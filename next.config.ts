@@ -1,14 +1,8 @@
 import type { NextConfig } from "next";
-import withPWA from 'next-pwa';
+import withPWA, { type PWAConfig } from 'next-pwa';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  pwa: {
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-    disable: process.env.NODE_ENV === 'development'
-  },
   images: {
     domains: ['image-domain.com'],
   },
@@ -19,7 +13,14 @@ const nextConfig: NextConfig = {
   }
 };
 
+const pwaConfig: PWAConfig = {
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+};
+
 export default withPWA({
   ...nextConfig,
-  dest: 'public'
+  ...pwaConfig
 } as const);
