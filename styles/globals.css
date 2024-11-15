@@ -13,10 +13,12 @@
     --foreground: #ededed;
   }
 }
-
+*{
+  margin: 0;
+  padding: 0;
+}
 body {
-  color: var(--foreground);
-  background: var(--background);
+  
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -33,12 +35,18 @@ main {
   align-items: center;
 }
 .chat-right-bottom {
-  margin-top: 60px;
+  margin-top: 50px;
 }
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 10px 20px;
+}
+.sign-in{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 .logo-img {
   display: flex;
@@ -48,4 +56,44 @@ main {
   display: flex;
   position: fixed;
   bottom: 30px;
+}
+
+.input-feed{
+  background-color: red;
+}
+.upgrade{
+  background-color: #E3CBFF;
+  position: relative;
+  padding: 20px;
+  height: 245px;
+  border-radius: 10px;
+  text-align: center;
+}
+.upgrade p{
+  margin-top: 5px;
+}
+.upgrade button{
+  background-color: blue;
+  display: flex;
+  color: white;
+  padding: 8px 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 20px;
+}
+.close_btn{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+ text-align: center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
 }
