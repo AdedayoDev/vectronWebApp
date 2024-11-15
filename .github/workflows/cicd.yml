@@ -1,0 +1,201 @@
+
+name: 'Build and Deploy'
+
+on:
+  push:
+    branches: [ "master","main","prod","feature/*" ]
+  pull_request:
+    branches: [ "master","main","prod","staging" ]
+  workflow_dispatch:
+    branches:
+    - main
+    - master
+    - prod
+
+
+permissions:
+  contents: read
+
+jobs:
+  Test:
+    name: 'App Test'
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # Specify the Node.js version you want to use
+        cache: 'npm'        # Cache npm dependencies to speed up future runs
+        registry-url: 'https://registry.npmjs.org/' # Default registry, can change if using a private registry
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run lint
+      run: npm run lint
+
+    - name: Build the project
+      run: npm run build
+
+    - name: Run tests
+      run: npm run test
+ 
+    # - name: SonarQube Scan
+    #   uses: sonarsource/sonarqube-scan-action@master
+    #   env:
+    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    #   with:
+    #     projectBaseDir: .
+    #     args: >
+    #       -Dsonar.projectKey=bird_backend-services_card-services_AYjLEtfbpzp81eDNt7Rp  
+    #       -Dsonar.java.binaries=target/classes
+
+
+    # # Check the Quality Gate status.
+    # - name: SonarQube Quality Gate check
+    #   id: sonarqube-quality-gate-check
+    #   uses: sonarsource/sonarqube-quality-gate-action@master
+    #   # Force to fail step after specific time.
+    #   timeout-minutes: 5
+    #   continue-on-error: true
+    #   env:
+    #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
+
+  deploy-to-staging:
+    name: 'Build & Deploy(Staging)'
+    if: github.ref == 'refs/heads/main' 
+    needs: [Test] 
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+
+
+
+    - name: Update kubeconfig (AWS EKS)
+      run: |
+        aws eks update-kubeconfig --name ${{ secrets.AWS_EKS_CLUSTER_SANDBOX }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, Tag, and Push Image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}  # or use ${{ github.sha }} for a unique tag
+        IMAGE_REPO_NAME: "vechtronai-webapp-staging"
+      run: | 
+        TAG_COMMIT=$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+        TAG_LATEST=$ECR_REGISTRY/$IMAGE_REPO_NAME:latest
+        docker build --cache-from $TAG_LATEST -t $TAG_COMMIT -t $TAG_LATEST .
+        echo "Docker image built successfully."
+        echo "Pushing Docker image to AWS ECR...."
+        docker push $TAG_COMMIT
+        docker push $TAG_LATEST $TAG_LATEST || true
+        echo "Successfully Pushed Docker image to AWS ECR...."
+
+    - name: Print Image URI
+      run: echo "$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG"
+
+    - name: K8s Deploy
+      run: |
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+        chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+        ls -l
+        sed -i 's/<version>/'${{ github.sha }}'/g' k8s/staging/deployment.yaml 
+        kubectl apply -f k8s/staging/namespace.yaml
+        kubectl apply -f k8s/staging/deployment.yaml  
+        kubectl apply -f k8s/staging/svc.yaml 
+        kubectl rollout status deployment/vechtron-ui -n vechtron-webapp
+
+  deploy-to-prod:
+    name: 'Build & Deploy(Production)'
+    if: github.ref == 'refs/heads/prod' 
+    runs-on: ubuntu-latest
+    needs: [Test] 
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Update kubeconfig (AWS EKS)
+      run: |
+        aws eks update-kubeconfig --name ${{ secrets.CLUSTER_PROD }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, Tag, and Push Image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}  # or use ${{ github.sha }} for a unique tag
+        IMAGE_REPO_NAME: "card-service-prod"
+      run: | 
+        TAG_COMMIT=$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
+        TAG_LATEST=$ECR_REGISTRY/$IMAGE_REPO_NAME:latest
+        docker build --cache-from $TAG_LATEST -t $TAG_COMMIT -t $TAG_LATEST .
+        echo "Docker image built successfully."
+        echo "Pushing Docker image to AWS ECR...."
+        docker push $TAG_COMMIT
+        docker push $TAG_LATEST $TAG_LATEST || true
+        echo "Successfully Pushed Docker image to AWS ECR...."
+
+    - name: Print Image URI
+      run: echo "$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG"
+
+    - name: K8s Deploy
+      run: |
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+        chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+        ls -l
+        sed -i 's/<version>/'${{ github.sha }}'/g' k8s/prod/deployment.yaml 
+        kubectl apply -f k8s/namespace.yaml
+        kubectl apply -f k8s/prod/deployment.yaml  
+        kubectl apply -f k8s/prod/svc.yaml 
+        kubectl apply -f k8s/prod/pod-autoscale.yaml
+        kubectl rollout status deployment/card-service -n card-service

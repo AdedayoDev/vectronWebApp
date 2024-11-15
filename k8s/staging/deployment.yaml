@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vechtron-ui
+  namespace: vechtron-webapp
+  labels:
+    app: vechtron-ui
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vechtron-ui
+  strategy:
+    type: RollingUpdate 
+  template: 
+    metadata: 
+      labels: 
+        app: vechtron-ui
+        namespace: vechtron-webapp
+    spec: 
+      containers:
+        - name:  vechtron-ui
+          image: 381491932875.dkr.ecr.us-east-2.amazonaws.com/vechtronai-webapp-staging:<version>
+          ports:
+            - containerPort: 80
+              name: vechtron
+      # imagePullSecrets:
+      # - name: us-east-2-ecr-registry                                      
+

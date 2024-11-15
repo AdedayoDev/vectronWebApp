@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f1f5f9;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+*{
+  margin: 0;
+  padding: 0;
+}
+body {
+  
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 30px;
+}
+
+.links {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.chat-right-bottom {
+  margin-top: 50px;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.sign-in{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.logo-img {
+  display: flex;
+  align-items: center;
+}
+.input-feed {
+  display: flex;
+  position: fixed;
+  bottom: 30px;
+}
+
+.input-feed{
+  background-color: red;
+}
+.upgrade{
+  background-color: #E3CBFF;
+  position: relative;
+  padding: 20px;
+  height: 245px;
+  border-radius: 10px;
+  text-align: center;
+}
+.upgrade p{
+  margin-top: 5px;
+}
+.upgrade button{
+  background-color: blue;
+  display: flex;
+  color: white;
+  padding: 8px 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 20px;
+}
+.close_btn{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+ text-align: center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
