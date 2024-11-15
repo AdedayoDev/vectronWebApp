@@ -13,10 +13,6 @@
     --foreground: #ededed;
   }
 }
-*{
-  margin: 0;
-  padding: 0;
-}
 body {
   
   font-family: Arial, Helvetica, sans-serif;
@@ -26,21 +22,23 @@ main {
   display: flex;
   justify-content: space-between;
   padding: 20px 30px;
+  margin-top: -20px;
+  margin-bottom: 0;
 }
 
 .links {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   align-items: center;
 }
 .chat-right-bottom {
-  margin-top: 50px;
+  margin: 50px 0;
 }
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 10px 30px;
 }
 .sign-in{
   display: flex;
@@ -52,14 +50,53 @@ main {
   display: flex;
   align-items: center;
 }
-.input-feed {
+.btn-dark{
+  background-color: #0a0a0a;
+  color: white;
+  text-align: center;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 9px;
+  padding: 5px;
+}
+.input-feed {
   position: fixed;
   bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  width: 50%;
 }
-
-.input-feed{
-  background-color: red;
+.feed-left{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.feed-left input{
+  width: 600px;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.feed-left button{
+  background-color: white;
+  color: #0a0a0a;
+  border-radius: 40px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  margin-left: 10px;
+  box-shadow: 0px 16px 16px -4px #0000001A;
+}
+.feed-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 .upgrade{
   background-color: #E3CBFF;
@@ -82,6 +119,7 @@ main {
   align-items: center;
   gap: 10px;
   border-radius: 20px;
+  
 }
 .close_btn{
   position: absolute;
@@ -96,4 +134,5 @@ main {
  display: flex;
  align-items: center;
  justify-content: center;
+ cursor: pointer; 
 }
