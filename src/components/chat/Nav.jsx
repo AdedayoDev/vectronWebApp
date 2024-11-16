@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Image from "next/image";
 
 export default function Nav() {
@@ -19,8 +19,14 @@ export default function Nav() {
             height={60}
           />
         </div>
-        <div>
-          <button> <Image src='/assets/icons/user.png' alt="user" width={30} height={30} /> Sign in</button>
+        <div className="sign-in">
+          <Image
+            src="/assets/icons/user.png"
+            alt="user"
+            width={30}
+            height={30}
+          />{" "}
+          <button> My account</button>
         </div>
       </div>
     </nav>

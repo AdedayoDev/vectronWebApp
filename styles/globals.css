@@ -13,10 +13,8 @@
     --foreground: #ededed;
   }
 }
-
 body {
-  color: var(--foreground);
-  background: var(--background);
+  
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -24,28 +22,117 @@ main {
   display: flex;
   justify-content: space-between;
   padding: 20px 30px;
+  margin-top: -20px;
+  margin-bottom: 0;
 }
 
 .links {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   align-items: center;
 }
 .chat-right-bottom {
-  margin-top: 60px;
+  margin: 50px 0;
 }
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 10px 30px;
+}
+.sign-in{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 .logo-img {
   display: flex;
   align-items: center;
 }
-.input-feed {
+.btn-dark{
+  background-color: #0a0a0a;
+  color: white;
+  text-align: center;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 9px;
+  padding: 5px;
+}
+.input-feed {
   position: fixed;
   bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  width: 50%;
+}
+.feed-left{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.feed-left input{
+  width: 600px;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.feed-left button{
+  background-color: white;
+  color: #0a0a0a;
+  border-radius: 40px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  margin-left: 10px;
+  box-shadow: 0px 16px 16px -4px #0000001A;
+}
+.feed-right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.upgrade{
+  background-color: #E3CBFF;
+  position: relative;
+  padding: 20px;
+  height: 245px;
+  border-radius: 10px;
+  text-align: center;
+}
+.upgrade p{
+  margin-top: 5px;
+}
+.upgrade button{
+  background-color: blue;
+  display: flex;
+  color: white;
+  padding: 8px 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 20px;
+  
+}
+.close_btn{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+ text-align: center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ cursor: pointer; 
 }

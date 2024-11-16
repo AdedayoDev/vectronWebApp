@@ -1,99 +1,94 @@
 import Link from "next/link";
 import Image from "next/image";
 import Feed from "./Feed";
+import ChatHistory from "@components/chat/ChatHistory";
+import Ai from "@components/chat/Ai";
 
 export default function Chat() {
+  const chatLinks = [
+    {
+      href: "/",
+      src: "/assets/icons/message.png",
+      text: "AI Chat Tool Ethics",
+    },
+    {
+      href: "/",
+      src: "/assets/icons/message.png",
+      text: "Al Chat Tool Impact Writing",
+    },
+    { href: "/", src: "/assets/icons/message.png", text: "New chat" },
+  ];
+
+  const actionLinks = [
+    {
+      href: "/",
+      src: "/assets/icons/delete.png",
+      alt: "Delete icon",
+      text: "Clear conversation",
+    },
+    {
+      href: "/",
+      src: "/assets/icons/light.png",
+      alt: "Light mode icon",
+      text: "Light mode",
+    },
+    {
+      href: "/",
+      src: "/assets/icons/upload.png",
+      alt: "Updates icon",
+      text: "Updates & FAQ",
+    },
+    {
+      href: "/",
+      src: "/assets/icons/logout.png",
+      alt: "Logout icon",
+      text: "Log out",
+    },
+  ];
+
   return (
     <main>
-      <section>
-        <div className="chat-left">
-          <Link href="/" className='links'>
-            <Image
-              src="/assets/images/logo2.png"
-              alt="Logo 2"
-              width={40}
-              height={40}
-            />
-          </Link>
-          <Link href="/" className='links'>
-            <Image
-              src="/assets/images/logo3.png"
-              alt="Logo 3"
-              width={40}
-              height={40}
-            />
-          </Link>
-          <Link href="/" className='links'>
-            <Image
-              src="/assets/images/logo5.png"
-              alt="Logo 5"
-              width={40}
-              height={40}
-            />
-          </Link>
-          <Link href="/" className='links'>
-            <Image
-              src="/assets/images/logo.png"
-              alt="Logo"
-              width={40}
-              height={40}
-            />
-          </Link>
-          <Link href="/" className='links'>
-            <Image
-              src="/assets/images/logo4.png"
-              alt="Logo 4"
-              width={40}
-              height={40}
-            />
-          </Link>
-          <Link href="/" className='links'>
-            <Image
-              src="/assets/icons/add.png"
-              alt="Add icon"
-              width={40}
-              height={40}
-            />
-          </Link>
-        </div>
-      </section>
+      <Ai />
 
-      <Feed/>
-
+      <Feed />
       <section className="chat-right">
-        <div className="chat-right-top">
-          <Link href="/">
-            <button className="btn-dark">+ New Chat</button>
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/message.png" alt="Message icon" width={20} height={20} /> AI Chat Tool Ethics
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/message.png" alt="Message icon" width={20} height={20} /> AI Chat Tool Ethics
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/message.png" alt="Message icon" width={20} height={20} /> AI Chat Tool Ethics
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/message.png" alt="Message icon" width={20} height={20} /> AI Chat Tool Ethics
-          </Link>
-        </div>
+        <Link href="/">
+          <button className="btn-dark">+ New Chat</button>
+        </Link>
+        <ChatHistory links={chatLinks} />
+        <Link href="/">
+          <b>see all chat</b>
+        </Link>
 
         <div className="chat-right-bottom">
-          <Link href="/" className="links">
-            <Image src="/assets/icons/delete.png" alt="Delete icon" width={20} height={20} /> Clear conversation
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/light.png" alt="Light mode icon" width={20} height={20} /> Light mode
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/upload.png" alt="Updates icon" width={20} height={20} /> Updates & FAQ
-          </Link>
-          <Link href="/" className="links">
-            <Image src="/assets/icons/logout.png" alt="Logout icon" width={20} height={20} /> Log out
-          </Link>
+          {actionLinks.map((link, index) => (
+            <Link key={index} href={link.href} className="links">
+              <Image src={link.src} alt={link.alt} width={20} height={20} />{" "}
+              {link.text}
+            </Link>
+          ))}
         </div>
-        <div className="upgrade"></div>
+        <div className="upgrade">
+          <div className="close_btn">x</div>
+          <div className="upgrade-content">
+            <Image
+              src="/assets/images/Empty-chat.png"
+              alt="upgade-image"
+              width={150}
+              height={100}
+            />
+            <button>
+              Upgrade to Pro
+              <Image
+                src="/assets/icons/solid.png"
+                alt="upgade-image"
+                width={20}
+                height={20}
+              />
+            </button>
+          </div>
+          <p>Follow us on</p>
+        </div>
       </section>
     </main>
   );
