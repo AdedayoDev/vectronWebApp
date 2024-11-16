@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 import withPWA from 'next-pwa';
 
-const nextConfig: NextConfig = {
+// PWA configuration
+const pwaConfig = {
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+};
+
+// Create the final config
+const nextConfig = withPWA(pwaConfig)({
   reactStrictMode: true,
   images: {
     domains: ['image-domain.com'],
@@ -11,14 +20,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb'
     },
   }
-};
+});
 
-const pwaConfig = {
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
-};
-
-// Combine configurations correctly
-export default withPWA(nextConfig)(pwaConfig);
+export default nextConfig;
