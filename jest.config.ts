@@ -41,7 +41,6 @@
 
 // // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 // export default createJestConfig(config);
-
 import type { Config } from 'jest';
 import nextJest from 'next/jest';
 
@@ -50,10 +49,21 @@ const createJestConfig = nextJest({
 });
 
 const config: Config = {
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'jest-environment-jsdom',
+  moduleDirectories: ['node_modules', '<rootDir>'],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-  }
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/__mocks__/fileMock.js'
+  },
+  testMatch: [
+    "**/tests/**/*.test.[jt]s?(x)",
+    "**/tests/**/*.spec.[jt]s?(x)"
+  ],
+  roots: ['<rootDir>/src']
 };
 
 export default createJestConfig(config);
