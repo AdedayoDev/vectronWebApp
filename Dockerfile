@@ -1,23 +1,43 @@
-# Use the latest stable Node.js image as base
-FROM node:latest
+# Stage 1: Building the code
+FROM node:18-alpine AS builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if present) to the container
+# Copy package files
 COPY package*.json ./
 
-# Install the dependencies
-RUN npm install
+# Install dependencies
+RUN npm ci
 
-# Copy the rest of the application code to the container
+# Copy the rest of the code
 COPY . .
 
-# Build the Next.js application (with TypeScript)
+# Build the application
 RUN npm run build
 
-# Expose the port the app will run on
+# Stage 2: Run the built code
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+# Copy built application from builder stage
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.ts ./
+
+# Create a non-root user and switch to it
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+USER nextjs
+
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Start the Next.js application
+# Start the application
 CMD ["npm", "start"]
