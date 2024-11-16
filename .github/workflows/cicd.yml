@@ -136,6 +136,7 @@ jobs:
         kubectl apply -f k8s/staging/namespace.yaml
         kubectl apply -f k8s/staging/deployment.yaml  
         kubectl apply -f k8s/staging/svc.yaml 
+        kubectl apply -f k8s/staging/ingress.yaml 
         kubectl rollout status deployment/vechtron-ui -n vechtron-webapp
 
   deploy-to-prod:
