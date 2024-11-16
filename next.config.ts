@@ -1,16 +1,42 @@
+// import type { NextConfig } from "next";
+// import withPWA from 'next-pwa';
+
+// // PWA configuration
+// const pwaConfig = {
+//   dest: 'public',
+//   register: true,
+//   skipWaiting: true,
+//   disable: process.env.NODE_ENV === 'development'
+// };
+
+// const nextConfig: NextConfig = {
+//   reactStrictMode: true,
+//   images: {
+//     domains: ['image-domain.com'],
+//   },
+//   experimental: {
+//     serverActions: {
+//       bodySizeLimit: '2mb'
+//     },
+//   }
+// };
+
+// export default withPWA(pwaConfig)(nextConfig);
 import type { NextConfig } from "next";
-import withPWA from 'next-pwa';
+import type { PWAConfig } from 'next-pwa';
+
+// Import withPWA this way to avoid TypeScript errors
+const withPWA = require('next-pwa');
 
 // PWA configuration
-const pwaConfig = {
+const pwaConfig: PWAConfig = {
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development'
 };
 
-// Create the final config
-const nextConfig = withPWA(pwaConfig)({
+const config: NextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['image-domain.com'],
@@ -20,6 +46,7 @@ const nextConfig = withPWA(pwaConfig)({
       bodySizeLimit: '2mb'
     },
   }
-});
+};
 
-export default nextConfig;
+// Export the composed configuration
+export default withPWA(pwaConfig)(config) as NextConfig;
