@@ -15,6 +15,7 @@ export default function Ai() {
     { href: "/", src: "/assets/images/logo5.png", alt: "Logo 5" },
     { href: "/", src: "/assets/images/logo.png", alt: "Logo" },
     { href: "/", src: "/assets/images/logo4.png", alt: "Logo 4" },
+    { href: "/", src: "/assets/images/logo6.png", alt: "Logo 6" },
     { href: "/", src: "/assets/icons/add.png", alt: "Add icon" },
   ];
   return (

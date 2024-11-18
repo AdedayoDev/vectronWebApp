@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Feed from "./Feed";
-import ChatHistory from "@components/chat/ChatHistory";
+import PrevChat from "@components/chat/PrevChat";
 import Ai from "@components/chat/Ai";
 
 export default function Chat() {
@@ -48,14 +48,22 @@ export default function Chat() {
 
   return (
     <main>
+      <div className="background-image"></div>
+      <div className="container">
       <Ai />
-
       <Feed />
       <section className="chat-right">
+      <Image
+      className="mode"
+        src="/assets/icons/moon-star.png"
+        alt="dark mode"
+        width={30}
+        height={30}
+      />
         <Link href="/">
           <button className="btn-dark">+ New Chat</button>
         </Link>
-        <ChatHistory links={chatLinks} />
+        <PrevChat links={chatLinks} />
         <Link href="/">
           <b>see all chat</b>
         </Link>
@@ -87,9 +95,10 @@ export default function Chat() {
               />
             </button>
           </div>
-          <p>Follow us on</p>
         </div>
+          <p className="follow">Follow us on</p>
       </section>
+      </div>
     </main>
   );
 }

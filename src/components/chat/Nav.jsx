@@ -1,12 +1,20 @@
 "use client";
 import Image from "next/image";
+import Ai from "./Ai";
+import React, { useState } from "react";
 
 export default function Nav() {
+  const [openMenu, setOpenMenu] = useState(false);
+  function handleChange() {
+    setOpenMenu((prev) => !prev);
+  }
   return (
     <nav>
+      {openMenu && <Ai className='chat-left' />}
       <div className="navbar">
         <div className="logo-img">
-          <Image
+          <Image 
+          onClick={handleChange}
             src="/assets/icons/Burger.png"
             alt="hamburger-menu"
             width={60}
