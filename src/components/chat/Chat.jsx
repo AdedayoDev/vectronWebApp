@@ -64,7 +64,7 @@ export default function Chat() {
           <button className="btn-dark">+ New Chat</button>
         </Link>
         <PrevChat links={chatLinks} />
-        <Link href="/">
+        <Link href="/chathistory">
           <b>see all chat</b>
         </Link>
 
