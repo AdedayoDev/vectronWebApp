@@ -1,0 +1,27 @@
+
+
+@media screen and (min-width: 1120px){
+
+    .welcome-page {
+      display: flex;
+      justify-content: space-between;
+    }
+    .welcome-left {
+      position: relative;
+      /* width: 50%; */
+    }
+    /* .welcome-right {
+      width: 50%;
+    } */
+    .welcome-left-text {
+      position: absolute;
+      font-size: 32px;
+      color: white;
+      top: 240px;
+      /* width: 80%;
+        margin: 100px auto; */
+      left: 0;
+      text-align: center;
+      padding: 30px;
+    }
+}

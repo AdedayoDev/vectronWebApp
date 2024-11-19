@@ -6,7 +6,7 @@ export default function ChatHistory({ links }) {
   
   return (
     <div className="chat-right-top">
-
+      
       {links.map((link, index) => (
         <Link href={link.href} key={index} className="links">
           <Image
