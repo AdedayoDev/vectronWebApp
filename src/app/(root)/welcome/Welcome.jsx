@@ -50,16 +50,7 @@ if(password.length <= 12){
           </div>
         </div>
         <div className="welcome-right">
-          <Link href="/">
-            {" "}
-            Sign in{" "}
-            <Image
-              src="/assets/icons/logout.png"
-              alt="icon"
-              width={30}
-              height={30}
-            />
-          </Link>
+          
           <div className="welcome-right-content">
             <h1>Welcome to Docvantage</h1>
             <div className="welcome-links">
@@ -82,6 +73,11 @@ if(password.length <= 12){
                 Continue with Apple
               </Link>
             </div>
+            <div className="welcome-line">
+                <hr />
+                <span>Or</span>
+                <hr />
+              </div>
             <form onSubmit={handleSubmit} className="welcome-form">
               <label htmlFor="email">Email</label>
               <br />

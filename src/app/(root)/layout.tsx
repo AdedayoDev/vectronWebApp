@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "../../../styles/globals.css";
-import Nav from '@components/chat/Nav'
+import Nav from "@app/(root)/Nav";
 
 export const metadata: Metadata = {
   title: "Car Ai Assistant",
@@ -14,9 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      >
-        <Nav/>
+      <body>
+        <Nav />
         {children}
       </body>
     </html>

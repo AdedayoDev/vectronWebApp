@@ -1,0 +1,103 @@
+.welcome-left {
+  position: relative;
+  /* width: 50%; */
+}
+/* .welcome-right {
+    width: 50%;
+  } */
+.welcome-left-text {
+  position: absolute;
+  font-size: 32px;
+  color: white;
+  top: 240px;
+  /* width: 80%;
+      margin: 100px auto; */
+  left: 0;
+  text-align: center;
+  padding: 30px;
+}
+.welcome-right-content {
+  width: 80%;
+  margin: auto;
+}
+.welcome-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 90%;
+  margin: 20px 0;
+}
+.welcome-line hr {
+  width: 80%;
+}
+.welcome-right-content h1 {
+  font-size: 40px;
+  font-weight: 600;
+  width: 60%;
+  margin: 30px auto;
+}
+.welcome-links {
+  display: flex;
+  flex-direction: column;
+}
+.welcome-links .welcome-right-link {
+  display: flex;
+  gap: 10px;
+  border: 1px solid #e3e9ee;
+  padding: 10px;
+  width: 345px;
+  border-radius: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.welcome-form {
+  width: 95%;
+  margin: auto;
+}
+.welcome-form input,
+button {
+  border: 1px solid #e3e9ee;
+  padding: 10px;
+  width: 345px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.welcome-form button {
+  background: linear-gradient(#9a77ff, #735ffa);
+  color: white;
+  transition: 0.3s ease;
+}
+label {
+  text-align: left !important;
+}
+.policy {
+  text-align: center;
+}
+@media screen and (min-width: 1120px) {
+  .welcome-page {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .welcome-form {
+    width: 100%;
+    margin: auto;
+  }
+  .welcome-right-content h1 {
+    margin: 30px 90px;
+  }
+
+  .welcome-right-content {
+    margin: auto;
+    width: 80%;
+  }
+  .policy {
+    width: 70%;
+    margin: 0 -25px;
+  }
+  .welcome-line{
+    width: 63% ;
+  }
+}

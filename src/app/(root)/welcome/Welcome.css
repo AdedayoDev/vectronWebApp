@@ -21,6 +21,17 @@
     width: 80%;
     margin: auto;
 }
+.welcome-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+    margin: 20px 0;
+  }
+  .welcome-line hr {
+    width: 80%;
+  }
 .welcome-right-content h1{
     font-size: 40px;
     font-weight: 600;
