@@ -1,16 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import "./Welcome.css";
+import "./SignIn.css";
 import Link from "next/link";
 
-export default function page() {
+export default function SignIn() {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
-  const [error, setError] =useState(null)
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,43 +18,50 @@ export default function page() {
       ...prev,
       [name]: value,
     }));
-    if(form.password.length<=12){
-
-      setError('')
-    }else{
-      setError('Password should be at least 12 characters')
+    if (form.password.length <= 12) {
+      setError("");
+    } else {
+      setError("Password should be at least 12 characters");
     }
   };
 
-const handleSubmit = (e) =>{
-if(password.length <= 12){
-  alert('Logged in')
-}
-  e.preventDefault()
-}
+  const handleSubmit = (e) => {
+    if (password.length <= 12) {
+      alert("Logged in");
+    }
+    e.preventDefault();
+  };
 
   return (
     <div>
       <div className="welcome-page">
         <div className="welcome-left">
           <Image
-            src="/assets/images/bg-welcome.png"
-            alt="welcome image"
+            src="/assets/images/bg-signin.png"
+            alt="signin image"
             width={500}
             height={500}
             objectFit="cover"
           />
           <div className="welcome-left-text">
-            The potential to enhance customer service and improve business
-            efficiency
+            Revolutionize your chats with AI-powered conversations.
           </div>
         </div>
         <div className="welcome-right">
-          
+          <Link href="/">
+            {" "}
+            New account
+            <Image
+              src="/assets/icons/logout.png"
+              alt="icon"
+              width={30}
+              height={30}
+            />
+          </Link>
           <div className="welcome-right-content">
-            <h1>Welcome to Docvantage</h1>
+            <h1>Sign in</h1>
             <div className="welcome-links">
-              <Link href="/"  className="welcome-right-link">
+              <Link href="/" className="welcome-right-link">
                 <Image
                   src="/assets/icons/google.png"
                   alt="icon"
@@ -72,6 +79,7 @@ if(password.length <= 12){
                 />
                 Continue with Apple
               </Link>
+              
             </div>
             <div className="welcome-line">
                 <hr />
@@ -91,7 +99,7 @@ if(password.length <= 12){
               <br />
               <label htmlFor="password">Password</label>
               <br />
-               <input
+              <input
                 type="password"
                 name={form.password}
                 onChange={handleChange}
@@ -99,11 +107,16 @@ if(password.length <= 12){
                 id="password"
                 maxLength={12}
               />
-             {error && (
-              <p style={{color:'red', marginTop: '5px', fontSize: '14px'}}>{error}</p>
-             )}
-              <button type="submit">Join Docvantage</button>
-          <p className="policy">By creating an account, you agree to our Terms of Service and Privacy & Cookie Statement.</p>
+              {error && (
+                <p style={{ color: "red", marginTop: "5px", fontSize: "14px" }}>
+                  {error}
+                </p>
+              )}
+              <button type="submit">Sign in</button>
+              <p className="policy">
+                By creating an account, you agree to our Terms of Service and
+                Privacy & Cookie Statement.
+              </p>
             </form>
           </div>
         </div>

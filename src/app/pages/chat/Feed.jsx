@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import FeedCard from "@components/chat/FeedCard";
 import { FaChevronUp } from "react-icons/fa";
@@ -6,56 +7,48 @@ import { useChat } from "ai/react";
 import React, { useEffect, useRef } from "react";
 
 export default function Feed() {
-  const { messages, input = "", handleSubmit, handleInputChange } = useChat({
+  const { messages, input, handleSubmit, handleInputChange } = useChat({
     api: "/api/openai",
   });
 
-
-  // Scroll behavior of the chat result
+  // Scroll behavior of the chat container
   const chatContainer = useRef(null);
 
-  const scroll = () => {
-    const { offsetHeight, scrollHeight, scrollTop } =
-      chatContainer.current || {};
-    if (scrollHeight >= scrollTop + offsetHeight) {
-      chatContainer.current?.scrollTo(0, scrollHeight + 200);
-    }
-  };
-
   useEffect(() => {
-    scroll();
+    if (chatContainer.current) {
+      chatContainer.current.scrollTo({
+        top: chatContainer.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages]);
 
   const handleChangeInput = (event) => {
-    // Correctly call handleInputChange to update the input value
     handleInputChange(event.target.value);
   };
 
-  // Show chat elements
-  const renderResponse = () => {
-    return (
-      <div className="response">
-        {messages.map((m, index) => (
-          <div
-            key={m.id}
-            className={`chat-line ${m.role === "user" ? "user-chat" : "ai-chat"}`}
-          >
-            <Image
-              className="avatar"
-              alt="avatar"
-              src={m.role === "user" ? "/user-avatar.jpg" : "/lcb-avatar.jpg"}
-              width={40}
-              height={40}
-            />
-            <div>
-              <p className="message">{m.content}</p>
-              {index < messages.length - 1 && <div className="horizontal-line" />}
-            </div>
+  const renderResponse = () => (
+    <div className="response">
+      {messages.map((m, index) => (
+        <div
+          key={m.id}
+          className={`chat-line ${m.role === "user" ? "user-chat" : "ai-chat"}`}
+        >
+          <Image
+            className="avatar"
+            alt="avatar"
+            src={m.role === "user" ? "/user-avatar.jpg" : "/lcb-avatar.jpg"}
+            width={40}
+            height={40}
+          />
+          <div>
+            <p className="message">{m.content}</p>
+            {index < messages.length - 1 && <div className="horizontal-line" />}
           </div>
-        ))}
-      </div>
-    );
-  };
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <section>
@@ -72,14 +65,21 @@ export default function Feed() {
               width={30}
               height={30}
             />
-            <form onSubmit={handleSubmit} className="input">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+              className="input"
+            >
               <input
                 type="text"
                 placeholder="Ask me anything"
                 onChange={handleChangeInput}
-                // value={input}
+                value={input} // Bind `input` state
+                aria-label="Chat input field"
               />
-              <button type="submit">
+              <button type="submit" aria-label="Send message">
                 <FaChevronUp />
               </button>
             </form>
