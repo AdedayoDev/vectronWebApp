@@ -3,7 +3,7 @@ import Image from "next/image";
 import FeedCard from "@components/chat/FeedCard";
 import { FaChevronUp } from "react-icons/fa";
 import { useChat } from "ai/react";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 export default function Feed() {
   const { messages, input = "", handleSubmit, handleInputChange } = useChat({
