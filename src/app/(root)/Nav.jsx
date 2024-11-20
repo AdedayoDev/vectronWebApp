@@ -4,7 +4,7 @@ import Image from "next/image"
 export default function Nav() {
   return (
     <div>
-        <Link href="/signin">
+        <Link href="/chat">
             {" "}
             Sign in{" "}
             <Image
