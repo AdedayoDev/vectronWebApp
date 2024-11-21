@@ -23,6 +23,6 @@
     },
     "typeRoots": ["./node_modules/@types", "./types"],
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts","jest.setup.ts",],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts","jest.setup.ts", "src/app/(root)/layout.jsx",],
   "exclude": ["node_modules"]
 }

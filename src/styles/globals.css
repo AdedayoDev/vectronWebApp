@@ -34,6 +34,28 @@ main .background-image {
   height: 200px;
   background: url("/assets/images/bg-img.png");
 }
+.chat-search-input {
+  position: absolute;
+  top: 120px;
+  left: 28%;
+  margin: auto;
+  z-index: 9999;
+  color: white;
+  text-align: center;
+}
+.chat-search-input input {
+  border: 1px solid rgb(175, 169, 169);
+  outline: none;
+  width: 35em;
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  background-color: transparent;
+}
+.chat-search-input hr{
+  width: 40px;
+  margin: auto;
+}
 .container {
   /* background-color: white; */
   display: flex;
@@ -223,7 +245,7 @@ main .background-image {
   border-radius: 20px;
   margin-top: 20px;
 }
-.close_btn {
+.upgrade .close-btn {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -253,7 +275,7 @@ main .background-image {
     width: 80%;
     /* background-color: aqua; */
     margin: 0;
-    left: 95px;
+    left: 50px;
   }
   .feed-left input {
     width: 230px;
@@ -281,7 +303,7 @@ main .background-image {
     transition: 0.3s ease;
     transform: translateX(-2000px);
   }
-  .text-feed{
+  .text-feed {
     width: 80%;
     left: 54px;
   }
@@ -290,7 +312,7 @@ main .background-image {
   }
 
   /* The Ai style for mobile view passed in using props.className */
-  .chat-left{
+  .chat-left {
     position: absolute;
     left: 0;
     top: 73px;
@@ -299,7 +321,13 @@ main .background-image {
     /* transform: translateX(-200px); */
     background-color: white;
     z-index: 99;
-    transition: .3s ease;
+    transition: 0.3s ease;
     transform: translateX(-200px);
+  }
+  .chat-search-input{
+    left: 50px;
+  }
+  .chat-search-input input{
+    width: 25em;
   }
 }

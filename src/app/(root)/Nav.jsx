@@ -4,9 +4,8 @@ import Image from "next/image"
 export default function Nav() {
   return (
     <div>
-        <Link href="/chat">
-            {" "}
-            Sign in{" "}
+        <Link href="/signin">
+            Sign in
             <Image
               src="/assets/icons/logout.png"
               alt="icon"
