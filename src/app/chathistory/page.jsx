@@ -1,4 +1,4 @@
-import Chat from '@app/pages/chat/Chat';
+import Chat from '@app/chat/page';
 
 
 export default function ChatHistory() {

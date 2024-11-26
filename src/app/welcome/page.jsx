@@ -54,7 +54,7 @@ if(password.length <= 12){
           <div className="welcome-right-content">
             <h1>Welcome to Docvantage</h1>
             <div className="welcome-links">
-              <Link href="/"  className="welcome-right-link">
+              <Link href="/signin"  className="welcome-right-link">
                 <Image
                   src="/assets/icons/google.png"
                   alt="icon"

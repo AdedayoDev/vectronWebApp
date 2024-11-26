@@ -1,5 +1,5 @@
 import "@styles/globals.css";
-import Nav from "@app/pages/chat/Nav";
+import Nav from "./Nav";
 
 export const metadata = {
   title: "Car Ai Assistant",
@@ -9,8 +9,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
         <Nav />
+      <body>
         {children}
       </body>
     </html>
