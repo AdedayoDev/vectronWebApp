@@ -1,10 +1,8 @@
-
-import Chat from "@components/chat/Chat"
-
+import Welcome from '@app/welcome/page'
 export default function HomePage() {
   return (
     <div className="">
-      <Chat />
+     <Welcome/>
     </div>
   );
 }
