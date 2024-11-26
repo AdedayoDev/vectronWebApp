@@ -5,6 +5,8 @@ import Feed from '@/components/chatComp/feed'
 // import PrevChat from "@app/chat/PrevChat";
 import AI from "@components/chatComp/ai-side";
 import SideChat from "@components/chatComp/side-chat";
+import PowerofAi from "@components/chatComp/powerofai";
+import './chat.css'
 
 export default function Chat(props) {
   // const [searchInput, setSearchInput] = useState({
@@ -59,9 +61,12 @@ export default function Chat(props) {
 
   return (
     <main>
-      <div>
+      <div className="chat-container">
         <AI/>
+        <div className="chat-section">
+        <PowerofAi/>
         <Feed/>
+        </div>
         <SideChat/>
       </div>
     </main>

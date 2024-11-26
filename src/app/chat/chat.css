@@ -1,0 +1,54 @@
+
+.chat-container{
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+}
+
+/* Side Bar Chat Styling */
+.prev-cat-one{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.other-option-one{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+.side-second-content{
+    margin-top: 30px;
+}
+.side-third-content{
+    background-color: #E3CBFF;
+    margin-top: 20px;
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+.side-third-content button{
+outline: none;
+border: none;
+background-color: white;
+font-weight: 500;
+position: absolute;
+top: 20px;
+right: 20px;
+padding: 5px;
+width: 30px;
+font-size: 20px;
+height: 30px;
+display: flex;
+align-items: center;
+text-align: center;
+justify-content: center;
+border-radius: 80px;
+}
+
+@media screen and (min-width: 1120px){
+   
+
+}
