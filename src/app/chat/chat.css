@@ -2,8 +2,8 @@
 .chat-container{
     display: flex;
     justify-content: space-between;
-    width: 90%;
-    margin: auto;
+    /* width: 90%;
+    margin: auto; */
 }
 
 /* Side Bar Chat Styling */
