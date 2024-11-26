@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Feed from '@/components/chatComp/feed'
 // import Feed from "@app/chat/Feed";
 // import PrevChat from "@app/chat/PrevChat";
-// import Ai from "@app/chat/Ai";
+import AI from "@components/chatComp/ai-side";
+import SideChat from "@components/chatComp/side-chat";
 
 export default function Chat(props) {
   // const [searchInput, setSearchInput] = useState({
@@ -59,7 +60,9 @@ export default function Chat(props) {
   return (
     <main>
       <div>
+        <AI/>
         <Feed/>
+        <SideChat/>
       </div>
     </main>
   );
