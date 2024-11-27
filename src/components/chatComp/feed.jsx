@@ -7,6 +7,7 @@ import { SendHorizonalIcon } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CopyToClipBoard from "@/components/copy-to-clip-board/copy-to-clip-board";
+import Image from 'next/image'
 
 export default function Feed() {
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
@@ -61,11 +62,18 @@ export default function Feed() {
       </ScrollArea>
 
       {/* Input */}
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
+      <Image
+          src="/assets/images/Bot-small.png"
+          alt="ai icon"
+          width={20}
+          height={20}
+        />
         <Input
           value={input}
           onChange={handleInputChange}
           placeholder="Ask me anything..."
+          className='chat-input'
         />
         <Button
           size="icon"
@@ -76,6 +84,20 @@ export default function Feed() {
         >
           <SendHorizonalIcon />
         </Button>
+        <div className="add-voice">
+        <Image
+          src="/assets/icons/plus-circle.png"
+          alt="ai icon"
+          width={20}
+          height={20}
+        />
+        <Image
+          src="/assets/icons/voice.png"
+          alt="ai icon"
+          width={25}
+          height={25}
+        />
+      </div>
       </form>
     </div>
   );

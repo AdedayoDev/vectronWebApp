@@ -1,7 +1,14 @@
-import React from 'react'
+import Image from "next/image";
 
 export default function PowerofAi() {
   return (
-    <div>PowerofAi</div>
-  )
+    <div>
+      <Image
+        src="/assets/images/bg-img.png"
+        alt="Background image"
+        width={450}
+        height={200}
+      />
+    </div>
+  );
 }

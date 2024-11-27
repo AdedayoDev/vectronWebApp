@@ -5,7 +5,7 @@ export default function SideChat() {
   return (
     <div className="side-chat-container">
       <div className="side-first-content">
-        <button>+ New chat</button>
+        <button className="new-chat-btn">+ New chat</button>
         <div className="prev-chat">
           <div className="prev-cat-one">
             <Image
@@ -35,7 +35,7 @@ export default function SideChat() {
             <p>AI Chat Tool Ethics</p>
           </div>
         </div>
-        <Link href="/chathistory">See all more</Link>
+        <Link className='see-more-btn' href="/chathistory">See all more</Link>
       </div>
       <div className="side-second-content">
         <div className="other-option">
@@ -94,8 +94,8 @@ export default function SideChat() {
             height={20}
           />
         </div>
-        <p>Follow us on</p>
       </div>
+        <p className="follow-us">Follow us on</p>
     </div>
   );
 }
