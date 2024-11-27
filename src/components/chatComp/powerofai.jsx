@@ -6,8 +6,9 @@ export default function PowerofAi() {
       <Image
         src="/assets/images/bg-img.png"
         alt="Background image"
-        width={450}
+        width={200}
         height={200}
+        className="powerai-bg"
       />
       <div className="powerofAi-content">
 

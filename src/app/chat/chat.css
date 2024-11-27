@@ -66,9 +66,10 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  margin-top: -10px;
 }
 .side-second-content {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .side-third-content {
   background-color: #e3cbff;
@@ -106,8 +107,7 @@
     border-radius: 10px;
 }
 .chat-input{
-   max-width: 100%;
-   width: 300px;
+   width: 18em !important;
    border:  none;
    outline: none;
    background-color: transparent;
@@ -124,18 +124,31 @@
     margin-left: 5px;
 }
 
+/* powerai */
+.powerai-bg{
+  width: 100% !important;
+  background-size: cover ;
+}
+
 @media screen and (min-width: 1120px) {
+  .form{
+    left: 90px;
+}
     .chat-input{
-        width: 600px;
+        width: 72.5em !important;
     }
     .side-chat-container{
         display: block;
     }
     .chat-container{
-        
         justify-content: space-between;
+        padding: 0 10px;
     }
-    .form{
-        left: 25%;
+    
+    /* Power AI */
+    .powerai-bg{
+      position: absolute;
+      left: 90px;
+      width: 75% !important;
     }
 }

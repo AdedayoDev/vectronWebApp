@@ -82,8 +82,8 @@ export default function SideChat() {
         <Image
           src="/assets/images/Empty-chat.png"
           alt="message icon"
-          width={200}
-          height={200}
+          width={150}
+          height={150}
         />
         <div className="upgrade">
           <span>Upgrade to Pro</span>
