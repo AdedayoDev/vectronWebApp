@@ -1,0 +1,10 @@
+.nav-content{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+}
+.nav-link{
+    text-decoration: none;
+}

@@ -79,7 +79,7 @@ export default function Welcome() {
           <div className="welcome-right-content">
             <h1>Welcome to Docvantage</h1>
             <div className="welcome-links">
-              <Link href="/signin" className="welcome-right-link">
+              <Link href="/" className="welcome-right-link">
                 <Image
                   src="/assets/icons/google.png"
                   alt="icon"
