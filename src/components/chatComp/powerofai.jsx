@@ -9,6 +9,9 @@ export default function PowerofAi() {
         width={450}
         height={200}
       />
+      <div className="powerofAi-content">
+
+      </div>
     </div>
   );
 }

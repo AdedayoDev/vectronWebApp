@@ -1,6 +1,18 @@
-
-export default function navbar() {
+import React from "react";
+import Image from "next/image";
+import "./navbar.css";
+export default function Navbar() {
   return (
-    <div>navbar</div>
-  )
+    <>
+      <div className="nav-content">
+        Sign in
+        <Image
+          src="/assets/icons/icon-login.png"
+          alt="icon"
+          width={20}
+          height={20}
+        />
+      </div>
+    </>
+  );
 }
