@@ -15,15 +15,20 @@ export default function PowerofAi() {
           <div className="powerai-header">
             <h1>Unlock the power of AI</h1>
             <p>
-              Meet docvantage, our ai chat app revolutionizing conversations
+              Meet docvantage, our AI chat app revolutionizing conversations
             </p>
           </div>
-          <div className="powerai-card-head">
+         <div className="powerai-cards">
+          <div className="card-chat-option">
+            
+          </div>
+         <div className="powerai-card-head">
             <span>Super</span>
             <span>High</span>
             <span>Medium</span>
             <span>Low</span>
           </div>
+         </div>
         </div>
       </div>
     </>
