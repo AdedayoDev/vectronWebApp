@@ -60,7 +60,7 @@ export default function Welcome() {
   };
 
   return (
-    <div>
+    <>
       <div className="welcome-page">
         <div className="welcome-left">
           <Image
@@ -142,6 +142,6 @@ export default function Welcome() {
 
       {/* Toastify container */}
       <ToastContainer autoClose={2000} pauseOnHover={false} />
-    </div>
+    </>
   );
 }

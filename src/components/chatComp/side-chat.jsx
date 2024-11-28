@@ -35,7 +35,7 @@ export default function SideChat() {
             <p>AI Chat Tool Ethics</p>
           </div>
         </div>
-        <Link className='see-more-btn' href="/chathistory">See all more</Link>
+        <Link className="see-more-btn" href="/chathistory">See all more</Link>
       </div>
       <div className="side-second-content">
         <div className="other-option">

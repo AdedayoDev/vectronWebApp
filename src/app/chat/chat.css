@@ -129,7 +129,14 @@
   width: 100% !important;
   background-size: cover ;
 }
+.powerai-container{
+position: absolute;
+background-color: white;
+left: 0;
+}
+.powerofAi-content{
 
+}
 @media screen and (min-width: 1120px) {
   .form{
     left: 90px;
