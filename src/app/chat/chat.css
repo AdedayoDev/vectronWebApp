@@ -104,6 +104,7 @@
   padding: 5px;
   align-items: center;
   border-radius: 10px;
+  z-index: 999;
 }
 .chat-input {
   width: 18em !important;
@@ -125,15 +126,18 @@
 
 /* powerai */
 .powerai-bg {
-  width: 100% !important;
+  width: 95% !important;
+  margin-left: 8px;
   background-size: cover;
+  position: relative;
 }
 .powerai-container {
   position: absolute;
   background-color: white;
-  border: 1px solid #e3e9ee;
+  border: 1px 1px solid #e3e9ee;
   z-index: 99;
   left: 54%;
+  top: 36%;
   border-radius: 10px 10px 0 0;
   width: 80%;
   transform: translate(-50%, -40%);
@@ -141,24 +145,92 @@
 .powerofAi-content {
   padding: 20px;
 }
-.powerai-header{
+.powerai-header {
   text-align: center;
 }
-.powerai-header h1{
+.powerai-header h1 {
   font-weight: 600;
-font-size: 32px;
+  font-size: 32px;
   margin-bottom: -10px;
 }
-.powerai-header p{
+.powerai-header p {
   font-size: 18px;
   font-weight: 400;
-  color: #7C878E;
+  color: #7c878e;
 }
-.powerai-card-head{
+.powerai-card-head {
+  display: flex;
+  gap: 20px;
+  color: #181b1f;
+  background-color: #e3e9ee;
+  padding: 8px;
+  border-radius: 5px;
+}
+.powerai-cards {
+  width: 95%;
+  margin: auto;
+}
+.powerai-cards p {
+  color: #7c878e;
+  font-size: 15px;
+  font-weight: 400;
+}
+.powerai-card-head span {
+  background-color: #fcfdfe;
+  width: 136px;
+  padding: 8px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.card-chat-option {
   display: flex;
   justify-content: space-between;
-  color: #181B1F;
+  align-items: center;
 }
+.cards-info-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 0 8px;
+}
+.cards-info-content .direction {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+.cards-info {
+  position: absolute;
+}
+/* Tablet view */
+@media screen and (min-width: 600px) {
+  .powerai-bg {
+    width: 70% !important;
+    position: absolute;
+    left: 65px;
+  }
+  .powerai-container {
+    left: 42%;
+    width: 65%;
+    top: 30%;
+  }
+  .side-chat-container {
+    display: block;
+  }
+  .chat-container {
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+  .form {
+    left: 90px;
+  }
+  .chat-input {
+    width: 44em !important;
+  }
+}
+
+/* Web View */
 @media screen and (min-width: 1120px) {
   .form {
     left: 90px;
@@ -185,10 +257,13 @@ font-size: 32px;
     left: 44%;
     width: 70%;
   }
-  .powerai-header h1{
-  font-size: 48px;
+  .powerai-cards {
+    width: 50%;
   }
-  .powerai-card-head{
+  .powerai-header h1 {
+    font-size: 48px;
+  }
+  .powerai-card-head {
     justify-content: space-around;
   }
 }

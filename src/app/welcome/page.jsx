@@ -7,6 +7,7 @@ import "./welcome.css";
 import Link from "next/link";
 
 export default function Welcome() {
+  
   const [form, setForm] = useState({
     email: "",
     password: "",
