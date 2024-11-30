@@ -196,7 +196,8 @@
   transition: .4s ease;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid #E3E9EE
+  border: 1px solid #E3E9EE;
+  cursor: pointer;
 }
 .cards-info-content:hover{
   box-shadow: 0px 16px 16px -4px #0000001A;
