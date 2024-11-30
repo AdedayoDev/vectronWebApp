@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import './welcome.css';
 import Link from "next/link";
+import './welcome.css';
 
 export default function Welcome() {
   
