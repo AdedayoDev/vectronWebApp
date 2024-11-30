@@ -162,12 +162,12 @@
   display: flex;
   gap: 20px;
   color: #181b1f;
-  background-color: #e3e9ee;
+  background-color: #E3E9EE;
   padding: 8px;
   border-radius: 5px;
+  width: 100%;
 }
 .powerai-cards {
-  width: 95%;
   margin: auto;
 }
 .powerai-cards p {
@@ -176,7 +176,6 @@
   font-weight: 400;
 }
 .powerai-card-head span {
-  background-color: #fcfdfe;
   width: 136px;
   padding: 8px;
   text-align: center;
@@ -193,12 +192,22 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 20px;
-  padding: 0 8px;
+  gap: 20px;
+  transition: .4s ease;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #E3E9EE
+}
+.cards-info-content:hover{
+  box-shadow: 0px 16px 16px -4px #0000001A;
 }
 .cards-info-content .direction {
   gap: 10px;
   display: flex;
   align-items: center;
+}
+.cards-info-content .direction p{
+font-size: 16px;
 }
 .cards-info {
   position: absolute;
@@ -263,7 +272,11 @@
   .powerai-header h1 {
     font-size: 48px;
   }
-  .powerai-card-head {
-    justify-content: space-around;
+  .cards-info{
+    width: 49%;
   }
+  .cards-info-content .direction{
+    gap: 20px;
+  }
+  /*  */
 }

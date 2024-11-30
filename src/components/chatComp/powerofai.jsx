@@ -5,9 +5,10 @@ import cardsData from "./chatCardsData";
 import { useState } from "react";
 
 export default function PowerofAi() {
-  const [closeCard, setCloseCard] = useState(false);
-  const handleToggle = () => {
-    setCloseCard((prev) => !prev);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+
+  const handleToggle = (index) => {
+    setActiveDropdown((prev) => (prev === index ? null : index));
   };
 
   return (
@@ -19,46 +20,59 @@ export default function PowerofAi() {
         height={200}
         className="powerai-bg"
       />
-        <div className="powerai-container">
-          <div className="powerofAi-content">
-            <div className="powerai-header">
-              <h1>Unlock the power of AI</h1>
-              <p>
-                Meet docvantage, our AI chat app revolutionizing conversations
-              </p>
+      <div className="powerai-container">
+        <div className="powerofAi-content">
+          <div className="powerai-header">
+            <h1>Unlock the power of AI</h1>
+            <p>
+              Meet docvantage, our AI chat app revolutionizing conversations
+            </p>
+          </div>
+          <div className="powerai-cards">
+            <div className="card-chat-option">
+              <p>Chat creativity</p>
+              <Image
+                src="/assets/icons/info.svg"
+                alt="icon"
+                width={20}
+                height={20}
+              />
             </div>
-            <div className="powerai-cards">
-              <div className="card-chat-option">
-                <p>Chat creativity</p>
-                <Image
-                  src="/assets/icons/info.svg"
-                  alt="icon"
-                  width={20}
-                  height={20}
-                />
-              </div>
-              <div className="powerai-card-head">
-                <span onClick={handleToggle}>Super</span>
-                <span onClick={handleToggle}>High</span>
-                <span onClick={handleToggle}>Medium</span>
-                <span onClick={handleToggle}>Low</span>
-              </div>
-            {closeCard && (
+            <div className="powerai-card-head">
+              {cardsData.map((data, index) => (
+                <span
+                  key={index}
+                  onClick={() => handleToggle(index)}
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor:
+                      activeDropdown === index ? "white" : "transparent",
+                    padding: "5px 10px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  {data.span}
+                </span>
+              ))}
+            </div>
+
+            {/* Dropdown content */}
+            {activeDropdown !== null && (
               <div className="cards-info">
-                {cardsData.map((card, index) => (
+                {cardsData[activeDropdown].items.map((item, index) => (
                   <div key={index} className="cards-info-content">
                     <div className="direction">
-                    <Image
-                      src={card.image}
-                      alt={card.text}
-                      width={40}
-                      height={40}
+                      <Image
+                        src={item.image}
+                        alt={item.text}
+                        width={40}
+                        height={40}
                       />
-                      <p>{card.text}</p>
+                      <p>{item.text}</p>
                     </div>
                     <Image
-                      src='/assets/icons/arrow.png'
-                      alt='arrow'
+                      src="/assets/icons/arrow.png"
+                      alt="arrow"
                       width={15}
                       height={15}
                     />
@@ -66,9 +80,9 @@ export default function PowerofAi() {
                 ))}
               </div>
             )}
-            </div>
           </div>
         </div>
+      </div>
     </>
   );
 }
