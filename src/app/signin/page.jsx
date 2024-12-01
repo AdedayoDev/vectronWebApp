@@ -130,10 +130,10 @@ export default function Signin() {
                 <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
               )}
               <button type="submit">Join Docvantage</button>
-              <p className="policy">
+              {/* <p className="policy">
                 By creating an account, you agree to our Terms of Service and
                 Privacy & Cookie Statement.
-              </p>
+              </p> */}
             </form>
           </div>
         </div>
