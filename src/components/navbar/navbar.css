@@ -1,0 +1,26 @@
+.nav-content{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    padding: 10px 30px;
+    border-radius: 20px;
+    text-align: center;
+    background-color: #393E44;
+    border: 1px solid #E3E9EE;
+}
+.nav-link{
+    text-decoration: none;
+    color: #E3E9EE;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+@media screen and (min-width: 1120px){
+    .nav-content{
+background-color: transparent;
+    }
+    .nav-link{
+        color: #393E44;
+    }
+}
