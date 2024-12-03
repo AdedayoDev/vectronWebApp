@@ -131,7 +131,7 @@ export default function Signin() {
               {error && (
                 <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
               )}
-              <button type="submit">Join Docvantage</button>
+              <button type="submit">Sign in</button>
               {/* <p className="policy">
                 By creating an account, you agree to our Terms of Service and
                 Privacy & Cookie Statement.

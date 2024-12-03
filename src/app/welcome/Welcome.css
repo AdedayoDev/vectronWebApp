@@ -95,6 +95,7 @@ body {
     width: 95%;
     border-radius: 8px;
     margin-bottom: 20px;
+    margin-top: 10px;
   }
   .welcome-form button {
     background: linear-gradient(#9a77ff, #735ffa);
@@ -103,11 +104,13 @@ body {
     width: 100%;
     border-radius: 20px;
   }
-  label {
+  .welcome-form label {
     text-align: left !important;
+    color: #7C878E;
   }
   .policy {
     text-align: center;
+    color: #7C878E;
   }
   
   @media screen and (min-width: 1120px) {
