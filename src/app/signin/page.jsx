@@ -7,10 +7,12 @@ import "./SignIn.css";
 import Link from "next/link";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/css";
+import { useRouter } from "next/navigation";
 
 import Navbar from "@components/navbar/Navbar";
 
 export default function Signin() {
+  const router = useRouter()
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -34,34 +36,40 @@ export default function Signin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = form;
-
+  
     if (!email || !password) {
       setError("Please fill in all fields.");
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setError(""); 
+      }, 3000);
       return;
     }
-
+  
     if (password.length <= 12) {
       // Show success message with Toastify
       toast.success("Login successfully!");
-
+  
       // Clear form fields
       setForm({
         email: "",
         password: "",
       });
-
-      // Clear error message after 3 seconds
+  
+      // Redirect after 2 seconds and ensure error is cleared
       setTimeout(() => {
-        setError(""); // This should clear the error message
-      }, 3000);
+        router.push("/onboarding");
+        setError(""); 
+      }, 2000);
     } else {
       setError("Password should be at least 12 characters.");
-      // Reset the error after 3 seconds if the password doesn't meet the criteria
+      // Clear the error message after 3 seconds
       setTimeout(() => {
-        setError(""); // This clears the error after 3 seconds
+        setError("");
       }, 3000);
     }
   };
+  
 
   return (
     <div>
