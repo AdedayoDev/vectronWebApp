@@ -6,8 +6,9 @@ import { Button } from "@components/ui/button";
 export default function SideChat() {
   return (
     <div className="side-chat-container">
-      <div className="side-first-content">
-        <Button variant='ghost' size='icon'>
+      
+      <div className="side-first-content ">
+        <Button variant='secondary'>
           + New chat
         </Button>
         {/* <button className="new-chat-btn">+ New chat</button> */}

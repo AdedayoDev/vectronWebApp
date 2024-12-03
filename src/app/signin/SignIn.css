@@ -21,6 +21,29 @@ body {
   text-align: center;
   padding: 30px;
 }
+/* Style the pagination container */
+.splide__pagination {
+  display: flex !important;
+  justify-content: center; 
+  gap: 10px; 
+  background-color: transparent !important;
+  visibility: visible !important;
+}
+.splide__pagination__page {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.splide__pagination__page.is-active {
+  background-color: white !important;
+  color: white !important;
+  transform: scale(1.2);
+}
+
+
 .welcome-right-content {
   width: 352px !important;
   margin: auto;
@@ -105,13 +128,12 @@ label {
 }
 
 @media screen and (min-width: 1120px) {
-  /* body{
-    overflow: hidden !important;
-  } */
+  body{
+    overflow: hidden ;
+  }
   .welcome-page {
     display: flex;
     align-items: center;
-    
   }
   .welcome-left{
     width: 50%;

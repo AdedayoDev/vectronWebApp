@@ -10,7 +10,7 @@ export default function Chat() {
   return (
     <>
       <div className="chat-container">
-        <AI />
+        {/* <AI /> */}
         <div className="chat-section">
           <PowerofAi />
           <Feed />

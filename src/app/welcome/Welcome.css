@@ -10,11 +10,28 @@ body {
     object-fit: cover !important;
     background-repeat: no-repeat !important;
   }
-  /* .splide__slide {
-    display: flex;
-    flex-direction: row;
-    
-  } */
+ /* Style the pagination container */
+.splide__pagination {
+  display: flex !important;
+  justify-content: center; 
+  gap: 10px; 
+  background-color: transparent !important;
+  visibility: visible !important;
+}
+.splide__pagination__page {
+  width: 10px;
+  height: 10px;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.splide__pagination__page.is-active {
+  background-color: white !important;
+  color: white !important;
+  transform: scale(1.2);
+}
+
   .welcome-left {
     position: relative;
   }
@@ -95,6 +112,7 @@ body {
     width: 95%;
     border-radius: 8px;
     margin-bottom: 20px;
+    margin-top: 10px;
   }
   .welcome-form button {
     background: linear-gradient(#9a77ff, #735ffa);
@@ -103,17 +121,19 @@ body {
     width: 100%;
     border-radius: 20px;
   }
-  label {
+  .welcome-form label {
     text-align: left !important;
+    color: #7C878E;
   }
   .policy {
     text-align: center;
+    color: #7C878E;
   }
   
   @media screen and (min-width: 1120px) {
-    /* body{
-      overflow: hidden !important;
-    } */
+    body{
+      overflow: hidden;
+    }
     .welcome-page {
       display: flex;
       align-items: center;

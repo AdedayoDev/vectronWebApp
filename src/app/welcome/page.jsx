@@ -1,10 +1,14 @@
 "use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/css";
+
 import "./Welcome.css";
 import Navbar from "@components/navbar/Navbar";
 
@@ -15,6 +19,8 @@ export default function Welcome() {
   });
 
   const [error, setError] = useState("");
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +41,10 @@ export default function Welcome() {
 
     if (!email || !password) {
       setError("Please fill in all fields.");
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return;
     }
 
@@ -48,27 +58,27 @@ export default function Welcome() {
         password: "",
       });
 
-      // Clear error message after 3 seconds
+      // Redirect after 2 seconds and ensure error is cleared
       setTimeout(() => {
-        setError(""); // This should clear the error message
-      }, 3000);
+        router.push("/onboarding");
+        setError("");
+      }, 2000);
     } else {
       setError("Password should be at least 12 characters.");
-      // Reset the error after 3 seconds if the password doesn't meet the criteria
+      // Clear the error message after 3 seconds
       setTimeout(() => {
-        setError(""); // This clears the error after 3 seconds
+        setError("");
       }, 3000);
     }
   };
 
   return (
     <>
-
       <div className="welcome-page">
-        <Navbar link='/signin' text='Sign in' />
+        <Navbar link="/signin" text="Sign in" />
         <div className="welcome-left">
           <div className="splide">
-            {/* <Splide
+            <Splide
               options={{
                 type: "loop",
                 perPage: 1,
@@ -90,7 +100,7 @@ export default function Welcome() {
               </SplideSlide>
               <SplideSlide>
                 <Image
-                  src="/assets/images/bg-welcome.png"
+                  src="/assets/images/bg-signin.png"
                   alt="welcome image"
                   width={470}
                   height={500}
@@ -106,17 +116,8 @@ export default function Welcome() {
                   className="welcome-image"
                 />
               </SplideSlide>
-              
-            </Splide> */}
-            
+            </Splide>
           </div>
-          <Image
-            src="/assets/images/bg-welcome.png"
-            alt="welcome image"
-            width={470}
-            height={500}
-            className="welcome-image"
-          />
           <div className="welcome-left-text">
             The potential to enhance customer service and improve business
             efficiency
@@ -145,10 +146,10 @@ export default function Welcome() {
                 Continue with Apple
               </Link>
             </div>
-            <div class="line-container">
-              <div class="line"></div>
-              <span class="or-text">Or</span>
-              <div class="line"></div>
+            <div className="line-container">
+              <div className="line"></div>
+              <span className="or-text">Or</span>
+              <div className="line"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">
