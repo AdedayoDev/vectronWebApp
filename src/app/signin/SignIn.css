@@ -22,7 +22,7 @@ body {
   padding: 30px;
 }
 .welcome-right-content {
-  width: 90%;
+  width: 352px !important;
   margin: auto;
 }
 .welcome-right-content h1 {
@@ -50,6 +50,8 @@ body {
   text-decoration: none;
   color: black;
   transition: 0.5s ease;
+  font-size: 16px;
+  font-weight: 600;
 }
 .welcome-links .welcome-right-link:hover {
   background-color: #e3e9ee;
@@ -120,9 +122,9 @@ label {
     border-radius: 30px !important;
   }
   .welcome-left-text {
-    top: 280px;
+    top: 290px;
     width: 60%;
-    left: 100px;
+    left: 110px;
   }
   .welcome-right{
 width: 50%;

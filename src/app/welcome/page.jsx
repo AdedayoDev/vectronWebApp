@@ -4,10 +4,11 @@ import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import './Welcome.css';
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "./Welcome.css";
+import Navbar from "@components/navbar/Navbar";
 
 export default function Welcome() {
-  
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -62,8 +63,53 @@ export default function Welcome() {
 
   return (
     <>
+
       <div className="welcome-page">
+        <Navbar link='/signin' text='Sign in' />
         <div className="welcome-left">
+          <div className="splide">
+            {/* <Splide
+              options={{
+                type: "loop",
+                perPage: 1,
+                autoplay: true,
+                interval: 3000,
+                arrows: false,
+                pagination: true,
+              }}
+              aria-label="My Favorite Images"
+            >
+              <SplideSlide>
+                <Image
+                  src="/assets/images/bg-welcome.png"
+                  alt="welcome image"
+                  width={470}
+                  height={500}
+                  className="welcome-image"
+                />
+              </SplideSlide>
+              <SplideSlide>
+                <Image
+                  src="/assets/images/bg-welcome.png"
+                  alt="welcome image"
+                  width={470}
+                  height={500}
+                  className="welcome-image"
+                />
+              </SplideSlide>
+              <SplideSlide>
+                <Image
+                  src="/assets/images/bg-welcome.png"
+                  alt="welcome image"
+                  width={470}
+                  height={500}
+                  className="welcome-image"
+                />
+              </SplideSlide>
+              
+            </Splide> */}
+            
+          </div>
           <Image
             src="/assets/images/bg-welcome.png"
             alt="welcome image"
@@ -101,7 +147,7 @@ export default function Welcome() {
             </div>
             <div class="line-container">
               <div class="line"></div>
-              <span class="or-text">OR</span>
+              <span class="or-text">Or</span>
               <div class="line"></div>
             </div>
 
