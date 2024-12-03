@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 import './SignIn.css'
 import Link from "next/link";
+import Navbar from "@components/navbar/Navbar";
 
 export default function Signin() {
   const [form, setForm] = useState({
@@ -61,6 +62,7 @@ export default function Signin() {
 
   return (
     <div>
+      <Navbar link='/welcome' text='New account'/>
       <div className="welcome-page">
         <div className="welcome-left">
           <Image
@@ -99,7 +101,7 @@ export default function Signin() {
             </div>
             <div class="line-container">
               <div class="line"></div>
-              <span class="or-text">OR</span>
+              <span class="or-text">Or</span>
               <div class="line"></div>
             </div>
 

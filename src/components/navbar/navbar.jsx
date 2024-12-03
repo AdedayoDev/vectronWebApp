@@ -2,12 +2,12 @@ import React from "react";
 import Image from "next/image";
 import "./navbar.css";
 import Link from "next/link";
-export default function Navbar() {
+export default function Navbar({link='/', text}) {
   return (
     <>
       <div className="nav-content">
-       <Link href='/signin' className="nav-link">
-       <span>Sign in</span>
+       <Link href={link} className="nav-link">
+       <span>{text}</span>
         <Image
           src="/assets/icons/icon-login.png"
           alt="icon"
