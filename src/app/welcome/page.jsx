@@ -5,6 +5,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
+import '@splidejs/splide/css';
+
 import "./Welcome.css";
 import Navbar from "@components/navbar/Navbar";
 
@@ -68,55 +70,47 @@ export default function Welcome() {
         <Navbar link='/signin' text='Sign in' />
         <div className="welcome-left">
           <div className="splide">
-            {/* <Splide
-              options={{
-                type: "loop",
-                perPage: 1,
-                autoplay: true,
-                interval: 3000,
-                arrows: false,
-                pagination: true,
-              }}
-              aria-label="My Favorite Images"
-            >
-              <SplideSlide>
-                <Image
-                  src="/assets/images/bg-welcome.png"
-                  alt="welcome image"
-                  width={470}
-                  height={500}
-                  className="welcome-image"
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <Image
-                  src="/assets/images/bg-welcome.png"
-                  alt="welcome image"
-                  width={470}
-                  height={500}
-                  className="welcome-image"
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <Image
-                  src="/assets/images/bg-welcome.png"
-                  alt="welcome image"
-                  width={470}
-                  height={500}
-                  className="welcome-image"
-                />
-              </SplideSlide>
-              
-            </Splide> */}
+          <Splide
+            options={{
+              type: "loop",
+              perPage: 1,
+              autoplay: true,
+              interval: 3000,
+              arrows: false,
+              pagination: true,
+            }}
+            aria-label="My Favorite Images"
+          >
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-welcome.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-signin.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-welcome.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+          </Splide>
             
           </div>
-          <Image
-            src="/assets/images/bg-welcome.png"
-            alt="welcome image"
-            width={470}
-            height={500}
-            className="welcome-image"
-          />
           <div className="welcome-left-text">
             The potential to enhance customer service and improve business
             efficiency
@@ -145,10 +139,10 @@ export default function Welcome() {
                 Continue with Apple
               </Link>
             </div>
-            <div class="line-container">
-              <div class="line"></div>
-              <span class="or-text">Or</span>
-              <div class="line"></div>
+            <div className="line-container">
+              <div className="line"></div>
+              <span className="or-text">Or</span>
+              <div className="line"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">

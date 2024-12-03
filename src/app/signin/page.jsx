@@ -2,9 +2,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
-import './SignIn.css'
+import "react-toastify/dist/ReactToastify.css";
+import "./SignIn.css";
 import Link from "next/link";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/css";
+
 import Navbar from "@components/navbar/Navbar";
 
 export default function Signin() {
@@ -62,18 +65,50 @@ export default function Signin() {
 
   return (
     <div>
-      <Navbar link='/welcome' text='New account'/>
+      <Navbar link="/welcome" text="New account" />
       <div className="welcome-page">
         <div className="welcome-left">
-          <Image
-            src="/assets/images/bg-signin.png"
-            alt="welcome image"
-            width={470}
-            height={500}
-            className="welcome-image"
-          />
+          <Splide
+            options={{
+              type: "loop",
+              perPage: 1,
+              autoplay: true,
+              interval: 3000,
+              arrows: false,
+              pagination: true,
+            }}
+            aria-label="My Favorite Images"
+          >
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-welcome.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-signin.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-welcome.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+          </Splide>
           <div className="welcome-left-text">
-          Revolutionize your chats with AI-powered conversations.
+            Revolutionize your chats with AI-powered conversations.
           </div>
         </div>
         <div className="welcome-right">
@@ -99,10 +134,10 @@ export default function Signin() {
                 Continue with Apple
               </Link>
             </div>
-            <div class="line-container">
-              <div class="line"></div>
-              <span class="or-text">Or</span>
-              <div class="line"></div>
+            <div className="line-container">
+              <div className="line"></div>
+              <span className="or-text">Or</span>
+              <div className="line"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">

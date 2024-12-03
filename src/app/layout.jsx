@@ -1,4 +1,4 @@
-
+import './globals.css'
 export const metadata = {
   title: "Vectron webapp",
   description: "Your intelligent automotive companion",
