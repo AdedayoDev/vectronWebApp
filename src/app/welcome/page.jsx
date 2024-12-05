@@ -99,10 +99,10 @@ export default function Welcome() {
                 Continue with Apple
               </Link>
             </div>
-            <div class="line-container">
-              <div class="line"></div>
-              <span class="or-text">OR</span>
-              <div class="line"></div>
+            <div className="line-container">
+              <div className="line"></div>
+              <span className="or-text">OR</span>
+              <div className="line"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">

@@ -1,5 +1,5 @@
 import Feed from "@/components/chatComp/feed";
-import AI from "@components/chatComp/ai-side";
+// import AI from "@components/chatComp/ai-side";
 import SideChat from "@components/chatComp/side-chat";
 import PowerofAi from "@components/chatComp/powerofai";
 import "./chat.css";
@@ -8,7 +8,7 @@ export default function Chat() {
   return (
     <>
       <div className="chat-container">
-        <AI />
+        {/* <AI /> */}
         <div className="chat-section">
           <PowerofAi />
           <Feed />

@@ -1,5 +1,5 @@
 // import "./globals.css";
-import Navbar from "@components/navbar/navbar";
+// import Navbar from "@components/navbar/navbar";
 
 export const metadata = {
   title: "Car Ai Assistant",
@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
    <>
     <html lang="en">
-      <Navbar />
+      {/* <Navbar /> */}
       <body>{children}</body>
     </html>
    </>
