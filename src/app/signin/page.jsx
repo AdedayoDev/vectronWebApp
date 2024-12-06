@@ -2,12 +2,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import './SignIn.css'
-import Link from "next/link";
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css'; 
+import { useRouter } from "next/navigation";
 import Navbar from "@components/navbar/navbar";
+import Link from "next/link";
+import './SignIn.css'
 
-export default function Signin() {
+
+ export default function SignIn(){
+  const router = useRouter()
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -31,51 +35,90 @@ export default function Signin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = form;
-
+  
     if (!email || !password) {
       setError("Please fill in all fields.");
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setError(""); 
+      }, 3000);
       return;
     }
-
+  
     if (password.length <= 12) {
       // Show success message with Toastify
       toast.success("Login successfully!");
-
+  
       // Clear form fields
       setForm({
         email: "",
         password: "",
       });
-
-      // Clear error message after 3 seconds
+  
+      // Redirect after 2 seconds and ensure error is cleared
       setTimeout(() => {
-        setError(""); // This should clear the error message
-      }, 3000);
+        router.push("/onboarding");
+        setError(""); 
+      }, 2000);
     } else {
       setError("Password should be at least 12 characters.");
-      // Reset the error after 3 seconds if the password doesn't meet the criteria
+      // Clear the error message after 3 seconds
       setTimeout(() => {
-        setError(""); // This clears the error after 3 seconds
+        setError("");
       }, 3000);
     }
   };
+  
 
   return (
     <div>
       <Navbar link="/" text="New account" icon='/assets/icons/logout.png' />
-      <div className="welcome-page">
-        <div className="welcome-left">
-          <Image
-            src="/assets/images/bg-signin.png"
-            alt="welcome image"
-            width={470}
-            height={500}
-            className="welcome-image"
-          />
+       <div className="signin-page">
+       <div className="welcome-left">
+          <Splide
+            options={{
+              type: "loop",
+              perPage: 1,
+              autoplay: true,
+              interval: 3000,
+              arrows: false,
+              pagination: true,
+            }}
+            aria-label="My Favorite Images"
+          >
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-welcome.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-signin.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+            <SplideSlide>
+              <Image
+                src="/assets/images/bg-welcome.png"
+                alt="welcome image"
+                width={470}
+                height={500}
+                className="welcome-image"
+              />
+            </SplideSlide>
+          </Splide>
           <div className="welcome-left-text">
-          Revolutionize your chats with AI-powered conversations.
+            Revolutionize your chats with AI-powered conversations.
           </div>
         </div>
+
         <div className="welcome-right">
           <div className="welcome-right-content">
             <h1>Sign in</h1>
@@ -101,11 +144,11 @@ export default function Signin() {
             </div>
             <div className="line-container">
               <div className="line"></div>
-              <span className="or-text">OR</span>
+              <span className="or-text">Or</span>
               <div className="line"></div>
             </div>
 
-            <form onSubmit={handleSubmit} className="welcome-form">
+            <form onSubmit={handleSubmit} className="sigin-form">
               <label htmlFor="email">Email</label>
               <br />
               <input
@@ -131,7 +174,7 @@ export default function Signin() {
               {error && (
                 <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
               )}
-              <button type="submit">Join Docvantage</button>
+              <button type="submit">Sign in</button>
               {/* <p className="policy">
                 By creating an account, you agree to our Terms of Service and
                 Privacy & Cookie Statement.
@@ -139,10 +182,9 @@ export default function Signin() {
             </form>
           </div>
         </div>
+       </div>
+        {/* Toastify container */}
+        <ToastContainer autoClose={2000} pauseOnHover={false} />
       </div>
-
-      {/* Toastify container */}
-      <ToastContainer autoClose={2000} pauseOnHover={false} />
-    </div>
   );
 }

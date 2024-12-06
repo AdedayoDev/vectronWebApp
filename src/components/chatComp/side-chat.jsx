@@ -1,11 +1,17 @@
+'use client'
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@components/ui/button";
 
 export default function SideChat() {
   return (
     <div className="side-chat-container">
-      <div className="side-first-content">
-        <button className="new-chat-btn">+ New chat</button>
+      
+      <div className="side-first-content ">
+        <Button variant='secondary'>
+          + New chat
+        </Button>
+        {/* <button className="new-chat-btn">+ New chat</button> */}
         <div className="prev-chat">
           <div className="prev-cat-one">
             <Image
@@ -35,7 +41,9 @@ export default function SideChat() {
             <p>AI Chat Tool Ethics</p>
           </div>
         </div>
-        <Link className="see-more-btn" href="/chathistory">See all more</Link>
+        <Link className="see-more-btn" href="/chathistory">
+          See all more
+        </Link>
       </div>
       <div className="side-second-content">
         <div className="other-option">
@@ -95,7 +103,7 @@ export default function SideChat() {
           />
         </div>
       </div>
-        <p className="follow-us">Follow us on</p>
+      <p className="follow-us">Follow us on</p>
     </div>
   );
 }

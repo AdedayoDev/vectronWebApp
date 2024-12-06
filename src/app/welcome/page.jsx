@@ -1,20 +1,25 @@
 "use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css'; 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Navbar from "@components/navbar/navbar";
-import './Welcome.css';
+import './Welcome.css'
 
 export default function Welcome() {
-  
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
   const [error, setError] = useState("");
+
+  const router = useRouter();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +40,10 @@ export default function Welcome() {
 
     if (!email || !password) {
       setError("Please fill in all fields.");
+      // Clear the error message after 3 seconds
+      setTimeout(() => {
+        setError("");
+      }, 3000);
       return;
     }
 
@@ -48,15 +57,16 @@ export default function Welcome() {
         password: "",
       });
 
-      // Clear error message after 3 seconds
+      // Redirect after 2 seconds and ensure error is cleared
       setTimeout(() => {
-        setError(""); // This should clear the error message
-      }, 3000);
+        router.push("/onboarding");
+        setError("");
+      }, 2000);
     } else {
       setError("Password should be at least 12 characters.");
-      // Reset the error after 3 seconds if the password doesn't meet the criteria
+      // Clear the error message after 3 seconds
       setTimeout(() => {
-        setError(""); // This clears the error after 3 seconds
+        setError("");
       }, 3000);
     }
   };
@@ -66,13 +76,47 @@ export default function Welcome() {
     <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
         <div className="welcome-left">
-          <Image
-            src="/assets/images/bg-welcome.png"
-            alt="welcome image"
-            width={470}
-            height={500}
-            className="welcome-image"
-          />
+          <div className="splide">
+            <Splide
+              options={{
+                type: "loop",
+                perPage: 1,
+                autoplay: true,
+                interval: 3000,
+                arrows: false,
+                pagination: true,
+              }}
+              aria-label="My Favorite Images"
+            >
+              <SplideSlide>
+                <Image
+                  src="/assets/images/bg-welcome.png"
+                  alt="welcome image"
+                  width={470}
+                  height={500}
+                  className="welcome-image"
+                />
+              </SplideSlide>
+              <SplideSlide>
+                <Image
+                  src="/assets/images/bg-signin.png"
+                  alt="welcome image"
+                  width={470}
+                  height={500}
+                  className="welcome-image"
+                />
+              </SplideSlide>
+              <SplideSlide>
+                <Image
+                  src="/assets/images/bg-welcome.png"
+                  alt="welcome image"
+                  width={470}
+                  height={500}
+                  className="welcome-image"
+                />
+              </SplideSlide>
+            </Splide>
+          </div>
           <div className="welcome-left-text">
             The potential to enhance customer service and improve business
             efficiency

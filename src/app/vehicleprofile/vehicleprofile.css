@@ -1,0 +1,76 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+.vectron-image {
+  width: 100%;
+  background-size: cover;
+  height: 90vh;
+}
+.vehicle-profile-right-content {
+  width: 80%;
+  margin: auto;
+}
+.vehicle-profile-right-content h1 {
+    text-align: center;
+  font-size: 40px;
+  font-weight: 600;
+}
+.vehicle-profile-right {
+    width: 100%;
+    margin: auto;
+  }
+.vehicle-form-content label {
+  margin-bottom: 8px !important;
+  display: block;
+  text-align: left;
+  color: #7C878E;
+  font-size: 14px;
+}
+.vehicle-form-content input {
+  width: 90%;
+  padding: 12px;
+  border: 2px solid #e3e9ee;
+  border-radius: 5px;
+  outline: none;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.vehicle-form-content button{
+    width: 352px;
+    padding: 12px;
+    border-radius: 40px;
+    outline: none;
+    border: none;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: 500;
+    background: linear-gradient(180deg, #9A77FF 0%, #735FFA 100%);
+
+}
+.error-message, .hint-message{
+    color: #ff0000cc;
+    margin-top: -6px;
+}
+
+@media screen and (min-width: 1120px) {
+    body{
+        overflow: hidden;
+    }
+  .vehicle-profile-container {
+    display: flex;
+  }
+  .vehicle-profile-left {
+    width: 100%;
+}
+.vectron-image {
+      background-size: cover;
+    height: 105vh;
+    width: 100%;
+  }
+  .vehicle-profile-right-content{
+    width: 352px;
+    margin: auto;
+  }
+  
+}

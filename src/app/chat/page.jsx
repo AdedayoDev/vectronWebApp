@@ -4,6 +4,8 @@ import SideChat from "@components/chatComp/side-chat";
 import PowerofAi from "@components/chatComp/powerofai";
 import Navbar from "@components/navbar/navbar";
 import "./chat.css";
+// import '@styles/globals.css';
+
 
 export default function Chat() {
   return (

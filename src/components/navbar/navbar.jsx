@@ -6,8 +6,8 @@ export default function Navbar({link='/', text, icon}) {
   return (
     <>
       <div className="nav-content">
-       <Link href={link} className="nav-link">
-       <Image
+       <Link href='/signin' className="nav-link">
+        <Image
           src={icon}
           alt="icon"
           width={20}
