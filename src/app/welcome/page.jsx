@@ -6,11 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/splide/css";
-
-import "./Welcome.css";
-import Navbar from "@components/navbar/Navbar";
+import Navbar from "@components/navbar/navbar";
 
 export default function Welcome() {
   const [form, setForm] = useState({
@@ -74,6 +70,7 @@ export default function Welcome() {
 
   return (
     <>
+    <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
         <Navbar link="/signin" text="Sign in" />
         <div className="welcome-left">
@@ -148,7 +145,7 @@ export default function Welcome() {
             </div>
             <div className="line-container">
               <div className="line"></div>
-              <span className="or-text">Or</span>
+              <span className="or-text">OR</span>
               <div className="line"></div>
             </div>
 

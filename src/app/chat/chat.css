@@ -1,3 +1,7 @@
+body{
+  padding: 0;
+  margin: 0;
+}
 .chat-container {
   display: flex;
   /* grid-template-columns: repeat(3, 1fr); */
@@ -77,9 +81,9 @@
 }
 .side-third-content {
   background-color: #e3cbff;
-  margin-top: 20px;
+  top: 10px;
   position: relative;
-  padding: 10px 20px;
+  padding: 10px  20px;
   border-radius: 15px;
 }
 .upgrade {
@@ -103,18 +107,20 @@
 .chat-feed {
   position: absolute;
   top: 410px;
-  left: 80px;
-  width: 75%;
+  left: 30px;
+  width: 88%;
   background-color: #181b1f;
   color: white;
 }
 .chat-input {
-  border: 1px solid #c391ff !important;
+  border: none !important;
+  /* border: 1px solid #c391ff !important; */
   border-radius: 8px;
+  /* background-color: #e3cbff !important; */
   position: fixed;
   bottom: 30px;
   color: black;
-  width: 75%;
+  width: 85%;
 }
 .message-list {
 border: none !important;
@@ -150,20 +156,23 @@ border: none !important;
 
 /* powerai */
 .powerai-bg {
-  width: 95% !important;
-  margin-left: 8px;
+  width: 100% !important;
+  margin-left: 0;
   background-size: cover;
   position: relative;
+}
+.navbar-component{
+
 }
 .powerai-container {
   position: absolute;
   background-color: white;
   border: 1px 1px solid #e3e9ee;
   z-index: 99;
-  left: 54%;
+  left: 50%;
   top: 36%;
   border-radius: 10px 10px 0 0;
-  width: 80%;
+  width: 90%;
   transform: translate(-50%, -40%);
 }
 .powerofAi-content {
@@ -282,13 +291,16 @@ border: none !important;
   .chat-input {
     width: 72.5em !important;
   } */
+   body{
+    overflow: hidden;
+   }
   .chat-feed {
     top: 400px;
-    left:140px;
-    width: 69%;
+    left:40px;
+    width: 78%;
   }
    .chat-input{
-    width: 69%;
+    width: 79%;
    }
   .side-chat-container {
     display: block;
@@ -296,18 +308,19 @@ border: none !important;
   .chat-container {
     justify-content: space-between;
     padding: 0 10px;
+    margin-top: 50px;
   }
 
   /* Power AI */
   .powerai-bg {
     position: absolute;
-    left: 90px;
-    width: 75% !important;
+    left: 0;
+    width: 83% !important;
   }
   .powerai-container {
     top: 28%;
-    left: 44%;
-    width: 70%;
+    left: 41.5%;
+    width: 78%;
   }
   .powerai-cards {
     width: 50%;

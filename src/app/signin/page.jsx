@@ -2,16 +2,9 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "./SignIn.css";
+
 import Link from "next/link";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/splide/css";
-import { useRouter } from "next/navigation";
-
-import Navbar from "@components/navbar/Navbar";
-
-export default function Signin() {
+ export default function SignIn(){
   const router = useRouter()
   const [form, setForm] = useState({
     email: "",
@@ -73,8 +66,6 @@ export default function Signin() {
 
   return (
     <div>
-      <Navbar link="/welcome" text="New account" />
-      <div className="welcome-page">
         <div className="welcome-left">
           <Splide
             options={{
@@ -144,7 +135,7 @@ export default function Signin() {
             </div>
             <div className="line-container">
               <div className="line"></div>
-              <span className="or-text">Or</span>
+              <span className="or-text">OR</span>
               <div className="line"></div>
             </div>
 
