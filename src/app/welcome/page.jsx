@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css'; 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Navbar from "@components/navbar/navbar";
+import Navbar from "@components/navbar/Navbar";
+import './Welcome.css'
 
 export default function Welcome() {
   const [form, setForm] = useState({
@@ -72,7 +75,6 @@ export default function Welcome() {
     <>
     <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
-        <Navbar link="/signin" text="Sign in" />
         <div className="welcome-left">
           <div className="splide">
             <Splide

@@ -2,7 +2,7 @@ import Feed from "@/components/chatComp/feed";
 // import AI from "@components/chatComp/ai-side";
 import SideChat from "@components/chatComp/side-chat";
 import PowerofAi from "@components/chatComp/powerofai";
-import Navbar from "@components/navbar/navbar";
+import Navbar from "@components/navbar/Navbar";
 import "./chat.css";
 // import '@styles/globals.css';
 

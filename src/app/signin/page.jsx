@@ -2,8 +2,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css'; 
+import { useRouter } from "next/navigation";
+import Navbar from "@components/navbar/Navbar";
 import Link from "next/link";
+import './SignIn.css'
+
+
  export default function SignIn(){
   const router = useRouter()
   const [form, setForm] = useState({
@@ -66,7 +72,9 @@ import Link from "next/link";
 
   return (
     <div>
-        <div className="welcome-left">
+      <Navbar link="/" text="New account" icon='/assets/icons/logout.png' />
+       <div className="signin-page">
+       <div className="welcome-left">
           <Splide
             options={{
               type: "loop",
@@ -110,6 +118,7 @@ import Link from "next/link";
             Revolutionize your chats with AI-powered conversations.
           </div>
         </div>
+
         <div className="welcome-right">
           <div className="welcome-right-content">
             <h1>Sign in</h1>
@@ -135,11 +144,11 @@ import Link from "next/link";
             </div>
             <div className="line-container">
               <div className="line"></div>
-              <span className="or-text">OR</span>
+              <span className="or-text">Or</span>
               <div className="line"></div>
             </div>
 
-            <form onSubmit={handleSubmit} className="welcome-form">
+            <form onSubmit={handleSubmit} className="sigin-form">
               <label htmlFor="email">Email</label>
               <br />
               <input
@@ -173,10 +182,9 @@ import Link from "next/link";
             </form>
           </div>
         </div>
+       </div>
+        {/* Toastify container */}
+        <ToastContainer autoClose={2000} pauseOnHover={false} />
       </div>
-
-      {/* Toastify container */}
-      <ToastContainer autoClose={2000} pauseOnHover={false} />
-    </div>
   );
 }

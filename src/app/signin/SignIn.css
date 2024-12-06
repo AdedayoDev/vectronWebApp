@@ -24,8 +24,8 @@ body {
 /* Style the pagination container */
 .splide__pagination {
   display: flex !important;
-  justify-content: center; 
-  gap: 10px; 
+  justify-content: center;
+  gap: 10px;
   background-color: transparent !important;
   visibility: visible !important;
 }
@@ -42,7 +42,6 @@ body {
   color: white !important;
   transform: scale(1.2);
 }
-
 
 .welcome-right-content {
   width: 352px !important;
@@ -102,10 +101,10 @@ body {
 }
 
 /* Form Inputs */
-.welcome-form {
+.sigin-form {
   margin-top: 30px;
 }
-.welcome-form input,
+.sigin-form input,
 button {
   border: 1px solid #e3e9ee;
   padding: 10px;
@@ -113,7 +112,7 @@ button {
   border-radius: 8px;
   margin-bottom: 20px;
 }
-.welcome-form button {
+.sigin-form button {
   background: linear-gradient(#9a77ff, #735ffa);
   color: white;
   transition: 0.3s ease;
@@ -123,23 +122,20 @@ button {
 label {
   text-align: left !important;
 }
-.policy {
-  text-align: center;
-}
 
 @media screen and (min-width: 1120px) {
-  body{
-    overflow: hidden ;
+  body {
+    overflow: hidden;
   }
-  .welcome-page {
+  .signin-page {
     display: flex;
     align-items: center;
   }
-  .welcome-left{
+  .welcome-left {
     width: 50%;
     padding: 8px;
   }
-  .welcome-left .welcome-image{
+  .welcome-left .welcome-image {
     height: 98vh !important;
     border-radius: 30px !important;
   }
@@ -148,10 +144,10 @@ label {
     width: 60%;
     left: 110px;
   }
-  .welcome-right{
-width: 50%;
+  .welcome-right {
+    width: 50%;
   }
-  .welcome-right-content{
+  .welcome-right-content {
     width: 60%;
     margin: auto;
   }

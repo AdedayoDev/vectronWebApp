@@ -16,7 +16,7 @@ export default function Onboarding() {
   return (
     <div>
       <div className="onboarding-container">
-        <Navbar link="/signin" text="Sign in" />
+        <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png'/>
         <div className="onboarding-left">
           <Image
             src="/assets/images/vectron-car.png"

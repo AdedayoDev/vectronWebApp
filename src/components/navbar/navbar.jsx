@@ -7,7 +7,6 @@ export default function Navbar({link='/', text, icon}) {
     <>
       <div className="nav-content">
        <Link href='/signin' className="nav-link">
-       <span>{text}</span>
         <Image
           src={icon}
           alt="icon"

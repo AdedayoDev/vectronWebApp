@@ -1,6 +1,23 @@
 .chat-history-container{
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
     margin-top: 50px;
+}
+
+.chathistory-data{
+    position: absolute;
+    bottom: 200px;
+}
+
+
+@media screen and (min-width: 1120px){
+    .chat-history-container{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        margin-top: 50px;
+    }
+    .chathistory-data{
+        position: relative;
+        top: 350px;
+        
+    }
 }
