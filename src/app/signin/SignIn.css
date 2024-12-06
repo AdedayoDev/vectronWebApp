@@ -2,8 +2,9 @@ body {
   padding: 0;
   margin: 0;
 }
-.welcome-page {
+.signin-page {
   width: 100%;
+  margin-top: 50px;
 }
 .welcome-left .welcome-image {
   width: 100% !important;
@@ -122,6 +123,30 @@ button {
 label {
   text-align: left !important;
 }
+@media screen and (min-width: 600px) {
+  body {
+    overflow: hidden;
+  }
+  .signin-page {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    gap: 30px;
+  }
+  .welcome-left .welcome-image {
+    height: 98vh !important;
+    border-radius: 30px !important;
+  }
+  .welcome-left {
+    width: 50%;
+    padding: 8px;
+  }
+  .welcome-left-text {
+    top: 280px;
+    /* width: 60%; */
+    left: 10px;
+  }
+}
 
 @media screen and (min-width: 1120px) {
   body {
@@ -130,6 +155,7 @@ label {
   .signin-page {
     display: flex;
     align-items: center;
+    margin-top: 0;
   }
   .welcome-left {
     width: 50%;

@@ -30,6 +30,22 @@ body {
   font-size: 16px;
   font-weight: 500;
 }
+@media screen and (min-width: 600px) {
+  body {
+    overflow: hidden;
+  }
+  .onboarding-container {
+    display: flex;
+    align-items: center;
+  }
+  .onboarding-left {
+    width: 55%;
+    background-size: cover;
+  }
+  .vectron-image {
+    height: 100vh;
+  }
+}
 
 @media screen and (min-width: 1120px) {
   body {

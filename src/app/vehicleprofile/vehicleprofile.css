@@ -53,6 +53,23 @@ body {
     margin-top: -6px;
 }
 
+@media screen and (min-width: 600px) {
+  body{
+      overflow: hidden;
+  }
+.vehicle-profile-container {
+  display: flex;
+}
+.vehicle-profile-left {
+  width: 100%;
+}
+.vectron-image {
+  background-size: cover;
+height: 105vh;
+width: 100%;
+}
+
+}
 @media screen and (min-width: 1120px) {
     body{
         overflow: hidden;

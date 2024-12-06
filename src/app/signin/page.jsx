@@ -2,16 +2,15 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css'; 
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
 import { useRouter } from "next/navigation";
 import Navbar from "@components/navbar/navbar";
 import Link from "next/link";
-import './SignIn.css'
+import "./SignIn.css";
 
-
- export default function SignIn(){
-  const router = useRouter()
+export default function SignIn() {
+  const router = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -35,30 +34,30 @@ import './SignIn.css'
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = form;
-  
+
     if (!email || !password) {
       setError("Please fill in all fields.");
       // Clear the error message after 3 seconds
       setTimeout(() => {
-        setError(""); 
+        setError("");
       }, 3000);
       return;
     }
-  
+
     if (password.length <= 12) {
       // Show success message with Toastify
       toast.success("Login successfully!");
-  
+
       // Clear form fields
       setForm({
         email: "",
         password: "",
       });
-  
+
       // Redirect after 2 seconds and ensure error is cleared
       setTimeout(() => {
         router.push("/onboarding");
-        setError(""); 
+        setError("");
       }, 2000);
     } else {
       setError("Password should be at least 12 characters.");
@@ -68,13 +67,12 @@ import './SignIn.css'
       }, 3000);
     }
   };
-  
 
   return (
     <div>
-      <Navbar link="/" text="New account" icon='/assets/icons/logout.png' />
-       <div className="signin-page">
-       <div className="welcome-left">
+      <Navbar link="/" text="New account" icon="/assets/icons/logout.png" />
+      <div className="signin-page">
+        <div className="welcome-left">
           <Splide
             options={{
               type: "loop",
@@ -182,9 +180,9 @@ import './SignIn.css'
             </form>
           </div>
         </div>
-       </div>
-        {/* Toastify container */}
-        <ToastContainer autoClose={2000} pauseOnHover={false} />
       </div>
+      {/* Toastify container */}
+      <ToastContainer autoClose={2000} pauseOnHover={false} />
+    </div>
   );
 }

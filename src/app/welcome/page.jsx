@@ -147,7 +147,7 @@ export default function Welcome() {
             </div>
             <div className="line-container">
               <div className="line"></div>
-              <span className="or-text">OR</span>
+              <span className="or-text">Or</span>
               <div className="line"></div>
             </div>
 
