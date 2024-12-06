@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import './SignIn.css'
 import Link from "next/link";
-import Navbar from "@components/navbar/Navbar";
+import Navbar from "@components/navbar/navbar";
 
 export default function Signin() {
   const [form, setForm] = useState({
