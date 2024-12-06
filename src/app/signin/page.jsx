@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import "react-toastify/dist/ReactToastify.css";
 import './SignIn.css'
 import Link from "next/link";
+import Navbar from "@components/navbar/navbar";
 
 export default function Signin() {
   const [form, setForm] = useState({
@@ -61,6 +62,7 @@ export default function Signin() {
 
   return (
     <div>
+      <Navbar link="/" text="New account" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
         <div className="welcome-left">
           <Image
@@ -97,10 +99,10 @@ export default function Signin() {
                 Continue with Apple
               </Link>
             </div>
-            <div class="line-container">
-              <div class="line"></div>
-              <span class="or-text">OR</span>
-              <div class="line"></div>
+            <div className="line-container">
+              <div className="line"></div>
+              <span className="or-text">OR</span>
+              <div className="line"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import Navbar from "@components/navbar/navbar";
 import './Welcome.css';
 
 export default function Welcome() {
@@ -62,6 +63,7 @@ export default function Welcome() {
 
   return (
     <>
+    <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
         <div className="welcome-left">
           <Image
@@ -99,10 +101,10 @@ export default function Welcome() {
                 Continue with Apple
               </Link>
             </div>
-            <div class="line-container">
-              <div class="line"></div>
-              <span class="or-text">OR</span>
-              <div class="line"></div>
+            <div className="line-container">
+              <div className="line"></div>
+              <span className="or-text">OR</span>
+              <div className="line"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">
