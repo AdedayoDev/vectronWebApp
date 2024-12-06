@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import "react-toastify/dist/ReactToastify.css";
 import './SignIn.css'
 import Link from "next/link";
+import Navbar from "@components/navbar/Navbar";
 
 export default function Signin() {
   const [form, setForm] = useState({
@@ -61,6 +62,7 @@ export default function Signin() {
 
   return (
     <div>
+      <Navbar link="/" text="New account" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
         <div className="welcome-left">
           <Image

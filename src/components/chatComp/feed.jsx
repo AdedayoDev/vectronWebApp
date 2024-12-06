@@ -10,11 +10,12 @@ import {
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
 
+
 const Feed = () => {
   const [typing, setTyping] = useState(false);
   const [messages, setMessages] = useState([
     {
-      message: "Hi, welcome to Docvantage!",
+      message: "Hi, I'm Vectron!",
       sender: "ChatGPT",
       sentTime: new Date().toLocaleTimeString(),
     },
@@ -108,6 +109,7 @@ const Feed = () => {
 
   return (
     <div className="chat-feed">
+    
       <MainContainer>
         <ChatContainer style={{
             backgroundColor: "transparent",
@@ -117,7 +119,7 @@ const Feed = () => {
            
             typingIndicator={
               typing ? (
-                <TypingIndicator content="Docvantage is typing..." />
+                <TypingIndicator content="Vectron is typing..." />
               ) : null
             }
           >
@@ -130,6 +132,7 @@ const Feed = () => {
             placeholder="Type your message here..."
             onSend={handleSend}
             className="chat-input"
+            
           />
         </ChatContainer>
       </MainContainer>

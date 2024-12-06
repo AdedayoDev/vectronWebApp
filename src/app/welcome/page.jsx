@@ -4,6 +4,7 @@ import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import Navbar from "@components/navbar/Navbar";
 import './Welcome.css';
 
 export default function Welcome() {
@@ -62,6 +63,7 @@ export default function Welcome() {
 
   return (
     <>
+    <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png' />
       <div className="welcome-page">
         <div className="welcome-left">
           <Image
