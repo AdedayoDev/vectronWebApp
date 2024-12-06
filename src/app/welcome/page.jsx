@@ -8,7 +8,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css'; 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Navbar from "@components/navbar/Navbar";
+import Navbar from "@components/navbar/navbar";
 import './Welcome.css'
 
 export default function Welcome() {

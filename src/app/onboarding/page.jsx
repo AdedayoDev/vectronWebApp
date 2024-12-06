@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "@components/navbar/Navbar";
+import Navbar from "@components/navbar/navbar";
 import "./onboarding.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

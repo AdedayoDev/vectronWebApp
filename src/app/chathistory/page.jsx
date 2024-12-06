@@ -4,7 +4,7 @@ import ChathistoryData from "@components/chathistoryComp/chathistoryData";
 import './chathistory.css'
 import "@app/chat/chat.css";
 import PowerofAi from "../../components/chatComp/powerofai";
-import Navbar from "@components/navbar/Navbar";
+import Navbar from "@components/navbar/navbar";
 
 export default function ChatHistory() {
   return (

@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css'; 
 import { useRouter } from "next/navigation";
-import Navbar from "@components/navbar/Navbar";
+import Navbar from "@components/navbar/navbar";
 import Link from "next/link";
 import './SignIn.css'
 
