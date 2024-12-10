@@ -1,10 +1,10 @@
-body{
+body {
   padding: 0;
   margin: 0;
 }
 .chat-container {
   display: flex;
-  margin-top: 50px ;
+  margin-top: 50px;
 }
 .chat-response {
   position: absolute;
@@ -80,7 +80,7 @@ body{
   background-color: #e3cbff;
   top: 10px;
   position: relative;
-  padding: 10px  20px;
+  padding: 10px 20px;
   border-radius: 15px;
 }
 .upgrade {
@@ -101,55 +101,26 @@ body{
 }
 
 /* Feed section styling */
-.chat-feed {
-  position: absolute;
-  top: 410px;
-  left: 30px;
-  width: 88%;
-  background-color: #181b1f;
-  color: white;
-}
-.chat-input {
-  border: none !important;
-  /* border: 1px solid #c391ff !important; */
-  border-radius: 8px;
-  /* background-color: #e3cbff !important; */
+.feed-chat {
   position: fixed;
-  bottom: 30px;
-  color: black;
-  width: 85%;
+  bottom: 20px;
+  left: 50px;
 }
-.message-list {
-border: none !important;
-}
-/* .form {
+.chat-form {
   display: flex;
-  position: fixed;
-  bottom: 30px;
-  justify-content: center;
-  border: 1px solid #c390ff;
-  padding: 5px;
-  align-items: center;
-  border-radius: 10px;
-  z-index: 999;
+  gap: 5px;
+  border: 1px solid #c391ff;
+  border-radius: 8px;
+  padding: 8px;
 }
-.chat-input {
-  width: 18em !important;
+.chat-form input,
+button {
   border: none;
   outline: none;
-  background-color: transparent;
-  margin-left: 5px;
 }
-.send-btn {
-  border: none;
-  background-color: transparent;
+.chat-form input {
+  width: 220px;
 }
-.add-voice {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: 5px;
-} */
 
 /* powerai */
 .powerai-bg {
@@ -157,9 +128,6 @@ border: none !important;
   margin-left: 0;
   background-size: cover;
   position: relative;
-}
-.navbar-component{
-
 }
 .powerai-container {
   position: absolute;
@@ -249,56 +217,35 @@ border: none !important;
     justify-content: space-between;
     padding: 0 10px;
   }
+  .chat-form input{
+    width: 400px;
+  }
   .powerai-bg {
-    width: 70% !important;
+    width: 72% !important;
     position: absolute;
-    left: 65px;
+    left: 0;
   }
   .powerai-container {
-    left: 42%;
+    left: 36%;
     width: 65%;
     top: 30%;
+  }
+  .powerai-cards {
+    width: 80%;
   }
   .side-chat-container {
     display: block;
   }
-  /* .chat-container {
-    justify-content: space-between;
-    padding: 0 10px;
-  }
-  .form {
-    left: 90px;
-  }
-  .chat-input {
-    width: 44em !important;
-  } */
-   .chat-feed{
-    width: 67%;
-   }
-   .chat-input{
-    width: 67%;
-   }
 }
 
 /* Web View */
 @media screen and (min-width: 1120px) {
-  /* .form {
-    left: 90px;
-  }
-  .chat-input {
-    width: 72.5em !important;
-  } */
-   body{
+  body {
     overflow: hidden;
-   }
-  .chat-feed {
-    top: 400px;
-    left:40px;
-    width: 78%;
   }
-   .chat-input{
-    width: 79%;
-   }
+  .chat-form input {
+    width: 995px;
+  }
   .side-chat-container {
     display: block;
   }
