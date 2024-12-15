@@ -1,0 +1,71 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+.chatdetail-container {
+  margin-top: 50px;
+}
+.chatdetail-content .chatdetail-bg {
+  width: 100%;
+  height: 161px;
+  position: relative;
+}
+.chatdetail-detail {
+  background-color: white;
+  position: absolute;
+  top: 130px;
+  width: 79%;
+  left: 26px;
+  padding: 8px 24px;
+  border-radius: 8px 8px 0 0;
+}
+.chatdetail-detail .avatar-bg {
+  border-radius: 40px;
+}
+.chatdetail-detail .detail-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chatdetail-detail .detail-user h4 {
+  margin-bottom: -7px;
+}
+.chatdetail-detail .detail-user p {
+  font-size: 14px;
+}
+.chatdetail-detail .detail-system{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.detail-system .system-icon{
+    position: relative;
+    top: -45px;
+}
+
+
+@media screen and (min-width: 786px) {
+  .chatdetail-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px 0 0;
+  }
+  .chatdetail-content .chatdetail-bg {
+    position: absolute;
+    left: 0;
+    width: 88% !important;
+  }
+  .chatdetail-detail {
+    top: 120px;
+    left: 30px;
+  }
+  .chatdetail-detail .detail-system p{
+    width: 542px;
+}
+.detail-system .system-icon{
+    position: relative;
+    top: -30px;
+}
+
+  
+}

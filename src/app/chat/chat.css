@@ -12,7 +12,6 @@ body {
   left: 100px;
 }
 
-
 /* Side AI Styling */
 .ai-side {
   display: flex;
@@ -37,23 +36,25 @@ body {
   font-weight: 500;
   margin-bottom: 10px;
 } */
- .side-chat-container p,h3, h4{
+.side-chat-container p,
+h3,
+h4 {
   margin-bottom: 0;
   color: #442066;
- }
+}
 .prev-cat-one {
   display: flex;
   align-items: baseline;
   gap: 10px;
   cursor: pointer;
 }
-.side-vehicles h4{
+.side-vehicles h4 {
   margin-top: 30px;
 }
-.side-features{
+.side-features {
   margin-top: 15px;
 }
-.side-features-one{
+.side-features-one {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -70,8 +71,8 @@ body {
   align-items: center;
   margin-top: 10px;
 }
-.arrow-right{
-  transform: scale(.8);
+.arrow-right {
+  transform: scale(0.8);
 }
 .side-third-content button {
   outline: none;
@@ -131,10 +132,10 @@ body {
 .feed-chat {
   position: fixed;
   bottom: 20px;
-  left: 50px;
+  left: 40px;
 }
 .form-container {
-  background-color: #C8D6FF;
+  background-color: #c8d6ff;
   border: 1px solid black;
   border-radius: 8px;
   padding: 8px;
@@ -163,11 +164,11 @@ button {
   margin-top: 16px;
   padding: 0 5px;
 }
-.form-images .image{
+.form-images .image {
   cursor: pointer;
-  transition: .3s ease;
+  transition: 0.3s ease;
 }
-.form-images .image:hover{
+.form-images .image:hover {
   background-color: #e3e9ee;
   padding: 5px;
   border-radius: 6px;
@@ -177,6 +178,11 @@ button {
   font-size: 16px;
   font-weight: 700;
   margin-top: 0;
+}
+.icon-button{
+  background-color: transparent;
+  position: absolute;
+  bottom: 10px;
 }
 
 /* powerai */
@@ -197,6 +203,7 @@ button {
   border-radius: 10px 10px 0 0;
   width: 90%;
   transform: translate(-50%, -40%);
+  /* display: none; */
 }
 .powerofAi-content {
   padding: 20px;
@@ -269,6 +276,62 @@ button {
 .cards-info {
   position: absolute;
 }
+
+/* Power of AI section (Content two for new chat) */
+.new-chat-container {
+  position: absolute;
+  background-color: white;
+  border: 1px 1px solid #e3e9ee;
+  z-index: 99;
+  left: 50%;
+  top: 32%;
+  border-radius: 10px 10px 0 0;
+  width: 90%;
+  transform: translate(-50%, -40%);
+}
+
+.new-chat-content {
+  padding: 5px 20px;
+  position: relative;
+}
+.new-chat-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.dropdown-content {
+  position: absolute;
+}
+.showdropdown{
+  display: block;
+}
+.hidedropdown{
+  display: none;
+}
+.new-chat-intro h1{
+  font-size: 50px;
+  font-weight: 400;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  top: 150px;
+  color: #1E3A8A;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.msg-button{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #DBB4FF;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  /* font-size: 16px; */
+  font-weight: 500;
+  width: 100%;
+
+}
+
 /* Tablet view */
 @media screen and (min-width: 600px) {
   .chat-container {
@@ -325,12 +388,12 @@ button {
   .powerai-bg {
     position: absolute;
     left: 0;
-    width: 81% !important;
+    width: 78% !important;
   }
   .powerai-container {
     top: 35%;
-    left: 40.5%;
-    width: 78%;
+    left: 39%;
+    width: 75%;
   }
   .powerai-cards {
     width: 50%;
@@ -344,5 +407,13 @@ button {
   .cards-info-content .direction {
     gap: 20px;
   }
-  /*  */
+  /* Power AI new Chat section */
+  .new-chat-container {
+    top: 35%;
+    left: 39%;
+    width: 75%;
+  }
+  .new-chat-intro h1{
+    top: 50px;
+  }
 }

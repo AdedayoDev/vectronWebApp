@@ -77,10 +77,10 @@ body {
   .chathistory-bg {
     position: absolute;
     left: 0;
-    width: 80% !important;
+    width: 77% !important;
   }
   .chat-history-data{
-    width: 75%;
+    width: 72%;
   }
   .search-container{
     width: 693px;
