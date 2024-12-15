@@ -1,0 +1,15 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+.chatnav-container{
+    display: flex;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    gap: 20px;
+    align-items: center;
+}
+.user-avatar{
+    border-radius: 40px;
+}

@@ -8,7 +8,7 @@ import { ChevronRight } from "lucide-react";
 
 export default function Feed() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
-    api: "api/openai",
+    api: "/api/openai",
   });
 
   const chatContainer = useRef(null);
@@ -58,36 +58,42 @@ export default function Feed() {
     <div ref={chatContainer} className="feed-chat">
       {renderResponse()}
 
-      <form onSubmit={handleSubmit} className="chat-form">
-        <Image
+      <div className="form-container">
+        <form onSubmit={handleSubmit} className="chat-form">
+          {/* <Image
           src="/assets/images/Bot-small.png"
           alt="Ai image"
           width={25}
           height={25}
-        />
-        <input
-          type="text"
-          name="input-feed"
-          placeholder="Say anything"
-          onChange={handleInputChange}
-          value={input}
-        />
-        <Button variant="outline" size="icon">
-          <ChevronRight />
-        </Button>
-        <Image
-          src="/assets/icons/add.png"
-          alt="Ai image"
-          width={25}
-          height={25}
-        />
-        <Image
-          src="/assets/icons/voice.png"
-          alt="Ai image"
-          width={25}
-          height={25}
-        />
-      </form>
+        /> */}
+          <textarea
+            type="text"
+            name="input-feed"
+            placeholder="Message Vechtron"
+            onChange={handleInputChange}
+            value={input}
+          />
+          {/* <Button variant="outline" size="icon">
+            <ChevronRight />
+          </Button> */}
+        </form>
+        <div className="form-images">
+          <Image
+            src="/assets/icons/spring.png"
+            alt="Ai image"
+            width={10}
+            height={20}
+            className="image"
+          />
+          <Image
+            src="/assets/icons/speak.png"
+            alt="Ai image"
+            width={20}
+            height={20}
+            className="image"
+          />
+        </div>
+      </div>
     </div>
   );
 }

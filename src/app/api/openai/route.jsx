@@ -3,26 +3,29 @@ import { OpenAIStream, StreamingTextResponse } from "ai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
+  organization: process.env.OPENAI_ORGANIZATION_ID || "",
 });
 
 export const runtime = "edge";
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
-    const { messages } = await req.json();
-    console.log("messages", messages);
+    const body = await req.json();
+    if (!body.messages || !Array.isArray(body.messages)) {
+      return new Response("Invalid request body", { status: 400 });
+    }
 
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: "You are a car AI companion",
+          content: "You are a helpful car assistant.",
         },
-        ...messages,
+        ...body.messages,
       ],
       stream: true,
-      temperature: 1,
+      temperature: 0.7,
     });
 
     const stream = OpenAIStream(response);

@@ -11,9 +11,7 @@ body {
   top: 400px;
   left: 100px;
 }
-.side-chat-container {
-  display: none;
-}
+
 
 /* Side AI Styling */
 .ai-side {
@@ -25,7 +23,10 @@ body {
   margin-bottom: 10px;
 }
 /* Side Bar Chat Styling */
-.new-chat-btn {
+.side-chat-container {
+  display: none;
+}
+/* .new-chat-btn {
   width: 200px;
   outline: none;
   border: none;
@@ -35,18 +36,42 @@ body {
   border-radius: 8px;
   font-weight: 500;
   margin-bottom: 10px;
-}
+} */
+ .side-chat-container p,h3, h4{
+  margin-bottom: 0;
+  color: #442066;
+ }
 .prev-cat-one {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
   cursor: pointer;
+}
+.side-vehicles h4{
+  margin-top: 30px;
+}
+.side-features{
+  margin-top: 15px;
+}
+.side-features-one{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 5px;
+  font-weight: 600;
 }
 .see-more-btn {
   text-decoration: none;
   color: black;
   cursor: pointer;
   font-weight: 600;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+.arrow-right{
+  transform: scale(.8);
 }
 .side-third-content button {
   outline: none;
@@ -68,27 +93,28 @@ body {
 }
 .other-option-one {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
   cursor: pointer;
-  margin-top: -10px;
+  /* margin-top: -10px; */
 }
 .side-second-content {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .side-third-content {
   background-color: #e3cbff;
-  top: 10px;
+  top: 20px;
   position: relative;
   padding: 10px 20px;
   border-radius: 15px;
+  text-align: center;
 }
 .upgrade {
   background-color: #331bd7;
   color: white;
   font-weight: 500;
   border-radius: 20px;
-  padding: 8px;
+  padding: 8px 24px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -98,6 +124,7 @@ body {
 .follow-us {
   text-align: center;
   font-weight: 500;
+  margin-top: 20px;
 }
 
 /* Feed section styling */
@@ -106,20 +133,50 @@ body {
   bottom: 20px;
   left: 50px;
 }
-.chat-form {
-  display: flex;
-  gap: 5px;
-  border: 1px solid #c391ff;
+.form-container {
+  background-color: #C8D6FF;
+  border: 1px solid black;
   border-radius: 8px;
   padding: 8px;
+  height: 95px;
+  /* width: 355px; */
 }
 .chat-form input,
 button {
   border: none;
   outline: none;
 }
-.chat-form input {
-  width: 220px;
+.chat-form textarea {
+  width: 350px;
+  height: 30px !important;
+  border: none;
+  outline: none;
+  padding: 10px 5px;
+  resize: none;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: transparent;
+}
+.form-images {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 0 5px;
+}
+.form-images .image{
+  cursor: pointer;
+  transition: .3s ease;
+}
+.form-images .image:hover{
+  background-color: #e3e9ee;
+  padding: 5px;
+  border-radius: 6px;
+}
+.chat-form textarea::placeholder {
+  color: #2869d4;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 0;
 }
 
 /* powerai */
@@ -128,6 +185,7 @@ button {
   margin-left: 0;
   background-size: cover;
   position: relative;
+  height: 161px;
 }
 .powerai-container {
   position: absolute;
@@ -217,7 +275,7 @@ button {
     justify-content: space-between;
     padding: 0 10px;
   }
-  .chat-form input{
+  .chat-form textarea {
     width: 400px;
   }
   .powerai-bg {
@@ -241,10 +299,19 @@ button {
 /* Web View */
 @media screen and (min-width: 1120px) {
   body {
-    overflow: hidden;
+    /* overflow: hidden; */
   }
-  .chat-form input {
+  .form-container {
+    height: 195px;
+    width: 100%;
+    margin-left: 10px;
+  }
+  .chat-form textarea {
     width: 995px;
+    padding: 10px 5px 90px;
+  }
+  .form-images {
+    margin-top: 30px;
   }
   .side-chat-container {
     display: block;
@@ -258,11 +325,11 @@ button {
   .powerai-bg {
     position: absolute;
     left: 0;
-    width: 83% !important;
+    width: 81% !important;
   }
   .powerai-container {
-    top: 28%;
-    left: 41.5%;
+    top: 35%;
+    left: 40.5%;
     width: 78%;
   }
   .powerai-cards {
