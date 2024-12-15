@@ -1,15 +1,20 @@
+
+// // export default withPWA(pwaConfig)(nextConfig);
 // import type { NextConfig } from "next";
-// import withPWA from 'next-pwa';
+// import type { PWAConfig } from 'next-pwa';
+
+// // Import withPWA this way to avoid TypeScript errors
+// const withPWA = require('next-pwa');
 
 // // PWA configuration
-// const pwaConfig = {
+// const pwaConfig: PWAConfig = {
 //   dest: 'public',
 //   register: true,
 //   skipWaiting: true,
 //   disable: process.env.NODE_ENV === 'development'
 // };
 
-// const nextConfig: NextConfig = {
+// const config: NextConfig = {
 //   reactStrictMode: true,
 //   images: {
 //     domains: ['image-domain.com'],
@@ -21,31 +26,40 @@
 //   }
 // };
 
-// export default withPWA(pwaConfig)(nextConfig);
+// // Export the composed configuration
+// export default withPWA(pwaConfig)(config) as NextConfig;
+
+
 import type { NextConfig } from "next";
-import type { PWAConfig } from 'next-pwa';
+import type { PWAConfig } from "next-pwa";
 
 // Import withPWA this way to avoid TypeScript errors
-const withPWA = require('next-pwa');
+const withPWA = require("next-pwa");
 
 // PWA configuration
 const pwaConfig: PWAConfig = {
-  dest: 'public',
+  dest: "public",
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development'
+  disable: process.env.NODE_ENV === "development",
 };
 
 const config: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['image-domain.com'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image-domain.com",
+        pathname: "/**", // Allow all paths from this domain
+      },
+    ],
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '2mb'
+      bodySizeLimit: "2mb",
     },
-  }
+  },
 };
 
 // Export the composed configuration
