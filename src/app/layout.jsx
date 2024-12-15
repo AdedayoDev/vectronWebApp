@@ -1,4 +1,4 @@
-
+import "./globals.css";
 
 export const metadata = {
   title: "Vectron webapp",
@@ -7,10 +7,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-   <>
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-   </>
+    <>
+      <html lang="en">
+        <body className="overflow-x-hidden">{children}</body>
+      </html>
+    </>
   );
 }

@@ -2,12 +2,22 @@
 module.exports = {
 	darkMode: ["class"],
 	content: [
-		"./app/**/*.{js,ts,jsx,tsx}", 
-		"./components/**/*.{js,ts,jsx,tsx}", 
-		"./pages/**/*.{js,ts,jsx,tsx}", 
-	],
+		"./app/**/*.{js,ts,jsx,tsx,mdx}",
+		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
+		"./components/**/*.{js,ts,jsx,tsx,mdx}",
+	 
+		// Or if using `src` directory:
+		"./src/**/*.{js,ts,jsx,tsx,mdx}",
+	  ],
 	theme: {
 	  extend: {
+		screens: {
+			xs: "280px",
+			sm: "320px",
+			md: "540px",
+			lg: "720px",
+			xl: "1080px",
+		  },
 		borderRadius: {
 		  lg: "var(--radius)",
 		  md: "calc(var(--radius) - 2px)",
