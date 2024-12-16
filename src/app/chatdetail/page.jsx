@@ -47,7 +47,7 @@ export default function Chatdetail() {
                     <h4>Vechtron</h4>
                     <p>
                       I would be happy to help you troubleshoot your car, but I will
-                      need more specific information about what issues you're
+                      need more specific information about what issues you are
                       experiencing. This will help me provide more targeted and
                       useful advice.
                     </p>
@@ -64,8 +64,8 @@ export default function Chatdetail() {
                   <div className="detail-user-text">
                     <h4>Vechtron</h4>
                     <p>
-                      I would be happy to help you troubleshoot your car, but I'll
-                      need more specific information about what issues you're
+                      I would be happy to help you troubleshoot your car, but I will
+                      need more specific information about what issues you are
                       experiencing. This will help me provide more targeted and
                       useful advice.
                     </p>
