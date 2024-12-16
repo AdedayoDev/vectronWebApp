@@ -12,6 +12,7 @@ body {
 }
 .welcome-left {
   position: relative;
+  display: none;
 }
 .welcome-left-text {
   position: absolute;
@@ -44,6 +45,9 @@ body {
   transform: scale(1.2);
 }
 
+.welcome-right{
+  margin-top: 100px ;
+}
 .welcome-right-content {
   width: 352px !important;
   margin: auto;
@@ -138,6 +142,7 @@ label {
     border-radius: 30px !important;
   }
   .welcome-left {
+    display: block;
     width: 50%;
     padding: 8px;
   }
@@ -145,6 +150,9 @@ label {
     top: 280px;
     /* width: 60%; */
     left: 10px;
+  }
+  .welcome-right{
+    margin: 0;
   }
 }
 
@@ -166,12 +174,13 @@ label {
     border-radius: 30px !important;
   }
   .welcome-left-text {
-    top: 290px;
+    top: 250px;
     width: 60%;
-    left: 110px;
+    left: 140px;
   }
   .welcome-right {
     width: 50%;
+    margin: 0;
   }
   .welcome-right-content {
     width: 60%;

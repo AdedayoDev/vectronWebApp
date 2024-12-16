@@ -4,7 +4,11 @@ body {
 }
 .welcome-page {
   width: 100%;
-  margin-top: 50px;
+  margin-top: 30px;
+}
+.welcome-left{
+  display: none;
+  /* position: relative; */
 }
 .welcome-left .welcome-image {
   width: 100% !important;
@@ -33,9 +37,6 @@ body {
   transform: scale(1.2);
 }
 
-.welcome-left {
-  position: relative;
-}
 .welcome-left-text {
   position: absolute;
   font-size: 32px;
@@ -45,6 +46,9 @@ body {
   text-align: center;
   padding: 30px;
 }
+.welcome-right{
+margin-top: 90px;
+}
 .welcome-right-content {
   width: 352px !important;
   margin: auto;
@@ -52,8 +56,8 @@ body {
 .welcome-right-content h1 {
   font-size: 40px;
   font-weight: 600;
-  width: 60%;
-  margin: 30px auto;
+  width: 80%;
+  margin: 20px auto;
   text-align: center;
 }
 
@@ -131,9 +135,9 @@ button {
   color: #7c878e;
 }
 @media screen and (min-width: 600px) {
-  body {
+  /* body {
     overflow: hidden;
-  }
+  } */
   .welcome-page {
     display: flex;
     align-items: center;
@@ -141,17 +145,19 @@ button {
     gap: 30px;
   }
   .welcome-left .welcome-image {
-    height: 98vh !important;
+    height: 100vh !important;
     border-radius: 30px !important;
   }
   .welcome-left {
     width: 50%;
     padding: 8px;
+    display: block;
+    position: relative;
   }
   .welcome-left-text {
-    top: 280px;
+    top: 250px !important;
     /* width: 60%; */
-    left: 10px;
+    /* left: 80px; */
   }
   .policy{
     margin-top: -5px;
@@ -159,9 +165,9 @@ button {
 }
 
 @media screen and (min-width: 1120px) {
-  body {
+  /* body {
     overflow: hidden;
-  }
+  } */
   .welcome-page {
     display: flex;
     align-items: center;
@@ -169,19 +175,24 @@ button {
   }
   .welcome-left {
     width: 50%;
-    padding: 8px;
+    padding: 0 8px;
+    position: relative;
+    top: -24px;
   }
   .welcome-left .welcome-image {
-    height: 98vh !important;
+    height: 96vh !important;
+/* position: absolute;
+    top: 0; */
     border-radius: 30px !important;
   }
   .welcome-left-text {
-    top: 280px;
-    width: 60%;
+    /* top: 300px; */
+    width: 70%;
     left: 100px;
   }
   .welcome-right {
     width: 50%;
+    margin-top: 40px;
   }
   .welcome-right-content {
     width: 60%;
