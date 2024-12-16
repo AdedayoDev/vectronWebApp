@@ -13,6 +13,7 @@ const chatData = [
     { id: 4, title: "Troubleshooting car wont stop", date: "Today" },
     { id: 5, title: "Troubleshooting car wont stop", date: "Today" },
     { id: 6, title: "Troubleshooting car wont stop", date: "Today" },
+    { id: 6, title: "Troubleshooting car wont stop", date: "Today" },
   ];
 
   export default chatData;
