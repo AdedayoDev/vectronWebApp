@@ -52,7 +52,7 @@ export default function Chatdetail() {
                       useful advice.
                     </p>
                   </div>
-                </div>
+                </div>    
                 <div className="detail-system">
                   <Image
                     src="/assets/icons/ai-icon.png"
@@ -70,25 +70,7 @@ export default function Chatdetail() {
                       useful advice.
                     </p>
                   </div>
-                </div>
-                <div className="detail-system">
-                  <Image
-                    src="/assets/icons/ai-icon.png"
-                    alt="Avatar"
-                    width={30}
-                    height={30}
-                    className="system-icon"
-                  />
-                  <div className="detail-user-text">
-                    <h4>Vechtron</h4>
-                    <p>
-                      I'd be happy to help you troubleshoot your car, but I'll
-                      need more specific information about what issues you're
-                      experiencing. This will help me provide more targeted and
-                      useful advice.
-                    </p>
-                  </div>
-                </div>
+                </div>              
               </div>
             </div>
           </div>
