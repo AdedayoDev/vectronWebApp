@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "Vectron Webapp",
   description: "Your intelligent automotive companion",
@@ -5,6 +7,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+ 
     <html lang="en">
       <head>
         {/* Preconnect for Google Fonts */}
@@ -21,9 +24,10 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body style={{ fontFamily: "'Inter', sans-serif" }}>
+      <body style={{ fontFamily: "'Inter', sans-serif" }} className="overflow-x-hidden">
         {children}
       </body>
     </html>
+
   );
 }
