@@ -1,22 +1,68 @@
-import AI from "@components/chatComp/ai-side";
+'use client'
+
+import { useState } from "react";
 import Aside from "@components/chatComp/side-chat";
-import ChathistoryData from "@components/chathistoryComp/chathistoryData";
-import './chathistory.css'
+import "./chathistory.css";
 import "@app/chat/chat.css";
-import PowerofAi from "../../components/chatComp/powerofai";
-import Navbar from "@components/navbar/navbar";
+import Navbar from "@components/navbar/chatNav";
+import Image from "next/image";
+import { Search } from "lucide-react";
+import chatData from '@components/chathistoryComp/chatData'
 
 export default function ChatHistory() {
+  const [searchTerm, setSearchTerm] = useState("");
+
+
+  const filteredChats = chatData.filter((chat) =>
+    chat.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
-      <Navbar link="/" text="My account" icon="/assets/icons/user.png" />
+      <Navbar />
       <div className="chat-history-container">
-        {/* <AI /> */}
-        <div className="chathistory-data">
-        <ChathistoryData />
+        <div className="chat-history-bg">
+          <Image
+            src="/assets/images/bg-img.png"
+            alt="Background image"
+            width={200}
+            height={200}
+            className="chathistory-bg"
+          />
+          <div className="chat-history-data">
+            <div className="search-container">
+              <button>
+                <Search size={20} color="gray" />
+              </button>
+              <input
+                type="text"
+                placeholder="Search conversation"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="conversation-container">
+              {filteredChats.map((chat) => (
+                <div className="conversation" key={chat.id}>
+                  <div className="conversation-text">
+                    <h3>{chat.title}</h3>
+                    <p>{chat.date}</p>
+                  </div>
+                  <div className="conversation-icon">
+                    <Image
+                      src="/assets/icons/dots.png"
+                      alt="Options icon"
+                      width={3}
+                      height={15}
+                      className="conversation-icon"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <div className="chat-history-aside">
-          <PowerofAi />
           <Aside />
         </div>
       </div>

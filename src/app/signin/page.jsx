@@ -25,43 +25,63 @@ export default function SignIn() {
       [name]: value,
     }));
     if (name === "password" && value.length <= 12) {
-      setError(""); // Reset error when password is valid
+      setError("");
     } else if (name === "password" && value.length > 12) {
       setError("Password should be at least 12 characters.");
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = form;
 
     if (!email || !password) {
       setError("Please fill in all fields.");
-      // Clear the error message after 3 seconds
       setTimeout(() => {
         setError("");
       }, 3000);
       return;
     }
 
-    if (password.length <= 12) {
-      // Show success message with Toastify
+    if (password.length > 12) {
+      setError("Password should be at least 12 characters.");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      return;
+    }
+
+    try {
+      // Make API call
+      const response = await fetch("https://api-staging.vechtron.com/apispec_1.json", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to sign in. Please try again.");
+      }
+
+      const data = await response.json();
+
       toast.success("Login successfully!");
 
-      // Clear form fields
+      // Clear form
       setForm({
         email: "",
         password: "",
       });
 
-      // Redirect after 2 seconds and ensure error is cleared
+      // Redirect to the onboarding page
       setTimeout(() => {
         router.push("/onboarding");
-        setError("");
       }, 2000);
-    } else {
-      setError("Password should be at least 12 characters.");
-      // Clear the error message after 3 seconds
+    } catch (error) {
+      console.error("Error:", error);
+      setError("An error occurred. Please try again later.");
       setTimeout(() => {
         setError("");
       }, 3000);
@@ -173,15 +193,10 @@ export default function SignIn() {
                 <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
               )}
               <button type="submit">Sign in</button>
-              {/* <p className="policy">
-                By creating an account, you agree to our Terms of Service and
-                Privacy & Cookie Statement.
-              </p> */}
             </form>
           </div>
         </div>
       </div>
-      {/* Toastify container */}
       <ToastContainer autoClose={2000} pauseOnHover={false} />
     </div>
   );
