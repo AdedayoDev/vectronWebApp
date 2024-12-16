@@ -3,6 +3,7 @@
 import { useChat } from "ai/react";
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
+import Image from 'next/image'
 
 export default function Feed() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -70,14 +71,16 @@ export default function Feed() {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             value={input}
+            className="no-scrollbar"
           />
           <button type="submit" className="icon-button">
             {isSoundWaveIcon ? (
-              <img
+              <Image
                 src="/assets/icons/speak.png"
                 alt="Sound wave icon"
                 width={20}
                 height={20}
+                className="soundwave-icon"
               />
             ) : (
               <Send size={20} />
@@ -85,7 +88,7 @@ export default function Feed() {
           </button>
         </form>
         <div className="form-images">
-          <img
+          <Image
             src="/assets/icons/spring.png"
             alt="Spring icon"
             width={10}

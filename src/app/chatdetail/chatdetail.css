@@ -26,6 +26,9 @@ body {
   scrollbar-color: transparent;
   padding-right: 10px;
 }
+.detail-system, .detail-user{
+  margin-bottom: 20px;
+}
 .detail-content::-webkit-scrollbar {
   width: 6px;
 }
@@ -46,22 +49,11 @@ body {
   align-items: center;
   gap: 8px;
 }
-.chatdetail-detail .detail-user h4 {
-  margin-bottom: -7px;
-}
-.chatdetail-detail .detail-user p {
-  font-size: 14px;
-}
+
 .chatdetail-detail .detail-system{
     display: flex;
     align-items: center;
     gap: 8px;
-}
-.chatdetail-detail .detail-system h4 {
-  margin-bottom: -7px;
-}
-.chatdetail-detail .detail-system p{
-  font-size: 14px;
 }
 .detail-system .system-icon{
     position: relative;

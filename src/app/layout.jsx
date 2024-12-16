@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body style={{ fontFamily: "'Inter', sans-serif" }} className="overflow-x-hidden">
+      <body style={{ fontFamily: "'Inter', sans-serif" }}>
         {children}
       </body>
     </html>
