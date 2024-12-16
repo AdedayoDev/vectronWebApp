@@ -1,16 +1,33 @@
-// import '@styles/globals.css'
+import "./globals.css";
 
 export const metadata = {
-  title: "Vectron webapp",
+  title: "Vectron Webapp",
   description: "Your intelligent automotive companion",
 };
 
 export default function RootLayout({ children }) {
   return (
-   <>
+ 
     <html lang="en">
-      <body>{children}</body>
+      <head>
+        {/* Preconnect for Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Google Fonts */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet"
+        />
+
+        {/* Metadata */}
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
+      <body style={{ fontFamily: "'Inter', sans-serif" }}>
+        {children}
+      </body>
     </html>
-   </>
+
   );
 }

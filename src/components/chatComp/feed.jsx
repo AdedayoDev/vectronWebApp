@@ -1,10 +1,9 @@
 "use client";
 
 import { useChat } from "ai/react";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
-import { Button } from "@components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Send } from "lucide-react";
+import Image from 'next/image'
 
 export default function Feed() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -12,6 +11,7 @@ export default function Feed() {
   });
 
   const chatContainer = useRef(null);
+  const [isSoundWaveIcon, setIsSoundWaveIcon] = useState(true);
 
   function scroll() {
     const container = chatContainer.current;
@@ -27,6 +27,17 @@ export default function Feed() {
     scroll();
   }, [messages]);
 
+  useEffect(() => {
+    setIsSoundWaveIcon(input.trim() === "");
+  }, [input]);
+
+  function handleKeyDown(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSubmit(event);
+    }
+  }
+
   function renderResponse() {
     return (
       <div>
@@ -38,13 +49,6 @@ export default function Feed() {
                 m.role === "user" ? "user-chat" : "ai-chat"
               }`}
             >
-              {/* <Image
-                className="avatar"
-                alt="avatar"
-                src={m.role === "user" ? "/user-avatar.jpg" : "/lcb-avatar.jpg"}
-                width={40} 
-                height={40}
-              /> */}
               <p>{m.content}</p>
               {i < messages.length - 1 && <div className="horizontal-line" />}
             </div>
@@ -60,35 +64,34 @@ export default function Feed() {
 
       <div className="form-container">
         <form onSubmit={handleSubmit} className="chat-form">
-          {/* <Image
-          src="/assets/images/Bot-small.png"
-          alt="Ai image"
-          width={25}
-          height={25}
-        /> */}
           <textarea
             type="text"
             name="input-feed"
             placeholder="Message Vechtron"
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             value={input}
+            className="no-scrollbar"
           />
-          {/* <Button variant="outline" size="icon">
-            <ChevronRight />
-          </Button> */}
+          <button type="submit" className="icon-button">
+            {isSoundWaveIcon ? (
+              <Image
+                src="/assets/icons/speak.png"
+                alt="Sound wave icon"
+                width={20}
+                height={20}
+                className="soundwave-icon"
+              />
+            ) : (
+              <Send size={20} />
+            )}
+          </button>
         </form>
         <div className="form-images">
           <Image
             src="/assets/icons/spring.png"
-            alt="Ai image"
+            alt="Spring icon"
             width={10}
-            height={20}
-            className="image"
-          />
-          <Image
-            src="/assets/icons/speak.png"
-            alt="Ai image"
-            width={20}
             height={20}
             className="image"
           />

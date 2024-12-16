@@ -4,11 +4,20 @@ import Image from "next/image";
 import { Button } from "@components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Toggle from "./toggle";
-export default function SideChat() {
+
+export default function SideChat({ showNewChat, toggleContainers }) {
   return (
     <div className="side-chat-container">
       <div className="side-first-content ">
-        <Button variant="secondary">+ New chat</Button>
+        <Button variant="secondary" onClick={toggleContainers} className='msg-button'>
+        <Image
+              src="/assets/icons/newmessage.png"
+              alt="message icon"
+              width={15}
+              height={15}
+            />
+            New message
+        </Button>
         {/* <button className="new-chat-btn">+ New chat</button> */}
         <div className="prev-chat">
           <h4>Recents</h4>
