@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev -p 5173",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 5173",
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -16,6 +16,7 @@
     "test:unit": "jest --testPathPattern=src/__tests__/unit",
     "test:integration": "jest --testPathPattern=src/__tests__/integration"
   },
+  
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^2.0.3",
     "@radix-ui/react-avatar": "^1.1.1",

@@ -48,6 +48,7 @@ body {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #D9D9D9 transparent;
+    cursor: pointer;
   }
   
   .conversation-container::-webkit-scrollbar {
