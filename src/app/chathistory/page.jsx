@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 import { useState } from "react";
 import Aside from "@components/chatComp/side-chat";
 import "./chathistory.css";
@@ -7,11 +6,10 @@ import "@app/chat/chat.css";
 import Navbar from "@components/navbar/chatNav";
 import Image from "next/image";
 import { Search } from "lucide-react";
-import chatData from '@components/chathistoryComp/chatData'
+import chatData from "@components/chathistoryComp/chatData";
 
 export default function ChatHistory() {
   const [searchTerm, setSearchTerm] = useState("");
-
 
   const filteredChats = chatData.filter((chat) =>
     chat.title.toLowerCase().includes(searchTerm.toLowerCase())

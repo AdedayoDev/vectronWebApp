@@ -20,32 +20,57 @@ export default function Chatdetail() {
               className="chatdetail-bg"
             />
             <div className="chatdetail-detail">
-              <div className="detail-user">
-                <Image
-                  src="/assets/icons/avatar-2.png"
-                  alt="Avatar"
-                  width={40}
-                  height={40}
-                  className="avatar-bg"
-                />
-                <div className="detail-user-text">
-                  <h4>Peter</h4>
-                  <p>Can you help me troubleshoot my car?</p>
+              <div className="detail-content">
+                <div className="detail-user">
+                  <Image
+                    src="/assets/icons/avatar-2.png"
+                    alt="Avatar"
+                    width={40}
+                    height={40}
+                    className="avatar-bg"
+                  />
+                  <div className="detail-user-text">
+                    <h4>Peter</h4>
+                    <p>Can you help me troubleshoot my car?</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="detail-system">
-                <Image
-                  src="/assets/icons/ai-icon.png"
-                  alt="Avatar"
-                  width={30}
-                  height={30}
-                  className="system-icon"
-                />
-                <div className="detail-user-text">
-                  <h4>Vechtron</h4>
-                  <p>I'd be happy to help you troubleshoot your car, but I'll need more specific information about what issues you're experiencing. This will help me provide more targeted and useful advice.</p>
-                </div>
+                <div className="detail-system">
+                  <Image
+                    src="/assets/icons/ai-icon.png"
+                    alt="Avatar"
+                    width={30}
+                    height={30}
+                    className="system-icon"
+                  />
+                  <div className="detail-user-text">
+                    <h4>Vechtron</h4>
+                    <p>
+                      I would be happy to help you troubleshoot your car, but I will
+                      need more specific information about what issues you are
+                      experiencing. This will help me provide more targeted and
+                      useful advice.
+                    </p>
+                  </div>
+                </div>    
+                <div className="detail-system">
+                  <Image
+                    src="/assets/icons/ai-icon.png"
+                    alt="Avatar"
+                    width={30}
+                    height={30}
+                    className="system-icon"
+                  />
+                  <div className="detail-user-text">
+                    <h4>Vechtron</h4>
+                    <p>
+                      I would be happy to help you troubleshoot your car, but I will
+                      need more specific information about what issues you are
+                      experiencing. This will help me provide more targeted and
+                      useful advice.
+                    </p>
+                  </div>
+                </div>              
               </div>
             </div>
           </div>
