@@ -14,7 +14,7 @@ function Toggle() {
         display: "flex",
         alignItems: "center",
         cursor: "pointer",
-        padding: "2px",
+        transition: '.3s ease',
         justifyContent: isToggled ? "flex-end" : "flex-start",
       }}
     >
