@@ -125,8 +125,9 @@ export default function SideChat({ showNewChat, toggleContainers }) {
         <Image
           src="/assets/images/Empty-chat.png"
           alt="message icon"
-          width={92}
-          height={86}
+          width={150}
+          height={150}
+          className="upgrade-image"
         />
         <div className="upgrade">
           <span>Upgrade to Pro</span>
@@ -135,6 +136,7 @@ export default function SideChat({ showNewChat, toggleContainers }) {
             alt="message icon"
             width={15}
             height={15}
+            
           />
         </div>
       </div>
