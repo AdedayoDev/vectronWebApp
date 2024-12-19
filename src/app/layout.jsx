@@ -1,18 +1,21 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Vectron Webapp",
+  title: "Vectron webapp",
   description: "Your intelligent automotive companion",
 };
 
 export default function RootLayout({ children }) {
   return (
- 
     <html lang="en">
       <head>
         {/* Preconnect for Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
 
         {/* Google Fonts */}
         <link
@@ -24,10 +27,12 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body style={{ fontFamily: "'Inter', sans-serif" }}>
+      <body
+        style={{ fontFamily: "'Inter', sans-serif" }}
+        className="overflow-x-hidden"
+      >
         {children}
       </body>
     </html>
-
   );
 }

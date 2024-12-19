@@ -5,7 +5,7 @@ import { useState } from "react";
 function Switch({ disabled, children }) {
   return !!children ? (
     <div
-      className={`flex items-center justify-between w-full h-[40px] gap-5 text-xs font-medium`}
+      className={`flex items-center justify-between w-full h-[40px] text-xs md:text-base font-medium`}
     >
       {children}
       <Button disabled={disabled} />

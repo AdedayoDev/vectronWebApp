@@ -4,6 +4,11 @@ import Input from "./_components/Input";
 import Profile from "./_components/Profile";
 import SideBar from "./_components/SideBar";
 
+export const metadata = {
+  title: "Chat with AI",
+  description: "AI Chat page",
+};
+
 export default function Chat() {
   const items = [
     {
@@ -43,10 +48,10 @@ export default function Chat() {
               </div>
               <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
                 <div className="flex flex-col text-center w-full xl:w-[1023px] -mt-24 bg-white z-10 p-2 sm:p-7 lg:py-7 lg:px-10 xl:px-52 rounded-2xl shadow-xl">
-                  <div className="text-xl md:text-2xl lg:text-4xl font-bold my-3">
+                  <div className="text-xl md:text-2xl lg:text-4xl xl:text-5xl font-bold my-3">
                     Unlock the power of AI
                   </div>
-                  <div className="text-xs md:text-sm lg:text-md text-gray-400">
+                  <div className="text-xs md:text-sm lg:text-md xl:text-lg text-gray-400">
                     Meet docvantage, our ai chat app revolutionizing
                     conversations
                   </div>
@@ -57,7 +62,7 @@ export default function Chat() {
                   </div>
                 </div>
 
-                <div className="mx-auto z-20">
+                <div className="mx-auto -mt-8 z-20">
                   <Input />
                 </div>
               </div>

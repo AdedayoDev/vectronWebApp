@@ -29,7 +29,7 @@ function Conversation({ items }) {
           height={40}
           className="hidden lg:block"
         />
-        <div className="text-xs font-semibold">{items.text}</div>
+        <div className="text-xs md:text-lg font-semibold">{items.text}</div>
       </div>
       <input
         type="checkbox"
