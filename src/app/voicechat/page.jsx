@@ -4,6 +4,7 @@ import SideChat from "../voicechat/components/sideChat";
 import "@app/chat/chat.css";
 import Feed from "@components/chatComp/feed";
 import Navbar from "@components/navbar/chatNav";
+import './voicechat.css'
 
 export default function page() {
   return (
@@ -17,7 +18,7 @@ export default function page() {
               alt="background-image"
               width={200}
               height={200}
-              className="backgroud-image sm:w-full lg:w-9/12 absolute h-32 cover-fill"
+              className="backgroud-image sm:w-full lg:w-78 absolute h-32 cover-fill"
             />
             <div className="voice-chat-content">
               <div className=" text-black-50 absolute lg:w-2/3 w-96 lg:mx-14 mx-10 my-24 px-2 py-3 rounded-md bg-white">
@@ -41,7 +42,7 @@ export default function page() {
             </div>
               <Feed />
           </div>
-          <div className="voice-chat-right sm:hidden md:block lg:block pr-6">
+          <div className="voice-chat-right sm:hidden md:block lg:block px-6">
             <SideChat />
           </div>
         </div>

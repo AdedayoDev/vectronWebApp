@@ -11,7 +11,7 @@ export default function sideChat() {
           buttonIcon="/assets/icons/chat-add.png"
           buttonText="New message"
         />
-        <button className="py-1 px-4 w-full gap-2 flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
+        <button className="py-2 px-4 w-full gap-2 items-center flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
           <Image
             src="/assets/icons/search-action.png"
             alt="search action"
