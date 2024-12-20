@@ -2,6 +2,7 @@
 
 import React from "react";
 import CardWrapper from "../CardWrapper";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -11,10 +12,24 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input"; // Ensure Input is imported correctly
-import { SignUpSchema } from "../../../../Schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
+import GoogleLogIn from "../LogIn/GoogleLogIn";
+import AppleLogIn from "../LogIn/AppleLogIn";
+
+const SignUpSchema = z.object({
+ email: z.string().email({
+    message: "Please enter a valid email address"
+}),
+name: z.string().min(1, {
+    message: "Please enter your name"
+}),
+password: z.string().min(8, {
+    message: "Password must be at least 8 characters long"
+}),
+})
+
 
 const SignUpForm = () => {
   const form = useForm({
@@ -47,6 +62,13 @@ const SignUpForm = () => {
     }
   };
 
+   // Mock user data for social logins
+   const userData = {
+    email: form.getValues("email"),
+    name: undefined, // Not needed for login
+    password: undefined, // Not needed for login
+  };
+
   return (
     <CardWrapper
       image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
@@ -56,6 +78,15 @@ const SignUpForm = () => {
       backButtonLabel="Already have an account? Log in"
       
     >
+       <div className="space-y-4 mb-4">
+        {/* Social Login Buttons */}
+        <GoogleLogIn userData={userData} mode="login">
+          Continue with Google
+        </GoogleLogIn>
+        <AppleLogIn userData={userData} mode="login">
+          Continue with Apple
+        </AppleLogIn>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">

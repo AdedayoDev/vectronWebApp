@@ -1,10 +1,11 @@
+import EmailVerification from '@components/Auth/EmailVerification/EmailVerification'
 import React from 'react'
 
 const EmailVerfication = () => {
   return (
-    <div>
-      
-    </div>
+    <main>
+      <EmailVerification/>
+    </main>
   )
 }
 

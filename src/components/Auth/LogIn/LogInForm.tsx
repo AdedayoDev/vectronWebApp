@@ -2,6 +2,7 @@
 
 import React from "react";
 import CardWrapper from "../CardWrapper";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -10,57 +11,75 @@ import {
   FormItem,
   FormMessage,
 } from "@components/ui/form";
-import { Input } from "@components/ui/input"; // Ensure Input is imported correctly
-import { LogInSchema } from "../../../../Schema";
+import { Input } from "@components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import GoogleLogIn from "./GoogleLogIn";
 import AppleLogIn from "./AppleLogIn";
 
+const LogInSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email",
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
+});
+
 const LogInForm = () => {
   const form = useForm({
     resolver: zodResolver(LogInSchema),
     defaultValues: {
       email: "",
-      confirmPassword: "",
+      password: "",
     },
   });
 
+  // Handle form submission
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
     try {
-      const response = await fetch(
-        "https://your-backend-endpoint.com/api/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("https://your-backend-endpoint.com/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       if (response.ok) {
-        console.log("User registered successfully");
+        console.log("User logged in successfully!");
       } else {
-        console.error("Failed to register user", await response.json());
+        console.error("Failed to log in", await response.json());
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error during login:", error);
     }
   };
+
+  // Mock user data for social logins
+  const userData = {
+    email: form.getValues("email"),
+    name: undefined, // Not needed for login
+    password: undefined, // Not needed for login
+  };
+
   return (
     <CardWrapper
       image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
       title="Welcome back"
       label="Welcome back! Please enter your details."
       backButtonHref="/auth/sign-up"
-      backButtonLabel="Already have an account? Sign Up"
-     
+      backButtonLabel="Don't have an account? Sign Up"
     >
       <div className="space-y-4 mb-4">
-        <GoogleLogIn>Continue with Google</GoogleLogIn>
-        <AppleLogIn>Continue with Apple</AppleLogIn>
+        {/* Social Login Buttons */}
+        <GoogleLogIn userData={userData} mode="login">
+          Continue with Google
+        </GoogleLogIn>
+        <AppleLogIn userData={userData} mode="login">
+          Continue with Apple
+        </AppleLogIn>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -94,7 +113,7 @@ const LogInForm = () => {
                     <Input
                       {...field}
                       type="password"
-                      placeholder="Create a Password"
+                      placeholder="Enter your Password"
                     />
                   </FormControl>
                   <FormMessage />
@@ -106,7 +125,7 @@ const LogInForm = () => {
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
           >
-            Create Account
+            Log In
           </Button>
         </form>
       </Form>
