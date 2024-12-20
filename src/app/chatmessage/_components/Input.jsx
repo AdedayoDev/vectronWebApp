@@ -21,13 +21,23 @@ function Input() {
               className="object-cover hover:cursor-pointer"
             />
           </div>
-          <div className="relative w-5 h-5">
-            <Image
-              src="/assets/icons/voiceRecord.png"
-              alt="voiceRecord image"
-              fill
-              className="object-cover hover:cursor-pointer"
-            />
+          <div className="flex items-center justify-center space-x-3">
+            <div className="relative w-5 h-5">
+              <Image
+                src="/assets/icons/voiceRecord.png"
+                alt="voiceRecord image"
+                fill
+                className="object-cover hover:cursor-pointer"
+              />
+            </div>
+            <div className="relative w-5 h-5">
+              <Image
+                src="/assets/icons/send.png"
+                alt="send image"
+                fill
+                className="object-cover hover:cursor-pointer"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -36,5 +46,3 @@ function Input() {
 }
 
 export default Input;
-
-//
