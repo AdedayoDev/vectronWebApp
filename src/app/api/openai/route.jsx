@@ -30,6 +30,7 @@ export async function POST(req) {
 
     const stream = OpenAIStream(response);
     return new StreamingTextResponse(stream);
+    
   } catch (error) {
     console.error("Error in POST handler:", error);
     return new Response("Internal Server Error", { status: 500 });
