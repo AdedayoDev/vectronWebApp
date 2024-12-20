@@ -22,6 +22,7 @@ export default function SignIn() {
       ...prev,
       [name]: value,
     }));
+
   };
 
   const handleSubmit = async (e) => {
@@ -41,6 +42,7 @@ export default function SignIn() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
+
       });
 
       const data = await response.json();
@@ -64,6 +66,7 @@ export default function SignIn() {
       console.error("Error during login:", err);
       setError("Network error. Please try again later.");
       setTimeout(() => setError(""), 3000);
+
     }
   };
 
@@ -140,7 +143,9 @@ export default function SignIn() {
                 <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
               )}
               <button type="submit">Sign in</button>
+
               <span>Have no account? <Link href="/">Sign Up</Link></span>
+
             </form>
           </div>
         </div>

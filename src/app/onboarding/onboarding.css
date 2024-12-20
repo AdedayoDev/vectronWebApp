@@ -7,9 +7,12 @@ body {
   background-size: cover;
   height: 90vh;
 }
+.onboarding-left{
+  display: none;
+}
 .onboarding-right-content {
   width: 80%;
-  margin: auto;
+  margin: 200px auto;
   text-align: center;
 }
 .onboarding-btn {
@@ -39,6 +42,7 @@ body {
     align-items: center;
   }
   .onboarding-left {
+    display: block;
     width: 55%;
     background-size: cover;
   }
@@ -64,5 +68,8 @@ body {
   .onboarding-right {
     width: 30%;
     margin: auto;
+  }
+  .onboarding-right-content {
+    margin: 0 auto;
   }
 }

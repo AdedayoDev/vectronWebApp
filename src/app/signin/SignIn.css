@@ -12,6 +12,7 @@ body {
 }
 .welcome-left {
   position: relative;
+  display: none;
 }
 .welcome-left-text {
   position: absolute;
@@ -44,6 +45,9 @@ body {
   transform: scale(1.2);
 }
 
+.welcome-right{
+  margin-top: 100px ;
+}
 .welcome-right-content {
   width: 352px !important;
   margin: auto;
@@ -183,6 +187,7 @@ label {
     padding: 30px;
     z-index: 2; /* Ensure it sits above the overlay */
   }
+
   
 }
 
@@ -204,12 +209,13 @@ label {
     border-radius: 30px !important;
   }
   .welcome-left-text {
-    top: 290px;
+    top: 250px;
     width: 60%;
-    left: 110px;
+    left: 140px;
   }
   .welcome-right {
     width: 50%;
+    margin: 0;
   }
   .welcome-right-content {
     width: 60%;

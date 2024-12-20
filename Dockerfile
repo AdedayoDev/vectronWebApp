@@ -38,6 +38,8 @@ USER nextjs
 
 # Expose the port the app runs on
 EXPOSE 3000
+ENV PORT 3000
 
 # Start the application
 CMD ["npm", "start"]
+
