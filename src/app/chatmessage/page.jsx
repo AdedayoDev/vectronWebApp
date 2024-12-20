@@ -3,6 +3,7 @@ import Conversation from "./_components/Conversation";
 import Input from "./_components/Input";
 import Profile from "./_components/Profile";
 import SideBar from "./_components/SideBar";
+import Link from "next/link";
 
 export const metadata = {
   title: "Chat with AI",
@@ -35,7 +36,7 @@ export default function Chat() {
         <div className="flex justify-end p-2">
           <Profile />
         </div>
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col items-start gap-1 lg:flex-row">
           <div className="flex flex-1 justify-center items-center w-full">
             <div>
               <div className="relative w-full h-40">
@@ -47,8 +48,21 @@ export default function Chat() {
                 />
               </div>
               <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
-                <div className="flex flex-col text-center w-full xl:w-[1023px] -mt-24 bg-white z-10 p-2 sm:p-7 lg:py-7 lg:px-10 xl:px-52 rounded-2xl shadow-xl">
-                  <div className="text-xl md:text-2xl lg:text-4xl xl:text-5xl font-bold my-3">
+                <div className="relative flex flex-col text-center w-full -mt-24 bg-white z-10 p-2 sm:p-7 lg:py-7 lg:px-10 xl:px-52 rounded-2xl shadow-xl">
+                  <Link
+                    href="/chatmessage/newchat"
+                    className="absolute top-3 right-3 border-2 border-purple-600 w-7 md:w-10 p-1 rounded-xl"
+                  >
+                    <div className="relative w-4 h-4 md:w-7 md:h-7">
+                      <Image
+                        src="/assets/icons/cancel.png"
+                        alt="cancel icon"
+                        fill
+                        className="object-fit hover:cursor-pointer"
+                      />
+                    </div>
+                  </Link>
+                  <div className="text-xl md:text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 mt-10">
                     Unlock the power of AI
                   </div>
                   <div className="text-xs md:text-sm lg:text-md xl:text-lg text-gray-400">
@@ -62,13 +76,13 @@ export default function Chat() {
                   </div>
                 </div>
 
-                <div className="mx-auto -mt-8 z-20">
+                <div className="mx-auto -mt-8">
                   <Input />
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex place-self-center w-72 lg:place-self-start">
+          <div className="flex place-self-center w-72 xl:w-80 lg:place-self-start">
             <SideBar />
           </div>
         </div>

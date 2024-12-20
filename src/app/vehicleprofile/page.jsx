@@ -36,7 +36,7 @@ export default function VehicleProfile() {
     });
 
     setTimeout(() => {
-      router.push("/chat");
+      router.push("/chatmessage");
     }, 2000);
   };
 

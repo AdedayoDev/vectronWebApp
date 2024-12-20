@@ -17,7 +17,7 @@ export default function Chat() {
         <div className="flex justify-end p-2">
           <Profile />
         </div>
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col items-start lg:flex-row">
           <div className="flex flex-1 justify-center items-start w-full">
             <div className="relative border overflow-x-hidden">
               <div className="relative w-full h-40">
@@ -29,7 +29,7 @@ export default function Chat() {
                 />
               </div>
               <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
-                <div className="z-10 flex flex-col text-center w-full xl:w-[1023px] -mt-24 bg-white rounded-2xl shadow-xl">
+                <div className="z-10 flex flex-col text-center w-full -mt-24 bg-white rounded-2xl shadow-xl">
                   <ChatHead />
                   <ChatBody />
                   <Input />
@@ -37,7 +37,7 @@ export default function Chat() {
               </div>
             </div>
           </div>
-          <div className="flex place-self-center w-72 lg:place-self-start">
+          <div className="flex place-self-center w-72 xl:w-80 lg:place-self-start">
             <SideBar />
           </div>
         </div>
