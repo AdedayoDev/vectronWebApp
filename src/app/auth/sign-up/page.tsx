@@ -1,10 +1,13 @@
+
+
+import SignUpPages from '@components/Auth/SignUp/SignUpPages'
 import React from 'react'
 
 const SignUp  = () => {
   return (
-    <div>
-      
-    </div>
+    <main>
+     <SignUpPages/>
+    </main>
   )
 }
 

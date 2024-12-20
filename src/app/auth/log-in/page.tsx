@@ -1,10 +1,11 @@
+import LogInPage from '@components/Auth/LogIn/LogInPage'
 import React from 'react'
 
 const LogIn = () => {
   return (
-    <div>
-      
-    </div>
+    <main>
+      <LogInPage/>
+    </main>
   )
 }
 
