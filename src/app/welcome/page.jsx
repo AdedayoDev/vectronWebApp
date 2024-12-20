@@ -9,7 +9,7 @@ import "@splidejs/react-splide/css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@components/navbar/navbar";
-import "./welcome.css";
+import "./Welcome.css";
 
 export default function Welcome() {
   const [form, setForm] = useState({
