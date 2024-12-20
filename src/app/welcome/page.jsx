@@ -4,21 +4,24 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css'; 
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@components/navbar/navbar";
-import './Welcome.css'
+import "./welcome.css";
 
 export default function Welcome() {
   const [form, setForm] = useState({
     email: "",
+    username: "",
+    firstname: "",
+    lastname: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [error, setError] = useState("");
-
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -27,104 +30,112 @@ export default function Welcome() {
       ...prev,
       [name]: value,
     }));
-    if (name === "password" && value.length <= 12) {
-      setError(""); // Reset error when password is valid
-    } else if (name === "password" && value.length > 12) {
-      setError("Password should be at least 12 characters.");
-    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = form;
-
-    if (!email || !password) {
+  
+    const { email, username, firstname, lastname, password, confirmPassword } = form;
+  
+    // Validation checks
+    if (!email || !username || !firstname || !lastname || !password || !confirmPassword) {
       setError("Please fill in all fields.");
-      // Clear the error message after 3 seconds
       setTimeout(() => {
         setError("");
       }, 3000);
       return;
     }
-
-    if (password.length <= 12) {
-      // Show success message with Toastify
-      toast.success("Login successfully!");
-
-      // Clear form fields
-      setForm({
-        email: "",
-        password: "",
-      });
-
-      // Redirect after 2 seconds and ensure error is cleared
-      setTimeout(() => {
-        router.push("/onboarding");
-        setError("");
-      }, 2000);
-    } else {
-      setError("Password should be at least 12 characters.");
-      // Clear the error message after 3 seconds
+  
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
       setTimeout(() => {
         setError("");
       }, 3000);
+      return;
+    }
+  
+    if (password.length < 8) {
+      setError("Password should be at least 8 characters.");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      return;
+    }
+  
+    try {
+      const response = await fetch("https://api-staging.vechtron.com/api/v1/auth/account/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          username,
+          firstname,
+          lastname,
+          password,
+          confirm_password: confirmPassword, // Fixing the field name
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        // Success: Show a success message
+        toast.success(data.message || "Registration successful!");
+  
+        // Reset the form
+        setForm({
+          email: "",
+          username: "",
+          firstname: "",
+          lastname: "",
+          password: "",
+          confirmPassword: "",
+        });
+  
+        // Redirect after a short delay
+        setTimeout(() => router.push("/signin"), 2000);
+      } else {
+        // Handle errors based on API response
+        if (data.message?.toLowerCase().includes("user already exists")) {
+          setError("A user with this email or username already exists.");
+        } else {
+          setError(data.message || "Something went wrong.");
+        }
+        setTimeout(() => setError(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setError("Network error. Please try again later.");
+      setTimeout(() => setError(""), 3000);
     }
   };
+  
+  
 
   return (
     <>
-    <Navbar link="/signin" text="Sign in" icon='/assets/icons/logout.png' />
+      {/* <Navbar link="/signin" text="Sign in" icon="/assets/icons/logout.png" /> */}
       <div className="welcome-page">
         <div className="welcome-left">
-          <div className="splide">
-            <Splide
-              options={{
-                type: "loop",
-                perPage: 1,
-                autoplay: true,
-                interval: 3000,
-                arrows: false,
-                pagination: true,
-              }}
-              aria-label="My Favorite Images"
-            >
-              <SplideSlide>
-                <Image
-                  src="/assets/images/bg-welcome.png"
-                  alt="welcome image"
-                  width={470}
-                  height={500}
-                  className="welcome-image"
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <Image
-                  src="/assets/images/bg-signin.png"
-                  alt="welcome image"
-                  width={470}
-                  height={500}
-                  className="welcome-image"
-                />
-              </SplideSlide>
-              <SplideSlide>
-                <Image
-                  src="/assets/images/bg-welcome.png"
-                  alt="welcome image"
-                  width={470}
-                  height={500}
-                  className="welcome-image"
-                />
-              </SplideSlide>
-            </Splide>
-          </div>
-          <div className="welcome-left-text">
-            The potential to enhance customer service and improve business
-            efficiency
-          </div>
+        <div className="onboarding-left">
+          <Image
+            src="/assets/images/vech2.png"
+            alt="Vectron car"
+            width={200}
+            height={200}
+            className="vech2-image"
+          />
         </div>
+          <h1 className="welcome-left-header">Turn Every Drive Into a Smarter Journey.</h1>
+          <p className="welcome-left-text">Access your AI-powered in-car assistant to navigate smarter, stay connected, and get real-time support on the go. No sign-up hassle. Trusted by drivers worldwide.</p>
+        </div>
+
         <div className="welcome-right">
           <div className="welcome-right-content">
-            <h1>Welcome to Docvantage</h1>
+            <h1>Sign Up</h1>
+            <p>Start Driving with AI</p>
             <div className="welcome-links">
               <Link href="/" className="welcome-right-link">
                 <Image
@@ -152,8 +163,6 @@ export default function Welcome() {
             </div>
 
             <form onSubmit={handleSubmit} className="welcome-form">
-              <label htmlFor="email">Email</label>
-              <br />
               <input
                 type="email"
                 name="email"
@@ -162,9 +171,30 @@ export default function Welcome() {
                 placeholder="hi@email.com"
                 id="email"
               />
-              <br />
-              <label htmlFor="password">Password</label>
-              <br />
+              <input
+                type="text"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="Username"
+                id="username"
+              />
+              <input
+                type="text"
+                name="firstname"
+                value={form.firstname}
+                onChange={handleChange}
+                placeholder="Firstname"
+                id="firstname"
+              />
+              <input
+                type="text"
+                name="lastname"
+                value={form.lastname}
+                onChange={handleChange}
+                placeholder="Lastname"
+                id="lastname"
+              />
               <input
                 type="password"
                 name="password"
@@ -172,22 +202,22 @@ export default function Welcome() {
                 onChange={handleChange}
                 placeholder="Password"
                 id="password"
-                maxLength={12}
               />
-              {error && (
-                <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
-              )}
-              <button type="submit">Join Docvantage</button>
-              <p className="policy">
-                By creating an account, you agree to our Terms of Service and
-                Privacy & Cookie Statement.
-              </p>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm Password"
+                id="confirmPassword"
+              />
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              <button type="submit">Sign Up</button>
+              <span>Already have an account? <Link href="/signin">Signin</Link></span>
             </form>
           </div>
         </div>
       </div>
-
-      {/* Toastify container */}
       <ToastContainer autoClose={2000} pauseOnHover={false} />
     </>
   );

@@ -5,7 +5,6 @@ import { toast, ToastContainer } from "react-toastify";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import { useRouter } from "next/navigation";
-import Navbar from "@components/navbar/navbar";
 import Link from "next/link";
 import "./SignIn.css";
 
@@ -15,7 +14,6 @@ export default function SignIn() {
     email: "",
     password: "",
   });
-
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -24,97 +22,66 @@ export default function SignIn() {
       ...prev,
       [name]: value,
     }));
-    if (name === "password" && value.length <= 12) {
-      setError(""); // Reset error when password is valid
-    } else if (name === "password" && value.length > 12) {
-      setError("Password should be at least 12 characters.");
-    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = form;
 
     if (!email || !password) {
       setError("Please fill in all fields.");
-      // Clear the error message after 3 seconds
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      setTimeout(() => setError(""), 3000);
       return;
     }
 
-    if (password.length <= 12) {
-      // Show success message with Toastify
-      toast.success("Login successfully!");
-
-      // Clear form fields
-      setForm({
-        email: "",
-        password: "",
+    try {
+      const response = await fetch("https://api-staging.vechtron.com/api/v1/auth/account/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      // Redirect after 2 seconds and ensure error is cleared
-      setTimeout(() => {
-        router.push("/onboarding");
-        setError("");
-      }, 2000);
-    } else {
-      setError("Password should be at least 12 characters.");
-      // Clear the error message after 3 seconds
-      setTimeout(() => {
-        setError("");
-      }, 3000);
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle successful login
+        toast.success(data.message || "Login successful!");
+        localStorage.setItem("access_token", data.access_token); // Store access token
+        localStorage.setItem("refresh_token", data.refresh_token); // Store refresh token
+        localStorage.setItem("user", JSON.stringify(data.user)); // Store user info
+
+        setForm({ email: "", password: "" }); // Clear form
+
+        setTimeout(() => router.push("/onboarding"), 2000); // Redirect to dashboard
+      } else {
+        // Handle login error
+        setError(data.message || "Invalid email or password.");
+        setTimeout(() => setError(""), 3000);
+      }
+    } catch (err) {
+      console.error("Error during login:", err);
+      setError("Network error. Please try again later.");
+      setTimeout(() => setError(""), 3000);
     }
   };
 
   return (
     <div>
-      <Navbar link="/" text="New account" icon="/assets/icons/logout.png" />
       <div className="signin-page">
-        <div className="welcome-left">
-          <Splide
-            options={{
-              type: "loop",
-              perPage: 1,
-              autoplay: true,
-              interval: 3000,
-              arrows: false,
-              pagination: true,
-            }}
-            aria-label="My Favorite Images"
-          >
-            <SplideSlide>
-              <Image
-                src="/assets/images/bg-welcome.png"
-                alt="welcome image"
-                width={470}
-                height={500}
-                className="welcome-image"
-              />
-            </SplideSlide>
-            <SplideSlide>
-              <Image
-                src="/assets/images/bg-signin.png"
-                alt="welcome image"
-                width={470}
-                height={500}
-                className="welcome-image"
-              />
-            </SplideSlide>
-            <SplideSlide>
-              <Image
-                src="/assets/images/bg-welcome.png"
-                alt="welcome image"
-                width={470}
-                height={500}
-                className="welcome-image"
-              />
-            </SplideSlide>
-          </Splide>
-          <div className="welcome-left-text">
-            Revolutionize your chats with AI-powered conversations.
-          </div>
+      <div className="welcome-left">
+        <div className="onboarding-left">
+          <Image
+            src="/assets/images/signin-img.png"
+            alt="Vectron car"
+            width={200}
+            height={200}
+            className="vech2-image"
+          />
+        </div>
+          <h1 className="welcome-left-header">We’ve been using In-Drive AI to stay connected while driving - couldn’t imagine hitting the road without it!</h1>
+          {/* <p className="welcome-left-text">Access your AI-powered in-car assistant to navigate smarter, stay connected, and get real-time support on the go. No sign-up hassle. Trusted by drivers worldwide.</p> */}
         </div>
 
         <div className="welcome-right">
@@ -173,15 +140,11 @@ export default function SignIn() {
                 <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
               )}
               <button type="submit">Sign in</button>
-              {/* <p className="policy">
-                By creating an account, you agree to our Terms of Service and
-                Privacy & Cookie Statement.
-              </p> */}
+              <span>Have no account? <Link href="/">Sign Up</Link></span>
             </form>
           </div>
         </div>
       </div>
-      {/* Toastify container */}
       <ToastContainer autoClose={2000} pauseOnHover={false} />
     </div>
   );
