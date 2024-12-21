@@ -44,6 +44,13 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        urbanist: ["Urbanist", "sans-serif"],
+        allura: ["Allura", "cursive"],
+        inter: ["Inter", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
+        barlow: ["Barlow", "sans-serif"],
+    },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

@@ -46,6 +46,7 @@ const pwaConfig: PWAConfig = {
 
 const config: NextConfig = {
   reactStrictMode: true,
+  skipWaiting: true,
   images: {
     remotePatterns: [
       {
@@ -54,6 +55,7 @@ const config: NextConfig = {
         pathname: "/**", // Allow all paths from this domain
       },
     ],
+    domains: ["res.cloudinary.com"],
   },
   experimental: {
     serverActions: {
