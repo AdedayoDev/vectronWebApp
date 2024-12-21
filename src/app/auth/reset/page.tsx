@@ -1,10 +1,11 @@
-import PasswordReset from '@components/Auth/FogetPassword/PasswordReset'
+
+import PassowordReset from '@components/Auth/FogetPassword/PassowordReset'
 import React from 'react'
 
 const Reset = () => {
   return (
     <main>
-      <PasswordReset/>
+     <PassowordReset/>
     </main>
   )
 }
