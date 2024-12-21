@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState} from "react";
 import CardWrapper from "../CardWrapper";
 import { z } from "zod";
 import {
@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import GoogleLogIn from "./GoogleLogIn";
 import AppleLogIn from "./AppleLogIn";
+import Link from "next/link";
 
 const LogInSchema = z.object({
   email: z.string().email({
@@ -28,6 +29,8 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
+   const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+
   const form = useForm({
     resolver: zodResolver(LogInSchema),
     defaultValues: {
@@ -38,6 +41,10 @@ const LogInForm = () => {
 
   // Handle form submission
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
+    if (!isChecked) {
+      alert("You must agree to the terms and conditions before signing up.");
+      return;
+    }
     try {
       const response = await fetch("https://your-backend-endpoint.com/api/login", {
         method: "POST",
@@ -121,8 +128,24 @@ const LogInForm = () => {
               )}
             />
           </div>
+
+          {/* Checkbox Field */}
+          <div className="flex items-center gap-4">
+              <input
+                type="checkbox"
+                id="terms-checkbox"
+                className="w-5 h-5"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)} // Toggle state on change
+              />
+              <label htmlFor="terms-checkbox" className="font-inter w-full  text-[#040308] flex items-center justify-between">
+              <span className="font-inter font-medium text-sm text-[#344054]">Remember for 30 days</span>
+              <Link href="/auth/forget-password"> <span className="font-inter font-medium text-sm text-[#6941c6] hover:underline cursor-pointer">Forget password</span> </Link>
+              </label>
+            </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
+            disabled={!isChecked} // Disable button if checkbox is unchecked
             type="submit"
           >
             Log In
