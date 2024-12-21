@@ -46,6 +46,7 @@ const pwaConfig: PWAConfig = {
 
 const config: NextConfig = {
   reactStrictMode: true,
+  skipWaiting: true,
   images: {
     remotePatterns: [
       {

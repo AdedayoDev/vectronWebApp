@@ -59,7 +59,7 @@ const EmailVerification = () => {
             </span>
           </p>
         </div>
-        <Link href="/components/Auth/">
+        <Link href="/components/Auth/input-token">
           {" "}
           <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
             Enter Code manually

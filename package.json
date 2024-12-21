@@ -66,7 +66,7 @@
     "jest-mock": "^29.7.0",
     "postcss": "^8.4.49",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss": "^3.4.16",
+    "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.2",
     "typescript": "^5"
