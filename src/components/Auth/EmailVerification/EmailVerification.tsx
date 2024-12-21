@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
@@ -40,9 +40,11 @@ const EmailVerification = () => {
     <main className="w-full h-screen flex items-center justify-center">
       <div className="w-full h-screen flex flex-col space-y-5 items-center justify-center">
         <div>
-          <img
+          <Image
             src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734714374/Featured_icon_mcn2x0.png"
             alt="Email Verification Icon"
+            width={56} 
+            height={56}
             className="w-14 h-14"
           />
         </div>
@@ -57,9 +59,12 @@ const EmailVerification = () => {
             </span>
           </p>
         </div>
-       <Link href="/components/Auth/"> <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
-          Enter Code manually
-        </Button> </Link>
+        <Link href="/components/Auth/">
+          {" "}
+          <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
+            Enter Code manually
+          </Button>{" "}
+        </Link>
 
         <Link href="/auth/log-in">
           {" "}

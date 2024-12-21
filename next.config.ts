@@ -54,6 +54,7 @@ const config: NextConfig = {
         pathname: "/**", // Allow all paths from this domain
       },
     ],
+    domains: ["res.cloudinary.com"],
   },
   experimental: {
     serverActions: {

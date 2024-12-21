@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from "react";
 import { Button } from "@components/ui/button";
+import Image from "next/image";
 
 interface GoogleLogInProps {
   children: ReactNode; 
@@ -42,11 +43,14 @@ const GoogleLogIn: FC<GoogleLogInProps> = ({ children, userData, mode }) => {
       onClick={() => handleGoogleRequest(userData, mode)} // Handle the request based on mode
       className="w-full border border-[#D0D5DD] bg-white text-[#040308] font-semibold font-inter text-base hover:bg-slate-100"
     >
-      <img
+        <Image
         src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734708500/google_fyaivt.png"
         alt="Google Logo"
-        className="mr-2"
-      />
+        width={24}
+        height={24}
+        className="w-6 h-6 mr-2"
+        />
+     
       {children}
     </Button>
   );

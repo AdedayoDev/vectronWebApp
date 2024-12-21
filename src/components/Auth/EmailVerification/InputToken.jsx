@@ -1,12 +1,13 @@
 "use client";
 
 import { Button } from "@components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 
 const InputToken = () => {
-  const [email, setEmail] = useState<string | null>(null);
+  const [email, setEmail] = (useState < string) | (null > null);
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -39,9 +40,11 @@ const InputToken = () => {
     <main className="w-full h-screen flex items-center justify-center">
       <div className="w-full h-screen flex flex-col space-y-5 items-center justify-center">
         <div>
-          <img
+          <Image
             src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734714374/Featured_icon_mcn2x0.png"
             alt="Email Verification Icon"
+            width={56}
+            height={56}
             className="w-14 h-14"
           />
         </div>
@@ -59,7 +62,10 @@ const InputToken = () => {
         <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
           Verify email
         </Button>
-        <p className="font-inter font-normal text-sm text-[#667085] ">Didn't receive the email? <span className="text-[#6941c6]">Click to resend</span></p>
+        <p className="font-inter font-normal text-sm text-[#667085] ">
+          Didn't receive the email?{" "}
+          <span className="text-[#6941c6]">Click to resend</span>
+        </p>
         <Link href="/auth/log-in">
           {" "}
           <Button size="lg" className="bg-transparent hover:bg-transparent">
