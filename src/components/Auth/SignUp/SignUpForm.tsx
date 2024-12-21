@@ -44,7 +44,7 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     try {
-      const response = await fetch("", {
+      const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,35 @@ const SignUpForm = () => {
             {/* Name Field */}
             <FormField
               control={form.control}
-              name="name"
+              name="firstname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder="John" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Name Field */}
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder="Doe" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Name Field */}
+            <FormField
+              control={form.control}
+              name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
@@ -121,7 +149,7 @@ const SignUpForm = () => {
             {/* Password Field */}
             <FormField
               control={form.control}
-              name="password"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>

@@ -39,7 +39,7 @@ const LogInForm = () => {
   // Handle form submission
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
     try {
-      const response = await fetch("https://your-backend-endpoint.com/api/login", {
+      const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
