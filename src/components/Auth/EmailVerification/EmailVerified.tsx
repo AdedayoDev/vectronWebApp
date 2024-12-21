@@ -4,7 +4,7 @@ import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 
 const EmailVerified = () => {
     const [email, setEmail] = useState<string | null>(null);
@@ -63,7 +63,7 @@ const EmailVerified = () => {
           </Button>{" "}
         </Link>
         <p className="font-inter font-normal text-sm text-[#667085]">
-          Didn't receive the email?{" "}
+          Didn't receive the email?
           <span className="text-[#6941c6] cursor-pointer">Click to resend</span>
         </p>
         <Link href="/auth/log-in">
