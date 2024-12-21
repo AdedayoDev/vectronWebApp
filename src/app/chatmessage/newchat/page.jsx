@@ -29,8 +29,13 @@ export default function Chat() {
                 />
               </div>
               <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
-                <div className="z-10 flex flex-col text-center w-full -mt-24 bg-white rounded-2xl shadow-xl">
+                <div className="z-10 flex flex-col items-center w-full -mt-24 bg-white rounded-2xl shadow-xl py-8">
                   <ChatHead />
+                  <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl">
+                    Good day! How may I assist you today?
+                  </div>
+                  <ChatBody />
+                  <ChatBody />
                   <ChatBody />
                   <Input />
                 </div>
