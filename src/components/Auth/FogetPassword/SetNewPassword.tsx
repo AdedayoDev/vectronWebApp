@@ -10,12 +10,13 @@ import {
   FormItem,
   FormMessage,
 } from "@components/ui/form";
-import { Input } from "@components/ui/input"; // Ensure Input is imported correctly
+import { Input } from "@components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const SetNewPasswordSchema = z
   .object({
@@ -28,6 +29,7 @@ const SetNewPasswordSchema = z
   });
 
 const SetNewPassword = () => {
+  const router = useRouter(); // Initialize the router
   const form = useForm({
     resolver: zodResolver(SetNewPasswordSchema),
     defaultValues: {
@@ -52,6 +54,7 @@ const SetNewPassword = () => {
       if (response.ok) {
         console.log("Password reset successfully!");
         alert("Your password has been updated successfully.");
+        router.push("/auth/reset"); // Redirect to the reset success page
       } else {
         const errorData = await response.json();
         console.error("Failed to reset password", errorData);
