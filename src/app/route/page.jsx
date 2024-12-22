@@ -5,27 +5,26 @@ import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import Image from "next/image";
 import Navbar from "@components/navbar/chatNav";
-import './route.css';
+import "./route.css";
 import SearchOverlay from "../route/component/SearchOverlay";
 
 export default function Route() {
   const mapRef = useRef(null);
   const [searchLocation, setSearchLocation] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [toggleSearchInput, settoggleSearchInput] = useState(false)
+  const [toggleSearchInput, settoggleSearchInput] = useState(false);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
 
+  function handleToggleSearchInput() {
+    settoggleSearchInput((prev) => !prev);
+    setIsInputDisabled((prev) => !prev);
+  }
 
-function handleToggleSearchInput(){
-  settoggleSearchInput(prev=>!prev)
-  setIsInputDisabled((prev) => !prev);
-}
-
-  // function handleSearchLocation(e) {
-  //   const value = e.target.value;
-  //   setSearchLocation(value);
-  //   setIsTyping(value.trim() !== "");
-  // }
+  function handleSearchLocation(e) {
+    const value = e.target.value;
+    setSearchLocation(value);
+    setIsTyping(value.trim() !== "");
+  }
 
   useEffect(() => {
     const loader = new Loader({
@@ -63,7 +62,75 @@ function handleToggleSearchInput(){
             height={200}
             className="w-full lg:w-78 absolute h-28 mt-2"
           />
-          <SearchOverlay handleShowSearch={handleToggleSearchInput} showSearch={toggleSearchInput} />
+          <SearchOverlay
+            handleShowSearch={handleToggleSearchInput}
+            showSearch={toggleSearchInput}
+          />
+          <div className="places flex items-center absolute top-52 left-24 z-10 gap-2">
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Resturants</p>
+            </div>
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Grocery stores</p>
+            </div>
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Hospitals</p>
+            </div>
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Hotels</p>
+            </div>
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Museums</p>
+            </div>
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Transits</p>
+            </div>
+            <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="background-image"
+                width={20}
+                height={20}
+              />
+              <p>Pharmacy</p>
+            </div>
+          </div>
           <div className="mapppp left-7 absolute w-87 md:w-74  pt-20">
             <div className="flex items-center gap-2 p-3 bg-white rounded-t-2xl">
               <Image
@@ -95,14 +162,18 @@ function handleToggleSearchInput(){
                 <input
                   type="text"
                   value={searchLocation}
-                  // onChange={handleSearchLocation}
-                  disabled={isInputDisabled}
+                  onChange={handleSearchLocation}
+                  // disabled={isInputDisabled}
                   onClick={handleToggleSearchInput}
                   placeholder="Where are you off to?"
                   className="bg-transparent rounded border-0 w-full outline-none"
                 />
                 <Image
-                  src={isTyping ? "/assets/icons/send-icon.png" : "/assets/icons/voice-icon.png"}
+                  src={
+                    isTyping
+                      ? "/assets/icons/send-icon.png"
+                      : "/assets/icons/voice-icon.png"
+                  }
                   alt={isTyping ? "Send Icon" : "Voice Icon"}
                   width={20}
                   height={20}
