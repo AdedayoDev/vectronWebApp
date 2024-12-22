@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function Switch({ disabled, children }) {
@@ -17,9 +18,13 @@ function Switch({ disabled, children }) {
 
 function Button({ disabled }) {
   const [isChecked, setIsChecked] = useState(false);
+  const router = useRouter();
 
   const handleToggle = () => {
     setIsChecked((prev) => !prev);
+    if (isChecked === true) {
+      router.replace("/chatmessage/newchat");
+    }
   };
 
   return (
@@ -32,7 +37,7 @@ function Button({ disabled }) {
     >
       <span
         className={`w-[8px] h-[8px] rounded-full bg-white ${
-          isChecked ? "translate-x-2" : ""
+          isChecked === true ? "translate-x-2" : ""
         } transition-all duration-500`}
       ></span>
     </button>
