@@ -1,9 +1,10 @@
 'use client'
 import Image from 'next/image'
 import React from 'react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+
 export default function sideMenu() {
-  const router= useRouter()
+  // const router= useRouter()
   return (
 
     // md:hidden
@@ -78,7 +79,7 @@ export default function sideMenu() {
           width={20}
           height={20}
           alt='Icon'
-          onClick={()=> router.push('/deleteaccount')}
+          // onClick={()=> router.push('/deleteaccount')}
           />
           Delete account
         </button>
