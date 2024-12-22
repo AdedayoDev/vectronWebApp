@@ -46,16 +46,19 @@ const pwaConfig: PWAConfig = {
 
 const config: NextConfig = {
   reactStrictMode: true,
-  skipWaiting: true,
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "image-domain.com",
+        hostname: "res.cloudinary.com",
+        pathname: "/**", // Allow all paths from this domain
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
         pathname: "/**", // Allow all paths from this domain
       },
     ],
-    domains: ["res.cloudinary.com"],
   },
   experimental: {
     serverActions: {
