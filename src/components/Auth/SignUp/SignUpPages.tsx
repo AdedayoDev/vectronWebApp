@@ -23,7 +23,7 @@ const SignUpPages = () => {
             opacity: 0.8, 
           }}
         >
-          <div className="flex flex-col w-[672px]  h-[600px] items-start space-y-8  justify-center p-8">
+          <div className="flex flex-col w-[672px]  h-[600px] items-start space-y-14  justify-center p-8">
             <Image
               src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
               alt=""
