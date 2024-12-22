@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import CardWrapper from "../CardWrapper";
 import { z } from "zod";
 import {
@@ -11,7 +11,7 @@ import {
   FormItem,
   FormMessage,
 } from "@components/ui/form";
-import { Input } from "@components/ui/input"; // Ensure Input is imported correctly
+import { Input } from "@components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
@@ -30,8 +30,9 @@ password: z.string().min(8, {
 }),
 })
 
-
 const SignUpForm = () => {
+  const [isChecked, setIsChecked] = useState(false); 
+
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -41,10 +42,16 @@ const SignUpForm = () => {
       confirmPassword: "",
       firstname: "",
       lastname: "",
+
     },
   });
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
+    if (!isChecked) {
+      alert("You must agree to the terms and conditions before signing up.");
+      return;
+    }
+
     try {
       const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/signup", {
         method: "POST",
@@ -64,11 +71,10 @@ const SignUpForm = () => {
     }
   };
 
-   // Mock user data for social logins
-   const userData = {
+  const userData = {
     email: form.getValues("email"),
-    name: undefined, // Not needed for login
-    password: undefined, // Not needed for login
+    name: undefined,
+    password: undefined,
   };
 
   return (
@@ -78,10 +84,8 @@ const SignUpForm = () => {
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"
       backButtonLabel="Already have an account? Log in"
-      
     >
-       <div className="space-y-4 mb-4">
-        {/* Social Login Buttons */}
+      <div className="space-y-2 mb-2">
         <GoogleLogIn userData={userData} mode="login">
           Continue with Google
         </GoogleLogIn>
@@ -90,7 +94,7 @@ const SignUpForm = () => {
         </AppleLogIn>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-4">
             {/* Name Field */}
             <FormField
@@ -162,8 +166,28 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
+            {/* Checkbox Field */}
+            <div className="flex items-center gap-4">
+              <input
+                type="checkbox"
+                id="terms-checkbox"
+                className="w-5 h-5"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)} // Toggle state on change
+              />
+              <label htmlFor="terms-checkbox" className="font-inter text-[#040308]">
+                I agree to Vechtron{" "}
+                <span className="font-inter text-[#2869d4]">Terms of Service</span>{" "}
+                and{" "}
+                <span className="font-inter text-[#2869d4]">Privacy Policy</span>.
+              </label>
+            </div>
           </div>
-          <Button className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]" type="submit">
+          <Button
+            className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
+            type="submit"
+            disabled={!isChecked} 
+          >
             Create Account
           </Button>
         </form>
