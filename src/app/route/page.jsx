@@ -5,16 +5,28 @@ import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import Image from "next/image";
 import Navbar from "@components/navbar/chatNav";
-import './route.css'
+import './route.css';
+import SearchOverlay from "../route/component/SearchOverlay";
 
 export default function Route() {
   const mapRef = useRef(null);
-  const [searchLocation, setsearchLocation] = useState("");
-  const [isTyping, setisTyping] = useState(false);
+  const [searchLocation, setSearchLocation] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [toggleSearchInput, settoggleSearchInput] = useState(false)
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
 
-  function handleSearchLocation(e) {
-    setsearchLocation(e.target.value);
-  }
+
+function handleToggleSearchInput(){
+  settoggleSearchInput(prev=>!prev)
+  setIsInputDisabled((prev) => !prev);
+}
+
+  // function handleSearchLocation(e) {
+  //   const value = e.target.value;
+  //   setSearchLocation(value);
+  //   setIsTyping(value.trim() !== "");
+  // }
+
   useEffect(() => {
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -38,18 +50,20 @@ export default function Route() {
       }
     });
   }, []);
+
   return (
     <>
       <Navbar />
       <div className="route-container mt-11 flex justify-between">
         <div className="">
           <Image
-            src="/assets/images/bg-img.png"
+            src="/assets/images/bg-img2.png"
             alt="Google map"
             width={200}
             height={200}
             className="w-full lg:w-78 absolute h-28 mt-2"
           />
+          <SearchOverlay handleShowSearch={handleToggleSearchInput} showSearch={toggleSearchInput} />
           <div className="mapppp left-7 absolute w-87 md:w-74  pt-20">
             <div className="flex items-center gap-2 p-3 bg-white rounded-t-2xl">
               <Image
@@ -69,9 +83,7 @@ export default function Route() {
             </div>
 
             <div className="map-container">
-              <div ref={mapRef} className="map-container"/>
-
-
+              <div ref={mapRef} className="map-container" />
 
               <div className="shadow-custom absolute rounded-3xl backdrop-blur-40 p-3 flex bottom-16 left-3 lg:left-16 items-center bg-slate-white-gradient gap-2 w-93 lg:w-919">
                 <Image
@@ -83,26 +95,18 @@ export default function Route() {
                 <input
                   type="text"
                   value={searchLocation}
-                  onChange={handleSearchLocation}
+                  // onChange={handleSearchLocation}
+                  disabled={isInputDisabled}
+                  onClick={handleToggleSearchInput}
                   placeholder="Where are you off to?"
                   className="bg-transparent rounded border-0 w-full outline-none"
                 />
-
-                {isTyping ? (
-                  <Image
-                    src="/assets/icons/send-icon.png"
-                    alt="Send Icon"
-                    width={20}
-                    height={20}
-                  />
-                ) : (
-                  <Image
-                    src="/assets/icons/voice-icon.png"
-                    alt="Voice icon"
-                    width={20}
-                    height={20}
-                  />
-                )}
+                <Image
+                  src={isTyping ? "/assets/icons/send-icon.png" : "/assets/icons/voice-icon.png"}
+                  alt={isTyping ? "Send Icon" : "Voice Icon"}
+                  width={20}
+                  height={20}
+                />
               </div>
             </div>
           </div>

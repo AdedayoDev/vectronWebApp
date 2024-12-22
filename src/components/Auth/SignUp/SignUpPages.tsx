@@ -8,7 +8,7 @@ const SignUpPages = () => {
     <main className="w-full flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
-        className="w-2/3 h-full relative"
+        className="w-2/3 h-[1000px] relative"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dpmy3egg2/image/upload/v1734251344/volkswagen_car_ai_1_o7a6hn.png')`,
           backgroundSize: "cover", // Ensures the image covers the entire section
@@ -20,10 +20,10 @@ const SignUpPages = () => {
           className="absolute inset-0 flex items-center justify-center"
           style={{
             backgroundColor: "#42307D",
-            opacity: 0.8, // Adjust transparency of the overlay
+            opacity: 0.8, 
           }}
         >
-          <div className="flex flex-col w-[672px]  h-[600px] items-start space-y-4 justify-center p-8">
+          <div className="flex flex-col w-[672px]  h-[600px] items-start space-y-8  justify-center p-8">
             <Image
               src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
               alt=""

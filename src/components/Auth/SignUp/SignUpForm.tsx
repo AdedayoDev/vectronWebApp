@@ -19,24 +19,30 @@ import GoogleLogIn from "../LogIn/GoogleLogIn";
 import AppleLogIn from "../LogIn/AppleLogIn";
 
 const SignUpSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Please enter a valid email address" }),
-  name: z.string().min(1, { message: "Please enter your name" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long" }),
-});
+ email: z.string().email({
+    message: "Please enter a valid email address"
+}),
+username: z.string().min(1, {
+    message: "Please enter your username"
+}),
+password: z.string().min(8, {
+    message: "Password must be at least 8 characters long"
+}),
+})
 
 const SignUpForm = () => {
-  const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+  const [isChecked, setIsChecked] = useState(false); 
 
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: "",
-      name: "",
+      username: "",
       password: "",
+      confirmPassword: "",
+      firstname: "",
+      lastname: "",
+
     },
   });
 
@@ -47,7 +53,7 @@ const SignUpForm = () => {
     }
 
     try {
-      const response = await fetch("", {
+      const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +99,35 @@ const SignUpForm = () => {
             {/* Name Field */}
             <FormField
               control={form.control}
-              name="name"
+              name="firstname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder="John" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Name Field */}
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder="Doe" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Name Field */}
+            <FormField
+              control={form.control}
+              name="username"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
@@ -121,7 +155,7 @@ const SignUpForm = () => {
             {/* Password Field */}
             <FormField
               control={form.control}
-              name="password"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
@@ -152,7 +186,7 @@ const SignUpForm = () => {
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
-            disabled={!isChecked} // Disable button if checkbox is unchecked
+            disabled={!isChecked} 
           >
             Create Account
           </Button>
