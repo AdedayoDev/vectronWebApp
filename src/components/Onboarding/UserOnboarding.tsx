@@ -23,7 +23,7 @@ const UserOnboarding = () => {
               yes, i do
             </Button>
             <Button className="border-[#e3e9ee] w-[231px] bg-white border  text-[#181b1f] uppercase px-12 font-semibold font-inter text-base hover:bg-slate-50">
-              no, i don't have
+              no, i don&apos;t have
             </Button>{" "}
           </div>
           <hr  />
