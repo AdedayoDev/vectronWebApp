@@ -16,11 +16,23 @@ import { useRouter } from "next/navigation";
 export default function SideMenu() {
   const router = useRouter();
   const [active, setActive] = useState("");
-  const [showMenu, setShowMenu] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
+
   const handleClick = (name) => {
     setActive(name);
-    if (name === "Delete account") {
-      router.push("/settings/deleteaccount");
+    const routes = {
+      "Edit profile": "/settings/edit-profile",
+      Password: "/settings/password",
+      Notifications: "/settings/notification",
+      "Chat export": "/settings/chat-export",
+      Sessions: "/settings/sessions",
+      Applications: "/settings/applications",
+      Teams: "/settings/teams",
+      "Delete account": "/settings/deleteaccount",
+    };
+
+    if (routes[name]) {
+      router.push(routes[name]);
     }
   };
 
@@ -33,10 +45,8 @@ export default function SideMenu() {
     { name: "Applications", icon: <Grid /> },
     { name: "Teams", icon: <Users /> },
   ];
-  // const isNav = true;
 
   return (
-    // border-r-2 border-solid ml-5 pr-11
     <>
       {/* Mobile view */}
       <div className="sm:flex lg:hidden">
@@ -130,7 +140,9 @@ export default function SideMenu() {
           >
             <Trash />
           </span>
-          <span>Delete account</span>
+          <span className={active === "Delete account" ? "text-black" : ""}>
+            Delete account
+          </span>
         </button>
       </div>
     </>

@@ -19,7 +19,7 @@ const plans = [
       "Custom chatbot",
       "No support",
     ],
-    buttonText: 'Current plan',
+    buttonText: "Current plan",
   },
   {
     id: "standard",
@@ -35,7 +35,7 @@ const plans = [
       "Custom chatbot",
       "Email support",
     ],
-    buttonText: 'Get started'
+    buttonText: "Get started",
   },
   {
     id: "pro",
@@ -50,12 +50,13 @@ const plans = [
       "Custom analytics",
       "Priority support",
     ],
-    buttonText:'Subscribe'
+    buttonText: "Subscribe",
   },
 ];
 
 const PricingSlider = () => {
   const [activeSlide, setActiveSlide] = useState(1);
+  const isVisible = true;
 
   return (
     <div className="pricing-slider">
@@ -78,16 +79,20 @@ const PricingSlider = () => {
         {plans.map((plan, index) => (
           <SplideSlide key={plan.id}>
             <div
-              className={`plan-card border ${activeSlide === index ? "active" : ""}`}
+              className={`plan-card border ${
+                activeSlide === index ? "active" : ""
+              }`}
             >
               <div className="flex justify-between mb-3">
                 <div>
                   <h3 className="text-lg font-semibold">{plan.title}</h3>
                   <p className="text-gray-400 text-sm -mt-2">{plan.duration}</p>
                 </div>
-                <p className="text-white text-sm bg-blue-700 flex justify-center h-6 w-20 rounded-md items-center">
-                  {plan.popular}
-                </p>
+                {isVisible && plan.popular && (
+                  <p className="text-white text-sm bg-blue-700 flex justify-center h-6 w-20 rounded-md items-center">
+                    {plan.popular}
+                  </p>
+                )}
               </div>
               <div className="price relative">
                 <span className="text-xs absolute top-1 text-gray-400">$</span>{" "}
@@ -104,11 +109,13 @@ const PricingSlider = () => {
                       width={20}
                       height={20}
                     />
-                    <li >{feature}</li>
+                    <li>{feature}</li>
                   </div>
                 ))}
               </ul>
-              <button className="text-white mt-4 sm:w-60 w-80 mx-auto bg-blue-800 flex justify-center items-center rounded-full py-2">{plan.buttonText}</button>
+              <button className="text-white mt-4 sm:w-60 w-80 mx-auto bg-blue-800 flex justify-center items-center rounded-full py-2">
+                {plan.buttonText}
+              </button>
             </div>
           </SplideSlide>
         ))}

@@ -3,10 +3,12 @@ import React from "react";
 import Faq from "./components/Faq";
 import PricingSlider from "./components/PricingSlider";
 import './settings.css'
+import NavBar from '@components/navbar/navbar'
 
 export default function Settings() {
   return (
     <>
+    <NavBar text='My account' icon='/assets/icons/user.png'/>
       <div className="settings-container">
         <div className="settings-main">
           <Image
