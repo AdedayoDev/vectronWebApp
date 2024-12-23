@@ -21,7 +21,7 @@ export default function page() {
               className="backgroud-image sm:w-full lg:w-78 absolute h-32 cover-fill"
             />
             <div className="voice-chat-content">
-              <div className=" text-black-50 absolute lg:w-2/3 w-96 lg:mx-14 mx-10 my-24 px-2 py-3 rounded-md bg-white">
+              <div className=" text-black-50 absolute lg:w-74 w-96 lg:mx-7 mx-10 my-24 px-2 py-3 rounded-md bg-white">
                 <div className="voice-chat-text items-center flex gap-2 cursor-pointer">
                   <Image
                     src="/assets/icons/vechtron.png"

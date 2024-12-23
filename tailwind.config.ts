@@ -23,8 +23,22 @@ module.exports = {
         '87': '87%',
         '90': '90%',
         '93': '93%',
+        '95': '95%',
+        '96': '96%',
+        '79': '79%',
 
+      // custom width
+      width: {
+        "78": "78%",
+        "74": "74%",
+        "919": "919px",
+        "87": "87%",
+        "90": "90%",
+        "93": "93%",
       },
+      // height: {
+      //   '919': '600px',
+      // },
       //custom box shadow and blur
       boxShadow: {
         custom: "0px 1px 6px 0px rgba(0, 0, 0, 0.25)",
@@ -50,7 +64,7 @@ module.exports = {
         inter: ["Inter", "sans-serif"],
         montserrat: ["Montserrat", "sans-serif"],
         barlow: ["Barlow", "sans-serif"],
-    },
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -95,8 +109,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-};
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar"), require('tailwind-scrollbar-hide'),],
+}
+}
 
 // import type { Config } from 'tailwindcss'
 
