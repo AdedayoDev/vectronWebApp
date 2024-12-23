@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Import Next.js router
 import CardWrapper from "../CardWrapper";
 import { z } from "zod";
 import {
@@ -19,19 +20,20 @@ import GoogleLogIn from "../LogIn/GoogleLogIn";
 import AppleLogIn from "../LogIn/AppleLogIn";
 
 const SignUpSchema = z.object({
- email: z.string().email({
-    message: "Please enter a valid email address"
-}),
-username: z.string().min(1, {
-    message: "Please enter your username"
-}),
-password: z.string().min(8, {
-    message: "Password must be at least 8 characters long"
-}),
-})
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  username: z.string().min(1, {
+    message: "Please enter your username",
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
+});
 
 const SignUpForm = () => {
-  const [isChecked, setIsChecked] = useState(false); 
+  const [isChecked, setIsChecked] = useState(false);
+  const router = useRouter(); // Initialize the router
 
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
@@ -42,7 +44,6 @@ const SignUpForm = () => {
       confirmPassword: "",
       firstname: "",
       lastname: "",
-
     },
   });
 
@@ -53,16 +54,20 @@ const SignUpForm = () => {
     }
 
     try {
-      const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://api-staging.vechtron.com/auth/api/v1/auth/account/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         console.log("User registered successfully");
+        router.push("/onboarding/user-onboarding"); // Redirect to the onboarding page
       } else {
         console.error("Failed to register user");
       }
@@ -96,7 +101,7 @@ const SignUpForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-4">
-            {/* Name Field */}
+            {/* First Name Field */}
             <FormField
               control={form.control}
               name="firstname"
@@ -110,7 +115,7 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            {/* Name Field */}
+            {/* Last Name Field */}
             <FormField
               control={form.control}
               name="lastname"
@@ -124,7 +129,7 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            {/* Name Field */}
+            {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
@@ -146,7 +151,11 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" placeholder="Enter your Email" />
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="Enter your Email"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -155,12 +164,16 @@ const SignUpForm = () => {
             {/* Password Field */}
             <FormField
               control={form.control}
-              name="confirmPassword"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" placeholder="Create a Password" />
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Create a Password"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -173,20 +186,28 @@ const SignUpForm = () => {
                 id="terms-checkbox"
                 className="w-5 h-5"
                 checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)} // Toggle state on change
+                onChange={() => setIsChecked(!isChecked)}
               />
-              <label htmlFor="terms-checkbox" className="font-inter text-[#040308]">
+              <label
+                htmlFor="terms-checkbox"
+                className="font-inter text-[#040308]"
+              >
                 I agree to Vechtron{" "}
-                <span className="font-inter text-[#2869d4]">Terms of Service</span>{" "}
+                <span className="font-inter text-[#2869d4]">
+                  Terms of Service
+                </span>{" "}
                 and{" "}
-                <span className="font-inter text-[#2869d4]">Privacy Policy</span>.
+                <span className="font-inter text-[#2869d4]">
+                  Privacy Policy
+                </span>
+                .
               </label>
             </div>
           </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
-            disabled={!isChecked} 
+            disabled={!isChecked}
           >
             Create Account
           </Button>
