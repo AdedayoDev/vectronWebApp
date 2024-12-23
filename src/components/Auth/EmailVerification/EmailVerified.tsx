@@ -63,8 +63,8 @@ const EmailVerified = () => {
           </Button>{" "}
         </Link>
         <p className="font-inter font-normal text-sm text-[#667085]">
-          Didn&apos;t receive the email?
-          <span className="text-[#6941c6] cursor-pointer">Click to resend</span>
+          Didn&apos;t receive the email? 
+          <span className="text-[#6941c6] cursor-pointer"> Click to resend</span>
         </p>
         <Link href="/auth/log-in">
           {" "}

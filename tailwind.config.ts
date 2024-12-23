@@ -15,6 +15,7 @@ module.exports = {
       backgroundImage: {
         "slate-white-gradient": "linear-gradient(to bottom, #708090, #FFFFFF)",
       },
+
 	  // custom width
 	  width: {
         '78': '78%', 
@@ -27,6 +28,14 @@ module.exports = {
         '96': '96%',
         '79': '79%',
 
+      // custom width
+      width: {
+        "78": "78%",
+        "74": "74%",
+        "919": "919px",
+        "87": "87%",
+        "90": "90%",
+        "93": "93%",
       },
       // height: {
       //   '919': '600px',
@@ -56,7 +65,7 @@ module.exports = {
         inter: ["Inter", "sans-serif"],
         montserrat: ["Montserrat", "sans-serif"],
         barlow: ["Barlow", "sans-serif"],
-    },
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -101,8 +110,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-};
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar"), require('tailwind-scrollbar-hide'),],
+}
+}
 
 // import type { Config } from 'tailwindcss'
 
