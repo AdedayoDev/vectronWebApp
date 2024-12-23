@@ -14,7 +14,7 @@ interface CardWrapperProps {
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@components/ui/card'
 const CardWrapper = ({image, title, backButtonHref, backButtonLabel, label, children}: CardWrapperProps) => {
   return (
-    <Card className='pt-32 lg:pt-24'>
+    <Card className='pt-16'>
         <CardHeader>
            <AuthHeader  image={image} title={title} label={label}/>
         </CardHeader>
