@@ -28,6 +28,9 @@ module.exports = {
         '79': '79%',
 
       },
+      // height: {
+      //   '919': '600px',
+      // },
       //custom box shadow and blur
       boxShadow: {
         custom: "0px 1px 6px 0px rgba(0, 0, 0, 0.25)",

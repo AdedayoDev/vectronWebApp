@@ -1,89 +1,138 @@
-'use client'
-import Image from 'next/image'
-import React from 'react'
-// import { useRouter } from 'next/navigation'
+"use client";
+import { useState } from "react";
+import {
+  Edit,
+  Lock,
+  Bell,
+  FileText,
+  Activity,
+  Grid,
+  Users,
+  Trash,
+  MenuIcon,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function sideMenu() {
-  // const router= useRouter()
+export default function SideMenu() {
+  const router = useRouter();
+  const [active, setActive] = useState("");
+  const [showMenu, setShowMenu] = useState("");
+  const handleClick = (name) => {
+    setActive(name);
+    if (name === "Delete account") {
+      router.push("/settings/deleteaccount");
+    }
+  };
+
+  const buttons = [
+    { name: "Edit profile", icon: <Edit /> },
+    { name: "Password", icon: <Lock /> },
+    { name: "Notifications", icon: <Bell /> },
+    { name: "Chat export", icon: <FileText /> },
+    { name: "Sessions", icon: <Activity /> },
+    { name: "Applications", icon: <Grid /> },
+    { name: "Teams", icon: <Users /> },
+  ];
+  // const isNav = true;
+
   return (
+    // border-r-2 border-solid ml-5 pr-11
+    <>
+      {/* Mobile view */}
+      <div className="sm:flex lg:hidden">
+        <MenuIcon onClick={() => setShowMenu((prev) => !prev)} />
+      </div>
 
-    // md:hidden
-    <div className=' border-r-2 border-solid ml-5 pr-11'>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Edit profile</span>
+      <div>
+        {showMenu && (
+          <div className="absolute bg-black lg:hidden top-24 left-3  p-7 z-10">
+            {buttons.map(({ name, icon }) => (
+              <button
+                key={name}
+                onClick={() => handleClick(name)}
+                className={`flex gap-2 items-center border rounded-full mb-3 shadow-md sm:w-56 py-2 pl-4 ${
+                  active === name
+                    ? "border-black text-black font-bold"
+                    : "text-gray-400 border-gray-200"
+                }`}
+              >
+                <span
+                  className={`icon ${
+                    active === name ? "text-black font-bold" : "text-gray-400"
+                  }`}
+                >
+                  {icon}
+                </span>
+                <span>{name}</span>
+              </button>
+            ))}
+            <hr className="border-1 border-solid w-full my-10" />
+            <button
+              onClick={() => handleClick("Delete account")}
+              className={`flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4 text-red-500 ${
+                active === "Delete account"
+                  ? "border-black text-black font-bold"
+                  : ""
+              }`}
+            >
+              <span
+                className={`icon ${
+                  active === "Delete account"
+                    ? "text-black font-bold"
+                    : "text-red-500"
+                }`}
+              >
+                <Trash />
+              </span>
+              <span>Delete account</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop view */}
+      <div className="ml-5 lg:block sm:hidden">
+        {buttons.map(({ name, icon }) => (
+          <button
+            key={name}
+            onClick={() => handleClick(name)}
+            className={`flex gap-2 items-center border rounded-full mb-3 shadow-md sm:w-56 py-2 pl-4 ${
+              active === name
+                ? "border-black text-black font-bold"
+                : "text-gray-400 border-gray-200"
+            }`}
+          >
+            <span
+              className={`icon ${
+                active === name ? "text-black font-bold" : "text-gray-400"
+              }`}
+            >
+              {icon}
+            </span>
+            <span>{name}</span>
+          </button>
+        ))}
+        <hr className="border-1 border-solid w-full my-10" />
+        <button
+          onClick={() => handleClick("Delete account")}
+          className={`flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4 text-red-500 ${
+            active === "Delete account"
+              ? "border-black text-black font-bold"
+              : ""
+          }`}
+        >
+          <span
+            className={`icon ${
+              active === "Delete account"
+                ? "text-black font-bold"
+                : "text-red-500"
+            }`}
+          >
+            <Trash />
+          </span>
+          <span>Delete account</span>
         </button>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Password</span>
-        </button>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Notifications</span>
-        </button>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Chat export</span>
-        </button>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Sessions</span>
-        </button>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Applications</span>
-        </button>
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          />
-          <span className='text-gray-400'>Teams</span>
-        </button>
-        <hr className='border-1 border-solid w-full my-10' />
-        <button className='hover:border-2 hover:border-solid hover:border-black flex gap-2 text-red-500 items-center border rounded-full mb-3 shadow-md w-56 py-2 pl-4'>
-          <Image
-          src='/assets/icons/toyota.png'
-          width={20}
-          height={20}
-          alt='Icon'
-          // onClick={()=> router.push('/deleteaccount')}
-          />
-          Delete account
-        </button>
-    </div>
-  )
+      </div>
+    </>
+  );
 }
- 

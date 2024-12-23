@@ -2,11 +2,13 @@ import Image from "next/image";
 import React from "react";
 import SideMenu from "../notification/_component/side-menu";
 import DeleteConfirmation from '../deleteaccount/_components/deleteComfirmation'
+import Navbar from "@components/navbar/chatNav";
 export default function page() {
   return (
     <>
       <div className="delete-account">
-        <div>
+        <Navbar/>
+        <div className="mt-11">
           <Image
             src="/assets/images/bg-img3.png"
             alt="background image"
