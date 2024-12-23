@@ -172,7 +172,7 @@ const InputToken = () => {
         </Button>
         <p className="font-inter font-normal text-sm text-[#667085]">
           Didn&apos;t receive the email?
-          <span className="text-[#6941c6] cursor-pointer">Click to resend</span>
+       <Link href="/auth/email-verification">   <span className="text-[#6941c6] cursor-pointer"> Click to resend</span> </Link>
         </p>
         <Link href="/auth/log-in">
           <Button size="lg" className="bg-transparent hover:bg-transparent">
