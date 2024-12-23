@@ -15,7 +15,6 @@ module.exports = {
       backgroundImage: {
         "slate-white-gradient": "linear-gradient(to bottom, #708090, #FFFFFF)",
       },
-
 	  // custom width
 	  width: {
         '78': '78%', 

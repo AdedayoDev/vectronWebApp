@@ -9,7 +9,7 @@ export default function Settings() {
   return (
     <>
     <NavBar text='My account' icon='/assets/icons/user.png'/>
-      <div className="settings-container">
+      <div className="settings-container mt-14">
         <div className="settings-main">
           <Image
             src="/assets/images/bg-img3.png"
