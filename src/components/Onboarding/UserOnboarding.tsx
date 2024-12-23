@@ -19,7 +19,7 @@ const UserOnboarding = () => {
             Do you have a vehicle?
           </h2>
           <div className="flex flex-col items-center justify-center space-y-10">
-            <Button className="border-[#e3e9ee] w-[231px] bg-white border text-[#181b1f] uppercase  px-12 font-semibold font-inter text-base  hover:bg-slate-50">
+            <Button className="border-[#e3e9ee] w-[232px] bg-white border text-[#181b1f] uppercase  px-12 font-semibold font-inter text-base  hover:bg-slate-50">
               yes, i do
             </Button>
             <Button className="border-[#e3e9ee] w-[231px] bg-white border  text-[#181b1f] uppercase px-12 font-semibold font-inter text-base hover:bg-slate-50">
