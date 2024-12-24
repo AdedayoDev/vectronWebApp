@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Input from "../_components/Input";
 import Profile from "../_components/Profile";
-import SideBar from "../_components/SideBar";
 import ChatHead from "../_components/ChatHead";
 import ChatBody from "../_components/ChatBody";
+import SideBar from "../_components/SideBar";
 
 export const metadata = {
   title: "New Chat",
@@ -42,7 +42,7 @@ export default function Chat() {
               </div>
             </div>
           </div>
-          <div className="flex place-self-center w-72 xl:w-80 lg:place-self-start">
+          <div className="flex place-self-center w-full lg:w-72 xl:w-80 lg:place-self-start">
             <SideBar />
           </div>
         </div>
