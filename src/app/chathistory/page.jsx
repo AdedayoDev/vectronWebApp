@@ -10,11 +10,16 @@ import chatData from "@components/chathistoryComp/chatData";
 
 export default function ChatHistory() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [handleEdit, setHandleEdit] = useState(false);
+  const [handleDelete, setHandleDelete] = useState(false);
 
   const filteredChats = chatData.filter((chat) =>
     chat.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  function deleteText() {
+    setHandleDelete((prev) => !prev);
+    setHandleEdit(false);
+  }
   return (
     <>
       <Navbar />
@@ -53,11 +58,56 @@ export default function ChatHistory() {
                       width={3}
                       height={15}
                       className="conversation-icon"
+                      onClick={() => setHandleEdit(!handleEdit)}
                     />
+                    {handleEdit && (
+                      <div className="edit-options">
+                        <div className="edit-text editz">
+                          <p>Edit</p>
+                          <Image
+                            src="/assets/icons/rename.png"
+                            alt="Options icon"
+                            width={15}
+                            height={15}
+                            className="edit-icon"
+                          />
+                        </div>
+                        <div className="export-text editz">
+                          <p>Export</p>
+                          <Image
+                            src="/assets/icons/export.png"
+                            alt="Options icon"
+                            width={15}
+                            height={15}
+                            className="export-icon"
+                          />
+                        </div>
+                        <div className="delete-chat editz" onClick={deleteText}>
+                          <p>Delete</p>
+                          <Image
+                            src="/assets/icons/delete.png"
+                            alt="Options icon"
+                            width={15}
+                            height={15}
+                            className="delete-icon"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
+            {handleDelete && (
+              <div className="delete-text">
+                <h4>Delete chat?</h4>
+                <p>Are you sure you want to delete this chat?</p>
+                <div className="delete-btn-option">
+                  <button className="delete-btn">Delete</button>
+                  <button className="cancel-btn">Cancel</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="chat-history-aside">
@@ -67,3 +117,5 @@ export default function ChatHistory() {
     </>
   );
 }
+
+// I want a user to be able to edit, export and delete the chats in this code and also each chat should have its own option for edit, export and delete. the delete and cancel button should be able to delete and cancle if a user wants to dlete and cancel the process. start by asking me for the code.

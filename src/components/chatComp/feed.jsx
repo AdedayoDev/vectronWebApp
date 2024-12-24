@@ -60,7 +60,9 @@ export default function Feed() {
 
   return (
     <div ref={chatContainer} className="feed-chat">
+      <div className="response-container">
       {renderResponse()}
+      </div>
 
       <div className="form-container">
         <form onSubmit={handleSubmit} className="chat-form">
@@ -83,7 +85,13 @@ export default function Feed() {
                 className="soundwave-icon"
               />
             ) : (
-              <Send size={20} />
+             <Image
+                src="/assets/icons/send-icon.png"
+                alt="send-icon"
+                width={15}
+                height={15}
+                className="send-icon"
+              />
             )}
           </button>
         </form>

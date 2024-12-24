@@ -2,59 +2,78 @@ body {
   padding: 0;
   margin: 0;
 }
-.welcome-page {
-  width: 100%;
-  margin-top: 50px;
-}
-.welcome-left .welcome-image {
-  width: 100% !important;
-  object-fit: cover !important;
-  background-repeat: no-repeat !important;
-}
-/* Style the pagination container */
-.splide__pagination {
-  display: flex !important;
-  justify-content: center;
-  gap: 10px;
-  background-color: transparent !important;
-  visibility: visible !important;
-}
-.splide__pagination__page {
-  width: 10px;
-  height: 10px;
-  background-color: transparent;
-  border: 1px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.splide__pagination__page.is-active {
-  background-color: white !important;
-  color: white !important;
-  transform: scale(1.2);
-}
-
 .welcome-left {
   position: relative;
+  width: 100%;
+
+  height: 98vh; /* Match the height of the image */
+
 }
+
+.vech2-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.welcome-left::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #42307DE5, #7F56D9E5 90%); 
+  z-index: 1;
+}
+
+
+.welcome-left-header{
+  position: absolute;
+  font-size: 45px;
+  color: white;
+  top: 130px;
+  left: 100px;
+  width: 350px;
+  text-align: left;
+  padding: 30px;
+  z-index: 2; /* Ensure it sits above the overlay */
+}
+
 .welcome-left-text {
   position: absolute;
-  font-size: 32px;
+  font-size: 20px;
   color: white;
-  top: 160px;
-  left: 0;
-  text-align: center;
+  width: 400px;
+  margin-top: 50px;
+  text-align: left;
   padding: 30px;
+  z-index: 2; /* Ensure it sits above the overlay */
 }
+
+
+
 .welcome-right-content {
   width: 352px !important;
   margin: auto;
 }
 .welcome-right-content h1 {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 600;
+
   width: 60%;
-  margin: 30px auto;
-  text-align: center;
+  margin: 15px auto;
+  text-align: left;
+}
+.welcome-right-content p {
+  font-size: 18px;
+  font-weight: 400;
+  width: 60%;
+  margin: 15px auto;
+  color: grey;
+
 }
 
 /* Google and apple link  */
@@ -108,12 +127,12 @@ body {
 }
 .welcome-form input,
 button {
-  border: 1px solid #e3e9ee;
+  border: 2px solid #e3e9ee;
   padding: 10px;
   width: 95%;
   border-radius: 8px;
-  margin-bottom: 20px;
-  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-top: 1px;
 }
 .welcome-form button {
   background: linear-gradient(#9a77ff, #735ffa);
@@ -131,9 +150,9 @@ button {
   color: #7c878e;
 }
 @media screen and (min-width: 600px) {
-  body {
+  /* body {
     overflow: hidden;
-  }
+  } */
   .welcome-page {
     display: flex;
     align-items: center;
@@ -141,17 +160,19 @@ button {
     gap: 30px;
   }
   .welcome-left .welcome-image {
-    height: 98vh !important;
+    height: 100vh !important;
     border-radius: 30px !important;
   }
   .welcome-left {
     width: 50%;
     padding: 8px;
+    display: block;
+    position: relative;
   }
   .welcome-left-text {
-    top: 280px;
+    top: 250px !important;
     /* width: 60%; */
-    left: 10px;
+    /* left: 80px; */
   }
   .policy{
     margin-top: -5px;
@@ -159,9 +180,9 @@ button {
 }
 
 @media screen and (min-width: 1120px) {
-  body {
+  /* body {
     overflow: hidden;
-  }
+  } */
   .welcome-page {
     display: flex;
     align-items: center;
@@ -169,19 +190,24 @@ button {
   }
   .welcome-left {
     width: 50%;
-    padding: 8px;
+    padding: 0 8px;
+    position: relative;
+    top: -24px;
   }
   .welcome-left .welcome-image {
-    height: 98vh !important;
+    height: 96vh !important;
+/* position: absolute;
+    top: 0; */
     border-radius: 30px !important;
   }
   .welcome-left-text {
-    top: 280px;
-    width: 60%;
+    /* top: 300px; */
+    width: 70%;
     left: 100px;
   }
   .welcome-right {
     width: 50%;
+    margin-top: 40px;
   }
   .welcome-right-content {
     width: 60%;

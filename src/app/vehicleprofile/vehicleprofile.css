@@ -1,15 +1,19 @@
 body {
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 .vectron-image {
   width: 100%;
   background-size: cover;
   height: 90vh;
 }
+.vehicle-profile-left{
+  display: none;
+}
 .vehicle-profile-right-content {
   width: 80%;
-  margin: auto;
+  margin: 60px auto;
 }
 .vehicle-profile-right-content h1 {
     text-align: center;
@@ -28,7 +32,7 @@ body {
   font-size: 14px;
 }
 .vehicle-form-content input {
-  width: 90%;
+  width: 100%;
   padding: 12px;
   border: 2px solid #e3e9ee;
   border-radius: 5px;
@@ -62,6 +66,7 @@ body {
 }
 .vehicle-profile-left {
   width: 100%;
+  display: block;
 }
 .vectron-image {
   background-size: cover;
@@ -79,6 +84,7 @@ width: 100%;
   }
   .vehicle-profile-left {
     width: 100%;
+    display: block;
 }
 .vectron-image {
       background-size: cover;
@@ -87,7 +93,7 @@ width: 100%;
   }
   .vehicle-profile-right-content{
     width: 352px;
-    margin: auto;
+    margin:0 auto;
   }
   
 }
