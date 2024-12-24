@@ -27,6 +27,14 @@ module.exports = {
         '96': '96%',
         '79': '79%',
 
+      // custom width
+      width: {
+        "78": "78%",
+        "74": "74%",
+        "919": "919px",
+        "87": "87%",
+        "90": "90%",
+        "93": "93%",
       },
       // height: {
       //   '919': '600px',
@@ -102,8 +110,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-};
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide"),],
+}}
 
 // import type { Config } from 'tailwindcss'
 

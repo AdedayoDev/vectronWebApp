@@ -1,11 +1,13 @@
 import Image from "next/image";
 import React from "react";
 import SideMenu from "../notification/_component/side-menu";
-import Notification from '../notification/_component/notificationFeed'
+import Notification from "../notification/_component/notificationFeed";
+import Nav from "../notification/_component/Nav";
 export default function page() {
   return (
     <>
-      <div className="notification">
+      <Nav />
+      <div className="notification mt-4">
         <div>
           <Image
             src="/assets/images/bg-img3.png"
@@ -16,10 +18,11 @@ export default function page() {
           />
         </div>
         <div className="notification-content px-4 py-2 w-90 lg:w-96 sm:left-6 relative rounded-t-lg shadow-custom bg-white left-8 -mt-11">
-         <div className='mt-14 flex'>
-         <SideMenu />
-         <Notification/>
-         </div>
+          <div className="mt-14 flex">
+            <SideMenu />
+            <div className=""/>
+            <Notification />
+          </div>
         </div>
       </div>
     </>
