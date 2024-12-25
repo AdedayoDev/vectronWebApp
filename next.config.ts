@@ -14,7 +14,7 @@
 //   disable: process.env.NODE_ENV === 'development'
 // };
 
-// const config: NextConfig = {
+// const config: NextConfig = { 
 //   reactStrictMode: true,
 //   images: {
 //     domains: ['image-domain.com'],
