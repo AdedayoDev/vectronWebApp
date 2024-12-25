@@ -1,9 +1,9 @@
+import Link from "next/link";
 import Image from "next/image";
 import Conversation from "./_components/Conversation";
 import Input from "./_components/Input";
 import Profile from "./_components/Profile";
 import SideBar from "./_components/SideBar";
-import Link from "next/link";
 
 export const metadata = {
   title: "Chat with AI",
