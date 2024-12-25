@@ -55,12 +55,12 @@ export default function SideMenu() {
 
       <div>
         {showMenu && (
-          <div className="absolute bg-black lg:hidden top-24 left-3  p-7 z-10">
+          <div className="absolute bg-white lg:hidden top-24 left-3 p-7 z-10">
             {buttons.map(({ name, icon }) => (
               <button
                 key={name}
                 onClick={() => handleClick(name)}
-                className={`flex gap-2 items-center border rounded-full mb-3 shadow-md sm:w-56 py-2 pl-4 ${
+                className={`flex gap-2 items-center border lg:hidden rounded-full mb-3 shadow-md w-56 py-2 pl-4 ${
                   active === name
                     ? "border-black text-black font-bold"
                     : "text-gray-400 border-gray-200"
@@ -101,7 +101,7 @@ export default function SideMenu() {
       </div>
 
       {/* Desktop view */}
-      <div className="ml-5 lg:block sm:hidden">
+      <div className="ml-5 hidden sm:block">
         {buttons.map(({ name, icon }) => (
           <button
             key={name}
