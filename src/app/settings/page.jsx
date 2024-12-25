@@ -1,9 +1,11 @@
+'use client'
 import Image from "next/image";
 import React from "react";
 import Faq from "./components/Faq";
 import PricingSlider from "./components/PricingSlider";
 import './settings.css'
 import NavBar from '@components/navbar/navbar'
+import { CldImage } from 'next-cloudinary';
 
 export default function Settings() {
   return (
@@ -11,8 +13,8 @@ export default function Settings() {
     <NavBar text='My account' icon='/assets/icons/user.png'/>
       <div className="settings-container mt-14">
         <div className="settings-main">
-          <Image
-            src="/assets/images/bg-img3.png"
+          <CldImage
+            src="https://res.cloudinary.com/dn4hkronr/image/upload/v1735045652/bg-img3_sjyfvr.png"
             alt="background image"
             width={200}
             height={200}

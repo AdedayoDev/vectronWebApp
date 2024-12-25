@@ -1,16 +1,18 @@
-import Image from "next/image";
+'use client'
+
 import React from "react";
 import SideMenu from "../notification/_component/side-menu";
 import Notification from "../notification/_component/notificationFeed";
 import Nav from "../notification/_component/Nav";
+import { CldImage } from 'next-cloudinary';
 export default function page() {
   return (
     <>
       <Nav />
       <div className="notification mt-4">
         <div>
-          <Image
-            src="/assets/images/bg-img3.png"
+          <CldImage
+            src="https://res.cloudinary.com/dn4hkronr/image/upload/v1735045652/bg-img3_sjyfvr.png"
             alt="background image"
             width={200}
             height={200}

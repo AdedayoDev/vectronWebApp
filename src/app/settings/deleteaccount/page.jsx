@@ -1,16 +1,18 @@
-import Image from "next/image";
+'use client'
 import React from "react";
 import SideMenu from "../notification/_component/side-menu";
 import DeleteConfirmation from '../deleteaccount/_components/deleteComfirmation'
 import Navbar from "@components/navbar/chatNav";
+import { CldImage } from 'next-cloudinary';
+
 export default function page() {
   return (
     <>
       <div className="delete-account">
         <Navbar/>
         <div className="mt-11">
-          <Image
-            src="/assets/images/bg-img3.png"
+          <CldImage
+            src="https://res.cloudinary.com/dn4hkronr/image/upload/v1735045652/bg-img3_sjyfvr.png"
             alt="background image"
             width={200}
             height={200}
