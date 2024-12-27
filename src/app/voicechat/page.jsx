@@ -1,10 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import SideChat from "../voicechat/components/sideChat";
-import "@app/chat/chat.css";
 import Feed from "@components/chatComp/feed";
 import Navbar from "@components/navbar/chatNav";
-import './voicechat.css'
+import "./voicechat.css";
 
 export default function page() {
   return (
@@ -40,7 +39,7 @@ export default function page() {
                 </div>
               </div>
             </div>
-              <Feed />
+            <Feed />
           </div>
           <div className="voice-chat-right sm:hidden md:block lg:block px-6">
             <SideChat />
