@@ -4,9 +4,14 @@ import React from "react";
 
 export default function DeleteConfirmation() {
   return (
-    <div className="delete-confirmation sm:w-80 lg:mx-auto lg:w-2/4 sm:ml-0 lg:mt-0 sm:mt-20 ">
-      <h1 className="font-bold text-4xl">We’re sorry to see you go</h1>
-      <p className="text-gray-400 mt-4 text-base leading-relaxed">
+    <>
+    <div className="flex">
+    <div className="w-0.5 h-screen absolute left-80 top-0 hidden lg:block bg-gray-300"/>
+    
+      <div className="delete-confirmation sm:w-80 lg:mx-auto lg:w-2/4 sm:ml-0 lg:mt-0 sm:mt-20 ">
+      <h1 className="font-bold text-4xl mb-12 sm:mt-0 mt-11">We’re sorry to see you go</h1>
+      <hr />
+      <p className="text-gray-400 mt-11 text-base leading-relaxed">
         Warning: Deleting your account will permanently remove all of your data 
         and cannot be undone. This includes your profile, conversations, 
         comments, and any other information associated with your account. Are 
@@ -30,8 +35,8 @@ export default function DeleteConfirmation() {
         <p className="mt-2 text-sm text-gray-500">Minimum 12 characters</p>
       </div>
 
-      <div className="delete-btn my-10 lg:my-24 flex items-center gap-6">
-        <button className="flex items-center justify-center sm:w-80 lg:w-52 gap-2 bg-red-500 text-white rounded-full py-3 shadow-md hover:bg-red-600">
+      <div className="delete-btn my-10 lg:my-24 flex items-center gap-3">
+        <button className="flex items-center justify-center sm:w-80 lg:w-52 gap-2 bg-red-500 text-white rounded-full py-3 px-3 shadow-md hover:bg-red-600">
           Delete my account
           <Trash size={20} className="text-white" />
         </button>
@@ -43,5 +48,7 @@ export default function DeleteConfirmation() {
        </Link>
       </div>
     </div>
+    </div>
+    </>
   );
 }

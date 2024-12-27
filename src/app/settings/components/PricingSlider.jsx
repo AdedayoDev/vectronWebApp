@@ -113,7 +113,7 @@ const PricingSlider = () => {
                   </div>
                 ))}
               </ul>
-              <button className="text-white mt-4 sm:w-60 w-80 mx-auto bg-blue-800 flex justify-center items-center rounded-full py-2">
+              <button className="text-white mt-4 w-60 lg:w-80 mx-auto bg-blue-800 flex justify-center items-center rounded-full py-2">
                 {plan.buttonText}
               </button>
             </div>
