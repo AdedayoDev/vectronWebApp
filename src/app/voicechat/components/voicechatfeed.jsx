@@ -1,5 +1,5 @@
 import React from "react";
-import { Spotify, Radar, ArrowRight } from "lucide-react";
+import { Radar, ArrowRight } from "lucide-react";
 import { FaSpotify } from "react-icons/fa";
 import Link from "next/link";
 
@@ -16,129 +16,148 @@ export default function voicechatfeed() {
       </div>
       <div className="sm:flex gap-7 w-5/6 mx-auto mt-10">
         <div className="sm:block flex flex-wrap gap-5">
-        <div className="flex gap-2 items-center mb-3">
-          <div className="bg-blue-500 w-32 p-3 rounded-lg">
-            <Radar size={24} color="gray" />
-            <div className="text-white text-sm">
-              <h1 className="mt-2 mb-2">Explore</h1>
-              <p>Learn how to use Vechtron.ai for needs</p>
+          <div className="flex gap-2 items-center mb-3">
+            <div className="bg-blue-500 w-32 p-3 rounded-lg">
+              <Radar size={24} color="gray" />
+              <div className="text-white text-sm">
+                <h1 className="mt-2 mb-2">Explore</h1>
+                <p>Learn how to use Vechtron.ai for needs</p>
+              </div>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-1 h-8 bg-blue-500"></div>
+              <div className="w-1 h-8 bg-blue-500"></div>
+              <div className="w-1 h-8 bg-blue-500"></div>
             </div>
           </div>
-          <div className="flex gap-1">
-            <div className="w-1 h-8 bg-blue-500"></div>
-            <div className="w-1 h-8 bg-blue-500"></div>
-            <div className="w-1 h-8 bg-blue-500"></div>
-          </div>
-        </div>
 
-        <div className="flex gap-2 items-center mb-3">
-          <div className="bg-blue-500 w-32 p-3 rounded-lg">
-            <Radar size={24} color="gray" />
-            <div className="text-white text-sm">
-              <h1 className="mt-2 mb-2">Tutorial</h1>
-              <p>Learn how to use Vechtron.ai for needs</p>
+          <div className="flex gap-2 items-center mb-3">
+            <div className="bg-blue-500 w-32 p-3 rounded-lg">
+              <Radar size={24} color="gray" />
+              <div className="text-white text-sm">
+                <h1 className="mt-2 mb-2">Tutorial</h1>
+                <p>Learn how to use Vechtron.ai for needs</p>
+              </div>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-1 h-8 bg-blue-500"></div>
+              <div className="w-1 h-8 bg-blue-500"></div>
+              <div className="w-1 h-8 bg-blue-500"></div>
             </div>
           </div>
-          <div className="flex gap-1">
-            <div className="w-1 h-8 bg-blue-500"></div>
-            <div className="w-1 h-8 bg-blue-500"></div>
-            <div className="w-1 h-8 bg-blue-500"></div>
-          </div>
-        </div>
 
-        <div className="flex gap-2 items-center mb-3">
-          <div className="bg-blue-500 w-32 p-3 rounded-lg">
-            <Radar size={24} color="gray" />
-            <div className="text-white text-sm">
-              <h1 className="mt-2 mb-2">Support</h1>
-              <p>Learn how to use Vechtron.ai for needs</p>
+          <div className="flex gap-2 items-center mb-3">
+            <div className="bg-blue-500 w-32 p-3 rounded-lg">
+              <Radar size={24} color="gray" />
+              <div className="text-white text-sm">
+                <h1 className="mt-2 mb-2">Support</h1>
+                <p>Learn how to use Vechtron.ai for needs</p>
+              </div>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-1 h-8 bg-blue-500"></div>
+              <div className="w-1 h-8 bg-blue-500"></div>
+              <div className="w-1 h-8 bg-blue-500"></div>
             </div>
           </div>
-          <div className="flex gap-1">
-            <div className="w-1 h-8 bg-blue-500"></div>
-            <div className="w-1 h-8 bg-blue-500"></div>
-            <div className="w-1 h-8 bg-blue-500"></div>
-          </div>
-        </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-blue-200 p-3 sm:h-32 rounded">
-            <div>
-              <FaSpotify color="green" size={24} />
-              <h1 className="text-lg font-semibold mt-2 mb-2">Entertainment</h1>
+          <Link href="#">
+            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+              <div>
+                <FaSpotify color="green" size={24} />
+                <h1 className="text-lg font-semibold mt-2 mb-2">
+                  Entertainment
+                </h1>
+              </div>
+              <div className="flex justify-between items-center gap-7">
+                <p className="text-sm">What Music do you want to listen to?</p>
+                <ArrowRight size={24} color="blue" />
+              </div>
             </div>
-            <div className="flex justify-between items-center gap-7">
-              <p className="text-sm">What Music do you want to listen to?</p>
-              <ArrowRight size={24} color="blue" />
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-blue-200 p-3 sm:h-32 rounded">
-            <div>
-              <FaSpotify color="green" size={24} />
-              <h1 className="text-lg font-semibold mt-2 mb-2">Navigation</h1>
+          <Link href="#">
+            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+              <div>
+                <FaSpotify color="green" size={24} />
+                <h1 className="text-lg font-semibold mt-2 mb-2">Navigation</h1>
+              </div>
+              <div className="flex justify-between items-center gap-7">
+                <p className="text-sm">What Music do you want to listen to?</p>
+                <ArrowRight size={24} color="blue" />
+              </div>
             </div>
-            <div className="flex justify-between items-center gap-7">
-              <p className="text-sm">What Music do you want to listen to?</p>
-              <ArrowRight size={24} color="blue" />
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-blue-200 p-3 sm:h-32 rounded">
-            <div>
-              <FaSpotify color="green" size={24} />
-              <h1 className="text-lg font-semibold mt-2 mb-2">Entertainment</h1>
+          <Link href="#">
+            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+              <div>
+                <FaSpotify color="green" size={24} />
+                <h1 className="text-lg font-semibold mt-2 mb-2">
+                  Entertainment
+                </h1>
+              </div>
+              <div className="flex justify-between items-center gap-7">
+                <p className="text-sm">What Music do you want to listen to?</p>
+                <ArrowRight size={24} color="blue" />
+              </div>
             </div>
-            <div className="flex justify-between items-center gap-7">
-              <p className="text-sm">What Music do you want to listen to?</p>
-              <ArrowRight size={24} color="blue" />
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-blue-200 p-3 sm:h-32 rounded">
-            <div>
-              <FaSpotify color="green" size={24} />
-              <h1 className="text-lg font-semibold mt-2 mb-2">Entertainment</h1>
+          <Link href="#">
+            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+              <div>
+                <FaSpotify color="green" size={24} />
+                <h1 className="text-lg font-semibold mt-2 mb-2">
+                  Entertainment
+                </h1>
+              </div>
+              <div className="flex justify-between items-center gap-7">
+                <p className="text-sm">What Music do you want to listen to?</p>
+                <ArrowRight size={24} color="blue" />
+              </div>
             </div>
-            <div className="flex justify-between items-center gap-7">
-              <p className="text-sm">What Music do you want to listen to?</p>
-              <ArrowRight size={24} color="blue" />
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-blue-200 p-3 sm:h-32 rounded">
-            <div>
-              <FaSpotify color="green" size={24} />
-              <h1 className="text-lg font-semibold mt-2 mb-2">Diagnostics</h1>
+          <Link href="#">
+            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+              <div>
+                <FaSpotify color="green" size={24} />
+                <h1 className="text-lg font-semibold mt-2 mb-2">Diagnostics</h1>
+              </div>
+              <div className="flex justify-between items-center gap-7">
+                <p className="text-sm">What Music do you want to listen to?</p>
+                <ArrowRight size={24} color="blue" />
+              </div>
             </div>
-            <div className="flex justify-between items-center gap-7">
-              <p className="text-sm">What Music do you want to listen to?</p>
-              <ArrowRight size={24} color="blue" />
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-blue-200 p-3 sm:h-32 rounded">
-            <div>
-              <FaSpotify color="green" size={24} />
-              <h1 className="text-lg font-semibold mt-2 mb-2">Health & maintenance</h1>
+          <Link href="#">
+            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+              <div>
+                <FaSpotify color="green" size={24} />
+                <h1 className="text-lg font-semibold mt-2 mb-2">
+                  Health & maintenance
+                </h1>
+              </div>
+              <div className="flex justify-between items-center gap-7">
+                <p className="text-sm">What Music do you want to listen to?</p>
+                <ArrowRight size={24} color="blue" />
+              </div>
             </div>
-            <div className="flex justify-between items-center gap-7">
-              <p className="text-sm">What Music do you want to listen to?</p>
-              <ArrowRight size={24} color="blue" />
-            </div>
-          </div>
+          </Link>
         </div>
       </div>
-      <Link href='#' className="w-32 bg-blue-700 text-white rounded-full mt-7 block p-3 mb-3 mx-auto text-center">
-      <button>
-        See more...
-      </button>
+      <Link
+        href="#"
+        className="w-32 bg-blue-700 text-white rounded-full mt-7 block p-3 mb-3 mx-auto text-center"
+      >
+        <button>See more...</button>
       </Link>
 
-      <div className="text-feed bg-blue-200 h-28 p-3 sm:w-93 sm:ml-7 mt-10  rounded">
-
-      </div>
+      <div className="text-feed bg-blue-200 h-28 p-3 sm:w-93 sm:ml-7 mt-10  rounded"></div>
     </div>
   );
 }
