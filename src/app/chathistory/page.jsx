@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Aside from "@components/chatComp/side-chat";
 import "./chathistory.css";
-import "@app/chat/chat.css";
 import Navbar from "@components/navbar/chatNav";
 import Image from "next/image";
 import { Search } from "lucide-react";

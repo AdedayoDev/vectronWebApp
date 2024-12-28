@@ -1,15 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Navbar from "@components/navbar/navbar";
-import "./Welcome.css";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Welcome() {
   const [form, setForm] = useState({
@@ -34,18 +31,26 @@ export default function Welcome() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const { email, username, firstname, lastname, password, confirmPassword } = form;
-  
+
+    const { email, username, firstname, lastname, password, confirmPassword } =
+      form;
+
     // Validation checks
-    if (!email || !username || !firstname || !lastname || !password || !confirmPassword) {
+    if (
+      !email ||
+      !username ||
+      !firstname ||
+      !lastname ||
+      !password ||
+      !confirmPassword
+    ) {
       setError("Please fill in all fields.");
       setTimeout(() => {
         setError("");
       }, 3000);
       return;
     }
-  
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       setTimeout(() => {
@@ -53,7 +58,7 @@ export default function Welcome() {
       }, 3000);
       return;
     }
-  
+
     if (password.length < 8) {
       setError("Password should be at least 8 characters.");
       setTimeout(() => {
@@ -61,29 +66,32 @@ export default function Welcome() {
       }, 3000);
       return;
     }
-  
+
     try {
-      const response = await fetch("https://api-staging.vechtron.com/api/v1/auth/account/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          username,
-          firstname,
-          lastname,
-          password,
-          confirm_password: confirmPassword, // Fixing the field name
-        }),
-      });
-  
+      const response = await fetch(
+        "https://api-staging.vechtron.com/api/v1/auth/account/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            username,
+            firstname,
+            lastname,
+            password,
+            confirm_password: confirmPassword, // Fixing the field name
+          }),
+        }
+      );
+
       const data = await response.json();
-  
+
       if (response.ok) {
         // Success: Show a success message
         toast.success(data.message || "Registration successful!");
-  
+
         // Reset the form
         setForm({
           email: "",
@@ -93,7 +101,7 @@ export default function Welcome() {
           password: "",
           confirmPassword: "",
         });
-  
+
         // Redirect after a short delay
         setTimeout(() => router.push("/signin"), 2000);
       } else {
@@ -111,25 +119,29 @@ export default function Welcome() {
       setTimeout(() => setError(""), 3000);
     }
   };
-  
-  
 
   return (
     <>
       {/* <Navbar link="/signin" text="Sign in" icon="/assets/icons/logout.png" /> */}
       <div className="welcome-page">
         <div className="welcome-left">
-        <div className="onboarding-left">
-          <Image
-            src="/assets/images/vech2.png"
-            alt="Vectron car"
-            width={200}
-            height={200}
-            className="vech2-image"
-          />
-        </div>
-          <h1 className="welcome-left-header">Turn Every Drive Into a Smarter Journey.</h1>
-          <p className="welcome-left-text">Access your AI-powered in-car assistant to navigate smarter, stay connected, and get real-time support on the go. No sign-up hassle. Trusted by drivers worldwide.</p>
+          <div className="onboarding-left">
+            <Image
+              src="/assets/images/vech2.png"
+              alt="Vectron car"
+              width={200}
+              height={200}
+              className="vech2-image"
+            />
+          </div>
+          <h1 className="welcome-left-header">
+            Turn Every Drive Into a Smarter Journey.
+          </h1>
+          <p className="welcome-left-text">
+            Access your AI-powered in-car assistant to navigate smarter, stay
+            connected, and get real-time support on the go. No sign-up hassle.
+            Trusted by drivers worldwide.
+          </p>
         </div>
 
         <div className="welcome-right">
@@ -213,7 +225,9 @@ export default function Welcome() {
               />
               {error && <p style={{ color: "red" }}>{error}</p>}
               <button type="submit">Sign Up</button>
-              <span>Already have an account? <Link href="/signin">Signin</Link></span>
+              <span>
+                Already have an account? <Link href="/signin">Signin</Link>
+              </span>
             </form>
           </div>
         </div>
