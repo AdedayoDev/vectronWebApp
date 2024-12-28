@@ -55,7 +55,7 @@ export default function SideMenu() {
 
       <div>
         {showMenu && (
-          <div className="absolute bg-white lg:hidden top-24 left-3 p-7 z-10">
+          <div className="absolute bg-white shadow-lg lg:hidden top-24 left-3 p-7 z-10">
             {buttons.map(({ name, icon }) => (
               <button
                 key={name}

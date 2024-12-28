@@ -54,7 +54,7 @@ export default function BarContent() {
       <div>
         <Recent />
       </div>
-      {/* <Vehicles /> */}
+
       <Switchs />
       <div>
         <ListComp
@@ -63,12 +63,14 @@ export default function BarContent() {
         >
           Support
         </ListComp>
-        <ListComp
-          src="/assets/icons/setting.png"
-          classes="bg-blue-800 p-2 text-white rounded-lg hover:cursor-pointer"
-        >
-          Settings
-        </ListComp>
+        <Link href="/settings">
+          <ListComp
+            src="/assets/icons/setting.png"
+            classes="bg-blue-800 p-2 text-white rounded-lg hover:cursor-pointer"
+          >
+            Settings
+          </ListComp>
+        </Link>
       </div>
       <UpgradePro />
     </div>

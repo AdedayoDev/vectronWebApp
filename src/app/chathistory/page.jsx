@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Aside from "@components/chatComp/side-chat";
 import "./chathistory.css";
-import "@app/chat/chat.css";
 import Navbar from "@components/navbar/chatNav";
 import Image from "next/image";
 import { Search } from "lucide-react";
@@ -118,4 +117,3 @@ export default function ChatHistory() {
   );
 }
 
-// I want a user to be able to edit, export and delete the chats in this code and also each chat should have its own option for edit, export and delete. the delete and cancel button should be able to delete and cancle if a user wants to dlete and cancel the process. start by asking me for the code.

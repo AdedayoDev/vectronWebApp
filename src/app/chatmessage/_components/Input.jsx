@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 function Input() {
   return (
@@ -23,12 +24,14 @@ function Input() {
           </div>
           <div className="flex items-center justify-center space-x-3">
             <div className="relative w-5 h-5">
-              <Image
-                src="/assets/icons/voiceRecord.png"
-                alt="voiceRecord image"
-                fill
-                className="object-cover hover:cursor-pointer"
-              />
+              <Link href="/voicechat">
+                <Image
+                  src="/assets/icons/voiceRecord.png"
+                  alt="voiceRecord image"
+                  fill
+                  className="object-cover hover:cursor-pointer"
+                />
+              </Link>
             </div>
             <div className="relative w-5 h-5">
               <Image
