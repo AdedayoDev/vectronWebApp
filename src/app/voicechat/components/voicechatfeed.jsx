@@ -5,16 +5,16 @@ import Link from "next/link";
 
 export default function voicechatfeed() {
   return (
-    <div className="absolute top-28 z-10 bg-white w-93 sm:w-74 shadow-lg rounded left-4 sm:left-7">
+    <div className="absolute top-28 sm:top-44 z-10 bg-white w-93 sm:w-[78%] shadow-lg rounded left-4 sm:left-5">
       <div className="w-4/5 mx-auto">
-        <h1 className="bg-blue-500 w-40 mx-auto rounded-2xl mt-5 p-1 text-white text-lg  text-center">
+        <h1 className="bg-blue-500 w-40 mx-auto rounded-2xl mt-5 p-1 text-white text-xl text-center">
           VECHTRON UI
         </h1>
         <p className="mt-10 text-center text-xl sm:text-3xl font-semibold">
           Good day! How may I assist you today?
         </p>
       </div>
-      <div className="sm:flex gap-7 w-5/6 mx-auto mt-10">
+      <div className="sm:flex sm:mx-52 gap-7 w-5/6 mx-auto mt-10">
         <div className="sm:block flex flex-wrap gap-5">
           <div className="flex gap-2 items-center mb-3">
             <div className="bg-blue-500 w-32 p-3 rounded-lg">
@@ -62,7 +62,7 @@ export default function voicechatfeed() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 relative top-3">
           <Link href="#">
             <div className="bg-blue-200 p-3 sm:h-32 rounded">
               <div>
@@ -157,7 +157,7 @@ export default function voicechatfeed() {
         <button>See more...</button>
       </Link>
 
-      <div className="text-feed bg-blue-200 h-28 p-3 sm:w-93 sm:ml-7 mt-10  rounded"></div>
+      <div className="text-feed bg-blue-200 h-28 p-3 sm:w-93 sm:ml-10 mt-10 mb-10 rounded"></div>
     </div>
   );
 }
