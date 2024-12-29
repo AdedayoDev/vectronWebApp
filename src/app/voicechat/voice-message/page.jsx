@@ -4,7 +4,7 @@ import Image from "next/image";
 import SideBar from "../components/sideBar";
 import Navbar from "@components/navbar/chatNav";
 import { Menu } from "lucide-react";
-import Voice from "../components/Voice";
+import Feed from "./component/Feed";
 
 export default function Page() {
   const [showNav, setShowNav] = useState(false);
@@ -32,7 +32,7 @@ export default function Page() {
             height={200}
             className="w-full lg:w-[82%] absolute h-32 object-cover sm:top-24"
           />
-          {/* <Voice /> */}
+          <Feed />
         </div>
         <div>
           <SideBar showNavbar={showNav} />

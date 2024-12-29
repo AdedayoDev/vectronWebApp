@@ -1,7 +1,6 @@
 import { Mic } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { FaTimes } from "react-icons/fa";
 
 export default function Voice() {
   return (
