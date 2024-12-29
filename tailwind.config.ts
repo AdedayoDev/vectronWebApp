@@ -5,31 +5,65 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-
-    // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      //custom background gradient
       backgroundImage: {
         "slate-white-gradient": "linear-gradient(to bottom, #708090, #FFFFFF)",
       },
-      // custom width
-      width: {
-        "78": "78%",
-        "74": "74%",
-        "919": "919px",
-        "87": "87%",
-        "90": "90%",
-        "93": "93%",
-        "95": "95%",
-        "96": "96%",
-        "79": "79%",
+      
+	  width: {
+        '78': '78%', 
+        '74': '74%', 
+        '919': '919px',
+        '87': '87%',
+        '90': '90%',
+        '93': '93%',
+        '95': '95%',
+        '96': '96%',
+        '79': '79%',
+      },
+      
+      height: {
+       '1000': '1132px',
+      },
 
-        // custom width
-        height: {
-          "1000": "1132px",
+      boxShadow: {
+        custom: "0px 1px 6px 0px rgba(0, 0, 0, 0.25)",
+      },
+      backdropBlur: {
+        40: "40px",
+      },
+      screens: {
+        xs: "280px",
+        sm: "320px",
+        md: "540px",
+        lg: "720px",
+        xl: "1080px",
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        urbanist: ["Urbanist", "sans-serif"],
+        allura: ["Allura", "cursive"],
+        inter: ["Inter", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
+        barlow: ["Barlow", "sans-serif"],
+      },
+      colors: {
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
 
         //custom box shadow and blur
@@ -108,5 +142,4 @@ module.exports = {
       require("tailwind-scrollbar-hide"),
     ],
   },
-};
 
