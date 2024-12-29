@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function voicechatfeed() {
   return (
-    <div className="absolute top-28 sm:top-44 z-10 bg-white w-93 sm:w-[78%] shadow-lg rounded left-4 sm:left-5">
+    <div className="absolute top-28 sm:top-44 z-10 bg-white w-[93%] sm:w-[78%] shadow-lg rounded left-4 sm:left-5">
       <div className="w-4/5 mx-auto">
         <h1 className="bg-blue-500 w-40 mx-auto rounded-2xl mt-5 p-1 text-white text-xl text-center">
           VECHTRON UI
