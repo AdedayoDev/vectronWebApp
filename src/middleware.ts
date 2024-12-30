@@ -6,15 +6,17 @@ export function middleware(request: NextRequest) {
 
   // Example: Redirect if the user visits `/old-page`
   if (pathname === "/onboarding") {
-    return NextResponse.redirect(new URL("/auth/log-in", request.url));
+    // print in terminal
+    // console.log(user)
+    // return NextResponse.redirect(new URL("/auth/log-in", request.url));
   }
 
-  if (pathname === "/auth/sign-up") {
-    let user = localStorage.getItem("user");
-    if (user) {
-      return NextResponse.redirect(new URL("/auth/log-in", request.url));
-    }
-  }
+  // if (pathname === "/auth/sign-up") {
+  //   let user = localStorage.getItem("user");
+  //   if (user) {
+  //     return NextResponse.redirect(new URL("/auth/log-in", request.url));
+  //   }
+  // }
 
   // Example: Add a custom header
   const response = NextResponse.next();
@@ -23,6 +25,9 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/onboarding", "/auth/sign-up"],
+  matcher: [
+    // "/onboarding", 
+    // "/auth/sign-up"
+  ],
   // Apply middleware to specific routes
 };

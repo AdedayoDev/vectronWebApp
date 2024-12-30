@@ -1,26 +1,25 @@
 "use client";
 
-import { BeatLoader } from "react-spinners";
-import React, { useState } from "react";
-import CardWrapper from "../CardWrapper";
-import { z } from "zod";
+import { Button } from "@components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
-  FormLabel,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { useForm } from "react-hook-form";
-import { login } from "@lib/Api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@components/ui/button";
-import GoogleLogIn from "./GoogleLogIn";
-import AppleLogIn from "./AppleLogIn";
 import Link from "next/link";
-import {useAuthStore} from "../../../store/useStore"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { BeatLoader } from "react-spinners";
+import { z } from "zod";
+import { useAuthStore } from "../../../store/useStore";
+import CardWrapper from "../CardWrapper";
+import AppleLogIn from "./AppleLogIn";
+import GoogleLogIn from "./GoogleLogIn";
 
 const LogInSchema = z.object({
   email: z.string().email({
@@ -32,8 +31,7 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
-  const {user, setUser, setToken}=useAuthStore()
-  
+  const { login } = useAuthStore()
   const [isChecked, setIsChecked] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
@@ -56,10 +54,7 @@ const LogInForm = () => {
     setMessage("");
     setMessageType("");
     try {
-      const response = await login(data);
-      
-      localStorage.setItem("user", JSON.stringify(user));
-      setUser(user) 
+      await login(data.email, data.password);
       setMessage("Login successful! Redirecting...");
       setMessageType("success");
       setTimeout(() => {
@@ -180,8 +175,8 @@ const LogInForm = () => {
                   messageType === "success"
                     ? "green"
                     : messageType === "error"
-                    ? "red"
-                    : "black",
+                      ? "red"
+                      : "black",
                 marginTop: "1rem",
               }}
             >
