@@ -61,7 +61,7 @@ export default function sideBar({ showSideBar, handleShow }) {
               <p> Reasons for car over heating</p>
             </div>
             <Link
-              href="/chathistory"
+              href="/chat/chathistory"
               className="mt-2 font-bold flex items-center gap-3 no-underline"
             >
               View all
@@ -153,10 +153,13 @@ export default function sideBar({ showSideBar, handleShow }) {
 
       {/* Desktop */}
       <div className="lg:block sm:hidden rounded p-3">
+        <Link href='/chat/newchat'>
         <Button
           buttonIcon="/assets/icons/chat-add.png"
           buttonText="New message"
         />
+        </Link>
+        <Link href='#'>
         <button className="py-2 px-4 w-full gap-2 items-center flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
           <Image
             src="/assets/icons/search-action.png"
@@ -166,6 +169,7 @@ export default function sideBar({ showSideBar, handleShow }) {
           />
           Search action
         </button>
+        </Link>
         <div className="starred-chat mt-6">
           <p className="text-md font-bold mb-2">Starred</p>
           <div className="border-dotted border-black border-x border-y h-20">
@@ -195,7 +199,7 @@ export default function sideBar({ showSideBar, handleShow }) {
             <p> Reasons for car over heating</p>
           </div>
           <Link
-            href="/chathistory"
+            href="/chat/chathistory"
             className="mt-2 font-bold flex items-center gap-3 no-underline"
           >
             View all
@@ -232,6 +236,7 @@ export default function sideBar({ showSideBar, handleShow }) {
         </div>
 
         <div className="updates mt-10">
+          <Link href='#'>
           <div className="cursor-pointer updates-content flex gap-2 mt-2">
             <Image
               src="/assets/icons/Iconset.png"
@@ -240,7 +245,8 @@ export default function sideBar({ showSideBar, handleShow }) {
               height={15}
             />
             <p> Updates & FAQ</p>
-          </div>
+          </div> 
+          </Link>
           <div className="cursor-pointer vehicle-content flex gap-2 mt-2">
             <Image
               src="/assets/icons/settings.png"

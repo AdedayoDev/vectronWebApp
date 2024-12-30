@@ -9,18 +9,19 @@ export default function SideChat({ showNewChat, toggleContainers }) {
   return (
     <div className="side-chat-container">
       <div className="side-first-content ">
-        <Link href="/chatmessage/newchat">
+        <Link href="/chat/newchat">
           <Button variant="secondary" className="msg-button">
             <Image
               src="/assets/icons/newmessage.png"
               alt="message icon"
               width={15}
               height={15}
+              className="w-full"
             />
             New message
           </Button>
         </Link>
-        {/* <button className="new-chat-btn">+ New chat</button> */}
+        
         <div className="prev-chat">
           <h4>Recents</h4>
           <div className="prev-cat-one">
@@ -42,7 +43,7 @@ export default function SideChat({ showNewChat, toggleContainers }) {
             <p>Reasons for car over heating </p>
           </div>
         </div>
-        <Link className="see-more-btn" href="/chathistory">
+        <Link className="see-more-btn" href="/chat/chathistory">
           View all <ArrowRight className="arrow-right" />
         </Link>
       </div>
@@ -138,7 +139,6 @@ export default function SideChat({ showNewChat, toggleContainers }) {
         </div>
        </Link>
       </div>
-      {/* <p className="follow-us">Follow us on</p> */}
     </div>
   );
 }
