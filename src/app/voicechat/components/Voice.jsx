@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Voice() {
   return (
-    <div className="absolute top-32 sm:top-44 bg-white shadow rounded-lg w-93 sm:w-[81%] left-4 p-4">
+    <div className="absolute top-[145px] lg:top-44 bg-white shadow rounded-lg sm:w-[92%] lg:w-[80.5%] left-5 p-4">
       <div className="flex gap-2 items-center">
         <Image
           src="/assets/icons/vechtron.png"
@@ -27,10 +27,9 @@ export default function Voice() {
             <Mic size={35} color="red" />
           </div>
 
-            <div className="cursor-pointer text-center bg-slate-200 rounded-full p-3 font-normal text-4xl w-14 h-14 flex justify-center items-center">
-                x
-            </div>
-
+          <div className="cursor-pointer text-center bg-slate-200 rounded-full p-3 font-normal text-4xl w-14 h-14 flex justify-center items-center">
+            x
+          </div>
         </div>
       </div>
     </div>

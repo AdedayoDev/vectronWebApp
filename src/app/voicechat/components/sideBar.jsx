@@ -1,28 +1,37 @@
 "use client";
+import { Menu } from "lucide-react";
 import Button from "./button";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function sideChat({ showNavbar, handleShowNav }) {
+export default function sideBar({ showSideBar, handleShow }) {
   return (
     <>
       {/* mobile */}
-
-      {showNavbar && (
-        <div className="absolute z-10 left-0 rounded p-3 bg-blue-100">
-          <Button
-            buttonIcon="/assets/icons/chat-add.png"
-            buttonText="New message"
-          />
-          <button className="py-2 px-4 w-full gap-2 items-center flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
-            <Image
-              src="/assets/icons/search-action.png"
-              alt="search action"
-              width={20}
-              height={20}
+      <Menu
+        size={30}
+        className="absolute top-0 mt-3 left-0 mx-3 block lg:hidden"
+        onClick={handleShow}
+      />
+      {showSideBar && (
+        <div className="absolute z-10 left-0 rounded p-3 lg:hidden bg-white shadow-lg w-[60%]">
+          <Link href="/chat/newchat">
+            <Button
+              buttonIcon="/assets/icons/chat-add.png"
+              buttonText="New message"
             />
-            Search action
-          </button>
+          </Link>
+          <Link href="#">
+            <button className="py-2 px-4 w-full gap-2 items-center flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
+              <Image
+                src="/assets/icons/search-action.png"
+                alt="search action"
+                width={20}
+                height={20}
+              />
+              Search action
+            </button>
+          </Link>
           <div className="starred-chat mt-6">
             <p className="text-md font-bold mb-2">Starred</p>
             <div className="border-dotted border-black border-x border-y h-20">
@@ -89,24 +98,28 @@ export default function sideChat({ showNavbar, handleShowNav }) {
           </div>
 
           <div className="updates mt-10">
-            <div className="cursor-pointer updates-content flex gap-2 mt-2">
-              <Image
-                src="/assets/icons/Iconset.png"
-                alt="search action"
-                width={20}
-                height={15}
-              />
-              <p> Updates & FAQ</p>
-            </div>
-            <div className="cursor-pointer vehicle-content flex gap-2 mt-2">
-              <Image
-                src="/assets/icons/settings.png"
-                alt="search action"
-                width={20}
-                height={15}
-              />
-              <p> Settings</p>
-            </div>
+            <Link href="#">
+              <div className="cursor-pointer updates-content flex gap-2 mt-2">
+                <Image
+                  src="/assets/icons/Iconset.png"
+                  alt="search action"
+                  width={20}
+                  height={15}
+                />
+                <p> Updates & FAQ</p>
+              </div>
+            </Link>
+            <Link href="/settings/notification">
+              <div className="cursor-pointer vehicle-content flex gap-2 mt-2">
+                <Image
+                  src="/assets/icons/settings.png"
+                  alt="search action"
+                  width={20}
+                  height={15}
+                />
+                <p> Settings</p>
+              </div>
+            </Link>
           </div>
 
           <div className="upgrade-container mt-6 p-3 relative rounded-2xl bg-purple-400">
@@ -122,22 +135,24 @@ export default function sideChat({ showNavbar, handleShowNav }) {
                 height={86}
                 className="mx-auto"
               />
-              <button className="justify-center items-center gap-2 flex w-full rounded-full p-2 bg-blue-700 text-white">
-                Upgrade to Pro
-                <Image
-                  src="/assets/icons/Solid.png"
-                  alt="search action"
-                  width={20}
-                  height={20}
-                />
-              </button>
+              <Link href="/pricing">
+                <button className="justify-center items-center gap-2 flex w-full rounded-full p-2 bg-blue-700 text-white">
+                  Upgrade to Pro
+                  <Image
+                    src="/assets/icons/Solid.png"
+                    alt="search action"
+                    width={20}
+                    height={20}
+                  />
+                </button>
+              </Link>
             </div>
           </div>
         </div>
       )}
 
       {/* Desktop */}
-      <div className="hidden sm:block side-container rounded p-3">
+      <div className="lg:block sm:hidden rounded p-3">
         <Button
           buttonIcon="/assets/icons/chat-add.png"
           buttonText="New message"

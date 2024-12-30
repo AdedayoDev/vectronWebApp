@@ -30,12 +30,12 @@ export default function Page() {
             alt="background-image"
             width={200}
             height={200}
-            className="w-full lg:w-[82%] absolute h-32 object-cover sm:top-24"
+            className="w-full lg:w-[82%] absolute h-32 object-cover lg:top-24"
           />
           <Feed />
         </div>
         <div>
-          <SideBar showNavbar={showNav} />
+          <SideBar showSideBar={showNav} handleShow={handleShowNav} />
         </div>
       </div>
     </div>

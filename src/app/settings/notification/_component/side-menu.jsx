@@ -49,13 +49,13 @@ export default function SideMenu() {
   return (
     <>
       {/* Mobile view */}
-      <div className="sm:flex lg:hidden">
-        <MenuIcon onClick={() => setShowMenu((prev) => !prev)} />
+      <div className="sm:flex lg:hidden absolute -top-40 right-0 bg-white rounded">
+        <MenuIcon size={30} onClick={() => setShowMenu((prev) => !prev)} />
       </div>
 
       <div>
         {showMenu && (
-          <div className="absolute bg-white shadow-lg lg:hidden top-24 left-3 p-7 z-10">
+          <div className="absolute bg-white shadow-lg lg:hidden -top-[125px] rounded right-0 p-7 z-10">
             {buttons.map(({ name, icon }) => (
               <button
                 key={name}
@@ -101,7 +101,7 @@ export default function SideMenu() {
       </div>
 
       {/* Desktop view */}
-      <div className="ml-5 hidden sm:block">
+      <div className="ml-5 hidden lg:block">
         {buttons.map(({ name, icon }) => (
           <button
             key={name}

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function voicechatfeed() {
   return (
-    <div className="absolute top-28 sm:top-44 z-10 bg-white w-[93%] sm:w-[78%] shadow-lg rounded left-4 sm:left-5">
+    <div className="absolute top-28 sm:top-44 z-10 bg-white w-[93%] lg:w-[78%] shadow-lg rounded left-4 sm:left-5">
       <div className="w-4/5 mx-auto">
         <h1 className="bg-blue-500 w-40 mx-auto rounded-2xl mt-5 p-1 text-white text-xl text-center">
           VECHTRON UI
@@ -14,8 +14,8 @@ export default function voicechatfeed() {
           Good day! How may I assist you today?
         </p>
       </div>
-      <div className="sm:flex sm:mx-52 gap-7 w-5/6 mx-auto mt-10">
-        <div className="sm:block flex flex-wrap gap-5">
+      <div className="lg:flex lg:mx-52 gap-7 w-5/6 mx-auto mt-10">
+        <div className="lg:block flex flex-wrap gap-5">
           <div className="flex gap-2 items-center mb-3">
             <div className="bg-blue-500 w-32 p-3 rounded-lg">
               <Radar size={24} color="gray" />
@@ -64,7 +64,7 @@ export default function voicechatfeed() {
 
         <div className="grid grid-cols-2 gap-3 relative top-3">
           <Link href="#">
-            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+            <div className="bg-blue-200 p-3 lg:h-32 rounded">
               <div>
                 <FaSpotify color="green" size={24} />
                 <h1 className="text-lg font-semibold mt-2 mb-2">
@@ -79,7 +79,7 @@ export default function voicechatfeed() {
           </Link>
 
           <Link href="#">
-            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+            <div className="bg-blue-200 p-3 lg:h-32 rounded">
               <div>
                 <FaSpotify color="green" size={24} />
                 <h1 className="text-lg font-semibold mt-2 mb-2">Navigation</h1>
@@ -92,7 +92,7 @@ export default function voicechatfeed() {
           </Link>
 
           <Link href="#">
-            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+            <div className="bg-blue-200 p-3 lg:h-32 rounded">
               <div>
                 <FaSpotify color="green" size={24} />
                 <h1 className="text-lg font-semibold mt-2 mb-2">
@@ -107,7 +107,7 @@ export default function voicechatfeed() {
           </Link>
 
           <Link href="#">
-            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+            <div className="bg-blue-200 p-3 lg:h-32 rounded">
               <div>
                 <FaSpotify color="green" size={24} />
                 <h1 className="text-lg font-semibold mt-2 mb-2">
@@ -122,7 +122,7 @@ export default function voicechatfeed() {
           </Link>
 
           <Link href="#">
-            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+            <div className="bg-blue-200 p-3 lg:h-32 rounded">
               <div>
                 <FaSpotify color="green" size={24} />
                 <h1 className="text-lg font-semibold mt-2 mb-2">Diagnostics</h1>
@@ -135,7 +135,7 @@ export default function voicechatfeed() {
           </Link>
 
           <Link href="#">
-            <div className="bg-blue-200 p-3 sm:h-32 rounded">
+            <div className="bg-blue-200 p-3 lg:h-32 rounded">
               <div>
                 <FaSpotify color="green" size={24} />
                 <h1 className="text-lg font-semibold mt-2 mb-2">
@@ -157,7 +157,7 @@ export default function voicechatfeed() {
         <button>See more...</button>
       </Link>
 
-      <div className="text-feed bg-blue-200 h-28 p-3 sm:w-93 sm:ml-10 mt-10 mb-10 rounded"></div>
+      <div className="text-feed bg-blue-200 h-28 p-3 lg:w-93 lg:ml-10 mt-10 mb-10 rounded"></div>
     </div>
   );
 }

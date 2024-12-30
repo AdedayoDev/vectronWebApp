@@ -17,7 +17,7 @@ export default function page() {
               alt="background-image"
               width={200}
               height={200}
-              className="w-full lg:w-[80.5%] absolute h-32 cover-fill sm:top-24"
+              className="w-full lg:w-[80.5%] absolute h-32 cover-fill lg:top-24"
             />
             <VoiceChatFeed />
           </div>
