@@ -1,5 +1,6 @@
 "use client";
 
+import { BeatLoader } from "react-spinners"
 import React, { useState } from "react";
 import CardWrapper from "../CardWrapper";
 import { z } from "zod";
@@ -12,62 +13,73 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
+import { signup } from "@lib/Api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import GoogleLogIn from "../LogIn/GoogleLogIn";
 import AppleLogIn from "../LogIn/AppleLogIn";
 
-const SignUpSchema = z.object({
- email: z.string().email({
-    message: "Please enter a valid email address"
-}),
-username: z.string().min(1, {
-    message: "Please enter your username"
-}),
-password: z.string().min(8, {
-    message: "Password must be at least 8 characters long"
-}),
-})
+const SignUpSchema = z
+  .object({
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    username: z.string().min(1, { message: "Please enter your username" }),
+    password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+    confirm_password: z.string().min(8, {
+      message: "Confirm Password must be at least 8 characters long",
+    }),
+    first_name: z.string().min(1, { message: "First name is required" }),
+    last_name: z.string().min(1, { message: "Last name is required" }),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords do not match",
+  });
 
 const SignUpForm = () => {
-  const [isChecked, setIsChecked] = useState(false); 
-
+  const [isChecked, setIsChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: "",
       username: "",
-      password: "",
-      confirmPassword: "",
-      firstname: "",
-      lastname: "",
-
+      password: "", 
+      confirm_password: "",
+      first_name: "",
+      last_name: "",
     },
   });
 
+  
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     if (!isChecked) {
       alert("You must agree to the terms and conditions before signing up.");
       return;
     }
 
+    setIsLoading(true)
+    setMessage("")
     try {
-      const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await signup(data); 
+      const user = {
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        first_name: data.first_name,
+        last_name: data.last_name,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      setMessage("Sign up successful!");
 
-      if (response.ok) {
-        console.log("User registered successfully");
-      } else {
-        console.error("Failed to register user");
-      }
+      setTimeout(() => {
+        window.location.href = "/auth/log-in";
+      }, 2000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      setMessage("Sign up failed. Please try again.");
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -96,10 +108,10 @@ const SignUpForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-4">
-            {/* Name Field */}
+            {/* First Name Field */}
             <FormField
               control={form.control}
-              name="firstname"
+              name="first_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -110,10 +122,10 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            {/* Name Field */}
+            {/* Last Name Field */}
             <FormField
               control={form.control}
-              name="lastname"
+              name="last_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -124,7 +136,7 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
-            {/* Name Field */}
+            {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
@@ -146,7 +158,11 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" placeholder="Enter your Email" />
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="Enter your Email"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -155,12 +171,34 @@ const SignUpForm = () => {
             {/* Password Field */}
             <FormField
               control={form.control}
-              name="confirmPassword"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" placeholder="Create a Password" />
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Create a Password"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Password Field */}
+            <FormField
+              control={form.control}
+              name="confirm_password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Confirm Password"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -173,22 +211,35 @@ const SignUpForm = () => {
                 id="terms-checkbox"
                 className="w-5 h-5"
                 checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)} // Toggle state on change
+                onChange={() => setIsChecked(!isChecked)}
               />
-              <label htmlFor="terms-checkbox" className="font-inter text-[#040308]">
+              <label
+                htmlFor="terms-checkbox"
+                className="font-inter text-[#040308]"
+              >
                 I agree to Vechtron{" "}
-                <span className="font-inter text-[#2869d4]">Terms of Service</span>{" "}
+                <span className="font-inter text-[#2869d4]">
+                  Terms of Service
+                </span>{" "}
                 and{" "}
-                <span className="font-inter text-[#2869d4]">Privacy Policy</span>.
+                <span className="font-inter text-[#2869d4]">
+                  Privacy Policy
+                </span>
+                .
               </label>
             </div>
           </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
-            disabled={!isChecked} 
+            disabled={!isChecked || isLoading}
+          
           >
-            Create Account
+           {isLoading ? (
+              <BeatLoader size={8} color="#ffffff" />
+            ) : (
+              "Create Account"
+            )}
           </Button>
         </form>
       </Form>

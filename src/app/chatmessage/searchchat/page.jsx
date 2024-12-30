@@ -21,7 +21,7 @@ export default function Chat() {
                   className="object-cover"
                 />
               </div>
-              <div className="flex flex-col w-full p-3 sm:px-7">
+              <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
                 <div className="z-10 flex flex-col text-center w-full -mt-24 bg-white rounded-2xl shadow-xl">
                   <div className="flex items-center p-3 md:p-5 space-x-5 rounded-t-2xl">
                     <div className="relative w-7 h-7">
@@ -41,7 +41,7 @@ export default function Chat() {
               </div>
             </div>
           </div>
-          <div className="flex place-self-center w-64 sm:w-72 xl:w-80 lg:place-self-start">
+          <div className="flex place-self-center w-full lg:w-72 xl:w-80 lg:place-self-start">
             <SideBar />
           </div>
         </div>

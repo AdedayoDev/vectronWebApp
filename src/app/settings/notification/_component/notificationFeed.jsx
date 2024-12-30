@@ -21,8 +21,8 @@ export default function NotificationFeed() {
 
   return (
     <div className="sm:w-80 lg:w-2/5 mx-auto sm:mt-20 lg:mt-0">
-      <div className="w-0.5 h-screen absolute left-80 top-0 hidden lg:block bg-gray-300"/>
-      <div className="flex items-center justify-between mb-10 mt-11 sm:mt-0">
+      <div className="w-0.5 h-[940px] absolute left-80 top-0 hidden lg:block bg-gray-300"/>
+      <div className="flex items-center justify-between mb-10 mt-11 sm:mt-0 w-80 sm:w-full">
         <h1 className="text-3xl font-bold">Notifications</h1>
         <button
           onClick={toggleNotifications}
