@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import SideBar from "@components/chatComp/side-chat";
+import Aside from "@components/chatComp/side-chat";
 import "./chathistory.css";
 import Navbar from "@components/navbar/chatNav";
 import Image from "next/image";
@@ -110,7 +110,7 @@ export default function ChatHistory() {
           </div>
         </div>
         <div className="chat-history-aside">
-          <SideBar />
+          <Aside />
         </div>
       </div>
     </>
