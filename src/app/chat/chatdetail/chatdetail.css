@@ -72,13 +72,10 @@ body {
     left: 0;
     width: 88% !important;
   }
-  .chatdetail-detail {
-    top: 120px;
-    left: 30px;
-  }
   .chatdetail-detail{
-    width: 82%;
-    left: 33px;
+    width: 78%;
+    left: 22px;
+    top: 140px;
   }
   .chatdetail-detail .detail-system p{
     width: 542px;
@@ -90,5 +87,4 @@ body {
 .detail-content{
   width: 80%;
 }
-
 }
