@@ -32,7 +32,6 @@ interface AuthState {
   logout: () => void;
 }
 
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -48,9 +47,14 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const response = await axiosInstance.post('/login', { email, password });
-          set({ user: response.data.user, token: response.data.access_token, refreshToken: response.data.refresh_token });
+          set({
+            user: response.data.user,
+            token: response.data.access_token,
+            refreshToken: response.data.refresh_token
+          });
         } catch (error) {
           console.error('Error during login:', error);
+          throw error; // Re-throw to handle in the component
         } finally {
           set({ isLoading: false });
         }
@@ -63,6 +67,7 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
+      version: 1,
     }
   )
 );

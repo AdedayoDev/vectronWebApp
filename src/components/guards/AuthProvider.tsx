@@ -1,7 +1,7 @@
 'use client'
 import { useAuthStore } from '@store/useStore'
 import { usePathname, useRouter } from 'next/navigation'
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 interface AuthContextType {
     isAuthenticated: boolean
@@ -20,21 +20,28 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const router = useRouter()
     const pathname = usePathname()
+    const [isHydrated, setIsHydrated] = useState(false)
     const { token, user } = useAuthStore()
 
-    console.log(token, user)
+    useEffect(() => {
+        useAuthStore.persist.rehydrate()
+        setIsHydrated(true)
+    }, [])
 
     useEffect(() => {
-        if (!token && !publicRoutes.includes(pathname)) {
-            console.log('No token, redirecting to log-in')
+        if (isHydrated && !token && !publicRoutes.includes(pathname)) {
             router.push('/auth/log-in')
         }
-    }, [token, pathname])
+    }, [isHydrated, token, pathname, router])
 
     const value = {
         isAuthenticated: !!token,
         user,
         token
+    }
+
+    if (!isHydrated) {
+        return null
     }
 
     return (

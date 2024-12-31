@@ -12,7 +12,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   useEffect(() => {
     if (!user || !token) {
-      console.log('No user or token, redirecting to log-in');
       router.push('/auth/log-in');
     }
   }, [user, token, router]);
