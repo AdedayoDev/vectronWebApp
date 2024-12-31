@@ -8,7 +8,7 @@ const SignUpPages = () => {
     <main className="w-full flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
-        className="w-2/3 h-[1000px] relative  hidden lg:block"
+        className="hidden lg:block w-2/3 h-[1000px] relative"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dpmy3egg2/image/upload/v1734251344/volkswagen_car_ai_1_o7a6hn.png')`,
           backgroundSize: "cover", // Ensures the image covers the entire section

@@ -9,16 +9,19 @@ export default function SideChat({ showNewChat, toggleContainers }) {
   return (
     <div className="side-chat-container">
       <div className="side-first-content ">
-        <Button variant="secondary" onClick={toggleContainers} className='msg-button'>
-        <Image
+        <Link href="/chat/newchat">
+          <Button variant="secondary" className="msg-button">
+            <Image
               src="/assets/icons/newmessage.png"
               alt="message icon"
               width={15}
               height={15}
+              className="w-full"
             />
             New message
-        </Button>
-        {/* <button className="new-chat-btn">+ New chat</button> */}
+          </Button>
+        </Link>
+        
         <div className="prev-chat">
           <h4>Recents</h4>
           <div className="prev-cat-one">
@@ -39,17 +42,8 @@ export default function SideChat({ showNewChat, toggleContainers }) {
             />
             <p>Reasons for car over heating </p>
           </div>
-          {/* <div className="prev-cat-one">
-            <Image
-              src="/assets/icons/recent.png"
-              alt="message icon"
-              width={15}
-              height={15}
-            />
-            <p>AI Chat Tool Ethics</p>
-          </div> */}
         </div>
-        <Link className="see-more-btn" href="/chathistory">
+        <Link className="see-more-btn" href="/chat/chathistory">
           View all <ArrowRight className="arrow-right" />
         </Link>
       </div>
@@ -106,7 +100,9 @@ export default function SideChat({ showNewChat, toggleContainers }) {
               width={15}
               height={15}
             />
-            <p>Updates & FAQ</p>
+            <Link href="#">
+              <p>Updates & FAQ</p>
+            </Link>
           </div>
           <div className="other-option-one">
             <Image
@@ -115,7 +111,9 @@ export default function SideChat({ showNewChat, toggleContainers }) {
               width={15}
               height={15}
             />
-            <p>Settings</p>
+            <Link href="/settings">
+              <p>Settings</p>
+            </Link>
           </div>
         </div>
       </div>
@@ -129,18 +127,18 @@ export default function SideChat({ showNewChat, toggleContainers }) {
           height={150}
           className="upgrade-image"
         />
-        <div className="upgrade">
+       <Link href='/pricing'>
+       <div className="upgrade">
           <span>Upgrade to Pro</span>
           <Image
             src="/assets/icons/solid.png"
             alt="message icon"
             width={15}
             height={15}
-            
           />
         </div>
+       </Link>
       </div>
-      {/* <p className="follow-us">Follow us on</p> */}
     </div>
   );
 }

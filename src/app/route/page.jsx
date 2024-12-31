@@ -1,13 +1,13 @@
 "use client";
 
-import SideChat from "@app/voicechat/components/sideChat";
+import SideBar from "@app/voicechat/components/sideBar";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import Image from "next/image";
 import Navbar from "@components/navbar/chatNav";
 import "./route.css";
 import SearchOverlay from "../route/component/SearchOverlay";
-import PlacesSlider from '../route/component/PlacesSlider'
+import PlacesSlider from "../route/component/PlacesSlider";
 
 export default function Route() {
   const mapRef = useRef(null);
@@ -15,6 +15,7 @@ export default function Route() {
   const [isTyping, setIsTyping] = useState(false);
   const [toggleSearchInput, settoggleSearchInput] = useState(false);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
+  const [ShowsideBar, setShowsideBar] = useState("");
 
   function handleToggleSearchInput() {
     settoggleSearchInput((prev) => !prev);
@@ -27,6 +28,9 @@ export default function Route() {
     setIsTyping(value.trim() !== "");
   }
 
+  function handleShowSideBar() {
+    setShowsideBar((prev) => !prev);
+  }
   useEffect(() => {
     const loader = new Loader({
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
@@ -67,8 +71,8 @@ export default function Route() {
             handleShowSearch={handleToggleSearchInput}
             showSearch={toggleSearchInput}
           />
-          <PlacesSlider/>
-          <div className="mapppp left-7 absolute w-87 md:w-74  pt-20">
+          <PlacesSlider />
+          <div className="left-7 absolute w-[89%] lg:w-74  pt-20">
             <div className="flex items-center gap-2 p-3 bg-white rounded-t-2xl">
               <Image
                 src="/assets/icons/vechtron.png"
@@ -119,8 +123,8 @@ export default function Route() {
             </div>
           </div>
         </div>
-        <div className="side-container hidden md:flex pr-6">
-          <SideChat />
+        <div className="side-container pr-6">
+          <SideBar showSideBar={ShowsideBar} handleShow={handleShowSideBar} />
         </div>
       </div>
     </>
