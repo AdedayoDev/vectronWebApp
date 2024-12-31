@@ -30,9 +30,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     useEffect(() => {
         if (isHydrated && !token && !publicRoutes.includes(pathname)) {
-            router.push('/auth/log-in')
+          router.push('/auth/log-in');
         }
-    }, [isHydrated, token, pathname, router])
+      }, [isHydrated, token, pathname, router]);
 
     const value = {
         isAuthenticated: !!token,

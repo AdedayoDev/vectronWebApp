@@ -1,6 +1,9 @@
+"use client"
 import { useAuthStore } from '@store/useStore';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+
+const publicRoutes = ['/auth/log-in', '/auth/sign-up', '/forgot-password'];
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,15 +11,16 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, token } = useAuthStore();
 
   useEffect(() => {
-    if (!user || !token) {
+    if (!token && !publicRoutes.includes(pathname)) {
       router.push('/auth/log-in');
     }
-  }, [user, token, router]);
+  }, [user, token, pathname, router]);
 
-  if (!user || !token) {
+  if (!token && !publicRoutes.includes(pathname)) {
     return null;
   }
 

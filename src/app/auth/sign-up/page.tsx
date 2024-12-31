@@ -1,14 +1,20 @@
+"use c";
 
+import SignUpPages from "@components/Auth/SignUp/SignUpPages";
+import { AuthProvider } from "@components/guards/AuthProvider";
+import { ProtectedRoute } from "@components/guards/ProtectedRoute";
+import React from "react";
 
-import SignUpPages from '@components/Auth/SignUp/SignUpPages'
-import React from 'react'
-
-const SignUp  = () => {
+const SignUp = () => {
   return (
-    <main>
-     <SignUpPages/>
-    </main>
-  )
-}
+    <AuthProvider>
+      <ProtectedRoute>
+        <main>
+          <SignUpPages />
+        </main>
+      </ProtectedRoute>
+    </AuthProvider>
+  );
+};
 
-export default SignUp   
+export default SignUp;

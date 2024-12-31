@@ -1,6 +1,5 @@
 import React from "react";
 import "./chatdetail.css";
-import "@app/chat/chat.css";
 import Navbar from "@components/navbar/chatNav";
 import SideChat from "@components/chatComp/side-chat";
 import Image from "next/image";
@@ -46,13 +45,13 @@ export default function Chatdetail() {
                   <div className="detail-user-text">
                     <h4>Vechtron</h4>
                     <p>
-                      I would be happy to help you troubleshoot your car, but I will
-                      need more specific information about what issues you are
-                      experiencing. This will help me provide more targeted and
-                      useful advice.
+                      I would be happy to help you troubleshoot your car, but I
+                      will need more specific information about what issues you
+                      are experiencing. This will help me provide more targeted
+                      and useful advice.
                     </p>
                   </div>
-                </div>    
+                </div>
                 <div className="detail-system">
                   <Image
                     src="/assets/icons/ai-icon.png"
@@ -64,13 +63,13 @@ export default function Chatdetail() {
                   <div className="detail-user-text">
                     <h4>Vechtron</h4>
                     <p>
-                      I would be happy to help you troubleshoot your car, but I will
-                      need more specific information about what issues you are
-                      experiencing. This will help me provide more targeted and
-                      useful advice.
+                      I would be happy to help you troubleshoot your car, but I
+                      will need more specific information about what issues you
+                      are experiencing. This will help me provide more targeted
+                      and useful advice.
                     </p>
                   </div>
-                </div>              
+                </div>
               </div>
             </div>
           </div>
