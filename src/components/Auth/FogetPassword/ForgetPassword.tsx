@@ -12,12 +12,14 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { useForm } from "react-hook-form";
+import { forgetPassword } from "@lib/Api"; // Ensure correct implementation
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
 
+// Define the schema for validation
 const ForgetPasswordSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email",
@@ -25,38 +27,25 @@ const ForgetPasswordSchema = z.object({
 });
 
 const ForgetPassword = () => {
-  const form = useForm({
+  const form = useForm<z.infer<typeof ForgetPasswordSchema>>({
     resolver: zodResolver(ForgetPasswordSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  // Handle form submission
   const onSubmit = async (data: z.infer<typeof ForgetPasswordSchema>) => {
     try {
-      const response = await fetch(
-        "https://your-backend-endpoint.com/api/validate-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await forgetPassword(data); // Pass data directly
+      console.log("Password reset request successful:", response);
 
-      if (response.ok) {
-        console.log("Email is valid, reset instructions sent!");
-        alert("Reset instructions have been sent to your email.");
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to validate email", errorData);
-        alert("The email entered does not match our records. Please try again.");
-      }
+      // Redirect or notify the user
+      setTimeout(() => {
+        window.location.href = "/set-new-password";
+      }, 2000);
     } catch (error) {
-      console.error("Error during email validation:", error);
-      alert("An error occurred while verifying the email. Please try again later.");
+      console.error("Error during password reset:", error);
+      
     }
   };
 
@@ -81,7 +70,7 @@ const ForgetPassword = () => {
           </p>
         </div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6  px-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-6">
             <div className="space-y-4">
               {/* Email Field */}
               <FormField

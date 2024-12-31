@@ -1,23 +1,25 @@
 "use client";
 
-import React, {useState} from "react";
-import CardWrapper from "../CardWrapper";
-import { z } from "zod";
+import { Button } from "@components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
-  FormLabel,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@components/ui/button";
-import GoogleLogIn from "./GoogleLogIn";
-import AppleLogIn from "./AppleLogIn";
 import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { BeatLoader } from "react-spinners";
+import { z } from "zod";
+import { useAuthStore } from "../../../store/useStore";
+import CardWrapper from "../CardWrapper";
+import AppleLogIn from "./AppleLogIn";
+import GoogleLogIn from "./GoogleLogIn";
 
 const LogInSchema = z.object({
   email: z.string().email({
@@ -29,7 +31,11 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
-   const [isChecked, setIsChecked] = useState(false); // State for the checkbox
+  const { login, user } = useAuthStore()
+  const [isChecked, setIsChecked] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error" | "">("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(LogInSchema),
@@ -39,36 +45,39 @@ const LogInForm = () => {
     },
   });
 
-  // Handle form submission
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
     if (!isChecked) {
-      alert("You must agree to the terms and conditions before signing up.");
+      alert("You must agree to the terms and conditions before logging in.");
       return;
     }
+    setIsLoading(true);
+    setMessage("");
+    setMessageType("");
     try {
-      const response = await fetch("https://api-staging.vechtron.com/auth/api/v1/auth/account/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        console.log("User logged in successfully!");
-      } else {
-        console.error("Failed to log in", await response.json());
-      }
-    } catch (error) {
+      await login(data.email, data.password);
+      setMessage("Login successful! Redirecting...");
+      setMessageType("success");
+      setTimeout(() => {
+        window.location.href = "/onboarding";
+      }, 2000);
+    } catch (error: any) {
       console.error("Error during login:", error);
+
+      if (error.response?.data?.message) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("Log in failed. Please try again.");
+      }
+      setMessageType("error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Mock user data for social logins
   const userData = {
     email: form.getValues("email"),
-    name: undefined, // Not needed for login
-    password: undefined, // Not needed for login
+    name: undefined,
+    password: undefined,
   };
 
   return (
@@ -131,25 +140,49 @@ const LogInForm = () => {
 
           {/* Checkbox Field */}
           <div className="flex items-center gap-4">
-              <input
-                type="checkbox"
-                id="terms-checkbox"
-                className="w-5 h-5"
-                checked={isChecked}
-                onChange={() => setIsChecked(!isChecked)} // Toggle state on change
-              />
-              <label htmlFor="terms-checkbox" className="font-inter w-full  text-[#040308] flex items-center justify-between">
-              <span className="font-inter font-medium text-sm text-[#344054]">Remember for 30 days</span>
-              <Link href="/auth/forget-password"> <span className="font-inter font-medium text-sm text-[#6941c6] hover:underline cursor-pointer">Forget password</span> </Link>
-              </label>
-            </div>
+            <input
+              type="checkbox"
+              id="terms-checkbox"
+              className="w-5 h-5"
+              checked={isChecked}
+              onChange={() => setIsChecked(!isChecked)}
+            />
+            <label
+              htmlFor="terms-checkbox"
+              className="font-inter w-full text-[#040308] flex items-center justify-between"
+            >
+              <span className="font-inter font-medium text-sm text-[#344054]">
+                Remember for 30 days
+              </span>
+              <Link href="/auth/forget-password">
+                <span className="font-inter font-medium text-sm text-[#6941c6] hover:underline cursor-pointer">
+                  Forgot password
+                </span>
+              </Link>
+            </label>
+          </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
-            disabled={!isChecked} // Disable button if checkbox is unchecked
+            disabled={!isChecked || isLoading}
             type="submit"
           >
-            Log In
+            {isLoading ? <BeatLoader size={8} color="#fff" /> : "Login"}
           </Button>
+          {message && (
+            <p
+              style={{
+                color:
+                  messageType === "success"
+                    ? "green"
+                    : messageType === "error"
+                      ? "red"
+                      : "black",
+                marginTop: "1rem",
+              }}
+            >
+              {message}
+            </p>
+          )}
         </form>
       </Form>
     </CardWrapper>
