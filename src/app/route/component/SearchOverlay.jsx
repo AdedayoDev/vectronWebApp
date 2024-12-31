@@ -20,7 +20,7 @@ function SearchOverlay({ showSearch, handleShowSearch }) {
   return (
     <>
       {showSearch && (
-        <div className="searchOverlay rounded-md font-bold bg-white w-1/2 md:w-64 p-3 z-10 absolute left-8 md:left-24 h-60 overflow-y-auto scrollbar-thin md:bottom-4 bottom-32">
+        <div className="searchOverlay rounded-md font-bold bg-white w-1/2 md:w-64 p-3 z-10 absolute left-11 lg:left-24 h-60 overflow-y-auto scrollbar-thin lg:bottom-[23px] bottom-[136px]">
           {/* Search Input */}
           <div className="flex items-center gap-2 border rounded-md p-2">
             <input

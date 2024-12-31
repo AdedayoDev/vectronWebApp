@@ -6,9 +6,9 @@ export default function DeleteConfirmation() {
   return (
     <>
     <div className="flex">
-    <div className="w-0.5 h-screen absolute left-80 top-0 hidden lg:block bg-gray-300"/>
+    <div className="w-0.5 h-[678px] absolute left-80 top-0 hidden lg:block bg-gray-300"/>
     
-      <div className="delete-confirmation sm:w-80 lg:mx-auto lg:w-2/4 sm:ml-0 lg:mt-0 sm:mt-20 ">
+      <div className="delete-confirmation sm:w-[80%] lg:mx-auto lg:w-2/4 mx-auto lg:mt-0 mt-2 ">
       <h1 className="font-bold text-4xl mb-12 sm:mt-0 mt-11">We’re sorry to see you go</h1>
       <hr />
       <p className="text-gray-400 mt-11 text-base leading-relaxed">
