@@ -9,7 +9,7 @@ const LogInPage = () => {
     <main className="w-full flex items-center gap- justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
-        className="w-1/2 h-full relative hidden lg:block"
+        className="w-1/2 h-full relative"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dpmy3egg2/image/upload/v1734707739/image_48_krxsvi.png')`,
           backgroundSize: "cover", // Ensures the image covers the entire section
@@ -48,7 +48,7 @@ const LogInPage = () => {
       </section>
 
       {/* Right Section with SignUpForm */}
-      <section className="w-full lg:w-1/2 h-full flex items-center">
+      <section className="w-1/2 h-full flex items-center">
         <LogInForm />
       </section>
     </main>
