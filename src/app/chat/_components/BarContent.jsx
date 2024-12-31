@@ -21,7 +21,7 @@ export default function BarContent() {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <Link href="/chatmessage/newchat">
+        <Link href="/chat/newchat">
           <div className="flex items-center justify-center w-44 xl:w-52 px-3 py-2 rounded-full space-x-2 hover:cursor-pointer bg-purple-400">
             <div className="relative w-5 h-5">
               <Image
@@ -34,7 +34,7 @@ export default function BarContent() {
             <p className="text-white">New Chat</p>
           </div>
         </Link>
-        <Link href="/chatmessage/searchchat">
+        <Link href="/chat/searchchat">
           <div className="relative w-10 h-10">
             <Image
               src="/assets/icons/sidebar-search.png"

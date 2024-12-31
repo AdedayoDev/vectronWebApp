@@ -17,7 +17,7 @@ export default function Chat() {
         <div className="flex justify-end p-2">
           <Profile />
         </div>
-        <div className="flex flex-col items-start lg:flex-row">
+        <div className="flex flex-col items-start lg:flex-row lg:gap-0">
           <div className="flex flex-1 justify-center items-start w-full">
             <div className="relative border overflow-x-hidden">
               <div className="relative w-full h-40">
