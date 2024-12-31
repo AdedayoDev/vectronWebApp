@@ -1,7 +1,11 @@
 import Image from "next/image";
 import React from "react";
+<<<<<<< HEAD
 import SideChat from "../voicechat/components/sideChat";
 import Feed from "@components/chatComp/feed";
+=======
+import SideBar from "../chatmessage/_components/SideBar"
+>>>>>>> 42addfa93428a83276baadbcf4380458be406481
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
 import "./voicechat.css";
@@ -18,7 +22,7 @@ export default function page() {
               alt="background-image"
               width={200}
               height={200}
-              className="backgroud-image w-full lg:w-78 absolute h-32 cover-fill"
+              className="w-full lg:w-[80.5%] absolute h-32 cover-fill lg:top-24"
             />
             <div className="voice-chat-content">
               <div className=" text-black-50 absolute lg:w-74 w-96 lg:mx-7 mx-10 my-24 px-2 py-3 rounded-md bg-white">
@@ -43,8 +47,8 @@ export default function page() {
             <Feed />
             <VoiceChatFeed />
           </div>
-          <div className="hidden sm:flex px-6">
-            <SideChat />
+          <div className="hidden sm:flex">
+            <SideBar />
           </div>
         </div>
       </div>

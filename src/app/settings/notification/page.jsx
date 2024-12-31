@@ -1,12 +1,12 @@
 'use client';
 
 import React from "react";
-import SideMenu from "../notification/_component/side-menu";
-import Notification from "../notification/_component/notificationFeed";
-import Nav from "../notification/_component/Nav";
+import SideMenu from "./_component/side-menu";
+import Notification from "./_component/notificationFeed";
+import Nav from "./_component/Nav";
 import { CldImage } from 'next-cloudinary';
 
-export default function Page() {
+export default function Settings() {
   return (
     <>
       <Nav />

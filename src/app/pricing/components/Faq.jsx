@@ -51,7 +51,7 @@ export default function Faq() {
 
         <div>
           {Faq.map((faq, index) => (
-            <div key={index} className="md:w-1/2 mx-auto border px-5 py-7 mb-10">
+            <div key={index} className="lg:w-1/2 mx-auto border px-5 py-7 mb-10">
               <div
                 onClick={() => handleToggleFaq(index)}
                 className="cursor-pointer font-semibold mb-2"
