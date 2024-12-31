@@ -16,7 +16,7 @@ body {
   position: absolute;
   top: 150px;
   width: 85%;
-  left: 35px;
+  left: 40px;
   padding: 8px;
   /* height: 823px; */
   border-radius: 8px 8px 0 0;
@@ -138,10 +138,11 @@ h3 {
   .chathistory-bg {
     position: absolute;
     left: 0;
-    width: 77% !important;
+    width: 80% !important;
   }
   .chat-history-data {
-    width: 72%;
+    width: 76%;
+    left: 29px;
   }
   .search-container {
     width: 693px;
