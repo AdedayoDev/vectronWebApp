@@ -1,11 +1,7 @@
 import Image from "next/image";
 import React from "react";
-<<<<<<< HEAD
 import SideChat from "../voicechat/components/sideChat";
 import Feed from "@components/chatComp/feed";
-=======
-import SideBar from "../chatmessage/_components/SideBar"
->>>>>>> 42addfa93428a83276baadbcf4380458be406481
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
 import "./voicechat.css";
