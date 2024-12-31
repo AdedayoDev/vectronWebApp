@@ -2,12 +2,14 @@ import axios from "axios";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-
-const BASE_URL = "https://api-staging.vechtron.com/auth"
+const BASE_URL = "https://api-staging.vechtron.com/auth/api/v1/auth/account";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
 interface User {
@@ -58,8 +60,9 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "auth-storage", // unique name for localStorage key
+      name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
+      skipHydration: true,
     }
   )
 );

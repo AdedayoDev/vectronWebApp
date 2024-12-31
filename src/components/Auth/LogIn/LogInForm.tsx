@@ -31,7 +31,7 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
-  const { login } = useAuthStore()
+  const { login, user } = useAuthStore()
   const [isChecked, setIsChecked] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");

@@ -2,12 +2,14 @@
 
 import { AuthProvider } from "@components/guards/AuthProvider";
 import { ProtectedRoute } from "@components/guards/ProtectedRoute";
+import { useAuthStore } from "@store/useStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./onboarding.css";
 
 export default function Onboarding() {
   const router = useRouter();
+  const { user } = useAuthStore()
 
   function handleSubmit() {
     setTimeout(() => {

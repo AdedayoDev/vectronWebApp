@@ -20,29 +20,16 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const router = useRouter()
     const pathname = usePathname()
-    const { token, user, setUser, setToken, setRefreshToken } = useAuthStore()
+    const { token, user } = useAuthStore()
+
+    console.log(token, user)
 
     useEffect(() => {
         if (!token && !publicRoutes.includes(pathname)) {
+            console.log('No token, redirecting to log-in')
             router.push('/auth/log-in')
         }
     }, [token, pathname])
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        const storedToken = localStorage.getItem('token');
-        const storedRefreshToken = localStorage.getItem('refreshToken');
-
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        if (storedToken) {
-            setToken(storedToken);
-        }
-        if (storedRefreshToken) {
-            setRefreshToken(storedRefreshToken);
-        }
-    }, [setUser, setToken, setRefreshToken]);
 
     const value = {
         isAuthenticated: !!token,
