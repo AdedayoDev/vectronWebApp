@@ -31,7 +31,7 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
-  const { login, user } = useAuthStore()
+  const { login, user } = useAuthStore();
   const [isChecked, setIsChecked] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
@@ -87,6 +87,8 @@ const LogInForm = () => {
       label="Welcome back! Please enter your details."
       backButtonHref="/auth/sign-up"
       backButtonLabel="Don't have an account? Sign Up"
+      smallScreenPadding="pt-8"
+      largeScreenPadding="lg:pt-"
     >
       <div className="space-y-4 mb-4">
         {/* Social Login Buttons */}
@@ -175,8 +177,8 @@ const LogInForm = () => {
                   messageType === "success"
                     ? "green"
                     : messageType === "error"
-                      ? "red"
-                      : "black",
+                    ? "red"
+                    : "black",
                 marginTop: "1rem",
               }}
             >

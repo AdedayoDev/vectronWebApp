@@ -10,11 +10,14 @@ interface CardWrapperProps {
     backButtonLabel: string
     label: string
     children: React.ReactNode
+    smallScreenPadding?: string; 
+    largeScreenPadding?: string;
 }
 import { Card, CardContent, CardHeader, CardFooter, CardTitle } from '@components/ui/card'
-const CardWrapper = ({image, title, backButtonHref, backButtonLabel, label, children}: CardWrapperProps) => {
+const CardWrapper = ({image, title, backButtonHref, backButtonLabel, label, children, smallScreenPadding = "pt-32", 
+  largeScreenPadding = "lg:pt-60",}: CardWrapperProps) => {
   return (
-    <Card className='pt-32 lg:pt-32'>
+    <Card className={`${smallScreenPadding} ${largeScreenPadding} `}>
         <CardHeader>
            <AuthHeader  image={image} title={title} label={label}/>
         </CardHeader>

@@ -8,7 +8,7 @@ const SignUpPages = () => {
     <main className="w-full flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
-        className="hidden lg:block w-2/3 h-[1000px] relative"
+        className="hidden lg:block w-2/3 h-[1200px] relative"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dpmy3egg2/image/upload/v1734251344/volkswagen_car_ai_1_o7a6hn.png')`,
           backgroundSize: "cover", // Ensures the image covers the entire section
@@ -49,7 +49,7 @@ const SignUpPages = () => {
       </section>
 
       {/* Right Section with SignUpForm */}
-      <section className="w-full lg:w-1/2 h-full flex items-center">
+      <section className="w-full lg:w-1/2 h-[1200px] flex items-center justify-center">
         <SignUpForm />
       </section>
     </main>
