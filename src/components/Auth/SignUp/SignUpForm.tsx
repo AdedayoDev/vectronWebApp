@@ -1,6 +1,6 @@
 "use client";
 
-import { BeatLoader } from "react-spinners"
+import { BeatLoader } from "react-spinners";
 import React, { useState } from "react";
 import CardWrapper from "../CardWrapper";
 import { z } from "zod";
@@ -24,7 +24,9 @@ const SignUpSchema = z
   .object({
     email: z.string().email({ message: "Please enter a valid email address" }),
     username: z.string().min(1, { message: "Please enter your username" }),
-    password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" }),
     confirm_password: z.string().min(8, {
       message: "Confirm Password must be at least 8 characters long",
     }),
@@ -45,24 +47,23 @@ const SignUpForm = () => {
     defaultValues: {
       email: "",
       username: "",
-      password: "", 
+      password: "",
       confirm_password: "",
       first_name: "",
       last_name: "",
     },
   });
 
-  
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     if (!isChecked) {
       alert("You must agree to the terms and conditions before signing up.");
       return;
     }
 
-    setIsLoading(true)
-    setMessage("")
+    setIsLoading(true);
+    setMessage("");
     try {
-      const response = await signup(data); 
+      const response = await signup(data);
       const user = {
         email: data.email,
         username: data.username,
@@ -79,7 +80,7 @@ const SignUpForm = () => {
     } catch (error) {
       setMessage("Sign up failed. Please try again.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -96,6 +97,8 @@ const SignUpForm = () => {
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"
       backButtonLabel="Already have an account? Log in"
+      smallScreenPadding="pt-72"
+      largeScreenPadding="lg:pt-60"
     >
       <div className="space-y-2 mb-2">
         <GoogleLogIn userData={userData} mode="login">
@@ -233,9 +236,8 @@ const SignUpForm = () => {
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
             disabled={!isChecked || isLoading}
-          
           >
-           {isLoading ? (
+            {isLoading ? (
               <BeatLoader size={8} color="#ffffff" />
             ) : (
               "Create Account"

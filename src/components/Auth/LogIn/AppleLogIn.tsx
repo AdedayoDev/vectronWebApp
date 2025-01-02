@@ -56,8 +56,8 @@ const AppleLogIn: FC<AppleLogInProps> = ({ children, userData, mode }) => {
       <Image
         src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734708500/apple_xl4xop.png"
         alt="Apple Logo"
-        width={24}
-        height={24}
+        width={16}
+        height={16}
         className="w-6 h-6 mr-2"
       />
 
