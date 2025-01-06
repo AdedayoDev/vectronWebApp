@@ -72,22 +72,14 @@ body {
     left: 0;
     width: 88% !important;
   }
-  .chatdetail-detail {
-    top: 120px;
-    left: 30px;
-  }
-  .chatdetail-detail {
-    width: 82%;
-    left: 33px;
-  }
   .chatdetail-detail .detail-system p {
     width: 542px;
   }
   .detail-system .system-icon {
     position: relative;
     top: -24px;
-  }
-  .detail-content {
-    width: 80%;
-  }
 }
+.detail-content{
+  width: 80%;
+}
+

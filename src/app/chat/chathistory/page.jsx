@@ -32,7 +32,7 @@ export default function ChatHistory() {
             height={200}
             className="chathistory-bg"
           />
-          <div className="chat-history-data">
+          <div className="chat-history-data shadow h-[80%] lg:h-[93%]">
             <div className="search-container">
               <button>
                 <Search size={20} color="gray" />
@@ -42,6 +42,7 @@ export default function ChatHistory() {
                 placeholder="Search conversation"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="outline"
               />
             </div>
             <div className="conversation-container">
