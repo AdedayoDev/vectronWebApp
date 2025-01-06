@@ -1,11 +1,6 @@
 import Image from "next/image";
 import React from "react";
-<<<<<<< HEAD
-import SideChat from "../voicechat/components/sideChat";
-import Feed from "@components/chatComp/feed";
-=======
-import SideBar from "../chatmessage/_components/SideBar"
->>>>>>> 42addfa93428a83276baadbcf4380458be406481
+import SideBar from "../chat/_components/SideBar";
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
 import "./voicechat.css";
@@ -44,7 +39,7 @@ export default function page() {
                 </div>
               </div>
             </div>
-            <Feed />
+            {/* <Feed /> */}
             <VoiceChatFeed />
           </div>
           <div className="hidden sm:flex">

@@ -1,8 +1,8 @@
 import React from "react";
 import "./chatdetail.css";
 import Navbar from "@components/navbar/chatNav";
-import SideChat from "@components/chatComp/side-chat";
 import Image from "next/image";
+import SideBar from "../_components/SideBar";
 
 export default function Chatdetail() {
   return (
@@ -74,7 +74,8 @@ export default function Chatdetail() {
             </div>
           </div>
         </div>
-        <SideChat />
+        {/* <SideChat /> */}
+        <SideBar />
       </div>
     </>
   );
