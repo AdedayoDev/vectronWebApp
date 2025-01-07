@@ -1,263 +1,275 @@
 "use client";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
+import { FaTimes } from "react-icons/fa";
 import Button from "./button";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import Toggle from "@components/chatComp/Toggle";
 
-export default function sideBar({ showSideBar, handleShow }) {
+export default function sideBar() {
+  const [showMenu, setShowMenu] = useState(false);
+  // const [showSideBar, setshowSideBar] = useState(false);
   return (
     <>
       {/* mobile */}
-      <Menu
-        size={30}
-        className="absolute top-0 mt-3 left-0 mx-3 block lg:hidden"
-        onClick={handleShow}
-      />
-      {showSideBar && (
-        <div className="absolute z-10 left-0 rounded p-3 lg:hidden bg-white shadow-lg w-[60%]">
-          <Link href="/chat/newchat">
-            <Button
-              buttonIcon="/assets/icons/chat-add.png"
-              buttonText="New message"
-            />
-          </Link>
-          <Link href="#">
-            <button className="py-2 px-4 w-full gap-2 items-center flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
-              <Image
-                src="/assets/icons/search-action.png"
-                alt="search action"
-                width={20}
-                height={20}
-              />
-              Search action
-            </button>
-          </Link>
-          <div className="starred-chat mt-6">
-            <p className="text-md font-bold mb-2">Starred</p>
-            <div className="border-dotted border-black border-x border-y h-20">
-              <p className="flex justify-center my-7 text">
-                Star chats you use often
-              </p>
-            </div>
-          </div>
-          <div className="recents mt-5">
-            <p className="text-md font-bold mb-2">Recents</p>
-            <div className="cursor-pointer recents-content flex gap-2 mb-2">
-              <Image
-                src="/assets/icons/gridchat.png"
-                alt="search action"
-                width={20}
-                height={20}
-              />
-              <p>Advantages of AI</p>
-            </div>
-            <div className="cursor-pointer recents-content flex gap-2">
-              <Image
-                src="/assets/icons/gridchat.png"
-                alt="search action"
-                width={20}
-                height={20}
-              />
-              <p> Reasons for car over heating</p>
-            </div>
-            <Link
-              href="/chat/chathistory"
-              className="mt-2 font-bold flex items-center gap-3 no-underline"
-            >
-              View all
-              <Image
-                src="/assets/icons/arrow.png"
-                alt="search action"
-                width={20}
-                height={5}
-                className="w-4 h-3"
-              />
-            </Link>
-          </div>
-
-          <div className="vehicles mt-6">
-            <p className="text-md font-bold mb-2">Vehicles</p>
-            <div className="cursor-pointer vehicle-content flex gap-2">
-              <Image
-                src="/assets/icons/tesla.png"
-                alt="search action"
-                width={20}
-                height={20}
-              />
-              <p> Tesla</p>
-            </div>
-            <div className=" cursor-pointer vehicle-content flex gap-2 mt-2">
-              <Image
-                src="/assets/icons/toyota.png"
-                alt="search action"
-                width={25}
-                height={15}
-              />
-              <p> Toyota Camery 2012</p>
-            </div>
-          </div>
-
-          <div className="updates mt-10">
-            <Link href="#">
-              <div className="cursor-pointer updates-content flex gap-2 mt-2">
-                <Image
-                  src="/assets/icons/Iconset.png"
-                  alt="search action"
-                  width={20}
-                  height={15}
-                />
-                <p> Updates & FAQ</p>
-              </div>
-            </Link>
-            <Link href="/settings/notification">
-              <div className="cursor-pointer vehicle-content flex gap-2 mt-2">
-                <Image
-                  src="/assets/icons/settings.png"
-                  alt="search action"
-                  width={20}
-                  height={15}
-                />
-                <p> Settings</p>
-              </div>
-            </Link>
-          </div>
-
-          <div className="upgrade-container mt-6 p-3 relative rounded-2xl bg-purple-400">
-            <div className=" cursor-pointer rounded-full bg-white absolute p-2 w-8 h-8 flex items-center justify-center right-2">
-              X
-            </div>
-
-            <div className="upgrade-content text-center">
-              <Image
-                src="/assets/images/Empty-chat.png"
-                alt="search action"
-                width={98}
-                height={86}
-                className="mx-auto"
-              />
-              <Link href="/pricing">
-                <button className="justify-center items-center gap-2 flex w-full rounded-full p-2 bg-blue-700 text-white">
-                  Upgrade to Pro
-                  <Image
-                    src="/assets/icons/Solid.png"
-                    alt="search action"
-                    width={20}
-                    height={20}
-                  />
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Desktop */}
-      <div className="lg:block sm:hidden rounded p-3">
-        <Link href='/chat/newchat'>
-        <Button
-          buttonIcon="/assets/icons/chat-add.png"
-          buttonText="New message"
+      {showMenu ? (
+        <FaTimes
+          size={25}
+          onClick={() => setShowMenu((prev) => !prev)}
+          className="absolute top-0 mt-3 left-0 mx-3 block lg:hidden"
         />
-        </Link>
-        <Link href='#'>
-        <button className="py-2 px-4 w-full gap-2 items-center flex bg-transparent border-2 border-black border-solid hover:bg-purple-200 rounded-lg mt-2">
+      ) : (
+        <Menu
+          size={30}
+          className="absolute top-0 mt-3 left-0 mx-3 block lg:hidden"
+          onClick={() => setShowMenu((prev) => !prev)}
+        />
+      )}
+      {showMenu && (
+        <div className="absolute z-10 left-0 rounded p-3 lg:hidden bg-white shadow-lg w-[60%] h-screen">
+        <div className="flex justify-between mb-7">
+          <h1 className="font-semibold">VECHTRON UI</h1>
           <Image
-            src="/assets/icons/search-action.png"
-            alt="search action"
+            src="/assets/icons/vech-ui.png"
+            alt="search"
             width={20}
             height={20}
           />
-          Search action
-        </button>
+        </div>
+        <Link
+          href="/chat/newchat"
+          className="flex items-center justify-between"
+        >
+          <div className="flex items-center p-2 px-5 gap-2 bg-blue-500 text-white rounded-full">
+            <Image
+              src="/assets/icons/chat-add2.png"
+              alt="search"
+              width={20}
+              height={20}
+            />
+            <p>New message</p>
+          </div>
+          <div className="bg-blue-800 p-2 rounded-full">
+            <Search size={20} color="white" />
+          </div>
         </Link>
-        <div className="starred-chat mt-6">
-          <p className="text-md font-bold mb-2">Starred</p>
-          <div className="border-dotted border-black border-x border-y h-20">
-            <p className="flex justify-center my-7 text">
-              Star chats you use often
-            </p>
+
+        <div className="my-7">
+          <p className="text-base font-semibold mb-3">Explore</p>
+          <div className="text text-blue-400">
+            <div className="flex justify-between gap-4 mb-3 items-center">
+              <p>Maintenance Recommendations</p>
+              <Toggle />
+            </div>
+            <div className="flex justify-between gap-4 mb-3 items-center">
+              <p>Troubleshooting & Diagnostic</p>
+              <Toggle />
+            </div>
+            <div className="flex justify-between gap-4 mb-3 items-center">
+              <p>Vehicle Profile Management</p>
+              <Toggle />
+            </div>
           </div>
         </div>
-        <div className="recents mt-5">
-          <p className="text-md font-bold mb-2">Recents</p>
-          <div className="cursor-pointer recents-content flex gap-2 mb-2">
-            <Image
-              src="/assets/icons/gridchat.png"
-              alt="search action"
-              width={20}
-              height={20}
-            />
-            <p>Advantages of AI</p>
-          </div>
-          <div className="cursor-pointer recents-content flex gap-2">
-            <Image
-              src="/assets/icons/gridchat.png"
-              alt="search action"
-              width={20}
-              height={20}
-            />
-            <p> Reasons for car over heating</p>
-          </div>
+
+        <div className="my-11">
+          <div className="w-full h-[3px] bg-gray-300" />
           <Link
             href="/chat/chathistory"
-            className="mt-2 font-bold flex items-center gap-3 no-underline"
+            className="my-3 cursor-pointer block text-blue-400"
           >
-            View all
-            <Image
-              src="/assets/icons/arrow.png"
-              alt="search action"
-              width={20}
-              height={5}
-              className="w-4 h-3"
-            />
+            Your Conversations
           </Link>
+          <div className="w-full h-[3px] bg-gray-300" />
         </div>
 
-        <div className="vehicles mt-6">
-          <p className="text-md font-bold mb-2">Vehicles</p>
-          <div className="cursor-pointer vehicle-content flex gap-2">
+        <Link href="#">
+          <div className="flex items-center gap-2 p-2 bg-blue-700 text-white rounded-md">
             <Image
-              src="/assets/icons/tesla.png"
-              alt="search action"
+              src="/assets/icons/chat-add2.png"
+              alt="search"
               width={20}
               height={20}
             />
-            <p> Tesla</p>
+            <p>Add Vehicle</p>
           </div>
-          <div className=" cursor-pointer vehicle-content flex gap-2 mt-2">
+        </Link>
+
+        <div className="mt-36">
+          <Link href="#">
+            <div className=" bg-blue-700 text-white rounded p-2 flex gap-2 mt-2">
+              <Image
+                src="/assets/icons/agent.png"
+                alt="search action"
+                width={20}
+                height={20}
+              />
+              <p>Vechtron Car Agent</p>
+            </div>
+          </Link>
+
+          <Link href="/support">
+            <div className="text-blue-500 rounded border-2 border-blue-300 p-2 flex gap-2 mt-2">
+              <Image
+                src="/assets/icons/headset.png"
+                alt="search action"
+                width={20}
+                height={20}
+              />
+              <p> Support</p>
+            </div>
+          </Link>
+
+          <Link href="/settings">
+            <div className="text-blue-500 rounded border-2 border-blue-300 p-2 flex gap-2 mt-2">
+              <Image
+                src="/assets/icons/settings.png"
+                alt="search action"
+                width={20}
+                height={15}
+              />
+              <p> Settings</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className="upgrade-container mt-6 p-3 relative rounded-2xl bg-purple-400">
+          <div className=" cursor-pointer rounded-full bg-white absolute p-2 w-8 h-8 flex items-center justify-center right-2">
+            X
+          </div>
+
+          <div className="upgrade-content text-center">
             <Image
-              src="/assets/icons/toyota.png"
+              src="/assets/images/Empty-chat.png"
               alt="search action"
-              width={25}
-              height={15}
+              width={98}
+              height={86}
+              className="mx-auto"
             />
-            <p> Toyota Camery 2012</p>
+            <Link href="/pricing">
+              <button className="justify-center items-center gap-2 flex w-full rounded-full p-2 bg-blue-700 text-white">
+                Upgrade to Pro
+                <Image
+                  src="/assets/icons/Solid.png"
+                  alt="search action"
+                  width={20}
+                  height={20}
+                />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+        
+      )}
+
+      {/* Desktop */}
+      <div className="lg:block sm:hidden rounded p-3 bg-blue-50">
+        <div className="flex justify-between mb-7">
+          <h1 className="font-semibold">VECHTRON UI</h1>
+          <Image
+            src="/assets/icons/vech-ui.png"
+            alt="search"
+            width={20}
+            height={20}
+          />
+        </div>
+        <Link
+          href="/chat/newchat"
+          className="flex items-center justify-between"
+        >
+          <div className="flex items-center p-2 px-5 gap-2 bg-blue-500 text-white rounded-full">
+            <Image
+              src="/assets/icons/chat-add2.png"
+              alt="search"
+              width={20}
+              height={20}
+            />
+            <p>New message</p>
+          </div>
+          <div className="bg-blue-800 p-2 rounded-full">
+            <Search size={20} color="white" />
+          </div>
+        </Link>
+
+        <div className="my-7">
+          <p className="text-base font-semibold mb-3">Explore</p>
+          <div className="text text-blue-400">
+            <div className="flex justify-between gap-4 mb-3 items-center">
+              <p>Maintenance Recommendations</p>
+              <Toggle />
+            </div>
+            <div className="flex justify-between gap-4 mb-3 items-center">
+              <p>Troubleshooting & Diagnostic</p>
+              <Toggle />
+            </div>
+            <div className="flex justify-between gap-4 mb-3 items-center">
+              <p>Vehicle Profile Management</p>
+              <Toggle />
+            </div>
           </div>
         </div>
 
-        <div className="updates mt-10">
-          <Link href='#'>
-          <div className="cursor-pointer updates-content flex gap-2 mt-2">
-            <Image
-              src="/assets/icons/Iconset.png"
-              alt="search action"
-              width={20}
-              height={15}
-            />
-            <p> Updates & FAQ</p>
-          </div> 
+        <div className="my-11">
+          <div className="w-full h-[3px] bg-gray-300" />
+          <Link
+            href="/chat/chathistory"
+            className="my-3 cursor-pointer block text-blue-400"
+          >
+            Your Conversations
           </Link>
-          <div className="cursor-pointer vehicle-content flex gap-2 mt-2">
+          <div className="w-full h-[3px] bg-gray-300" />
+        </div>
+
+        <Link href="#">
+          <div className="flex items-center gap-2 p-2 bg-blue-700 text-white rounded-md">
             <Image
-              src="/assets/icons/settings.png"
-              alt="search action"
+              src="/assets/icons/chat-add2.png"
+              alt="search"
               width={20}
-              height={15}
+              height={20}
             />
-            <Link href="/settings">
-              <p> Settings</p>
-            </Link>
+            <p>Add Vehicle</p>
           </div>
+        </Link>
+
+        <div className="mt-36">
+          <Link href="#">
+            <div className=" bg-blue-700 text-white rounded p-2 flex gap-2 mt-2">
+              <Image
+                src="/assets/icons/agent.png"
+                alt="search action"
+                width={20}
+                height={20}
+              />
+              <p>Vechtron Car Agent</p>
+            </div>
+          </Link>
+
+          <Link href="/support">
+            <div className="text-blue-500 rounded border-2 border-blue-300 p-2 flex gap-2 mt-2">
+              <Image
+                src="/assets/icons/headset.png"
+                alt="search action"
+                width={20}
+                height={20}
+              />
+              <p> Support</p>
+            </div>
+          </Link>
+
+          <Link href="/settings">
+            <div className="text-blue-500 rounded border-2 border-blue-300 p-2 flex gap-2 mt-2">
+              <Image
+                src="/assets/icons/settings.png"
+                alt="search action"
+                width={20}
+                height={15}
+              />
+              <p> Settings</p>
+            </div>
+          </Link>
         </div>
 
         <div className="upgrade-container mt-6 p-3 relative rounded-2xl bg-purple-400">

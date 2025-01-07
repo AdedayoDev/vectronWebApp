@@ -22,7 +22,7 @@ export default function SideChat() {
   return (
     <>
     {/* Mobile */}
-    <div className='absolute lg:hidden flex top-2 left-5 hover:bg-gray-100 hover:rounded-full p-[5px]' onClick={handleChange}>
+    <div className='absolute lg:hidden sm:flex top-2 left-5 hover:bg-gray-100 hover:rounded-full p-[5px]' onClick={handleChange}>
     {changeIcon ? <Menu size={30} onClick={handleshowBar}/>:  <FaTimes size={25} className="font-extralight" onClick={handleshowBar}/>}
     </div>
    {showSideBar && <div className="top-[50px] px-3 bg-white z-10 shadow-md absolute w-[60%] block lg:hidden">
