@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from 'next/font/google';
+import '@splidejs/react-splide/css';
 
 export const metadata = {
   title: "Vectron webapp",

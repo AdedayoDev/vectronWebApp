@@ -1,12 +1,18 @@
-import React from 'react'
-import ResetPassword from '@components/Auth/FogetPassword/ResetPassword'
+import React from "react";
+import ResetPassword from "@components/Auth/FogetPassword/ResetPassword";
+import { ProtectedRoute } from "@components/guards/ProtectedRoute";
+import { AuthProvider } from "@components/guards/AuthProvider";
 
 const ResetPasswords = () => {
   return (
-    <main>
-      <ResetPassword/>
-    </main>
-  )
-}
+    <AuthProvider>
+      <ProtectedRoute>
+        <main>
+          <ResetPassword />
+        </main>
+      </ProtectedRoute>
+    </AuthProvider>
+  );
+};
 
-export default ResetPassword
+export default ResetPasswords;

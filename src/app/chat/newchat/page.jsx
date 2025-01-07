@@ -19,7 +19,7 @@ export default function Chat() {
         </div>
         <div className="flex flex-col items-start lg:flex-row">
           <div className="flex flex-1 justify-center items-start w-full">
-            <div className="relative border overflow-x-hidden">
+            <div className="relative overflow-x-hidden">
               <div className="relative w-full h-40">
                 <Image
                   src="/assets/images/bg-img.png"

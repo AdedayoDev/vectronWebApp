@@ -46,8 +46,8 @@ const GoogleLogIn: FC<GoogleLogInProps> = ({ children, userData, mode }) => {
         <Image
         src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734708500/google_fyaivt.png"
         alt="Google Logo"
-        width={24}
-        height={24}
+        width={20}
+        height={20}
         className="w-6 h-6 mr-2"
         />
      
