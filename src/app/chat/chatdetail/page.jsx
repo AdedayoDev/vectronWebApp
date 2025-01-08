@@ -17,7 +17,7 @@ export default function Chatdetail() {
   return (
     <>
       <div className="chatdetail-container">
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="chatdetail-content">
           <div className="">
             <Image
@@ -94,7 +94,7 @@ export default function Chatdetail() {
           </div>
         </div>
         {/* <SideChat /> */}
-        <SideBar />
+        {/* <SideBar /> */}
       </div>
     </>
   );
