@@ -30,6 +30,6 @@
     ".next/types/**/*.ts",
     "jest.setup.ts",
     "src/app/(root)/layout.jsx"
-  ],
+, "src/app/chat/layout.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -6,7 +6,7 @@ body {
   margin-top: 50px;
 }
 .chatdetail-content .chatdetail-bg {
-  width: 100%;
+  width: 99%;
   height: 161px;
   position: relative;
 }
@@ -19,14 +19,15 @@ body {
   padding: 8px 24px;
   border-radius: 8px 8px 0 0;
 }
-.detail-content{
+.detail-content {
   overflow-y: auto;
   height: 400px;
   scrollbar-width: thin;
   scrollbar-color: transparent;
   padding-right: 10px;
 }
-.detail-system, .detail-user{
+.detail-system,
+.detail-user {
   margin-bottom: 20px;
 }
 .detail-content::-webkit-scrollbar {
@@ -38,7 +39,7 @@ body {
 }
 
 .detail-content::-webkit-scrollbar-thumb {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   border-radius: 7px;
 }
 .chatdetail-detail .avatar-bg {
@@ -50,16 +51,15 @@ body {
   gap: 8px;
 }
 
-.chatdetail-detail .detail-system{
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.chatdetail-detail .detail-system {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.detail-system .system-icon{
-    position: relative;
-    top: -45px;
+.detail-system .system-icon {
+  position: relative;
+  top: -45px;
 }
-
 
 @media screen and (min-width: 786px) {
   .chatdetail-container {
@@ -72,19 +72,14 @@ body {
     left: 0;
     width: 88% !important;
   }
-  .chatdetail-detail{
-    width: 78%;
-    left: 22px;
-    top: 140px;
-  }
-  .chatdetail-detail .detail-system p{
+  .chatdetail-detail .detail-system p {
     width: 542px;
-}
-.detail-system .system-icon{
+  }
+  .detail-system .system-icon {
     position: relative;
     top: -24px;
-}
-.detail-content{
-  width: 80%;
-}
+  }
+  .detail-content {
+    width: 80%;
+  }
 }

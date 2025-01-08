@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React from "react";
+import SideBar from "../chat/_components/SideBar";
 import Feed from "@components/chatComp/feed";
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
-import SideBar from "../chat/_components/SideBar";
 import "./voicechat.css";
 
 export default function page() {
@@ -40,7 +40,7 @@ export default function page() {
                 </div>
               </div>
             </div>
-            <Feed />
+            {/* <Feed /> */}
             <VoiceChatFeed />
           </div>
           <div className="hidden sm:flex">
