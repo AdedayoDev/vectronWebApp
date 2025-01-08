@@ -4,7 +4,6 @@ import SideBar from "../chat/_components/SideBar";
 import Feed from "@components/chatComp/feed";
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
-import SideBar from "../chat/_components/SideBar";
 import "./voicechat.css";
 
 export default function page() {

@@ -22,7 +22,7 @@ export default function ChatHistory() {
   }
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="chat-history-container">
         <div className="chat-history-bg">
           <Image
@@ -113,7 +113,7 @@ export default function ChatHistory() {
         </div>
         <div className="chat-history-aside">
           {/* <Aside /> */}
-          <SideBar />
+          {/* <SideBar /> */}
         </div>
       </div>
     </>
