@@ -1,12 +1,18 @@
-import EmailVerified from '@components/Auth/EmailVerification/EmailVerified'
-import React from 'react'
+import EmailVerified from "@components/Auth/EmailVerification/EmailVerified";
+import { AuthProvider } from "@components/guards/AuthProvider";
+import { ProtectedRoute } from "@components/guards/ProtectedRoute";
+import React from "react";
 
 const page = () => {
   return (
-    <main>
-      <EmailVerified/>
-    </main>
-  )
-}
+    <AuthProvider>
+      <ProtectedRoute>
+        <main>
+          <EmailVerified />
+        </main>
+      </ProtectedRoute>
+    </AuthProvider>
+  );
+};
 
-export default page
+export default page;

@@ -46,7 +46,7 @@ export default function VehicleProfile() {
       <div className="vehicle-profile-container">
         <div className="vehicle-profile-left">
           <Image
-            src="/assets/images/vectron-car.png"
+            src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734961047/vech4_wjjixn.png"
             alt="Vectron car"
             width={200}
             height={200}
@@ -97,7 +97,7 @@ export default function VehicleProfile() {
                 <label htmlFor="year">Year</label>
                 <input
                   id="year"
-                  type="text"
+                  type="date"
                   placeholder="What year is it"
                   {...register("year", {
                     required: "Vehicle Year is required",
@@ -133,9 +133,150 @@ export default function VehicleProfile() {
                   onFocus={() => setShowMinCharHint(true)}
                   onBlur={() => setShowMinCharHint(false)}
                 />
-                {showMinCharHint && (
-                  <p className="hint-message">Must be at least 12 characters</p>
+                {errors.registrationNumber && (
+                  <p className="error-message">
+                    {errors.registrationNumber.message}
+                  </p>
                 )}
+              </div>
+
+              {/* Vehicle Registration Number */}
+              <div className="form-group">
+                <label htmlFor="registrationNumber">
+                  Current Mileage
+                </label>
+                <input
+                  id="registrationNumber"
+                  type="number"
+                  placeholder="Enter Number"
+                  {...register("registrationNumber", {
+                    required: "Registration Number is required",
+                    minLength: {
+                      value: 12,
+                      message:
+                        "Registration Number must be at least 12 characters",
+                    },
+                  })}
+                  onFocus={() => setShowMinCharHint(true)}
+                  onBlur={() => setShowMinCharHint(false)}
+                />
+                {errors.registrationNumber && (
+                  <p className="error-message">
+                    {errors.registrationNumber.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Vehicle Registration Number */}
+              <div className="form-group">
+                <label htmlFor="registrationNumber">
+                 Last Oil Change Date
+                </label>
+                <input
+                  id="registrationNumber"
+                  type="date"
+                  placeholder="Enter Number"
+                  {...register("registrationNumber", {
+                    required: "Registration Number is required",
+                    minLength: {
+                      value: 12,
+                      message:
+                        "Registration Number must be at least 12 characters",
+                    },
+                  })}
+                  onFocus={() => setShowMinCharHint(true)}
+                  onBlur={() => setShowMinCharHint(false)}
+                />
+                {errors.registrationNumber && (
+                  <p className="error-message">
+                    {errors.registrationNumber.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Vehicle Registration Number */}
+              <div className="form-group">
+                <label htmlFor="registrationNumber">
+                Any warnings?
+                </label>
+                <input
+                  id="registrationNumber"
+                  type="number"
+                  placeholder="Enter Number"
+                  // {...register("registrationNumber", {
+                  //   required: "Registration Number is required",
+                  //   minLength: {
+                  //     value: 12,
+                  //     message:
+                  //       "Registration Number must be at least 12 characters",
+                  //   },
+                  // })}
+                  onFocus={() => setShowMinCharHint(true)}
+                  onBlur={() => setShowMinCharHint(false)}
+                />
+                {/* {showMinCharHint && (
+                  <p className="hint-message">Must be at least 12 characters</p>
+                )} */}
+                {errors.registrationNumber && (
+                  <p className="error-message">
+                    {errors.registrationNumber.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Vehicle Registration Number */}
+              <div className="form-group">
+                <label htmlFor="registrationNumber">
+                  Unusual Noises/Vibrations
+                </label>
+                <input
+                  id="registrationNumber"
+                  type="text"
+                  placeholder="Enter Number"
+                  // {...register("registrationNumber", {
+                  //   required: "Registration Number is required",
+                  //   minLength: {
+                  //     value: 12,
+                  //     message:
+                  //       "Registration Number must be at least 12 characters",
+                  //   },
+                  // })}
+                  onFocus={() => setShowMinCharHint(true)}
+                  onBlur={() => setShowMinCharHint(false)}
+                />
+                {/* {showMinCharHint && (
+                  <p className="hint-message">Must be at least 12 characters</p>
+                )} */}
+                {errors.registrationNumber && (
+                  <p className="error-message">
+                    {errors.registrationNumber.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Vehicle Registration Number */}
+              <div className="form-group">
+                <label htmlFor="registrationNumber">
+                  Fuel Efficiency Issues?
+                </label>
+                <input
+                  id="registrationNumber"
+                  type="number"
+                  placeholder="Enter Number"
+                  // {...register("registrationNumber", {
+                  //   required: "Registration Number is required",
+                  //   minLength: {
+                  //     value: 12,
+                  //     message:
+                  //       "Registration Number must be at least 12 characters",
+                  //   },
+                  // })}
+                  onFocus={() => setShowMinCharHint(true)}
+                  onBlur={() => setShowMinCharHint(false)}
+                />
+                {/* {showMinCharHint && (
+                  <p className="hint-message">Must be at least 12 characters</p>
+                )} */}
                 {errors.registrationNumber && (
                   <p className="error-message">
                     {errors.registrationNumber.message}

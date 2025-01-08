@@ -1,11 +1,12 @@
 "use client";
+
 import { useState } from "react";
-import SideBar from "@components/chatComp/side-chat";
 import "./chathistory.css";
 import Navbar from "@components/navbar/chatNav";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import chatData from "@components/chathistoryComp/chatData";
+import SideBar from "../_components/SideBar";
 
 export default function ChatHistory() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -111,10 +112,10 @@ export default function ChatHistory() {
           </div>
         </div>
         <div className="chat-history-aside">
+          {/* <Aside /> */}
           <SideBar />
         </div>
       </div>
     </>
   );
 }
-

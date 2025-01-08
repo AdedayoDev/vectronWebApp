@@ -36,7 +36,7 @@ export default function Chat() {
         <div className="flex justify-end p-2">
           <Profile />
         </div>
-        <div className="flex flex-col items-start gap-1 lg:flex-row">
+        <div className="flex flex-col items-start gap-1 lg:flex-row lg:gap-0">
           <div className="flex flex-1 justify-center items-center w-full">
             <div>
               <div className="relative w-full h-40">
@@ -50,7 +50,7 @@ export default function Chat() {
               <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
                 <div className="relative flex flex-col text-center w-full -mt-24 bg-white z-10 p-2 sm:p-7 lg:py-7 lg:px-10 xl:px-52 rounded-2xl shadow-xl">
                   <Link
-                    href="/chatmessage/newchat"
+                    href="/chat/newchat"
                     className="absolute top-3 right-3 border-2 border-purple-600 w-7 md:w-10 p-1 rounded-xl"
                   >
                     <div className="relative w-4 h-4 md:w-7 md:h-7">

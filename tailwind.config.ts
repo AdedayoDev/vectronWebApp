@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  darkMode: ["class"], // Enable dark mode
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -36,7 +36,7 @@ module.exports = {
         xs: "280px",
         sm: "320px",
         md: "540px",
-        lg: "720px",
+        lg: "786px",
         xl: "1080px",
       },
       borderRadius: {

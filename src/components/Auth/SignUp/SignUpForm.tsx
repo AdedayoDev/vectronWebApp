@@ -1,7 +1,7 @@
 "use client";
 
+import { BeatLoader } from "react-spinners";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // Import Next.js router
 import CardWrapper from "../CardWrapper";
 import { z } from "zod";
 import {
@@ -13,37 +13,44 @@ import {
   FormMessage,
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
+import { signup } from "@lib/Api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import GoogleLogIn from "../LogIn/GoogleLogIn";
 import AppleLogIn from "../LogIn/AppleLogIn";
 
-const SignUpSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-  username: z.string().min(1, {
-    message: "Please enter your username",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long",
-  }),
-});
+const SignUpSchema = z
+  .object({
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    username: z.string().min(1, { message: "Please enter your username" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" }),
+    confirm_password: z.string().min(8, {
+      message: "Confirm Password must be at least 8 characters long",
+    }),
+    first_name: z.string().min(1, { message: "First name is required" }),
+    last_name: z.string().min(1, { message: "Last name is required" }),
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    path: ["confirm_password"],
+    message: "Passwords do not match",
+  });
 
 const SignUpForm = () => {
   const [isChecked, setIsChecked] = useState(false);
-  const router = useRouter(); // Initialize the router
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: "",
       username: "",
       password: "",
-      confirmPassword: "",
-      firstname: "",
-      lastname: "",
+      confirm_password: "",
+      first_name: "",
+      last_name: "",
     },
   });
 
@@ -53,26 +60,27 @@ const SignUpForm = () => {
       return;
     }
 
+    setIsLoading(true);
+    setMessage("");
     try {
-      const response = await fetch(
-        "https://api-staging.vechtron.com/auth/api/v1/auth/account/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await signup(data);
+      const user = {
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        first_name: data.first_name,
+        last_name: data.last_name,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      setMessage("Sign up successful!");
 
-      if (response.ok) {
-        console.log("User registered successfully");
-        router.push("/onboarding/user-onboarding"); // Redirect to the onboarding page
-      } else {
-        console.error("Failed to register user");
-      }
+      setTimeout(() => {
+        window.location.href = "/auth/log-in";
+      }, 2000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      setMessage("Sign up failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,6 +97,8 @@ const SignUpForm = () => {
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"
       backButtonLabel="Already have an account? Log in"
+      smallScreenPadding="pt-72"
+      largeScreenPadding="lg:pt-60"
     >
       <div className="space-y-2 mb-2">
         <GoogleLogIn userData={userData} mode="login">
@@ -104,7 +114,7 @@ const SignUpForm = () => {
             {/* First Name Field */}
             <FormField
               control={form.control}
-              name="firstname"
+              name="first_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -118,7 +128,7 @@ const SignUpForm = () => {
             {/* Last Name Field */}
             <FormField
               control={form.control}
-              name="lastname"
+              name="last_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -179,6 +189,24 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
+            {/* Password Field */}
+            <FormField
+              control={form.control}
+              name="confirm_password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Confirm Password"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Checkbox Field */}
             <div className="flex items-center gap-4">
               <input
@@ -207,9 +235,13 @@ const SignUpForm = () => {
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
-            disabled={!isChecked}
+            disabled={!isChecked || isLoading}
           >
-            Create Account
+            {isLoading ? (
+              <BeatLoader size={8} color="#ffffff" />
+            ) : (
+              "Create Account"
+            )}
           </Button>
         </form>
       </Form>
