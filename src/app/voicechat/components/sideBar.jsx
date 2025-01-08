@@ -1,7 +1,7 @@
 "use client";
 import { Menu, Search } from "lucide-react";
 import { FaTimes } from "react-icons/fa";
-import Button from "./button";
+// import Button from "./button";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -17,17 +17,17 @@ export default function sideBar() {
         <FaTimes
           size={25}
           onClick={() => setShowMenu((prev) => !prev)}
-          className="absolute top-0 mt-3 left-0 mx-3 block lg:hidden"
+          className="absolute top-0 mt-3 left-0 mx-3 sm:block lg:hidden"
         />
       ) : (
         <Menu
           size={30}
-          className="absolute top-0 mt-3 left-0 mx-3 block lg:hidden"
+          className="absolute top-0 mt-3 left-0 mx-3 sm:block lg:hidden"
           onClick={() => setShowMenu((prev) => !prev)}
         />
       )}
       {showMenu && (
-        <div className="absolute z-10 left-0 rounded p-3 lg:hidden bg-white shadow-lg w-[60%] h-screen">
+        <div className="absolute z-10 left-0 rounded p-3 lg:hidden bg-white shadow-lg w-[60%] h-[1100px]">
         <div className="flex justify-between mb-7">
           <h1 className="font-semibold">VECHTRON UI</h1>
           <Image
@@ -165,7 +165,7 @@ export default function sideBar() {
       )}
 
       {/* Desktop */}
-      <div className="lg:block sm:hidden rounded p-3 bg-blue-50">
+      <div className="lg:block hidden rounded p-3 bg-blue-50">
         <div className="flex justify-between mb-7">
           <h1 className="font-semibold">VECHTRON UI</h1>
           <Image

@@ -13,15 +13,15 @@ export default function page() {
         <div className="flex justify-between mt-11">
           <div className="voice-chat-left">
             <Image
-              src="/assets/images/bg-img.png"
+              src="/assets/images/bg-img2.png"
               alt="background-image"
               width={200}
               height={200}
-              className="w-full lg:w-[80.5%] absolute h-32 cover-fill"
+              className="w-full lg:w-[78%] absolute h-32 cover-fill"
             />
             <VoiceChatFeed />
           </div>
-          <div className="hidden sm:flex">
+          <div className="">
             <SideBar />
           </div>
         </div>

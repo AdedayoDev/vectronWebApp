@@ -7,7 +7,7 @@
   
     /* For tablets and desktops */
     @media (min-width: 768px) {
-      height: 90vh;
+      height: 785px;
     }
   }
   .scrollbar-thin {
