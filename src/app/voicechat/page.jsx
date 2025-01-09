@@ -3,7 +3,7 @@ import React from "react";
 
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
-import SideBar from "./components/sideBar";
+
 import "./voicechat.css";
 
 export default function page() {

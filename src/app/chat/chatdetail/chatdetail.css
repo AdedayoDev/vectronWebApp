@@ -78,8 +78,8 @@ body {
   .detail-system .system-icon {
     position: relative;
     top: -24px;
+  }
+  .detail-content {
+    width: 80%;
+  }
 }
-.detail-content{
-  width: 80%;
-}
-
