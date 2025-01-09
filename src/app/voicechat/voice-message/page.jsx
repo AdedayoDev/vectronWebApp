@@ -1,6 +1,6 @@
 
 import Image from "next/image";
-import SideBar from "../components/sideBar";
+import SideBar from "../../voicechat/components/sideBar";
 import Navbar from "@components/navbar/chatNav";
 import { Menu } from "lucide-react";
 import Feed from "./component/Feed";

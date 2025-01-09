@@ -8,8 +8,8 @@ import Image from "next/image";
 export default function voicechatfeed() {
   const [inputValue, setInputValue] = useState("");
   return (
-    <div className="absolute top-36 lg:top-36 z-10 bg-white w-[93%] lg:w-[75%] shadow-lg rounded left-4 sm:left-5">
-      <div className="w-4/5 mx-auto">
+    <div className="absolute top-36 lg:top-36 z-10 bg-white w-[93%] custom_content lg:w-[75%] shadow-lg rounded left-4 sm:left-5">
+      <div className="w-4/5 mx-auto custom_text">
         <h1 className="bg-blue-700 w-40 mx-auto rounded-2xl mt-5 p-1 text-white text-xl text-center">
           VECHTRON UI
         </h1>
@@ -17,7 +17,7 @@ export default function voicechatfeed() {
           Good day! How may I assist you today?
         </p>
       </div>
-      <div className="lg:flex lg:mx-52 gap-7 w-5/6 left-[35px] lg:left-[6%] relative mt-10">
+      <div className="lg:flex lg:mx-52 gap-7 w-5/6 left-[35px] lg:left-[6%] relative mt-10 custom_feed">
         <div className="lg:block grid grid-cols-2 gap-2">
           <div className="flex gap-2 items-center mb-3">
             <div className="bg-blue-700 w-[145px] p-3 rounded-lg">
