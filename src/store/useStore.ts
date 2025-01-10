@@ -62,7 +62,7 @@ export const useAuthStore = create<AuthState>()(
           console.log('State after update:', useAuthStore.getState());
           console.log("here!!!")
           if (response.data.access_token) {
-            axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+            axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.access_token}`;
           }
           console.log(useAuthStore.getState()) // Should show current state
           console.log(localStorage.getItem('auth-storage')) 
