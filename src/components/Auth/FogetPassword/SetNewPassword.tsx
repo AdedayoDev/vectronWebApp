@@ -16,7 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuthStore } from "@store/useStore";
 
 const SetNewPasswordSchema = z
   .object({
@@ -29,7 +30,11 @@ const SetNewPasswordSchema = z
   });
 
 const SetNewPassword = () => {
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token"); 
+  const { resetPassword } = useAuthStore();
+
   const form = useForm({
     resolver: zodResolver(SetNewPasswordSchema),
     defaultValues: {
@@ -39,30 +44,19 @@ const SetNewPassword = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof SetNewPasswordSchema>) => {
-    try {
-      const response = await fetch(
-        "https://your-backend-endpoint.com/api/set-new-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+    if (!token) {
+      alert("Invalid or missing reset token.");
+      return;
+    }
 
-      if (response.ok) {
-        console.log("Password reset successfully!");
-        alert("Your password has been updated successfully.");
-        router.push("/auth/reset"); // Redirect to the reset success page
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to reset password", errorData);
-        alert("Failed to reset your password. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("An error occurred. Please try again later.");
+    try {
+      // Call the Zustand store function to reset the password
+      await resetPassword(token, data.password);
+
+      alert("Your password has been updated successfully.");
+      router.push("/auth/log-in");
+    } catch (error: any) {
+      alert(error.message || "Failed to reset your password. Please try again.");
     }
   };
 
@@ -136,7 +130,11 @@ const SetNewPassword = () => {
             </Button>
           </form>
         </Form>
-        <Button size="lg" className="bg-transparent hover:bg-transparent">
+        <Button
+          size="lg"
+          className="bg-transparent hover:bg-transparent"
+          onClick={() => router.push("/auth/log-in")}
+        >
           <FaArrowLeft className="text-lg lg:text-xl text-[#667085]" />
           <span className="font-urbanist font-medium text-sm text-[#667085]">
             Back to log in

@@ -20,6 +20,8 @@ import { useAuthStore } from "../../../store/useStore";
 import CardWrapper from "../CardWrapper";
 import AppleLogIn from "./AppleLogIn";
 import GoogleLogIn from "./GoogleLogIn";
+import { useRouter } from "next/router";
+
 
 const LogInSchema = z.object({
   email: z.string().email({
@@ -50,29 +52,29 @@ const LogInForm = () => {
       alert("You must agree to the terms and conditions before logging in.");
       return;
     }
+    
     setIsLoading(true);
     setMessage("");
     setMessageType("");
+  
     try {
-      await login(data.email, data.password);
+      await login(data.email, data.password); // Call the login function
+  
       setMessage("Login successful! Redirecting...");
       setMessageType("success");
+  
       setTimeout(() => {
         window.location.href = "/onboarding";
       }, 2000);
     } catch (error: any) {
-      console.error("Error during login:", error);
-
-      if (error.response?.data?.message) {
-        setMessage(error.response.data.message);
-      } else {
-        setMessage("Log in failed. Please try again.");
-      }
+      // Handle the error message received from login
+      setMessage(error.message);
       setMessageType("error");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const userData = {
     email: form.getValues("email"),

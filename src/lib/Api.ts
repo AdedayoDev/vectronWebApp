@@ -5,7 +5,6 @@ const BASE_URL = "https://api-staging.vechtron.com/auth";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
- 
 });
 
 export const signup = async (data: {
@@ -24,7 +23,12 @@ export const signup = async (data: {
     return response.data;
   } catch (error: any) {
     if (error.response) {
-      throw new Error(error.response.data?.message || "Sign up failed.");
+      const errorMessage = error.response.data?.message || "Sign up failed.";
+      if (error.response.status === 400) { 
+        throw new Error("This email is already registered. Please log in.");
+      }
+
+      throw new Error(errorMessage);
     } else if (error.request) {
       throw new Error("No response from server. Please try again later.");
     } else {
