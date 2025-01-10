@@ -18,6 +18,9 @@ interface User {
   username: string
   last_login: string
   email_verified: boolean
+  email_verified_at: string
+  is_vehicle_owner: boolean
+  profile_picture: string
 }
 
 interface AuthState {
