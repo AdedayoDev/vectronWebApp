@@ -162,7 +162,7 @@ export default function sideBar() {
       )}
 
       {/* Desktop */}
-      <div className="desktop-sidebar lg:block hidden rounded p-3 bg-blue-50">
+      <div className="hidden md:hidden lg:block rounded p-3 bg-blue-50">
         <div className="flex justify-between mb-7">
           <h1 className="font-semibold">VECHTRON UI</h1>
           <Image

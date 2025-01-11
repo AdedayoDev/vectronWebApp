@@ -14,7 +14,7 @@ import {
 export default function Feed() {
   return (
     <>
-      <section className="absolute top-32 z-10 bg-white w-[90%] lg:w-[75%] h-[550px] lg:h-[850px] shadow-lg rounded left-4 sm:left-5">
+      <section className="absolute top-32 z-10 bg-white w-[90%] lg:w-[75%] md:w-[94%] h-[550px] sm:h-[850px] shadow-lg rounded left-4 sm:left-5">
         <div className="flex gap-2 items-baseline p-3">
           <Image
             src="/assets/icons/vechtron.png"
@@ -73,7 +73,7 @@ export default function Feed() {
                 This will help me provide more targeted and useful advice.
               </p>
               <div className="flex justify-between w-[100%] lg:w-[70%] items-center">
-                <div className="mt-2 rounded shadow-md p-2 border flex gap-2 lg:w-[35%] w-[70%]">
+                <div className="mt-2 rounded shadow-md p-2 border flex gap-2 sm:w-[40%] w-[70%]">
                   <div className="rounded cursor-pointer p-1 border">
                     <Speaker size={20} color="gray" />
                   </div>

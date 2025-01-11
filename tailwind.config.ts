@@ -34,10 +34,10 @@ module.exports = {
       },
       screens: {
         xs: "280px",
-        sm: "320px",
-        md: "540px",
-        lg: "786px",
-        xl: "1080px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Radar, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { FaSpotify } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";

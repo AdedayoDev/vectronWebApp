@@ -8,7 +8,7 @@ export default function Voice() {
   const [showMic, setShowMic] = useState(false);
 
   return (
-    <div className="absolute top-[145px]  bg-white shadow rounded-lg sm:w-[92%] lg:h-[850px] lg:w-[75%] left-4 p-4">
+    <div className="absolute top-[145px] bg-white shadow rounded-lg sm:w-[92%] lg:h-[850px] lg:w-[75%] md:w-[95%] left-4 p-4">
       <div className="flex gap-2 items-center">
         <Image
           src="/assets/icons/vechtron.png"

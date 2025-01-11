@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-
+import  SideBar from './components/sideBar'
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
 
