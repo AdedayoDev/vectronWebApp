@@ -1,11 +1,12 @@
 "use client";
+
 import { useState } from "react";
-import Aside from "@components/chatComp/side-chat";
 import "./chathistory.css";
 import Navbar from "@components/navbar/chatNav";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import chatData from "@components/chathistoryComp/chatData";
+import SideBar from "../_components/SideBar";
 
 export default function ChatHistory() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,7 +22,7 @@ export default function ChatHistory() {
   }
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="chat-history-container">
         <div className="chat-history-bg">
           <Image
@@ -31,7 +32,7 @@ export default function ChatHistory() {
             height={200}
             className="chathistory-bg"
           />
-          <div className="chat-history-data">
+          <div className="chat-history-data shadow h-[80%] lg:h-[93%]">
             <div className="search-container">
               <button>
                 <Search size={20} color="gray" />
@@ -41,6 +42,7 @@ export default function ChatHistory() {
                 placeholder="Search conversation"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                className="outline"
               />
             </div>
             <div className="conversation-container">
@@ -110,10 +112,10 @@ export default function ChatHistory() {
           </div>
         </div>
         <div className="chat-history-aside">
-          <Aside />
+          {/* <Aside /> */}
+          {/* <SideBar /> */}
         </div>
       </div>
     </>
   );
 }
-

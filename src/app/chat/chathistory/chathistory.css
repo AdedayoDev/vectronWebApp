@@ -4,7 +4,7 @@ body {
 }
 
 .chat-history-container {
-  margin-top: 50px;
+  /*margin-top: 10px;*/
 }
 .chathistory-bg {
   width: 100%;
@@ -16,7 +16,7 @@ body {
   position: absolute;
   top: 150px;
   width: 85%;
-  left: 35px;
+  left: 40px;
   padding: 8px;
   /* height: 823px; */
   border-radius: 8px 8px 0 0;
@@ -31,7 +31,7 @@ body {
   /* border: 2px solid red; */
   outline: none;
   padding: 8px;
-  width: 693px;
+  width: 100%;
 }
 .search-container button {
   background-color: transparent;
@@ -108,11 +108,11 @@ h3 {
   justify-content: space-between;
 }
 .delete-text h4 {
-  color: black ;
-  font-weight: 700 ;
-  font-size: 16px ;
+  color: black;
+  font-weight: 700;
+  font-size: 16px;
 }
-.delete-text p{
+.delete-text p {
   margin-bottom: 10px;
 }
 .delete-btn-option .delete-btn {
@@ -138,10 +138,11 @@ h3 {
   .chathistory-bg {
     position: absolute;
     left: 0;
-    width: 77% !important;
+    width: 80% !important;
   }
   .chat-history-data {
-    width: 72%;
+    width: 76%;
+    left: 29px;
   }
   .search-container {
     width: 693px;

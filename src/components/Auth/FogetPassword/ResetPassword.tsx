@@ -33,7 +33,7 @@ const ResetPassword = () => {
       }
     };
 
-    fetchEmail(); // Call the fetchEmail function on component mount
+    fetchEmail(); 
   }, []);
 
   return (

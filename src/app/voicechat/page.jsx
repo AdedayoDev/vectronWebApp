@@ -18,12 +18,12 @@ export default function page() {
               alt="background-image"
               width={200}
               height={200}
-              className="backgroud-image w-full lg:w-78 absolute h-32 cover-fill"
+              className="w-full lg:w-[80.5%] absolute h-32 cover-fill lg:top-24"
             />
             <VoiceChatFeed />
           </div>
-          <div className="hidden sm:flex px-6">
-            <SideChat />
+          <div className="hidden sm:flex">
+            <SideBar />
           </div>
         </div>
       </div>
