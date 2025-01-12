@@ -12,6 +12,7 @@ module.exports = {
       backgroundImage: {
         "slate-white-gradient": "linear-gradient(to bottom, #708090, #FFFFFF)",
       },
+     
       width: {
         '78': '78%',
         '74': '74%',
@@ -34,10 +35,10 @@ module.exports = {
       },
       screens: {
         xs: "280px",
-        sm: "320px",
-        md: "540px",
-        lg: "786px",
-        xl: "1080px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -54,6 +55,7 @@ module.exports = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        customGreen: "#EDFFF5",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
