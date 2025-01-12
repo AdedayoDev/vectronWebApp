@@ -1,9 +1,9 @@
-import "./globals.css";
+
 import { Inter } from 'next/font/google';
-import '@splidejs/react-splide/css';
+import NavBar from "@components/navbar/chatNav";
 
 export const metadata = {
-  title: "Vectron webapp",
+  title: "Settings",
   description: "Your intelligent automotive companion",
 };
 
@@ -25,9 +25,6 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         />
 
-      
-
-        
 
         {/* Metadata */}
         <title>{metadata.title}</title>
@@ -37,6 +34,8 @@ export default function RootLayout({ children }) {
         style={{ fontFamily: "'Inter', sans-serif" }}
         className="overflow-x-hidden"
       >
+      <NavBar />
+
         {children}
       </body>
     </html>
