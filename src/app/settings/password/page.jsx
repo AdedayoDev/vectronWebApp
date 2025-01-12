@@ -2,13 +2,15 @@
 import Image from "next/image";
 import SettingsSideBar from "../components/SettingsSideBar";
 import { useState } from "react";
-import { Check, CheckCircle } from "lucide-react";
+import { Check } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Password() {
+  const router = useRouter();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [alert, setAlert] = useState('');
+  const [alert, setAlert] = useState("");
   const [errors, setErrors] = useState({});
 
   const validateInputs = () => {
@@ -38,8 +40,10 @@ export default function Password() {
 
     if (Object.keys(validationErrors).length === 0) {
       setAlert("Password changed successfully");
-      setTimeout(() => setAlert(""), 3000);
-
+      setTimeout(() => {
+        setAlert("");
+        router.push("/settings");
+      }, 3000);
       // Reset form inputs
       setOldPassword("");
       setNewPassword("");
@@ -48,6 +52,7 @@ export default function Password() {
   };
 
   const handleCancel = () => {
+    router.push("/settings");
     setOldPassword("");
     setNewPassword("");
     setConfirmPassword("");
@@ -123,28 +128,28 @@ export default function Password() {
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 justify-end">
+                <div className="flex items-center mt-11 gap-3 justify-end">
                   <button
                     type="submit"
-                    className="px-5 py-3 bg-blue-700 text-white font-medium rounded-full hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-5 py-3 bg-blue-700 text-white cursor-pointer font-medium rounded-full focus:bg-blue-500 focus:outline-none"
                   >
                     Update
                   </button>
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="px-4 py-2 border-4 rounded-full border-purple-300 border-solid font-medium  hover:bg-red-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="px-4 py-2 cursor-pointer border-4 rounded-full border-purple-300 border-solid font-medium  focus:bg-red-600 focus:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
                     Cancel
                   </button>
                 </div>
               </form>
               {alert && (
-                <div className="mt-4 p-4 bg-customGreen flex gap-3 items-center justify-center absolute right-0 top-0 w-[30%] text-center rounded-md">
+                <div className="mt-4 p-3 bg-customGreen flex gap-3 items-center absolute right-3 top-0 w-[60%] lg:w-[25%] text-center rounded-md">
                   <div className="bg-green-600 rounded-full">
-                  <Check color='white'/>
+                    <Check color="white" />
                   </div>
-                  
+
                   {alert}
                 </div>
               )}

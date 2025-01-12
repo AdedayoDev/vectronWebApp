@@ -1,6 +1,6 @@
 "use client";
 import SettingsSideBar from "../components/SettingsSideBar";
-
+import Image from 'next/image'
 export default function Password() {
   return (
     <>
@@ -14,7 +14,14 @@ export default function Password() {
         />
         <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto ">
           <SettingsSideBar />
-          <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]"></div>
+          <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]">
+          <h1 className='text-lg font-semibold'>
+            Payment
+          </h1>
+          <div className="lg:w-[80%]">
+
+          </div>
+          </div>
         </div>
       </section>
     </>

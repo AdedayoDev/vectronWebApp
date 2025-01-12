@@ -33,7 +33,7 @@ export default function SettingsSideBar() {
             href="/settings/profile"
             iconSrc="/assets/icons/user-octagon.svg"
             label="Profile"
-            isActive={isActive("/settings/profile")}
+            isActive={isActive("/user_profile")}
             onClick={()=>{setShowSideBar(false)}}
           />
           <SidebarLink
@@ -94,7 +94,7 @@ export default function SettingsSideBar() {
           href="/settings/profile"
           iconSrc="/assets/icons/user-octagon.svg"
           label="Profile"
-          isActive={isActive("/settings/profile")}
+          isActive={isActive("/user_profile")}
         />
         <SidebarLink
           href="/settings/vehicle_management"
