@@ -1,15 +1,24 @@
 "use client";
-import { Car, LucideSettings, Timer, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
 export default function SettingsSideBar() {
   const [showSideBar, setShowSideBar] = useState(false);
+  const router = useRouter(); 
+
+  const isActive = (path) => router.pathname === path;
+
   return (
     <>
-      {/* Mobile  */}
-      <div className="flex cursor-pointer items-center gap-2 mb-5 sm:hidden" onClick={()=>{setShowSideBar(prev=>!prev)}}>
+      {/* Mobile */}
+      <div
+        className="flex absolute -top-[57px] -left-2 z-20 lg:hidden md:flex cursor-pointer items-center gap-2 mb-5"
+        onClick={() => {
+          setShowSideBar((prev) => !prev);
+        }}
+      >
         <Image
           src="/assets/icons/user-settings.png"
           alt="icon"
@@ -19,40 +28,60 @@ export default function SettingsSideBar() {
         <h1 className="font-bold text-base">User Settings</h1>
       </div>
       {showSideBar && (
-        <section className="block sm:hidden absolute">
-          <Link href="/settings/profile">
-            <div className="flex items-center gap-2 border mb-3 rounded p-2 w-[274px]">
-              <User size={20} />
-              <p>Profile</p>
+        <section className="block lg:hidden absolute -top-8 -left-7 px-7 py-11 shadow-lg z-30 bg-white h-screen">
+          <SidebarLink
+            href="/settings/profile"
+            iconSrc="/assets/icons/user-octagon.svg"
+            label="Profile"
+            isActive={isActive("/settings/profile")}
+            onClick={()=>{setShowSideBar(false)}}
+          />
+          <SidebarLink
+            href="/settings/vehicle_management"
+            iconSrc="/assets/icons/vehicle-services.svg"
+            label="Vehicle Management"
+            isActive={isActive("/settings/vehicle_management")}
+            onClick={()=>{setShowSideBar(false)}}
+          />
+          <SidebarLink
+            href="/settings/history"
+            iconSrc="/assets/icons/history.svg"
+            label="History"
+            isActive={isActive("/settings/history")}
+            onClick={()=>{setShowSideBar(false)}}
+          />
+          <SidebarLink
+            href="/settings"
+            iconSrc="/assets/icons/settings-ai.svg"
+            label="AI Settings"
+            isActive={isActive("/settings")}
+            onClick={()=>{setShowSideBar(false)}}
+          />
+          <div className="flex rounded-full shadow-lg p-2 items-center justify-between mt-64 cursor-pointer">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/assets/icons/avatar.png"
+                alt="user"
+                width={25}
+                height={20}
+                className="rounded-full"
+              />
+              <p>Prosper</p>
             </div>
-          </Link>
-
-          <Link href="/settings/vehicle_management">
-            <div className="flex items-center gap-2 mb-3 border rounded p-2 w-[274px]">
-              <Car size={20} />
-              <p>Vehhicle management</p>
-            </div>
-          </Link>
-
-          <Link href="/settings/history">
-            <div className="flex items-center gap-2 border mb-3 rounded p-2 w-[274px]">
-              <Timer size={20} />
-              <p>History</p>
-            </div>
-          </Link>
-
-          <Link href="/settings">
-            <div className="flex items-center gap-2 border rounded p-2 w-[274px]">
-              <LucideSettings size={20} />
-              <p>AI Settings</p>
-            </div>
-          </Link>
+            <Image
+              src="/assets/icons/logout-icon.svg"
+              alt="icon"
+              width={20}
+              height={20}
+              className="rounded-full"
+            />
+          </div>
         </section>
       )}
 
-      {/* Desktop  */}
-      <section className="hidden sm:block">
-        <div className="flex items-center gap-2 mb-5">
+      {/* Desktop */}
+      <section className="hidden lg:block">
+        <div className="flex items-center gap-2 mb-5 cursor-pointer">
           <Image
             src="/assets/icons/user-settings.png"
             alt="icon"
@@ -61,34 +90,72 @@ export default function SettingsSideBar() {
           />
           <h1 className="font-bold text-base">User Settings</h1>
         </div>
-        <Link href="/settings/profile">
-          <div className="flex items-center gap-2 border mb-3 rounded p-2 w-[274px]">
-            <User size={20} />
-            <p>Profile</p>
+        <SidebarLink
+          href="/settings/profile"
+          iconSrc="/assets/icons/user-octagon.svg"
+          label="Profile"
+          isActive={isActive("/settings/profile")}
+        />
+        <SidebarLink
+          href="/settings/vehicle_management"
+          iconSrc="/assets/icons/vehicle-services.svg"
+          label="Vehicle Management"
+          isActive={isActive("/settings/vehicle_management")}
+        />
+        <SidebarLink
+          href="/settings/history"
+          iconSrc="/assets/icons/history.svg"
+          label="History"
+          isActive={isActive("/settings/history")}
+        />
+        <SidebarLink
+          href="/settings"
+          iconSrc="/assets/icons/settings-ai.svg"
+          label="AI Settings"
+          isActive={isActive("/settings")}
+        />
+        <div className="flex rounded-full shadow-lg p-2 items-center justify-between mt-48 cursor-pointer">
+          <div className="flex items-center gap-3">
+            <Image
+              src="/assets/icons/avatar.png"
+              alt="user"
+              width={25}
+              height={20}
+              className="rounded-full"
+            />
+            <p>Prosper</p>
           </div>
-        </Link>
-
-        <Link href="/settings/vehicle_management">
-          <div className="flex items-center gap-2 mb-3 border rounded p-2 w-[274px]">
-            <Car size={20} />
-            <p>Vehhicle management</p>
-          </div>
-        </Link>
-
-        <Link href="/settings/history">
-          <div className="flex items-center gap-2 border mb-3 rounded p-2 w-[274px]">
-            <Timer size={20} />
-            <p>History</p>
-          </div>
-        </Link>
-
-        <Link href="/settings">
-          <div className="flex items-center gap-2 border rounded p-2 w-[274px]">
-            <LucideSettings size={20} />
-            <p>AI Settings</p>
-          </div>
-        </Link>
+          <Image
+            src="/assets/icons/logout-icon.svg"
+            alt="icon"
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+        </div>
       </section>
     </>
   );
 }
+
+// SidebarLink Component
+const SidebarLink = ({ href, iconSrc, label, isActive }) => {
+  return (
+    <Link href={href}>
+      <div
+        className={`flex items-center gap-2 border rounded p-2 w-[274px] mb-3 ${
+          isActive ? "bg-blue-600 text-white" : "bg-white text-black"
+        }`}
+      >
+        <Image
+          src={iconSrc}
+          alt={`${label} icon`}
+          width={20}
+          height={20}
+          className={`${isActive ? "text-white" : "text-black"}`}
+        />
+        <p>{label}</p>
+      </div>
+    </Link>
+  );
+};

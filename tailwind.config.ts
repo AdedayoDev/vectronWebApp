@@ -12,6 +12,7 @@ module.exports = {
       backgroundImage: {
         "slate-white-gradient": "linear-gradient(to bottom, #708090, #FFFFFF)",
       },
+     
       width: {
         '78': '78%',
         '74': '74%',
@@ -54,6 +55,7 @@ module.exports = {
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        customGreen: "#EDFFF5",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

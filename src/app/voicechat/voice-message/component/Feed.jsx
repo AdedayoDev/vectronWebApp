@@ -14,7 +14,7 @@ import {
 export default function Feed() {
   return (
     <>
-      <section className="absolute top-32 z-10 bg-white w-[90%] lg:w-[75%] md:w-[94%] h-[550px] sm:h-[850px] shadow-lg rounded left-4 sm:left-5">
+      <section className="absolute top-32 z-10 bg-white w-[90%] lg:w-[75%] md:w-[95%] h-[550px] sm:h-[850px] shadow-lg rounded left-4 sm:left-5">
         <div className="flex gap-2 items-baseline p-3">
           <Image
             src="/assets/icons/vechtron.png"
