@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Toggle from "@components/chatComp/Toggle";
 
-export default function sideBar() {
+export default function SideBar() {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>

@@ -9,17 +9,10 @@ export default function Delete_Account() {
   const [error, setError] = useState("");
   const [alert, setAlert] = useState("");
   const [secondAlert, setSecondAlert] = useState("");
-  const [submit, setSubmit] = useState("");
 
   function handleAlert() {
     setSecondAlert([]);
     setAlert('');
-  }
-  function handleDelete() {
-    setSecondAlert('');
-    setTimeout(()=>{
-      setSubmit('')
-    },)
   }
   const handleSubmit = (e) => {
     e.preventDefault();
