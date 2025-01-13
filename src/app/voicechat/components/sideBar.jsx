@@ -4,7 +4,8 @@ import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import Toggle from "@components/chatComp/Toggle";
+import Toggle from "@components/chatComp/toggle";
+
 
 export default function SideBar() {
   const [showMenu, setShowMenu] = useState(false);

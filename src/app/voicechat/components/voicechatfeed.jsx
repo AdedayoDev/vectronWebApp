@@ -5,7 +5,8 @@ import { FaSpotify } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function voicechatfeed() {
+// eslint-disable-next-line react-hooks/rules-of-hooks
+export default function Voicechatfeed() {
   const [inputValue, setInputValue] = useState("");
   return (
     <div className="absolute top-36 lg:top-36 z-10 bg-white w-[93%] custom_content lg:w-[75%] shadow-lg rounded left-4 sm:left-5">
