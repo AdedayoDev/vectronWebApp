@@ -8,6 +8,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
+RUN npm install --platform=linux --arch=x64
 
 # Copy the rest of the code
 COPY . .
