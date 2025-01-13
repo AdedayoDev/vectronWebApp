@@ -192,7 +192,7 @@ export default function Profile() {
                 <button
                   type="button"
                   onClick={handleGoHome}
-                  className="px-4 py-[6px] w-36 text-gray-500 cursor-pointer font-medium rounded-full focus:bg-gray-600 focus:outline-none ring-2 ring-gray-500"
+                  className="px-4 py-[6px] w-36 text-gray-500 cursor-pointer font-medium rounded-full focus:outline-none border-2 border-solid border-purple-300"
                 >
                   Go Home
                 </button>

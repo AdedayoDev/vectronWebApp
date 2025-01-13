@@ -339,7 +339,7 @@ export default function Vehicle_Profile() {
               </div>
 
               {alert && (
-                <div className="bg-slate-white-gradient p-4 fixed top-0 w-full left-0 h-screen z-50">
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
                   <div className="absolute w-[80%] lg:w-[30%] left-[50px] lg:left-[35%] bg-white shadow-md h-44 items-center top-[35%] mx-auto mt-3 px-3 pt-11 bg-white-500 text-center rounded-md">
                     <div className="flex justify-center mb-2">
                       <Check
