@@ -7,7 +7,7 @@ import { useState } from "react";
 import Toggle from "@components/chatComp/toggle";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
-export default function sideBar() {
+export default function SideBar() {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <>
