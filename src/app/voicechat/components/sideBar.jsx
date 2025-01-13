@@ -1,4 +1,4 @@
-"use client";
+
 import { Menu, Search } from "lucide-react";
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
