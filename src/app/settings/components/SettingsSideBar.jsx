@@ -30,21 +30,21 @@ export default function SettingsSideBar() {
       {showSideBar && (
         <section className="block lg:hidden absolute -top-8 -left-7 px-7 py-11 shadow-lg z-30 bg-white h-screen">
           <SidebarLink
-            href="/settings/profile"
+            href="/user_profile"
             iconSrc="/assets/icons/user-octagon.svg"
             label="Profile"
             isActive={isActive("/user_profile")}
             onClick={()=>{setShowSideBar(false)}}
           />
           <SidebarLink
-            href="/settings/vehicle_management"
+            href="/vehicle_management"
             iconSrc="/assets/icons/vehicle-services.svg"
             label="Vehicle Management"
             isActive={isActive("/settings/vehicle_management")}
             onClick={()=>{setShowSideBar(false)}}
           />
           <SidebarLink
-            href="/settings/history"
+            href="/history"
             iconSrc="/assets/icons/history.svg"
             label="History"
             isActive={isActive("/settings/history")}
@@ -91,19 +91,19 @@ export default function SettingsSideBar() {
           <h1 className="font-bold text-base">User Settings</h1>
         </div>
         <SidebarLink
-          href="/settings/profile"
+          href="/user_profile"
           iconSrc="/assets/icons/user-octagon.svg"
           label="Profile"
           isActive={isActive("/user_profile")}
         />
         <SidebarLink
-          href="/settings/vehicle_management"
+          href="/vehicle_management"
           iconSrc="/assets/icons/vehicle-services.svg"
           label="Vehicle Management"
           isActive={isActive("/settings/vehicle_management")}
         />
         <SidebarLink
-          href="/settings/history"
+          href="/history"
           iconSrc="/assets/icons/history.svg"
           label="History"
           isActive={isActive("/settings/history")}

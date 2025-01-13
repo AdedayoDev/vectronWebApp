@@ -126,7 +126,7 @@ export default function page() {
             </div>
 
             <div>
-            <Link href='/settings/deleteaccount'>
+            <Link href='/settings/delete_account'>
             <div className="flex items-center mt-24 lg:mt-32 gap-2 text-red-600">
               <Image
                 src="/assets/icons/trash.svg"
