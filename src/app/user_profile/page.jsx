@@ -1,6 +1,6 @@
 "use client";
 import { Check, CloudUpload } from "lucide-react";
-import SettingsSideBar from "../components/SettingsSideBar";
+import SettingsSideBar from "../settings/components/SettingsSideBar";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -73,6 +73,7 @@ export default function Profile() {
 
   return (
     <>
+    <NavBar/>
       <section>
         <Image
           src="/assets/images/bg-img3.png"
