@@ -58,7 +58,7 @@ const LogInForm = () => {
       setMessage("Login successful! Redirecting...");
       setMessageType("success");
       setTimeout(() => {
-        window.location.href = "/onboarding";
+       window.location.href = "/onboarding";
       }, 2000);
     } catch (error: any) {
       console.error("Error during login:", error);
