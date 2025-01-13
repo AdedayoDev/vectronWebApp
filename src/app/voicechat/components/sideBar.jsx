@@ -3,11 +3,11 @@ import { Menu, Search } from "lucide-react";
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+// import { useState } from "react";
 import Toggle from "@components/chatComp/Toggle";
 
 export default function sideBar() {
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
   return (
     <>
       {/* mobile */}
