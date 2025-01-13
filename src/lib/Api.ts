@@ -37,7 +37,7 @@ export const signup = async (data: {
 export const login = async (data: { email: string; password: string }) => {
   try {
     const response = await axiosInstance.post(
-      "/api/v1/auth/account/login",
+      "//api/v1/users/send-verify-mail/",
       data
     );
     return response.data;
@@ -53,7 +53,7 @@ export const login = async (data: { email: string; password: string }) => {
 };
 
 // Request an OTP
-export const forgetPassword = async (data: { email: string }) => {
+export const emailVerification = async (data: { email: string }) => {
   const response = await axiosInstance.post(
     "/api/v1/auth/account/forgot-password/",
     data

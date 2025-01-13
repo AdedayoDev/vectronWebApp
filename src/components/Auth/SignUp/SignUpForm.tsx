@@ -75,7 +75,7 @@ const SignUpForm = () => {
       setMessage("Sign up successful!");
 
       setTimeout(() => {
-        window.location.href = "/auth/log-in";
+        window.location.href = "/auth/email-verification";
       }, 2000);
     } catch (error) {
       setMessage("Sign up failed. Please try again.");

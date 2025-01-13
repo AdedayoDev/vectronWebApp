@@ -57,6 +57,7 @@ export const useAuthStore = create<AuthState>()(
             refreshToken: response.data.data.refresh_token
           });
           console.log("user", response.data.data.user);
+          
       
           // Verify the state was updated
           console.log('State after update:', useAuthStore.getState());
@@ -64,11 +65,11 @@ export const useAuthStore = create<AuthState>()(
           if (response.data.access_token) {
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.access_token}`;
           }
-          console.log(useAuthStore.getState()) // Should show current state
+          console.log(useAuthStore.getState()) 
           console.log(localStorage.getItem('auth-storage')) 
         } catch (error) {
           console.error('Error during login:', error);
-          throw error; // Re-throw to handle in the component
+          throw error; 
         } finally {
           set({ isLoading: false });
         }
@@ -91,6 +92,31 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
+
+export const emailVerification = async (data: { email: string }) => {
+  const token = useAuthStore.getState().token; 
+
+  try {
+    const response = await axiosInstance.post(
+      "/api/v1/users/send-verify-mail/",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the Authorization header
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Failed to request verification.");
+    } else if (error.request) {
+      throw new Error("No response from server. Please try again later.");
+    } else {
+      throw new Error(error.message || "An unexpected error occurred.");
+    }
+  }
+};
 
 
 // // Hydration helper
