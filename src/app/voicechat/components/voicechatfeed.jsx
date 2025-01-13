@@ -1,4 +1,4 @@
-"use client";
+
 import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { FaSpotify } from "react-icons/fa";
