@@ -12,7 +12,7 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { useForm } from "react-hook-form";
-import { forgetPassword } from "@lib/Api"; // Ensure correct implementation
+import { forgetPassword } from "@lib/Api"; 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import Image from "next/image";
@@ -36,16 +36,16 @@ const ForgetPassword = () => {
 
   const onSubmit = async (data: z.infer<typeof ForgetPasswordSchema>) => {
     try {
-      const response = await forgetPassword(data); // Pass data directly
+      const response = await forgetPassword(data); // Call forgetPassword API
       console.log("Password reset request successful:", response);
 
-      // Redirect or notify the user
+      // Notify the user or redirect after success
       setTimeout(() => {
         window.location.href = "/set-new-password";
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during password reset:", error);
-      
+      alert(error.message || "Something went wrong. Please try again.");
     }
   };
 

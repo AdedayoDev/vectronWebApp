@@ -52,6 +52,24 @@ export const login = async (data: { email: string; password: string }) => {
   }
 };
 
+export const forgetPassword = async (data: { email: string }) => {
+  try {
+    const response = await axiosInstance.post(
+      "/api/v1/auth/account/forgot-password/",
+      data
+    );
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || "Forgot password request failed.");
+    } else if (error.request) {
+      throw new Error("No response from server. Please try again later.");
+    } else {
+      throw new Error(error.message || "An unexpected error occurred.");
+    }
+  }
+};
+
 // Request an OTP
 export const emailVerification = async (data: { email: string }) => {
   const response = await axiosInstance.post(

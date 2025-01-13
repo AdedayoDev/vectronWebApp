@@ -13,23 +13,23 @@ const axiosInstance = axios.create({
 });
 
 interface User {
-  id: number
-  email: string
-  username: string
-  last_login: string
-  email_verified: boolean
-  email_verified_at: string
-  is_vehicle_owner: boolean
-  profile_picture: string
+  id: number;
+  email: string;
+  username: string;
+  last_login: string;
+  email_verified: boolean;
+  email_verified_at: string;
+  is_vehicle_owner: boolean;
+  profile_picture: string;
 }
 
 interface AuthState {
   user: User | null;
-  token: string | null;
-  refreshToken: string | null;
+  access_token: string | null;
+  refresh_token: string | null;
   isLoading: boolean;
   setUser: (user: User | null) => void;
-  setToken: (token: string | null) => void;
+  setAccessToken: (token: string | null) => void;
   setRefreshToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -39,13 +39,13 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      token: null,
-      refreshToken: null,
+      access_token: null,
+      refresh_token: null,
       isLoading: false,
 
       setUser: (user) => set({ user }),
-      setToken: (token) => set({ token }),
-      setRefreshToken: (refreshToken) => set({ refreshToken }),
+      setAccessToken: (access_token) => set({ access_token }),
+      setRefreshToken: (refresh_token) => set({ refresh_token }),
       login: async (email, password) => {
         set({ isLoading: true });
         try {
@@ -53,29 +53,24 @@ export const useAuthStore = create<AuthState>()(
           console.log("response", response.data);
           set({
             user: response.data.data.user,
-            token: response.data.data.access_token,
-            refreshToken: response.data.data.refresh_token
+            access_token: response.data.data.access_token,
+            refresh_token: response.data.data.refresh_token,
           });
-          console.log("user", response.data.data.user);
-          
-      
+
           // Verify the state was updated
           console.log('State after update:', useAuthStore.getState());
-          console.log("here!!!")
-          if (response.data.access_token) {
+          if (response.data.data.access_token) {
             axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.access_token}`;
           }
-          console.log(useAuthStore.getState()) 
-          console.log(localStorage.getItem('auth-storage')) 
         } catch (error) {
           console.error('Error during login:', error);
-          throw error; 
+          throw error;
         } finally {
           set({ isLoading: false });
         }
       },
       logout: () => {
-        set({ user: null, token: null, refreshToken: null });
+        set({ user: null, access_token: null, refresh_token: null });
       },
     }),
     {
@@ -83,18 +78,17 @@ export const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
-        token: state.token,
-        refreshToken: state.refreshToken,
+        access_token: state.access_token,
+        refresh_token: state.refresh_token,
       }),
       skipHydration: true,
       version: 1,
-
     }
   )
 );
 
 export const emailVerification = async (data: { email: string }) => {
-  const token = useAuthStore.getState().token; 
+  const access_token = useAuthStore.getState().access_token;
 
   try {
     const response = await axiosInstance.post(
@@ -102,7 +96,7 @@ export const emailVerification = async (data: { email: string }) => {
       data,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Add the Authorization header
+          Authorization: `Bearer ${access_token}`, // Add the Authorization header
         },
       }
     );
@@ -117,28 +111,3 @@ export const emailVerification = async (data: { email: string }) => {
     }
   }
 };
-
-
-// // Hydration helper
-// export const initializeAuth = () => {
-//   const stored = localStorage.getItem('auth-storage');
-//   if (stored) {
-//     try {
-//       const { state } = JSON.parse(stored);
-//       useAuthStore.setState({ 
-//         ...state, 
-//         isInitialized: true 
-//       });
-      
-//       // Restore axios headers if token exists
-//       if (state.token) {
-//         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
-//       }
-//     } catch (error) {
-//       console.error('Error initializing auth state:', error);
-//       useAuthStore.setState({ isInitialized: true });
-//     }
-//   } else {
-//     useAuthStore.setState({ isInitialized: true });
-//   }
-// };
