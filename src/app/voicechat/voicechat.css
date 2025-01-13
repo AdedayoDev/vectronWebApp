@@ -12,3 +12,28 @@
     background: #888; 
     border-radius: 10px;
   }
+
+  /* @media screen and (min-width: 540px){
+    .desktop-sidebar{
+      display: none !important;
+    }
+    .banner-image{
+      width: 100% !important;
+    }
+    .custom_content{
+      width: 95%;
+    }
+    .custom_text{
+      text-align: center;
+    }
+    .custom_feed{
+      position: relative !important;
+      left: -80px !important;
+    }
+    .custom_menu{
+      display: block !important;
+    }
+    .custom_sidebar{
+      display: block;
+    }
+  } */

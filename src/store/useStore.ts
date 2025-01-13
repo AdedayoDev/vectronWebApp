@@ -18,6 +18,9 @@ interface User {
   username: string
   last_login: string
   email_verified: boolean
+  email_verified_at: string
+  is_vehicle_owner: boolean
+  profile_picture: string
 }
 
 interface AuthState {
@@ -47,11 +50,22 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const response = await axiosInstance.post('/login', { email, password });
+          console.log("response", response.data);
           set({
-            user: response.data.user,
-            token: response.data.access_token,
-            refreshToken: response.data.refresh_token
+            user: response.data.data.user,
+            token: response.data.data.access_token,
+            refreshToken: response.data.data.refresh_token
           });
+          console.log("user", response.data.data.user);
+      
+          // Verify the state was updated
+          console.log('State after update:', useAuthStore.getState());
+          console.log("here!!!")
+          if (response.data.access_token) {
+            axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.access_token}`;
+          }
+          console.log(useAuthStore.getState()) // Should show current state
+          console.log(localStorage.getItem('auth-storage')) 
         } catch (error) {
           console.error('Error during login:', error);
           throw error; // Re-throw to handle in the component
@@ -66,8 +80,39 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        refreshToken: state.refreshToken,
+      }),
       skipHydration: true,
       version: 1,
+
     }
   )
 );
+
+
+// // Hydration helper
+// export const initializeAuth = () => {
+//   const stored = localStorage.getItem('auth-storage');
+//   if (stored) {
+//     try {
+//       const { state } = JSON.parse(stored);
+//       useAuthStore.setState({ 
+//         ...state, 
+//         isInitialized: true 
+//       });
+      
+//       // Restore axios headers if token exists
+//       if (state.token) {
+//         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+//       }
+//     } catch (error) {
+//       console.error('Error initializing auth state:', error);
+//       useAuthStore.setState({ isInitialized: true });
+//     }
+//   } else {
+//     useAuthStore.setState({ isInitialized: true });
+//   }
+// };

@@ -1,22 +1,16 @@
-"use client";
-import React, { useState } from "react";
+
 import Image from "next/image";
-import SideBar from "../components/sideBar";
+import SideBar from "../../voicechat/components/sideBar";
 import Navbar from "@components/navbar/chatNav";
 import { Menu } from "lucide-react";
 import Feed from "./component/Feed";
 
 export default function Page() {
-  const [showNav, setShowNav] = useState(false);
-
-  function handleShowNav() {
-    setShowNav((prev) => !prev);
-  }
 
   return (
     <div>
       <Navbar />
-      <div onClick={handleShowNav}>
+      <div >
         <Menu
           size={30}
           color="blue"
@@ -26,16 +20,16 @@ export default function Page() {
       <div className="voice-chat flex justify-between mt-11">
         <div className="voice-chat-left">
           <Image
-            src="/assets/images/bg-img.png"
+            src="/assets/images/bg-img2.png"
             alt="background-image"
             width={200}
             height={200}
-            className="w-full lg:w-[82%] absolute h-32 object-cover lg:top-24"
+            className="w-full lg:w-[78%] absolute h-32 object-cover"
           />
           <Feed />
         </div>
         <div>
-          <SideBar showSideBar={showNav} handleShow={handleShowNav} />
+          <SideBar />
         </div>
       </div>
     </div>
