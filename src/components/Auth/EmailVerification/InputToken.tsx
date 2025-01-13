@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { Button } from "@components/ui/button";
 import Image from "next/image";
@@ -8,10 +8,11 @@ import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 
 const InputToken = () => {
+  const [error, setError] = useState("")
   const [token, setToken] = useState(["", "", "", ""]);
   const [email, setEmail] = useState<string | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
 
   // Function to handle input change
   const handleInputChange = (value: string, index: number) => {
@@ -58,46 +59,29 @@ const InputToken = () => {
       }
     });
 
-    // Move focus to the last input
     if (updatedToken.length === 4) {
       inputRefs.current[3]?.focus();
     }
   };
 
-  // Function to fetch email
-  React.useEffect(() => {
-    const fetchEmail = async () => {
-      try {
-        const response = await fetch(
-          "https://your-backend-endpoint.com/api/get-email",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setEmail(data.email);
-        } else {
-          console.error("Failed to fetch email", await response.json());
-        }
-      } catch (error) {
-        console.error("Error fetching email:", error);
+  
+  useEffect(() => {
+      const emailFromStorage = localStorage.getItem("user");
+      if (emailFromStorage) {
+        const user = JSON.parse(emailFromStorage);
+        const email = user.email
+        setEmail(email);
+      } else {
+        setError("No email found. Please sign up first.");
       }
-    };
+    }, []);
 
-    fetchEmail();
-  }, []);
-
-  // Function to submit the token
+  
   const handleSubmitToken = async () => {
     const tokenString = token.join("");
     try {
       const response = await fetch(
-        "https://your-backend-endpoint.com/api/verify-token",
+        "/api/v1/users/verify-email/",
         {
           method: "POST",
           headers: {
@@ -112,11 +96,9 @@ const InputToken = () => {
 
       if (response.ok) {
         console.log("Token verified successfully");
-        // Redirect to /auth/email-verified after successful verification
         router.push("/auth/email-verified");
       } else {
         console.error("Invalid token", await response.json());
-        // Handle error (e.g., show error message)
         alert("Invalid token. Please try again.");
       }
     } catch (error) {
@@ -166,7 +148,7 @@ const InputToken = () => {
         </div>
         <Button
           onClick={handleSubmitToken}
-          className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white"
+          className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
         >
           Verify Token
         </Button>

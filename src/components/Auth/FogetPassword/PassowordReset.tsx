@@ -28,7 +28,7 @@ const PassowordReset: FC = () => {
           magically.
         </p>
       </div>
-      <Link href="/auth/password-reset">
+      <Link href="/auth/set-new-password">
         <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
           Continue
         </Button>

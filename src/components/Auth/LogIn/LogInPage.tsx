@@ -6,22 +6,22 @@ const LogInPage = () => {
   const year = new Date();
   const getYear = year.getFullYear();
   return (
-    <main className="w-full flex items-center gap- justify-center h-screen">
+    <main className="w-full flex items-center  justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
         className="hidden lg:block w-1/2 h-full relative"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dpmy3egg2/image/upload/v1734707739/image_48_krxsvi.png')`,
-          backgroundSize: "cover", // Ensures the image covers the entire section
-          backgroundPosition: "center", // Centers the image
-          backgroundRepeat: "no-repeat", // Prevents repetition
+          backgroundSize: "cover",
+          backgroundPosition: "center", 
+          backgroundRepeat: "no-repeat", 
         }}
       >
         <div
           className="absolute inset-0"
           style={{
             backgroundColor: "#42307D",
-            opacity: 0.8, // Adjust transparency of the overlay
+            opacity: 0.8, 
           }}
         >
           <div className=" p-10 flex  flex-col justify-between items-start w-full h-full">

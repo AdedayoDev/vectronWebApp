@@ -4,39 +4,55 @@ import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa";
-import { emailVerification } from "@lib/Api"; 
-import { useAuthStore } from "@store/useStore"; 
+import { useRouter } from "next/navigation";
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-  const user = useAuthStore((state) => state.user); 
+  const [isSending, setIsSending] = useState(false); 
+  const [error, setError] = useState<string | null>(null); 
+  const router = useRouter(); 
 
-  useEffect(() => {
-    if (user && user.email) {
-      setEmail(user.email); 
+   useEffect(() => {
+    const emailFromStorage = localStorage.getItem("user");
+    if (emailFromStorage) {
+      const user = JSON.parse(emailFromStorage);
+      const email = user.email
+      setEmail(email);
+    } else {
+      setError("No email found. Please sign up first.");
     }
-  }, [user]);
+  }, []);
 
-  const handleEmailVerification = async () => {
+  const sendVerificationEmail = async () => {
     if (!email) {
-      console.error("Email is not available");
+      alert("No email found ");
       return;
     }
 
-    setIsSubmitting(true);
+    setIsSending(true);
+    setError(null);
 
     try {
-      await emailVerification({ email }); 
-      router.push("/input-token"); 
-    } catch (error: any) {
-      console.error("Error requesting email verification:", error.message);
-      alert(error.message);
+      const response = await fetch("/api/v1/users/send-verify-mail/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      if (response.ok) {
+        alert("verfication email sent successfully. Please check your inbox");
+        router.push("auth/input-token");
+      } else {
+        const errorData = await response.json();
+
+        setError(errorData.message || "Failed to send verification email");
+      }
+    } catch (error) {
+      setError("An error occurred while sending the email");
     } finally {
-      setIsSubmitting(false);
+      setIsSending(false);
     }
   };
 
@@ -63,17 +79,17 @@ const EmailVerification = () => {
             </span>
           </p>
         </div>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <Button
           className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
-          onClick={handleEmailVerification}
-          disabled={isSubmitting}
+          onClick={sendVerificationEmail}
+          disabled={isSending}
         >
-          {isSubmitting ? "Sending..." : "Enter Code Manually"}
+          {isSending ? "Sending..." : "Enter Code manually"}
         </Button>
-
         <Link href="/auth/log-in">
           <Button size="lg" className="bg-transparent hover:bg-transparent">
-            <FaArrowLeft className="text-lg lg:text-xl text-[#667085]" />
+            <FaArrowLeft className="text-lg lg:text-xl text-[#212225]" />
             <span className="font-urbanist font-medium text-sm text-[#667085]">
               Back to log in
             </span>

@@ -1,34 +1,58 @@
 body {
   padding: 0;
   margin: 0;
-  overflow: hidden;
 }
 .vectron-image {
   width: 100%;
   background-size: cover;
   height: 90vh;
 }
-.vehicle-profile-left{
+.vehicle-profile-left {
   display: none;
 }
 .vehicle-profile-right-content {
-  width: 80%;
-  margin: 60px auto;
+  width: 90%;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0;
 }
 .vehicle-profile-right-content h1 {
-    text-align: center;
+  text-align: center;
   font-size: 40px;
   font-weight: 600;
 }
 .vehicle-profile-right {
-    width: 100%;
-    margin: auto;
-  }
+  width: 100%;
+  margin: auto;
+}
+
+.vehicle-form-content {
+  width: 100%;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+  
+}
+
+.vehicle-form-content::-webkit-scrollbar {
+  width: 12px;
+}
+.vehicle-form-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9a77ff, #735ffa);
+  border-radius: 4px;
+}
+.vehicle-form-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #735ffa, #593dff);
+}
+.vehicle-form-content::-webkit-scrollbar-track {
+  background: #f4f4f4;
+  border-radius: 4px;
+}
+
 .vehicle-form-content label {
   margin-bottom: 8px !important;
   display: block;
   text-align: left;
-  color: #7C878E;
+  color: #7c878e;
   font-size: 14px;
 }
 .vehicle-form-content input {
@@ -40,60 +64,58 @@ body {
   margin-bottom: 20px;
   font-size: 14px;
 }
-.vehicle-form-content button{
-    width: 352px;
-    padding: 12px;
-    border-radius: 40px;
-    outline: none;
-    border: none;
-    margin-bottom: 20px;
-    color: white;
-    font-weight: 500;
-    background: linear-gradient(180deg, #9A77FF 0%, #735FFA 100%);
-
+.vehicle-form-content button {
+  width: 352px;
+  padding: 12px;
+  border-radius: 40px;
+  outline: none;
+  border: none;
+  margin-bottom: 20px;
+  color: white;
+  font-weight: 500;
+  background: linear-gradient(180deg, #9a77ff 0%, #735ffa 100%);
 }
-.error-message, .hint-message{
-    color: #ff0000cc;
-    margin-top: -6px;
+.error-message,
+.hint-message {
+  color: #ff0000cc;
+  margin-top: -6px;
 }
 
 @media screen and (min-width: 600px) {
-  body{
-      overflow: hidden;
+  body {
+    overflow: hidden;
   }
-.vehicle-profile-container {
-  display: flex;
-}
-.vehicle-profile-left {
-  width: 100%;
-  display: block;
-}
-.vectron-image {
-  background-size: cover;
-height: 105vh;
-width: 100%;
-}
-
-}
-@media screen and (min-width: 1120px) {
-    body{
-        overflow: hidden;
-    }
   .vehicle-profile-container {
     display: flex;
   }
   .vehicle-profile-left {
     width: 100%;
     display: block;
-}
-.vectron-image {
-      background-size: cover;
+  }
+  .vectron-image {
+    background-size: cover;
     height: 105vh;
     width: 100%;
   }
-  .vehicle-profile-right-content{
-    width: 352px;
-    margin:0 auto;
+}
+@media screen and (min-width: 1120px) {
+  body {
+    overflow: hidden;
   }
-  
+  .vehicle-profile-container {
+    display: flex;
+  }
+  .vehicle-profile-left {
+    width: 100%;
+    display: block;
+  }
+  .vectron-image {
+    background-size: cover;
+    height: 105vh;
+    width: 100%;
+  }
+  .vehicle-profile-right-content {
+    width: 352px;
+    margin: 0 auto;
+  }
 }

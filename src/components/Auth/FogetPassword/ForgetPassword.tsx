@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 import {
   Form,
@@ -12,12 +12,12 @@ import {
 } from "@components/ui/form";
 import { Input } from "@components/ui/input";
 import { useForm } from "react-hook-form";
-import { forgetPassword } from "@lib/Api"; 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
+import axios from "axios"; // Import axios for API calls
 
 // Define the schema for validation
 const ForgetPasswordSchema = z.object({
@@ -34,18 +34,32 @@ const ForgetPassword = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false); 
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); 
+
   const onSubmit = async (data: z.infer<typeof ForgetPasswordSchema>) => {
     try {
-      const response = await forgetPassword(data); // Call forgetPassword API
+      setLoading(true); 
+      setErrorMessage(null); 
+      setSuccessMessage(null); 
+
+      // Call the forgot password API endpoint
+      const response = await axios.post("/api/v1/auth/account/forgot-password", data);
       console.log("Password reset request successful:", response);
 
-      // Notify the user or redirect after success
+      // Show a success message and redirect after a delay
+      setSuccessMessage("A password reset link has been sent to your email.");
       setTimeout(() => {
-        window.location.href = "/set-new-password";
-      }, 2000);
+        window.location.href = "/reset-password"; 
+      }, 3000);
     } catch (error: any) {
       console.error("Error during password reset:", error);
-      alert(error.message || "Something went wrong. Please try again.");
+      setErrorMessage(
+        error?.response?.data?.message || "Failed to send password reset request."
+      );
+    } finally {
+      setLoading(false); 
     }
   };
 
@@ -85,6 +99,7 @@ const ForgetPassword = () => {
                         type="email"
                         placeholder="Enter your Email"
                         className="w-96"
+                        disabled={loading} 
                       />
                     </FormControl>
                     <FormMessage />
@@ -95,11 +110,23 @@ const ForgetPassword = () => {
             <Button
               className=" bg-[#7F56D9] rounded w-96 hover:bg-[#683ec2]"
               type="submit"
+              disabled={loading} 
             >
-              Reset Password
+              {loading ? "Sending..." : "Reset Password"}
             </Button>
           </form>
         </Form>
+
+        {/* Display success message */}
+        {successMessage && (
+          <p className="text-green-600 font-inter text-center">{successMessage}</p>
+        )}
+
+        {/* Display error message */}
+        {errorMessage && (
+          <p className="text-red-600 font-inter text-center">{errorMessage}</p>
+        )}
+
         <p className="font-inter font-normal text-sm text-[#667085]">
           Didn&apos;t receive the email?{" "}
           <span className="text-[#6941c6] cursor-pointer">Click to resend</span>

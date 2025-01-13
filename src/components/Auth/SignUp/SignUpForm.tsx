@@ -59,11 +59,12 @@ const SignUpForm = () => {
       alert("You must agree to the terms and conditions before signing up.");
       return;
     }
-
+  
     setIsLoading(true);
     setMessage("");
+    
     try {
-      const response = await signup(data);
+      await signup(data);
       const user = {
         email: data.email,
         username: data.username,
@@ -73,12 +74,12 @@ const SignUpForm = () => {
       };
       localStorage.setItem("user", JSON.stringify(user));
       setMessage("Sign up successful!");
-
+  
       setTimeout(() => {
         window.location.href = "/auth/email-verification";
       }, 2000);
-    } catch (error) {
-      setMessage("Sign up failed. Please try again.");
+    } catch (error: any) {
+      setMessage(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -232,6 +233,9 @@ const SignUpForm = () => {
               </label>
             </div>
           </div>
+          {message && (
+            <p className="text-green-500 text-sm">{message}</p>
+          )}
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
