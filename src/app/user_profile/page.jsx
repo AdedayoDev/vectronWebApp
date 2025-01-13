@@ -4,6 +4,7 @@ import SettingsSideBar from "../settings/components/SettingsSideBar";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import NavBar from "@components/navbar/chatNav";
 
 export default function Profile() {
   const router = useRouter();
@@ -72,6 +73,7 @@ export default function Profile() {
 
   return (
     <>
+    <NavBar/>
       <section>
         <Image
           src="/assets/images/bg-img3.png"
@@ -108,9 +110,9 @@ export default function Profile() {
 
             <form
               onSubmit={handleEdit}
-              className="lg:grid grid-cols-2 w-[80%] gap-10 items-center"
+              className="lg:grid grid-cols-2 lg:w-[80%] items-center"
             >
-              <div className="my-6">
+              <div className="my-6 lg:mr-11">
                 <label className="block text-gray-700 font-medium mb-2">
                   Full Name:
                 </label>
@@ -146,7 +148,7 @@ export default function Profile() {
                 )}
               </div>
 
-              <div className="mb-4 lg:mb-0">
+              <div className="mb-4 lg:mr-11 lg:mb-0">
                 <label className="block text-gray-700 font-medium mb-2">
                   Email:
                 </label>
@@ -180,17 +182,17 @@ export default function Profile() {
                 )}
               </div>
 
-              <div className="flex items-center gap-7 my-7 justify-center">
+              <div className="flex items-center gap-7 my-7 justify-center lg:w-full lg:mx-[50%]">
                 <button
                   type="submit"
-                  className="px-4 py-2 cursor-pointer w-28 bg-blue-800 text-white font-medium rounded-full focus:bg-blue-600 focus:outline-none"
+                  className="px-4 py-2 cursor-pointer w-36 bg-blue-800 text-white font-medium rounded-full focus:bg-blue-600 focus:outline-none"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   onClick={handleGoHome}
-                  className="px-4 py-[6px] text-gray-500 cursor-pointer font-medium rounded-full focus:bg-gray-600 focus:outline-none ring-2 ring-gray-500"
+                  className="px-4 py-[6px] w-36 text-gray-500 cursor-pointer font-medium rounded-full focus:bg-gray-600 focus:outline-none ring-2 ring-gray-500"
                 >
                   Go Home
                 </button>
