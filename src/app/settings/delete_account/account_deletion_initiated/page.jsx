@@ -35,7 +35,7 @@ export default function Delete_Account() {
             {/* Account deleted */}
            <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
            {deleted && (
-              <div className="absolute w-[90%] lg:w-[40%] left-[30px] lg:left-[35%] z-40 shadow-2xl items-center lg:top-[30%] top-[35%] mx-auto py-14 px-10 bg-white-500 bg-gray-200 rounded-md">
+              <div className="absolute w-[90%] lg:w-[40%] left-[30px] lg:left-[35%] z-40 shadow-2xl items-center lg:top-[30%] top-[35%] mx-auto py-14 px-10 bg-white-500 bg-white rounded-md">
                 <div className="mb-4 text-center">
                   <h1 className="text-red-700 text-xl lg:text-2xl font-semibold  mb-4">
                     Account Deletion Initiated

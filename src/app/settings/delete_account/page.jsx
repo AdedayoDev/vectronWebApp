@@ -1,10 +1,10 @@
 "use client";
 import { CldImage } from "next-cloudinary";
 import SettingsSideBar from "../../settings/components/SettingsSideBar";
-import { Lock, LucideBatteryWarning, Trash } from "lucide-react";
+import { Lock, Trash } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from 'next/image'
+import Image from "next/image";
 
 export default function Delete_Account() {
   const router = useRouter();
@@ -13,11 +13,14 @@ export default function Delete_Account() {
   const [alert, setAlert] = useState("");
   const [secondAlert, setSecondAlert] = useState("");
   const [submit, setSubmit] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   function handleAlert() {
     setSecondAlert([]);
     setAlert("");
   }
+
+  //Delete
   function handleDelete() {
     setSecondAlert("");
     setTimeout(() => {
@@ -25,6 +28,33 @@ export default function Delete_Account() {
     }, 3000);
     router.push("/settings/delete_account/account_deletion_initiated");
   }
+
+  const option = [
+    "Remove your personal data",
+    "Cancel any active subscription",
+    "Delete your profile and saved preferences",
+    "Erase your account history",
+  ];
+
+  const handleCheckboxChange = (option) => {
+    setSelectedOptions((prev) =>
+      prev.includes(option)
+        ? prev.filter((item) => item !== option)
+        : [...prev, option]
+    );
+  };
+  const validateSelection = () => {
+    if (selectedOptions.length === 0) {
+      setError("Please select at least one option before submitting.");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      return;
+    }
+    handleDelete(selectedOptions);
+  };
+
+  //Submit
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -122,10 +152,10 @@ export default function Delete_Account() {
                       </ul>
                       <div className="flex items-center gap-2 mt-3 mb-5">
                         <Image
-                        src='/assets/icons/danger.svg'
-                        width={20}
-                        height={20}
-                        alt='danger'
+                          src="/assets/icons/danger.svg"
+                          width={20}
+                          height={20}
+                          alt="danger"
                         />
                         <p className="text-sm font-bold">
                           This action cannot be undone. All data will be
@@ -167,26 +197,32 @@ export default function Delete_Account() {
                       </p>
 
                       <ul className="text-gray-500 list-disc">
-                        <li className="mb-1 ml-7">Remove your personal data</li>
-                        <li className="mb-1 ml-7">
-                          Cancel any active subscription
-                        </li>
-                        <li className="mb-1 ml-7">
-                          Delete your profile and saved preferences
-                        </li>
-                        <li className="mb-1 ml-7">
-                          Erase your account history
-                        </li>
+                        {option.map((option) => (
+                          <li
+                            key={option}
+                            className="mb-1 ml-7 flex justify-between"
+                          >
+                            {option}
+                            <input
+                              type="checkbox"
+                              checked={selectedOptions.includes(option)}
+                              onChange={() => handleCheckboxChange(option)}
+                            />
+                          </li>
+                        ))}
                       </ul>
                     </div>
 
                     <div className="mb-3">
                       <button
                         className="bg-blue-600 text-white rounded-full p-3"
-                        onClick={handleDelete}
+                        onClick={validateSelection}
                       >
                         Submit
                       </button>
+                      {error && (
+                        <p className="text-red-500 text-sm mt-2">{error}</p>
+                      )}
                     </div>
 
                     {secondAlert}
