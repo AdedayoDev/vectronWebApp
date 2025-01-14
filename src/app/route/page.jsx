@@ -72,7 +72,7 @@ export default function Route() {
             showSearch={toggleSearchInput}
           />
           <PlacesSlider />
-          <div className="left-7 absolute w-[89%] lg:w-74  pt-20">
+          <div className="left-6 lg:left-3 absolute w-[89%] lg:h-[900px] lg:w-[76%]  pt-20">
             <div className="flex items-center gap-2 p-3 bg-white rounded-t-2xl">
               <Image
                 src="/assets/icons/vechtron.png"
@@ -123,7 +123,7 @@ export default function Route() {
             </div>
           </div>
         </div>
-        <div className="side-container pr-6">
+        <div className="side-container">
           <SideBar showSideBar={ShowsideBar} handleShow={handleShowSideBar} />
         </div>
       </div>

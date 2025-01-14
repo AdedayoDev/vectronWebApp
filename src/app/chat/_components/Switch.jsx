@@ -23,7 +23,7 @@ function Button({ disabled }) {
   const handleToggle = () => {
     setIsChecked((prev) => !prev);
     if (isChecked === true) {
-      router.replace("/chatmessage/newchat");
+      router.replace("/chat/newchat");
     }
   };
 

@@ -7,7 +7,9 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
+RUN npm install --platform=linux --arch=x64
 RUN npm ci
+
 
 # Copy the rest of the code
 COPY . .
@@ -25,6 +27,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
+RUN npm install --platform=linux --arch=x64
 RUN npm ci --only=production
 
 # Copy built application from builder stage

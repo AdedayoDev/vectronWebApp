@@ -4,6 +4,7 @@ import SideChat from "../voicechat/components/sideChat";
 import "@app/chat/chat.css";
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
+
 import "./voicechat.css";
 
 export default function page() {
@@ -11,18 +12,18 @@ export default function page() {
     <>
       <div className="wrapper">
         <Navbar />
-        <div className="voice-chat flex justify-between mt-11">
+        <div className="flex justify-between mt-11">
           <div className="voice-chat-left">
             <Image
-              src="/assets/images/bg-img.png"
+              src="/assets/images/bg-img2.png"
               alt="background-image"
               width={200}
               height={200}
-              className="w-full lg:w-[80.5%] absolute h-32 cover-fill lg:top-24"
+              className="banner-image w-full lg:w-[78%] absolute h-32 cover-fill"
             />
             <VoiceChatFeed />
           </div>
-          <div className="hidden sm:flex">
+          <div>
             <SideBar />
           </div>
         </div>
