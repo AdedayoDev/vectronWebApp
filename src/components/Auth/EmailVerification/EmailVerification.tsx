@@ -48,9 +48,9 @@ const EmailVerification = () => {
             Check your email
           </h2>
           <p>
-            We sent a verification link to {user?.email} 
+            We sent a verification link to&nbsp; 
             <span className="font-medium text-[#7f56d9]">
-              {email || "loading..."}
+               {user?.email }
             </span>
           </p>
         </div>
