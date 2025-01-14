@@ -6,55 +6,66 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useAuthStore, axiosInstance } from "@store/useStore"; 
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
-  const [isSending, setIsSending] = useState(false); 
-  const [error, setError] = useState<string | null>(null); 
-  const router = useRouter(); 
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-   useEffect(() => {
+  // Access the store token
+  const token = useAuthStore((state) => state.token);
+
+  useEffect(() => {
     const emailFromStorage = localStorage.getItem("user");
     if (emailFromStorage) {
       const user = JSON.parse(emailFromStorage);
-      const email = user.email
-      setEmail(email);
+      setEmail(user.email);
     } else {
       setError("No email found. Please sign up first.");
     }
   }, []);
 
-  const sendVerificationEmail = async () => {
+  const handleSendEmail = async () => {
+    const token = useAuthStore.getState().token; // Get the stored token
     if (!email) {
-      alert("No email found ");
+      alert("No email found.");
       return;
     }
-
+  
+    if (!token) {
+      setError("No authorization token found. Please log in again.");
+      return;
+    }
+  
     setIsSending(true);
     setError(null);
-
+  
     try {
-      const response = await fetch("/api/v1/users/send-verify-mail/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-      if (response.ok) {
-        alert("verfication email sent successfully. Please check your inbox");
-        router.push("auth/input-token");
-      } else {
-        const errorData = await response.json();
-
-        setError(errorData.message || "Failed to send verification email");
-      }
-    } catch (error) {
-      setError("An error occurred while sending the email");
+      // Use axiosInstance to send the token to the endpoint
+      await axiosInstance.post(
+        "/api/v1/users/send-verify-mail/",
+        { email }, // Request payload
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token as Bearer token
+          },
+        }
+      );
+  
+      alert("Verification email sent successfully. Please check your inbox.");
+      router.push("/auth/input-token");
+    } catch (error: any) {
+      setError(
+        error.response?.data?.data?.message || "An error occurred while sending the email."
+      );
     } finally {
       setIsSending(false);
     }
   };
+  
+  
 
   return (
     <main className="w-full h-screen flex items-center justify-center">
@@ -82,7 +93,7 @@ const EmailVerification = () => {
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <Button
           className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
-          onClick={sendVerificationEmail}
+          onClick={handleSendEmail}
           disabled={isSending}
         >
           {isSending ? "Sending..." : "Enter Code manually"}

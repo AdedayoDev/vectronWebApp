@@ -58,13 +58,13 @@ const LogInForm = () => {
     setMessageType("");
   
     try {
-      await login(data.email, data.password); // Call the login function
+      await login(data.email, data.password); 
   
       setMessage("Login successful! Redirecting...");
       setMessageType("success");
   
       setTimeout(() => {
-       window.location.href = "/onboarding";
+       window.location.href = "/auth/email-verificatio";
       }, 2000);
     } catch (error: any) {
       // Handle the error message received from login

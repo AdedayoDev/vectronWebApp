@@ -18,13 +18,15 @@ const page = () => {
   };
 
   return (
-    <main className="flex">
+    <main className="">
+      <div  className="w-11/12 mx-auto flex ">
       <div>
         {/* Side Bar */}
         <Sidebar onSelect={setSelectComponent} />
 
         {/* Main Content Area */}
         <div>{componentsMap[selectComponent]}</div>
+      </div>
       </div>
     </main>
   );

@@ -1,34 +1,57 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation";
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
-
+import { useAuthStore } from "@store/useStore"; 
 const InputToken = () => {
-  const [error, setError] = useState("")
+  const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState(["", "", "", ""]);
   const [email, setEmail] = useState<string | null>(null);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const router = useRouter(); 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]); 
+  const router = useRouter();
 
-  // Function to handle input change
+  
+  const bearerToken = useAuthStore((state) => state.token);
+
+ 
+  useEffect(() => {
+    const emailFromStorage = localStorage.getItem("user");
+    if (emailFromStorage) {
+      try {
+        const user = JSON.parse(emailFromStorage);
+        if (user && user.email) {
+          setEmail(user.email);
+        } else {
+          setError("Invalid user data in storage. Please log in again.");
+        }
+      } catch {
+        setError("Failed to parse user data from storage.");
+      }
+    } else {
+      setError("No email found. Please log in first.");
+    }
+  }, []);
+
+  // Function to handle changes in individual input fields
   const handleInputChange = (value: string, index: number) => {
     if (/^[0-9]?$/.test(value)) {
       const updatedToken = [...token];
       updatedToken[index] = value;
       setToken(updatedToken);
 
-      // Move to the next input
+      // Move focus to the next input if valid
       if (value && index < 3) {
         inputRefs.current[index + 1]?.focus();
       }
     }
   };
 
-  // Function to handle deletion of input
+  // Function to handle backspace or delete input
   const handleInputDelete = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Backspace" || event.key === "Delete") {
       const updatedToken = [...token];
@@ -39,70 +62,78 @@ const InputToken = () => {
         setToken(updatedToken);
       }
 
-      // Move focus to the previous input if "Backspace" is pressed
+      // Move focus to the previous input
       if (event.key === "Backspace" && index > 0) {
         inputRefs.current[index - 1]?.focus();
       }
     }
   };
 
-  // Function to handle pasting into inputs
+  // Function to handle pasting a token directly
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    const pastedData = e.clipboardData.getData("text").slice(0, 4);
+    const pastedData = e.clipboardData.getData("text").slice(0, 4); // Restrict to 4 characters
     const updatedToken = pastedData.split("");
     setToken(updatedToken);
 
-    // Autofill all inputs
+    // Autofill inputs
     updatedToken.forEach((value, index) => {
       if (inputRefs.current[index]) {
         inputRefs.current[index]!.value = value;
       }
     });
 
+    // Move focus to the last input if all are filled
     if (updatedToken.length === 4) {
       inputRefs.current[3]?.focus();
     }
   };
 
-  
-  useEffect(() => {
-      const emailFromStorage = localStorage.getItem("user");
-      if (emailFromStorage) {
-        const user = JSON.parse(emailFromStorage);
-        const email = user.email
-        setEmail(email);
-      } else {
-        setError("No email found. Please sign up first.");
-      }
-    }, []);
-
-  
+  // Function to handle form submission
   const handleSubmitToken = async () => {
     const tokenString = token.join("");
+    setError(null);
+
+    if (!email) {
+      setError("No email found. Please log in again.");
+      return;
+    }
+
+    if (!bearerToken) {
+      setError("No authorization token found. Please log in again.");
+      return;
+    }
+
+    if (tokenString.length !== 4) {
+      setError("Please enter a 4-digit verification code.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-      const response = await fetch(
-        "/api/v1/users/verify-email/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            token: tokenString,
-          }),
-        }
-      );
+      const response = await fetch("/api/v1/users/verify-email/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken}`,
+        },
+        body: JSON.stringify({
+          email,
+          token: tokenString,
+        }),
+      });
 
       if (response.ok) {
-        console.log("Token verified successfully");
         router.push("/auth/email-verified");
       } else {
-        console.error("Invalid token", await response.json());
-        alert("Invalid token. Please try again.");
+        const errorData = await response.json();
+        setError(errorData.message || "Invalid verification code. Please try again.");
       }
     } catch (error) {
       console.error("Error verifying token:", error);
+      setError("An unexpected error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -123,12 +154,13 @@ const InputToken = () => {
             Enter the verification code
           </h2>
           <p>
-            We sent a verification link to{" "}
+            We sent a verification code to{" "}
             <span className="font-medium text-[#7f56d9]">
               {email || "loading..."}
             </span>
           </p>
         </div>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div className="flex space-x-4">
           {token.map((value, index) => (
             <input
@@ -148,13 +180,19 @@ const InputToken = () => {
         </div>
         <Button
           onClick={handleSubmitToken}
+          disabled={isSubmitting}
           className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
         >
-          Verify Token
+          {isSubmitting ? "Verifying..." : "Verify Token"}
         </Button>
         <p className="font-inter font-normal text-sm text-[#667085]">
-          Didn&apos;t receive the email?
-          <span className="text-[#6941c6] cursor-pointer">Click to resend</span>
+          Didn&apos;t receive the email?{" "}
+          <span
+            className="text-[#6941c6] cursor-pointer"
+            onClick={() => router.push("/auth/resend-email")}
+          >
+            Click to resend
+          </span>
         </p>
         <Link href="/auth/log-in">
           <Button size="lg" className="bg-transparent hover:bg-transparent">
