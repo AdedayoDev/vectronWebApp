@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from 'react';
 import { z } from "zod";
 import Link from 'next/link';
 import {
@@ -34,7 +34,8 @@ const SetNewPasswordSchema = z
 
 type SetNewPasswordFormData = z.infer<typeof SetNewPasswordSchema>;
 
-const SetNewPassword = () => {
+// Content Component
+const SetNewPasswordContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +50,7 @@ const SetNewPassword = () => {
   });
 
   const onSubmit = async (data: SetNewPasswordFormData) => {
-    console.log("Form submitted", data); // Debug log
+    console.log("Form submitted", data);
     setIsLoading(true);
 
     try {
@@ -59,7 +60,7 @@ const SetNewPassword = () => {
         confirm_password: data.confirm_password
       });
 
-      console.log("API Response:", response); // Debug log
+      console.log("API Response:", response);
       
       toast.success("Password reset successfully!");
       setTimeout(() => {
@@ -74,7 +75,6 @@ const SetNewPassword = () => {
     }
   };
 
-  // Early return for missing token
   if (!token) {
     return (
       <main className="w-full h-screen flex items-center justify-center">
@@ -189,7 +189,6 @@ const SetNewPassword = () => {
               className="w-96 bg-[#7F56D9] rounded hover:bg-[#683ec2]"
               type="submit"
               disabled={isLoading}
-              onClick={() => console.log("Button clicked")} // Debug log
             >
               {isLoading ? "Resetting Password..." : "Reset Password"}
             </Button>
@@ -206,6 +205,32 @@ const SetNewPassword = () => {
         </Link>
       </div>
     </main>
+  );
+};
+
+// Main Component with Suspense
+const SetNewPassword = () => {
+  return (
+    <Suspense fallback={
+      <main className="w-full h-screen flex items-center justify-center">
+        <div className="w-full h-screen flex flex-col space-y-5 items-center justify-center">
+          <div>
+            <Image
+              src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734749088/Featured_icon_2_nfihfn.png"
+              alt="Loading"
+              width={56}
+              height={56}
+              className="w-14 h-14"
+            />
+          </div>
+          <p className="font-inter text-base text-[#667085] text-center">
+            Loading...
+          </p>
+        </div>
+      </main>
+    }>
+      <SetNewPasswordContent />
+    </Suspense>
   );
 };
 
