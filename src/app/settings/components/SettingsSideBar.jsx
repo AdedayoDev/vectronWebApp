@@ -3,10 +3,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useAuthStore } from "@store/useStore";
+import { handleLogout } from '../../../lib/utils';
 
 export default function SettingsSideBar() {
   const [showSideBar, setShowSideBar] = useState(false);
   const router = useRouter(); 
+  const { user } = useAuthStore();
 
   const isActive = (path) => router.pathname === path;
 
@@ -30,21 +33,21 @@ export default function SettingsSideBar() {
       {showSideBar && (
         <section className="block lg:hidden absolute -top-8 -left-7 px-7 py-11 shadow-lg z-30 bg-white h-screen">
           <SidebarLink
-            href="/settings/profile"
+            href="/user_profile"
             iconSrc="/assets/icons/user-octagon.svg"
             label="Profile"
             isActive={isActive("/user_profile")}
             onClick={()=>{setShowSideBar(false)}}
           />
           <SidebarLink
-            href="/settings/vehicle_management"
+            href="/vehicle_management"
             iconSrc="/assets/icons/vehicle-services.svg"
             label="Vehicle Management"
             isActive={isActive("/settings/vehicle_management")}
             onClick={()=>{setShowSideBar(false)}}
           />
           <SidebarLink
-            href="/settings/history"
+            href="/history"
             iconSrc="/assets/icons/history.svg"
             label="History"
             isActive={isActive("/settings/history")}
@@ -66,15 +69,20 @@ export default function SettingsSideBar() {
                 height={20}
                 className="rounded-full"
               />
-              <p>Prosper</p>
+              <p>{user.username}</p>
             </div>
-            <Image
-              src="/assets/icons/logout-icon.svg"
-              alt="icon"
-              width={20}
-              height={20}
-              className="rounded-full"
-            />
+            <div 
+              onClick={handleLogout}
+              className="cursor-pointer"
+            >
+              <Image
+                src="/assets/icons/logout-icon.svg"
+                alt="Logout"
+                width={20}
+                height={20}
+                className="rounded-full"
+              />
+            </div>
           </div>
         </section>
       )}
@@ -91,19 +99,19 @@ export default function SettingsSideBar() {
           <h1 className="font-bold text-base">User Settings</h1>
         </div>
         <SidebarLink
-          href="/settings/profile"
+          href="/user_profile"
           iconSrc="/assets/icons/user-octagon.svg"
           label="Profile"
           isActive={isActive("/user_profile")}
         />
         <SidebarLink
-          href="/settings/vehicle_management"
+          href="/vehicle_management"
           iconSrc="/assets/icons/vehicle-services.svg"
           label="Vehicle Management"
           isActive={isActive("/settings/vehicle_management")}
         />
         <SidebarLink
-          href="/settings/history"
+          href="/history"
           iconSrc="/assets/icons/history.svg"
           label="History"
           isActive={isActive("/settings/history")}
@@ -123,7 +131,7 @@ export default function SettingsSideBar() {
               height={20}
               className="rounded-full"
             />
-            <p>Prosper</p>
+            <p>{user.username}</p>
           </div>
           <Image
             src="/assets/icons/logout-icon.svg"

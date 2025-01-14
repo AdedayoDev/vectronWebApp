@@ -72,7 +72,7 @@ const SignUpForm = () => {
         first_name: data.first_name,
         last_name: data.last_name,
       };
-      localStorage.setItem("user", JSON.stringify(user));
+      
       setMessage("Sign up successful!");
   
       setTimeout(() => {

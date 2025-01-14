@@ -58,7 +58,7 @@ const LogInForm = () => {
       setMessageType("success");
 
       setTimeout(() => {
-        window.location.href = "/auth/email-verification";
+       window.location.href = "/chat";
       }, 2000);
     } catch (error: any) {
       // Handle the error message received from login
@@ -154,6 +154,7 @@ const LogInForm = () => {
           </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
+            disabled={isLoading}
             type="submit"
           >
             {isLoading ? <BeatLoader size={8} color="#fff" /> : "Login"}

@@ -4,28 +4,31 @@ import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useAuthStore, axiosInstance } from "@store/useStore"; 
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import api from '../../../lib/protectedapi';
+import { useAuthStore } from '@store/useStore'
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
-  const [isSending, setIsSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
-
-  // Access the store token
-  const token = useAuthStore((state) => state.token);
+  const { token, user } = useAuthStore()
 
   useEffect(() => {
-    const emailFromStorage = localStorage.getItem("user");
-    if (emailFromStorage) {
-      const user = JSON.parse(emailFromStorage);
-      setEmail(user.email);
-    } else {
-      setError("No email found. Please sign up first.");
-    }
+    const fetchEmail = async () => {
+      try {
+        const response = await api.post('/auth/api/v1/users/send-verify-mail/',{}); 
+
+        // if (response.ok) {
+        //   const data = await response.json();
+        //   setEmail(data.email);
+        // } else {
+        //   console.error("Failed to fetch email", await response.json());
+        // }
+      } catch (error) {
+        console.error("Error fetching email:", error);
+      }
+    };
+
+    fetchEmail(); // Call the fetchEmail function on component mount
   }, []);
 
   const handleSendEmail = async () => {
@@ -86,9 +89,9 @@ const EmailVerification = () => {
             Check your email
           </h2>
           <p>
-            We sent a verification link to{" "}
+            We sent a verification link to&nbsp; 
             <span className="font-medium text-[#7f56d9]">
-              {email || "loading..."}
+               {user?.email }
             </span>
           </p>
         </div>
