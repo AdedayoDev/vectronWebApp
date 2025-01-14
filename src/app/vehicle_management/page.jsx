@@ -4,6 +4,7 @@ import SettingsSideBar from "../settings/components/SettingsSideBar";
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
 export default function Vehicle_Management() {
   return (
     <>

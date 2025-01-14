@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaTimes } from "react-icons/fa";
 
+export const dynamic = 'force-dynamic';
 export default function Vehicle_Profile() {
   const router = useRouter();
   const [formData, setFormData] = useState({
