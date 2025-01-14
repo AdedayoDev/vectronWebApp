@@ -31,7 +31,23 @@ function layout({ children }:Props) {
   return (
     // All routes and sub-routes Protected
     <AuthProvider>
-      <ProtectedRoute>{children}</ProtectedRoute>
+      <ProtectedRoute>
+       <>
+       <div className="flex flex-col">
+         <div className="flex justify-end p-2">
+           <Profile />
+         </div>
+         <div className="flex flex-col items-start gap-1 lg:flex-row lg:gap-0">
+           <div className="flex flex-1 justify-center items-center w-full">
+             {children}
+           </div>
+           <div className="flex place-self-center w-72 xl:w-80 lg:place-self-start">
+             <SideBar />
+           </div>
+         </div>
+       </div>
+     </>
+      </ProtectedRoute>
     </AuthProvider>
   );
 }
