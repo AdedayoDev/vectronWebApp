@@ -31,7 +31,7 @@ const api = {
         if (response.status === 401) {
         //   localStorage.removeItem('accessToken');
         //   window.location.href = '/auth/log-in';
-        console.log(token);
+        // console.log(token);
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -45,14 +45,14 @@ const api = {
       }
   
       const token = getAuthToken();
-      console.log(token)
+      // console.log(token)
       
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : ''
       };
 
-      console.log('Request headers:', headers);
+      // console.log('Request headers:', headers);
       const response = await fetch(`${BASE_URL}${url}`, {
         method: 'POST',
         headers: headers,
