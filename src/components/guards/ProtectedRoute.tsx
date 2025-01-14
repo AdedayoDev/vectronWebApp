@@ -23,13 +23,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
         // If user exists, check email verification and vehicle owner status
     if (user) {
       // Don't redirect if already on email verification route
-      if (!user.email_verified && pathname !== emailVerificationRoute) {
+      if (!user.email_verified_at && pathname !== emailVerificationRoute) {
         router.push(emailVerificationRoute);
         return;
       }
 
       // Only check vehicle owner status if email is verified and not already on vehicle owner route
-      if (user.email_verified && user.is_vehicle_owner === null && pathname !== vehicleOwnerRoute) {
+      if (user.email_verified_at && user.is_vehicle_owner === null && pathname !== vehicleOwnerRoute) {
         router.push(vehicleOwnerRoute);
         return;
       }
@@ -40,12 +40,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return null;
   }
   // Show nothing while checking email verification
-  if (user && !user.email_verified && pathname !== emailVerificationRoute) {
+  if (user && !user.email_verified_at && pathname !== emailVerificationRoute) {
     return null;
   }
 
   // Show nothing while checking vehicle owner status
-  if (user && user.email_verified && user.is_vehicle_owner === null && pathname !== vehicleOwnerRoute) {
+  if (user && user.email_verified_at && user.is_vehicle_owner === null && pathname !== vehicleOwnerRoute) {
     return null;
   }
   return <>{children}</>;
