@@ -64,7 +64,7 @@ const LogInForm = () => {
       setMessageType("success");
   
       setTimeout(() => {
-       window.location.href = "/auth/email-verificatio";
+       window.location.href = "/auth/email-verification";
       }, 2000);
     } catch (error: any) {
       // Handle the error message received from login
