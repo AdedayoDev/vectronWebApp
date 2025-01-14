@@ -5,13 +5,9 @@ import { AuthProvider } from "@components/guards/AuthProvider";
 
 const ResetPasswords = () => {
   return (
-    <AuthProvider>
-      <ProtectedRoute>
         <main>
           <ResetPassword />
         </main>
-      </ProtectedRoute>
-    </AuthProvider>
   );
 };
 
