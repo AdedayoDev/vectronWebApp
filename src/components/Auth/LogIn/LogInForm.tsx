@@ -22,7 +22,6 @@ import AppleLogIn from "./AppleLogIn";
 import GoogleLogIn from "./GoogleLogIn";
 import { useRouter } from "next/router";
 
-
 const LogInSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email",
@@ -34,7 +33,7 @@ const LogInSchema = z.object({
 
 const LogInForm = () => {
   const { login, user } = useAuthStore();
-  const [isChecked, setIsChecked] = useState(false);
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [isLoading, setIsLoading] = useState(false);
@@ -48,23 +47,18 @@ const LogInForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
-    if (!isChecked) {
-      alert("You must agree to the terms and conditions before logging in.");
-      return;
-    }
-    
     setIsLoading(true);
     setMessage("");
     setMessageType("");
-  
+
     try {
-      await login(data.email, data.password); 
-  
+      await login(data.email, data.password);
+
       setMessage("Login successful! Redirecting...");
       setMessageType("success");
-  
+
       setTimeout(() => {
-       window.location.href = "/auth/email-verification";
+        window.location.href = "/auth/email-verification";
       }, 2000);
     } catch (error: any) {
       // Handle the error message received from login
@@ -74,7 +68,6 @@ const LogInForm = () => {
       setIsLoading(false);
     }
   };
-  
 
   const userData = {
     email: form.getValues("email"),
@@ -144,13 +137,7 @@ const LogInForm = () => {
 
           {/* Checkbox Field */}
           <div className="flex items-center gap-4">
-            <input
-              type="checkbox"
-              id="terms-checkbox"
-              className="w-5 h-5"
-              checked={isChecked}
-              onChange={() => setIsChecked(!isChecked)}
-            />
+            <input type="checkbox" id="terms-checkbox" className="w-5 h-5" />
             <label
               htmlFor="terms-checkbox"
               className="font-inter w-full text-[#040308] flex items-center justify-between"
@@ -167,7 +154,6 @@ const LogInForm = () => {
           </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
-            disabled={!isChecked || isLoading}
             type="submit"
           >
             {isLoading ? <BeatLoader size={8} color="#fff" /> : "Login"}

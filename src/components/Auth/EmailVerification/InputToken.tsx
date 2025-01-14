@@ -7,6 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 import { useAuthStore } from "@store/useStore"; 
+import axios from "axios";
+
 const InputToken = () => {
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState(["", "", "", ""]);
@@ -92,46 +94,53 @@ const InputToken = () => {
   const handleSubmitToken = async () => {
     const tokenString = token.join("");
     setError(null);
-
+  
     if (!email) {
       setError("No email found. Please log in again.");
       return;
     }
-
+  
     if (!bearerToken) {
       setError("No authorization token found. Please log in again.");
       return;
     }
-
+  
     if (tokenString.length !== 4) {
       setError("Please enter a 4-digit verification code.");
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const response = await fetch("/api/v1/users/verify-email/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken}`,
-        },
-        body: JSON.stringify({
+      // Use axios for the POST request
+      const response = await axios.post(
+        "https://api-staging.vechtron.com/auth/api/v1/users/verify-email/",
+        {
           email,
           token: tokenString,
-        }),
-      });
-
-      if (response.ok) {
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken}`, // Include the Bearer token for authorization
+          },
+        }
+      );
+  
+      // If the request is successful, redirect to the email-verified page
+      if (response.status === 200) {
         router.push("/auth/email-verified");
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Invalid verification code. Please try again.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error verifying token:", error);
-      setError("An unexpected error occurred. Please try again later.");
+  
+      // Handle error response from the server
+      if (error.response && error.response.data) {
+        setError(error.response.data.message || "Invalid verification code. Please try again.");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -151,9 +160,9 @@ const InputToken = () => {
         </div>
         <div>
           <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
-            Enter the verification code
+            Check your mail
           </h2>
-          <p>
+          <p className="w-[360px] text-[#667085] mx-auto text-center">
             We sent a verification code to{" "}
             <span className="font-medium text-[#7f56d9]">
               {email || "loading..."}

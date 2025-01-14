@@ -75,7 +75,7 @@ const ForgetPassword = () => {
             className="w-14 h-14"
           />
         </div>
-        <div>
+        <div className="space-y-2">
           <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
             Forgot password?
           </h2>

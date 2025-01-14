@@ -6,6 +6,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import { useAuthStore, axiosInstance } from "@store/useStore"; 
 
 const EmailVerification = () => {
@@ -33,32 +34,33 @@ const EmailVerification = () => {
       alert("No email found.");
       return;
     }
-  
+
     if (!token) {
       setError("No authorization token found. Please log in again.");
       return;
     }
-  
+
     setIsSending(true);
     setError(null);
-  
+
     try {
-      // Use axiosInstance to send the token to the endpoint
-      await axiosInstance.post(
-        "/api/v1/users/send-verify-mail/",
-        { email }, // Request payload
+      await axios.post(
+        "https://api-staging.vechtron.com/auth/api/v1/users/send-verify-mail/",
+        { email },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Send token as Bearer token
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-  
+
       alert("Verification email sent successfully. Please check your inbox.");
       router.push("/auth/input-token");
     } catch (error: any) {
       setError(
-        error.response?.data?.data?.message || "An error occurred while sending the email."
+        error.response?.data?.data?.message ||
+          "An error occurred while sending the email."
       );
     } finally {
       setIsSending(false);
