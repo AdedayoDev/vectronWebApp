@@ -33,11 +33,13 @@ interface AuthState {
   setRefreshToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUserVerification: () => void;
+  updateVehicleOwnerStatus: (status: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set,get) => ({
       user: null,
       token: null,
       refreshToken: null,
@@ -76,6 +78,29 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         set({ user: null, token: null, refreshToken: null });
       },
+      updateUserVerification: () => {
+        const currentUser = get().user;
+        if (currentUser) {
+          set({
+            user: {
+              ...currentUser,
+              email_verified: true,
+              email_verified_at: new Date().toISOString()
+            }
+          });
+        }
+      },
+      updateVehicleOwnerStatus: (status: boolean) => {
+        const currentUser = get().user;
+        if (currentUser) {
+          set({
+            user: {
+              ...currentUser,
+              is_vehicle_owner: status
+            }
+          });
+        }
+      },
     }),
     {
       name: "auth-storage",
@@ -88,7 +113,8 @@ export const useAuthStore = create<AuthState>()(
       skipHydration: true,
       version: 1,
 
-    }
+    },
+    
   )
 );
 

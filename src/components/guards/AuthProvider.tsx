@@ -23,6 +23,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isHydrated, setIsHydrated] = useState(false)
     const { token, user } = useAuthStore()
 
+    const isTokenExpired = (token: string): boolean => {
+        try {
+            const payloadBase64 = token.split('.')[1]
+            const decodedJson = atob(payloadBase64)
+            const decoded = JSON.parse(decodedJson)
+            return Date.now() >= decoded.exp * 1000
+        } catch (error) {
+            console.error('Error checking token expiration:', error)
+            return true
+        }
+    }
+
     useEffect(() => {
         useAuthStore.persist.rehydrate()
         setIsHydrated(true)
@@ -31,6 +43,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     useEffect(() => {
         if (isHydrated && !token && !publicRoutes.includes(pathname)) {
           router.push('/auth/log-in');
+        }
+        if (token && isTokenExpired(token)) {
+            // logout()
+            router.push('/auth/log-in')
+            return
         }
       }, [isHydrated, token, pathname, router]);
 
