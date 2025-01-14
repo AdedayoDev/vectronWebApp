@@ -69,7 +69,7 @@ export default function SettingsSideBar() {
                 height={20}
                 className="rounded-full"
               />
-              <p>{user.username}</p>
+              <p>{user.username || "John Doe"}</p>
             </div>
             <div 
               onClick={handleLogout}
@@ -131,7 +131,7 @@ export default function SettingsSideBar() {
               height={20}
               className="rounded-full"
             />
-            <p>{user.username}</p>
+            <p>{user.username || "John Doe"}</p>
           </div>
           <Image
             src="/assets/icons/logout-icon.svg"
