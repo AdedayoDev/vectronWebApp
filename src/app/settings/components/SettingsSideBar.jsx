@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useAuthStore } from "@store/useStore";
 import { handleLogout } from '../../../lib/utils';
 
+export const dynamic = 'force-dynamic';
 export default function SettingsSideBar() {
   const [showSideBar, setShowSideBar] = useState(false);
   const router = useRouter(); 
@@ -69,7 +70,7 @@ export default function SettingsSideBar() {
                 height={20}
                 className="rounded-full"
               />
-              <p>{user.username || "John Doe"}</p>
+              <p>{user?.username || "John Doe"}</p>
             </div>
             <div 
               onClick={handleLogout}
@@ -131,7 +132,7 @@ export default function SettingsSideBar() {
               height={20}
               className="rounded-full"
             />
-            <p>{user.username || "John Doe"}</p>
+            <p>{user?.username || "John Doe"}</p>
           </div>
           <Image
             src="/assets/icons/logout-icon.svg"
