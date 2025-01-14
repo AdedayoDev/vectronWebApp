@@ -5,29 +5,24 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import api from '../../../lib/protectedapi';
+import { useAuthStore } from '@store/useStore'
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
+  const { token, user } = useAuthStore()
 
   useEffect(() => {
     const fetchEmail = async () => {
       try {
-        const response = await fetch(
-          "https://your-backend-endpoint.com/api/get-email",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await api.post('/auth/api/v1/users/send-verify-mail/',{}); 
 
-        if (response.ok) {
-          const data = await response.json();
-          setEmail(data.email);
-        } else {
-          console.error("Failed to fetch email", await response.json());
-        }
+        // if (response.ok) {
+        //   const data = await response.json();
+        //   setEmail(data.email);
+        // } else {
+        //   console.error("Failed to fetch email", await response.json());
+        // }
       } catch (error) {
         console.error("Error fetching email:", error);
       }
@@ -53,7 +48,7 @@ const EmailVerification = () => {
             Check your email
           </h2>
           <p>
-            We sent a verification link to{" "}
+            We sent a verification link to {user?.email} 
             <span className="font-medium text-[#7f56d9]">
               {email || "loading..."}
             </span>

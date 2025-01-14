@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import api from '../../lib/protectedapi';
 
 export default function VehicleProfile() {
   const router = useRouter();
@@ -17,27 +18,50 @@ export default function VehicleProfile() {
     setError,
     clearErrors,
   } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
   const [showMinCharHint, setShowMinCharHint] = useState(false);
 
-  // Clear error messages after 3 seconds
   useEffect(() => {
     const timeout = setTimeout(() => {
       clearErrors();
     }, 3000);
 
-    return () => clearTimeout(timeout); // Cleanup timeout
+    return () => clearTimeout(timeout);
   }, [errors, clearErrors]);
 
-  const onSubmit = (data) => {
-    toast.success("Vehicle added successfully!", {
-      position: "top-right",
-      autoClose: 2000,
-      pauseOnHover: false,
-    });
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const vehicleData = {
+        license_plate: data.registrationNumber,
+        make: data.make,
+        model: data.model,
+        vin: data.registrationNumber, // Using registration number as VIN
+        year: parseInt(new Date(data.year).getFullYear())
+      };
 
-    setTimeout(() => {
-      router.push("/chatmessage");
-    }, 2000);
+      const response = await api.post('/vehicle/api/v1/vehicles/create', vehicleData);
+
+      if (response) {
+        toast.success("Vehicle added successfully!", {
+          position: "top-right",
+          autoClose: 2000,
+          pauseOnHover: false,
+        });
+
+        setTimeout(() => {
+          router.push("/chat");
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error creating vehicle:', error);
+      toast.error(error.message || "Failed to add vehicle", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -56,10 +80,7 @@ export default function VehicleProfile() {
         <div className="vehicle-profile-right">
           <div className="vehicle-profile-right-content">
             <h1>Create Vehicle Profile</h1>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="vehicle-form-content"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className="vehicle-form-content">
               {/* Vehicle Make */}
               <div className="form-group">
                 <label htmlFor="make">Vehicle Make</label>
@@ -98,14 +119,8 @@ export default function VehicleProfile() {
                 <input
                   id="year"
                   type="date"
-                  placeholder="What year is it"
                   {...register("year", {
                     required: "Vehicle Year is required",
-                    min: { value: 1886, message: "Year must be from 1886" },
-                    max: {
-                      value: new Date().getFullYear(),
-                      message: "Invalid year",
-                    },
                   })}
                 />
                 {errors.year && (
@@ -115,9 +130,7 @@ export default function VehicleProfile() {
 
               {/* Vehicle Registration Number */}
               <div className="form-group">
-                <label htmlFor="registrationNumber">
-                  Vehicle Registration Number
-                </label>
+                <label htmlFor="registrationNumber">Vehicle Registration Number</label>
                 <input
                   id="registrationNumber"
                   type="text"
@@ -126,166 +139,19 @@ export default function VehicleProfile() {
                     required: "Registration Number is required",
                     minLength: {
                       value: 12,
-                      message:
-                        "Registration Number must be at least 12 characters",
+                      message: "Registration Number must be at least 12 characters",
                     },
                   })}
-                  onFocus={() => setShowMinCharHint(true)}
-                  onBlur={() => setShowMinCharHint(false)}
                 />
                 {errors.registrationNumber && (
-                  <p className="error-message">
-                    {errors.registrationNumber.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Vehicle Registration Number */}
-              <div className="form-group">
-                <label htmlFor="registrationNumber">
-                  Current Mileage
-                </label>
-                <input
-                  id="registrationNumber"
-                  type="number"
-                  placeholder="Enter Number"
-                  {...register("registrationNumber", {
-                    required: "Registration Number is required",
-                    minLength: {
-                      value: 12,
-                      message:
-                        "Registration Number must be at least 12 characters",
-                    },
-                  })}
-                  onFocus={() => setShowMinCharHint(true)}
-                  onBlur={() => setShowMinCharHint(false)}
-                />
-                {errors.registrationNumber && (
-                  <p className="error-message">
-                    {errors.registrationNumber.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Vehicle Registration Number */}
-              <div className="form-group">
-                <label htmlFor="registrationNumber">
-                 Last Oil Change Date
-                </label>
-                <input
-                  id="registrationNumber"
-                  type="date"
-                  placeholder="Enter Number"
-                  {...register("registrationNumber", {
-                    required: "Registration Number is required",
-                    minLength: {
-                      value: 12,
-                      message:
-                        "Registration Number must be at least 12 characters",
-                    },
-                  })}
-                  onFocus={() => setShowMinCharHint(true)}
-                  onBlur={() => setShowMinCharHint(false)}
-                />
-                {errors.registrationNumber && (
-                  <p className="error-message">
-                    {errors.registrationNumber.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Vehicle Registration Number */}
-              <div className="form-group">
-                <label htmlFor="registrationNumber">
-                Any warnings?
-                </label>
-                <input
-                  id="registrationNumber"
-                  type="number"
-                  placeholder="Enter Number"
-                  // {...register("registrationNumber", {
-                  //   required: "Registration Number is required",
-                  //   minLength: {
-                  //     value: 12,
-                  //     message:
-                  //       "Registration Number must be at least 12 characters",
-                  //   },
-                  // })}
-                  onFocus={() => setShowMinCharHint(true)}
-                  onBlur={() => setShowMinCharHint(false)}
-                />
-                {/* {showMinCharHint && (
-                  <p className="hint-message">Must be at least 12 characters</p>
-                )} */}
-                {errors.registrationNumber && (
-                  <p className="error-message">
-                    {errors.registrationNumber.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Vehicle Registration Number */}
-              <div className="form-group">
-                <label htmlFor="registrationNumber">
-                  Unusual Noises/Vibrations
-                </label>
-                <input
-                  id="registrationNumber"
-                  type="text"
-                  placeholder="Enter Number"
-                  // {...register("registrationNumber", {
-                  //   required: "Registration Number is required",
-                  //   minLength: {
-                  //     value: 12,
-                  //     message:
-                  //       "Registration Number must be at least 12 characters",
-                  //   },
-                  // })}
-                  onFocus={() => setShowMinCharHint(true)}
-                  onBlur={() => setShowMinCharHint(false)}
-                />
-                {/* {showMinCharHint && (
-                  <p className="hint-message">Must be at least 12 characters</p>
-                )} */}
-                {errors.registrationNumber && (
-                  <p className="error-message">
-                    {errors.registrationNumber.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Vehicle Registration Number */}
-              <div className="form-group">
-                <label htmlFor="registrationNumber">
-                  Fuel Efficiency Issues?
-                </label>
-                <input
-                  id="registrationNumber"
-                  type="number"
-                  placeholder="Enter Number"
-                  // {...register("registrationNumber", {
-                  //   required: "Registration Number is required",
-                  //   minLength: {
-                  //     value: 12,
-                  //     message:
-                  //       "Registration Number must be at least 12 characters",
-                  //   },
-                  // })}
-                  onFocus={() => setShowMinCharHint(true)}
-                  onBlur={() => setShowMinCharHint(false)}
-                />
-                {/* {showMinCharHint && (
-                  <p className="hint-message">Must be at least 12 characters</p>
-                )} */}
-                {errors.registrationNumber && (
-                  <p className="error-message">
-                    {errors.registrationNumber.message}
-                  </p>
+                  <p className="error-message">{errors.registrationNumber.message}</p>
                 )}
               </div>
 
               {/* Submit Button */}
-              <button type="submit">Add Vehicle</button>
+              <button type="submit" disabled={isLoading}>
+                {isLoading ? "Adding Vehicle..." : "Add Vehicle"}
+              </button>
             </form>
           </div>
         </div>
