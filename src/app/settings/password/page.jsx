@@ -35,7 +35,6 @@ export default function Password() {
   };
 
   const handleUpdate = async (e) => {
-  const handleUpdate = async (e) => {
     e.preventDefault();
     const validationErrors = validateInputs();
     setErrors(validationErrors);
