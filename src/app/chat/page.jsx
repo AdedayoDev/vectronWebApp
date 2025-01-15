@@ -67,9 +67,6 @@ export default function Chat() {
             </div>
           </div>
 
-          <div className="mx-auto -mt-8">
-            <Input />
-          </div>
         </div>
       </div>
     </>

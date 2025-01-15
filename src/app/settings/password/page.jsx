@@ -3,9 +3,8 @@ import Image from "next/image";
 import SettingsSideBar from "../components/SettingsSideBar";
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import api from '../../../lib/protectedapi';
-import { toast } from "react-toastify";
 
 export default function Password() {
   const router = useRouter();
@@ -14,16 +13,21 @@ export default function Password() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [alert, setAlert] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const validateInputs = () => {
     const validationErrors = {};
 
-    if (!newPassword || newPassword.length < 7) {
+    if (!newPassword || newPassword.length < 12) {
       validationErrors.newPassword = "New password must be at least 12 characters.";
     }
 
-    if (!confirmPassword || confirmPassword.length < 7) {
+    if (!confirmPassword || confirmPassword.length < 12) {
       validationErrors.confirmPassword = "Password must be at least 12 characters.";
     }
 
@@ -47,21 +51,22 @@ export default function Password() {
           password: newPassword,
           confirm_password: confirmPassword
         });
-
-        setAlert("Password changed successfully");
         setTimeout(() => {
-          setAlert("");
-          router.push("/settings");
-        }, 3000);
+          setAlert("Password changed successfully");
+          setIsLoading(false);
+          setTimeout(() => {
+            setAlert("");
+            router.push("/settings");
+          }, 3000);
 
-        // Reset form inputs
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+          // Reset form inputs
+          setOldPassword("");
+          setNewPassword("");
+          setConfirmPassword("");
+        }, 2000);
       } catch (error) {
-        console.error('Error changing password:', error);
-        setAlert("Failed to change password");
-      } finally {
+        setAlert("An error occurred while updating the password");
+        setTimeout(() => setAlert(""), 5000);
         setIsLoading(false);
       }
     }
@@ -74,6 +79,10 @@ export default function Password() {
     setConfirmPassword("");
     setErrors({});
     setAlert("");
+  };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
   return (
@@ -92,31 +101,53 @@ export default function Password() {
             <div>
               <h1 className="text-2xl font-semibold mb-6">Edit Password</h1>
               <form onSubmit={handleUpdate} className="lg:w-[80%]">
-                <div className="mb-4">
+                {/* Old Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     Old Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.old ? "text" : "password"}
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
                     required
                     disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("old")}
+                  >
+                    {showPassword.old ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                 </div>
 
-                <div className="mb-4">
+                {/* New Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     New Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.new ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("new")}
+                  >
+                    {showPassword.new ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-1">
                     Minimum 12 characters.
                   </p>
@@ -127,17 +158,28 @@ export default function Password() {
                   )}
                 </div>
 
-                <div className="mb-4">
+                {/* Confirm Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     Confirm Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.confirm ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("confirm")}
+                  >
+                    {showPassword.confirm ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-1">
                     Minimum 12 characters.
                   </p>
