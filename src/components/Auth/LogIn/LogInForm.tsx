@@ -16,11 +16,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BeatLoader } from "react-spinners";
 import { z } from "zod";
-import { useAuthStore } from "../../../store/useStore";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios"; // Import Axios for API requests
 import CardWrapper from "../CardWrapper";
 import AppleLogIn from "./AppleLogIn";
 import GoogleLogIn from "./GoogleLogIn";
-import { useRouter } from "next/router";
 
 const LogInSchema = z.object({
   email: z.string().email({
@@ -32,11 +32,10 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
-  const { login, user } = useAuthStore();
-
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(LogInSchema),
@@ -52,17 +51,32 @@ const LogInForm = () => {
     setMessageType("");
 
     try {
-      await login(data.email, data.password);
+      const response = await axios.post(
+        "https://api-staging.vechtron.com/auth/api/v1/auth/account/login",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      setMessage("Login successful! Redirecting...");
-      setMessageType("success");
+      if (response.status === 200) {
+        setMessage("Login successful! Redirecting...");
+        setMessageType("success");
 
-      setTimeout(() => {
-       window.location.href = "/chat";
-      }, 2000);
+        
+        setTimeout(() => {
+          window.location.href = "/auth/email-verification";
+        }, 2000);
+      } else {
+        setMessage("Unexpected response from the server.");
+        setMessageType("error");
+      }
     } catch (error: any) {
-      // Handle the error message received from login
-      setMessage(error.message);
+      setMessage(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
       setMessageType("error");
     } finally {
       setIsLoading(false);
@@ -115,7 +129,7 @@ const LogInForm = () => {
                 </FormItem>
               )}
             />
-            {/* Password Field */}
+            {/* Password Field with Toggle */}
             <FormField
               control={form.control}
               name="password"
@@ -123,11 +137,19 @@ const LogInForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Enter your Password"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your Password"
+                      />
+                      <span
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,23 +181,21 @@ const LogInForm = () => {
           >
             {isLoading ? <BeatLoader size={8} color="#fff" /> : "Login"}
           </Button>
-          {message && (
-            <p
-              style={{
-                color:
-                  messageType === "success"
-                    ? "green"
-                    : messageType === "error"
-                    ? "red"
-                    : "black",
-                marginTop: "1rem",
-              }}
-            >
-              {message}
-            </p>
-          )}
         </form>
       </Form>
+
+      {/* Popup Message */}
+      {messageType && (
+        <div
+          className={`fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+            messageType === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {message}
+        </div>
+      )}
     </CardWrapper>
   );
 };

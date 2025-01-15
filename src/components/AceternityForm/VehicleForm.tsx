@@ -1,13 +1,18 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Input } from "@components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { cn } from "@lib/utils";
 import axios from "axios";
-import { useAuthStore } from "@store/useStore"; // Import auth store
+import { useAuthStore } from "@store/useStore";
 import Link from "next/link";
+import { BeatLoader } from "react-spinners";
+import { useRouter } from "next/navigation";
 
 export function VehicleForm() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     make: "",
     model: "",
@@ -21,8 +26,11 @@ export function VehicleForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error" | "">("");
+  const [progress, setProgress] = useState(100);
 
-  const bearerToken = useAuthStore((state) => state.token); // Retrieve token from store
+  const bearerToken = useAuthStore((state) => state.token);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -33,6 +41,9 @@ export function VehicleForm() {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    setPopupMessage("");
+    setPopupType("");
+    setProgress(100);
 
     if (!bearerToken) {
       setError("No authorization token found. Please log in again.");
@@ -53,28 +64,33 @@ export function VehicleForm() {
       );
 
       if (response.status === 201) {
-        alert("Vehicle profile created successfully!");
-        setFormData({
-          make: "",
-          model: "",
-          year: "",
-          registrationNumber: "",
-          mileage: "",
-          lastOilChange: "",
-          warnings: "",
-          noises: "",
-          fuelEfficiency: "",
-        });
+        setPopupMessage("Vehicle profile created successfully!");
+        setPopupType("success");
+
+        const interval = setInterval(() => {
+          setProgress((prev) => {
+            if (prev <= 0) {
+              clearInterval(interval);
+              router.push("/chat"); 
+            }
+            return prev - 5;
+          });
+        }, 100);
       }
     } catch (error: any) {
       console.error("Error creating vehicle profile:", error);
-      setError(
+      setPopupMessage(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again later."
       );
+      setPopupType("error");
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSkip = () => {
+    router.push("/chat"); 
   };
 
   return (
@@ -83,7 +99,7 @@ export function VehicleForm() {
         Create Vehicle Profile
       </h2>
       <form
-        className="my-8 space-y-4 p-6  w-full vehicle-form-content"
+        className="my-8 space-y-4 p-6 w-full vehicle-form-content"
         onSubmit={handleSubmit}
       >
         <LabelInputContainer>
@@ -182,25 +198,50 @@ export function VehicleForm() {
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-[#1E3A8A] text-white rounded-full hover:bg-[#1E3A8A]/100 disabled:opacity-50"
+          className="w-full py-2 px-4 bg-[#1E3A8A] text-white rounded-full hover:bg-[#1E3A8A]/100 disabled:opacity-50 flex justify-center items-center"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Submitting..." : "Add Vehicle"}
+          {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Add Vehicle"}
         </button>
       </form>
-      <Link href="/chat">
-      <div className="flex  justify-end">
-        <button className="font-inter font-bold text-sm text-[#f8f1ff] bg-[#442066] w-[140px] h-[53px] rounded-lg ">Skip for now</button>
-      </div>
-      </Link>
 
-      {/* Inline style for the scrollbar */}
+      <div className="flex justify-end">
+        <button
+          className="font-inter font-bold text-sm text-[#f8f1ff] bg-[#442066] w-[140px] h-[53px] rounded-lg"
+          onClick={handleSkip}
+        >
+          Skip for now
+        </button>
+      </div>
+
+      {/* Popup Message */}
+      {popupType && (
+        <div
+          className={`fixed bottom-4 left-4 right-4 max-w-md mx-auto p-4 rounded-lg shadow-lg z-50 ${
+            popupType === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          <p>{popupMessage}</p>
+          {popupType === "success" && (
+            <div className="h-2 bg-green-500 rounded mt-2 relative overflow-hidden">
+              <div
+                className="absolute top-0 left-0 h-full bg-green-700 transition-all"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Scrollbar styles */}
       <style jsx>{`
         .vehicle-form-content {
           width: 100%;
           overflow-y: auto;
           max-height: calc(100vh - 120px);
-          padding-right: 16px
+          padding-right: 16px;
         }
         .vehicle-form-content::-webkit-scrollbar {
           width: 10px;

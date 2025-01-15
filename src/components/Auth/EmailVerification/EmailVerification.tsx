@@ -3,38 +3,27 @@
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import api from '../../../lib/protectedapi';
-import { useAuthStore } from '@store/useStore'
+import React, { useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import axios from "axios";
+import { useAuthStore } from "@store/useStore";
 
 const EmailVerification = () => {
-  const [email, setEmail] = useState<string | null>(null);
-  const { token, user } = useAuthStore()
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchEmail = async () => {
-      try {
-        const response = await api.post('/auth/api/v1/users/send-verify-mail/',{}); 
+ 
+  const { token, user } = useAuthStore();
 
-        // if (response.ok) {
-        //   const data = await response.json();
-        //   setEmail(data.email);
-        // } else {
-        //   console.error("Failed to fetch email", await response.json());
-        // }
-      } catch (error) {
-        console.error("Error fetching email:", error);
-      }
-    };
 
-    fetchEmail(); // Call the fetchEmail function on component mount
-  }, []);
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    "https://api-staging.vechtron.com";
 
+ 
   const handleSendEmail = async () => {
-    const token = useAuthStore.getState().token; // Get the stored token
-    if (!email) {
-      alert("No email found.");
+    if (!user?.email) {
+      setError("No email found. Please log in again.");
       return;
     }
 
@@ -47,9 +36,10 @@ const EmailVerification = () => {
     setError(null);
 
     try {
-      await axios.post(
-        "https://api-staging.vechtron.com/auth/api/v1/users/send-verify-mail/",
-        { email },
+      
+      const response = await axios.post(
+        `${BASE_URL}/auth/api/v1/users/send-verify-mail/`,
+        { email: user.email },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -58,19 +48,31 @@ const EmailVerification = () => {
         }
       );
 
-      alert("Verification email sent successfully. Please check your inbox.");
-      router.push("/auth/input-token");
+      
+      if (response.status === 200) {
+        alert("Verification email sent successfully. Please check your inbox.");
+        window.location.href = "/auth/email-verified";
+      }
     } catch (error: any) {
-      setError(
-        error.response?.data?.data?.message ||
-          "An error occurred while sending the email."
-      );
+      const errorMessage =
+        error.response?.data?.message ||
+        "An error occurred while sending the email.";
+
+      
+      if (
+        error.response?.data?.code === "USER_ALREADY_VERIFIED" ||
+        errorMessage.includes("already verified")
+      ) {
+        alert("Your account is already verified.");
+        window.location.href = "/auth/email-verified";
+      } else {
+      
+        setError(errorMessage);
+      }
     } finally {
       setIsSending(false);
     }
   };
-  
-  
 
   return (
     <main className="w-full h-screen flex items-center justify-center">
@@ -78,20 +80,20 @@ const EmailVerification = () => {
         <div>
           <Image
             src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734714374/Featured_icon_mcn2x0.png"
-            alt="Email Verification Icon"
+            alt="Icon representing email verification"
             width={56}
             height={56}
             className="w-14 h-14"
           />
         </div>
-        <div>
+        <div className="space-y-3">
           <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
             Check your email
           </h2>
-          <p>
-            We sent a verification link to&nbsp; 
+          <p className="w-[360px] text-center">
+            We sent a verification link to&nbsp;
             <span className="font-medium text-[#7f56d9]">
-               {user?.email }
+              {user?.email || "your email"}
             </span>
           </p>
         </div>
