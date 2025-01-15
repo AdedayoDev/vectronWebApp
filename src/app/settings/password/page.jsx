@@ -13,16 +13,21 @@ export default function Password() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [alert, setAlert] = useState("");
   const [errors, setErrors] = useState({});
-
+  const [showPassword, setShowPassword] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateInputs = () => {
     const validationErrors = {};
 
-    if (!newPassword || newPassword.length < 7) {
+    if (!newPassword || newPassword.length < 12) {
       validationErrors.newPassword = "New password must be at least 12 characters.";
     }
 
-    if (!confirmPassword || confirmPassword.length < 7) {
+    if (!confirmPassword || confirmPassword.length < 12) {
       validationErrors.confirmPassword = "Password must be at least 12 characters.";
     }
 
@@ -37,29 +42,28 @@ export default function Password() {
     e.preventDefault();
     const validationErrors = validateInputs();
     setErrors(validationErrors);
-  
+
     if (Object.keys(validationErrors).length === 0) {
+      setIsLoading(true);
       try {
-        // success response
-        setAlert("Password changed successfully");
+        // Simulate API call
         setTimeout(() => {
-          setAlert("");
-          router.push("/settings");
-        }, 3000);
-  
-        // Reset form inputs
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-        
+          setAlert("Password changed successfully");
+          setIsLoading(false);
+          setTimeout(() => {
+            setAlert("");
+            router.push("/settings");
+          }, 3000);
+
+          // Reset form inputs
+          setOldPassword("");
+          setNewPassword("");
+          setConfirmPassword("");
+        }, 2000);
       } catch (error) {
-        //  error response
-        if (error.response && error.response.data) {
-          setAlert(error.response.data.message || "An error occurred");
-        } else {
-          setAlert("An error occurred while updating the password");
-        }
+        setAlert("An error occurred while updating the password");
         setTimeout(() => setAlert(""), 5000);
+        setIsLoading(false);
       }
     }
   };
@@ -73,6 +77,9 @@ export default function Password() {
     setAlert("");
   };
 
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
 
   return (
     <>
