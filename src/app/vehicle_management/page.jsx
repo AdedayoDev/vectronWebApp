@@ -4,6 +4,7 @@ import SettingsSideBar from "../settings/components/SettingsSideBar";
 import Link from "next/link";
 import { ChevronRight, Home } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
 export default function Vehicle_Management() {
   return (
     <>
@@ -20,7 +21,7 @@ export default function Vehicle_Management() {
           <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]">
             <div>
               <Link
-                href="/"
+                href="/settings"
                 className="flex items-center gap-2 w-44 text-blue-500 mb-4"
               >
                 <Home size={20} />
@@ -41,7 +42,7 @@ export default function Vehicle_Management() {
                     <p>Vehicle Profile</p>
                   </div>
 
-                  <ChevronRight />
+                  <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -57,7 +58,7 @@ export default function Vehicle_Management() {
                     <p>Diagnostics</p>
                   </div>
 
-                  <ChevronRight />
+                  <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -68,13 +69,13 @@ export default function Vehicle_Management() {
                     <Image
                       src="/assets/icons/map.svg"
                       alt="Icon"
-                      width={20}
-                      height={20}
+                      width={15}
+                      height={15}
                     />
                     <p>Route Navigation</p>
                   </div>
 
-                  <ChevronRight />
+                  <ChevronRight  className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>

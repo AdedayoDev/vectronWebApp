@@ -6,13 +6,9 @@ import React from "react";
 
 const LogIn = () => {
   return (
-    <AuthProvider>
-      <ProtectedRoute>
         <main>
           <LogInPage />
         </main>
-      </ProtectedRoute>
-    </AuthProvider>
   );
 };
 

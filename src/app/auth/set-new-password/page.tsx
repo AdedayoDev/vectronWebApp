@@ -5,13 +5,12 @@ import React from "react";
 
 const NewPassword = () => {
   return (
-    <AuthProvider>
-      <ProtectedRoute>
+
+
         <main>
           <SetNewPassword />
         </main>
-      </ProtectedRoute>
-    </AuthProvider>
+
   );
 };
 

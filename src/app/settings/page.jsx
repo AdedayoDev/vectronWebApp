@@ -43,7 +43,7 @@ export default function page() {
                     </div>
                     <p>Password</p>
                   </div>
-                  <ChevronRight />
+                  <ChevronRight className='text-gray-400'/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -62,7 +62,7 @@ export default function page() {
                     </div>
                     <p>Notification</p>
                   </div>
-                  <ChevronRight />
+                  <ChevronRight className='text-gray-400'/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300" />
               </Link>
@@ -81,7 +81,7 @@ export default function page() {
                     </div>
                     <p>Integration</p>
                   </div>
-                  <ChevronRight />
+                  <ChevronRight className='text-gray-400'/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300" />
               </Link>
@@ -100,7 +100,7 @@ export default function page() {
                     </div>
                     <p>Payment</p>
                   </div>
-                  <ChevronRight />
+                  <ChevronRight className='text-gray-400'/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300" />
               </Link>
@@ -119,7 +119,7 @@ export default function page() {
                     </div>
                     <p>About Vechtron</p>
                   </div>
-                  <ChevronRight />
+                  <ChevronRight className='text-gray-400'/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300" />
               </Link>

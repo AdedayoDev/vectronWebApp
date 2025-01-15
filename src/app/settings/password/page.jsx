@@ -3,6 +3,7 @@ import Image from "next/image";
 import SettingsSideBar from "../components/SettingsSideBar";
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Password() {
@@ -12,18 +13,22 @@ export default function Password() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [alert, setAlert] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateInputs = () => {
     const validationErrors = {};
 
     if (!newPassword || newPassword.length < 12) {
-      validationErrors.newPassword =
-        "New password must be at least 12 characters.";
+      validationErrors.newPassword = "New password must be at least 12 characters.";
     }
 
     if (!confirmPassword || confirmPassword.length < 12) {
-      validationErrors.confirmPassword =
-        "Password must be at least 12 characters.";
+      validationErrors.confirmPassword = "Password must be at least 12 characters.";
     }
 
     if (newPassword !== confirmPassword) {
@@ -33,21 +38,37 @@ export default function Password() {
     return validationErrors;
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     const validationErrors = validateInputs();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      setAlert("Password changed successfully");
-      setTimeout(() => {
-        setAlert("");
-        router.push("/settings");
-      }, 3000);
-      // Reset form inputs
-      setOldPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
+      setIsLoading(true);
+      try {
+        await api.post('/auth/api/v1/users/password-change/', {
+          current_password: oldPassword,
+          password: newPassword,
+          confirm_password: confirmPassword
+        });
+        setTimeout(() => {
+          setAlert("Password changed successfully");
+          setIsLoading(false);
+          setTimeout(() => {
+            setAlert("");
+            router.push("/settings");
+          }, 3000);
+
+          // Reset form inputs
+          setOldPassword("");
+          setNewPassword("");
+          setConfirmPassword("");
+        }, 2000);
+      } catch (error) {
+        setAlert("An error occurred while updating the password");
+        setTimeout(() => setAlert(""), 5000);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -59,6 +80,11 @@ export default function Password() {
     setErrors({});
     setAlert("");
   };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
   return (
     <>
       <section>
@@ -69,35 +95,59 @@ export default function Password() {
           height={20}
           className="w-[95%] h-[50px] object-cover mt-11 mx-auto"
         />
-        <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto ">
+        <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto">
           <SettingsSideBar />
           <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]">
             <div>
               <h1 className="text-2xl font-semibold mb-6">Edit Password</h1>
               <form onSubmit={handleUpdate} className="lg:w-[80%]">
-                <div className="mb-4">
+                {/* Old Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     Old Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.old ? "text" : "password"}
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
                     required
+                    disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("old")}
+                  >
+                    {showPassword.old ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                 </div>
 
-                <div className="mb-4">
+                {/* New Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     New Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.new ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("new")}
+                  >
+                    {showPassword.new ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-1">
                     Minimum 12 characters.
                   </p>
@@ -108,16 +158,28 @@ export default function Password() {
                   )}
                 </div>
 
-                <div className="mb-4">
+                {/* Confirm Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     Confirm Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.confirm ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("confirm")}
+                  >
+                    {showPassword.confirm ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-1">
                     Minimum 12 characters.
                   </p>
@@ -131,14 +193,16 @@ export default function Password() {
                 <div className="flex items-center mt-11 gap-3 justify-end">
                   <button
                     type="submit"
-                    className="px-5 py-3 bg-blue-700 text-white cursor-pointer font-medium rounded-full focus:bg-blue-500 focus:outline-none"
+                    disabled={isLoading}
+                    className="px-5 py-3 bg-blue-700 text-white cursor-pointer font-medium rounded-full focus:bg-blue-500 focus:outline-none disabled:opacity-50"
                   >
-                    Update
+                    {isLoading ? "Updating..." : "Update"}
                   </button>
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="px-4 py-2 cursor-pointer border-4 rounded-full border-purple-300 border-solid font-medium  focus:bg-red-600 focus:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                    disabled={isLoading}
+                    className="px-4 py-2 cursor-pointer border-4 rounded-full border-purple-300 border-solid font-medium focus:bg-red-600 focus:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
                     Cancel
                   </button>
@@ -149,7 +213,6 @@ export default function Password() {
                   <div className="bg-green-600 rounded-full">
                     <Check color="white" />
                   </div>
-
                   {alert}
                 </div>
               )}
