@@ -46,10 +46,7 @@ const LogInForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
-    if (!isChecked) {
-      alert("You must agree to the terms and conditions before logging in.");
-      return;
-    }
+
     setIsLoading(true);
     setMessage("");
     setMessageType("");
