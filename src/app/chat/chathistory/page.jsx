@@ -24,15 +24,15 @@ export default function ChatHistory() {
     <>
       {/* <Navbar /> */}
       <div className="chat-history-container">
-        <div className="chat-history-bg">
+        <div className="">
           <Image
             src="/assets/images/bg-img.png"
             alt="Background image"
             width={200}
             height={200}
-            className="chathistory-bg"
+            className="absolute w-full top-3 h-[100px] left-0 lg:w-[78%] mt-8"
           />
-          <div className="chat-history-data shadow h-[80%] lg:h-[93%]">
+          <div className="bg-white rounded w-[95%] lg:w-[75%] p-3 left-[20px] top-[120px] absolute shadow h-[80%] lg:h-[93%]">
             <div className="search-container">
               <button>
                 <Search size={20} color="gray" />
@@ -112,7 +112,7 @@ export default function ChatHistory() {
           </div>
         </div>
         <div className="chat-history-aside">
-          {/* <Aside /> */}
+
           {/* <SideBar /> */}
         </div>
       </div>
