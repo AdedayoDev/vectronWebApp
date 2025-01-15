@@ -107,6 +107,7 @@ export default function ChatHistory() {
                 >
                   <h3 className="text-lg font-medium text-gray-900">{conversation.title}</h3>
                   <p className="text-sm text-gray-500">{formatDate(conversation.created_at)}</p>
+
                 </div>
                 <div className="relative">
                   <button
@@ -145,8 +146,7 @@ export default function ChatHistory() {
                   )}
                 </div>
               </div>
-            ))
-          )}
+
         </div>
       </div>
       
