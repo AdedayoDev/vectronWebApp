@@ -46,7 +46,11 @@ export default function Password() {
     if (Object.keys(validationErrors).length === 0) {
       setIsLoading(true);
       try {
-        // Simulate API call
+        await api.post('/auth/api/v1/users/password-change/', {
+          current_password: oldPassword,
+          password: newPassword,
+          confirm_password: confirmPassword
+        });
         setTimeout(() => {
           setAlert("Password changed successfully");
           setIsLoading(false);
