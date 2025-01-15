@@ -21,7 +21,7 @@ export default function BarContent() {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <Link href="/chat/newchat">
+        <Link href="/chat/chatdetail">
           <div className="flex items-center justify-center w-44 xl:w-52 px-3 py-2 rounded-full space-x-2 hover:cursor-pointer bg-purple-400">
             <div className="relative w-5 h-5">
               <Image
