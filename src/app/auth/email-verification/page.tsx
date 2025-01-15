@@ -6,11 +6,9 @@ import React from "react";
 const EmailVerfication = () => {
   return (
     <AuthProvider>
-      <ProtectedRoute>
         <main>
           <EmailVerification />
         </main>
-      </ProtectedRoute>
     </AuthProvider>
   );
 };

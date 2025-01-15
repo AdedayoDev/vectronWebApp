@@ -6,11 +6,9 @@ import React from "react";
 const page = () => {
   return (
     <AuthProvider>
-      <ProtectedRoute>
         <main>
           <EmailVerified />
         </main>
-      </ProtectedRoute>
     </AuthProvider>
   );
 };

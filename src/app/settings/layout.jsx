@@ -1,6 +1,8 @@
 
 import { Inter } from 'next/font/google';
 import NavBar from "@components/navbar/chatNav";
+import { AuthProvider } from "@components/guards/AuthProvider";
+import { ProtectedRoute } from "@components/guards/ProtectedRoute";
 
 export const metadata = {
   title: "Settings",
@@ -15,6 +17,8 @@ const inter = Inter({
 
 export default function RootLayout({ children }) {
   return (
+    <AuthProvider>
+      <ProtectedRoute>
     <html lang="en">
       <head>
     
@@ -39,5 +43,7 @@ export default function RootLayout({ children }) {
         {children}
       </body>
     </html>
+    </ProtectedRoute>
+    </AuthProvider>
   );
 }

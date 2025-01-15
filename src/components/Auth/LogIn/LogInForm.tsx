@@ -58,7 +58,7 @@ const LogInForm = () => {
       setMessage("Login successful! Redirecting...");
       setMessageType("success");
       setTimeout(() => {
-       window.location.href = "/onboarding";
+       window.location.href = "/chat";
       }, 2000);
     } catch (error: any) {
       console.error("Error during login:", error);
@@ -165,7 +165,7 @@ const LogInForm = () => {
           </div>
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
-            disabled={!isChecked || isLoading}
+            disabled={isLoading}
             type="submit"
           >
             {isLoading ? <BeatLoader size={8} color="#fff" /> : "Login"}

@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 
-function Input() {
+function Input({ onClick }) {
   return (
     <div className="flex flex-col w-[250px] xs:w-[275px] sm:w-[305px] md:w-[540px] xl:w-[900px]  bg-white p-5 md:p-7 lg:p-10 mx-auto">
       <div className="flex flex-col bg-[#C8D6FF] rounded-2xl p-5 md:p-8 space-y-2">
@@ -24,14 +23,13 @@ function Input() {
           </div>
           <div className="flex items-center justify-center space-x-3">
             <div className="relative w-5 h-5">
-              <Link href="/voicechat">
-                <Image
-                  src="/assets/icons/voiceRecord.png"
-                  alt="voiceRecord image"
-                  fill
-                  className="object-cover hover:cursor-pointer"
-                />
-              </Link>
+              <Image
+                src="/assets/icons/voiceRecord.png"
+                alt="voiceRecord image"
+                fill
+                className="object-cover hover:cursor-pointer"
+                onClick={onClick}
+              />
             </div>
             <div className="relative w-5 h-5">
               <Image

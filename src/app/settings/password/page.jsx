@@ -14,23 +14,17 @@ export default function Password() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [alert, setAlert] = useState("");
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState({
-    old: false,
-    new: false,
-    confirm: false,
-  });
+
 
   const validateInputs = () => {
     const validationErrors = {};
 
-    if (!newPassword || newPassword.length < 12) {
-      validationErrors.newPassword =
-        "New password must be at least 12 characters.";
+    if (!newPassword || newPassword.length < 7) {
+      validationErrors.newPassword = "New password must be at least 12 characters.";
     }
 
-    if (!confirmPassword || confirmPassword.length < 12) {
-      validationErrors.confirmPassword =
-        "Password must be at least 12 characters.";
+    if (!confirmPassword || confirmPassword.length < 7) {
+      validationErrors.confirmPassword = "Password must be at least 12 characters.";
     }
 
     if (newPassword !== confirmPassword) {
@@ -40,6 +34,7 @@ export default function Password() {
     return validationErrors;
   };
 
+  const handleUpdate = async (e) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     const validationErrors = validateInputs();
@@ -94,12 +89,6 @@ export default function Password() {
     setAlert("");
   };
 
-  const togglePasswordVisibility = (field) => {
-    setShowPassword((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-  };
 
   return (
     <>
@@ -111,7 +100,7 @@ export default function Password() {
           height={20}
           className="w-[95%] h-[50px] object-cover mt-11 mx-auto"
         />
-        <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto ">
+        <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto">
           <SettingsSideBar />
           <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]">
             <div>
@@ -127,6 +116,7 @@ export default function Password() {
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
                     required
+                    disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
                   <div
@@ -150,6 +140,7 @@ export default function Password() {
                     type={showPassword.new ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
                   <div
@@ -181,6 +172,7 @@ export default function Password() {
                     type={showPassword.confirm ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    disabled={isLoading}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
                   <div
@@ -206,14 +198,16 @@ export default function Password() {
                 <div className="flex items-center mt-11 gap-3 justify-end">
                   <button
                     type="submit"
-                    className="px-5 py-3 bg-blue-700 text-white cursor-pointer font-medium rounded-full focus:bg-blue-500 focus:outline-none"
+                    disabled={isLoading}
+                    className="px-5 py-3 bg-blue-700 text-white cursor-pointer font-medium rounded-full focus:bg-blue-500 focus:outline-none disabled:opacity-50"
                   >
-                    Update
+                    {isLoading ? "Updating..." : "Update"}
                   </button>
                   <button
                     type="button"
                     onClick={handleCancel}
-                    className="px-4 py-2 cursor-pointer border-4 rounded-full border-purple-300 border-solid font-medium  focus:bg-red-600 focus:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                    disabled={isLoading}
+                    className="px-4 py-2 cursor-pointer border-4 rounded-full border-purple-300 border-solid font-medium focus:bg-red-600 focus:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
                     Cancel
                   </button>
@@ -224,7 +218,6 @@ export default function Password() {
                   <div className="bg-green-600 rounded-full">
                     <Check color="white" />
                   </div>
-
                   {alert}
                 </div>
               )}
