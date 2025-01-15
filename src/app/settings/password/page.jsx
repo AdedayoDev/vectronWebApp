@@ -67,6 +67,7 @@ export default function Password() {
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
+        
       } catch (error) {
         //  error response
         if (error.response && error.response.data) {

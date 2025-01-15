@@ -42,7 +42,7 @@ export default function Vehicle_Management() {
                     <p>Vehicle Profile</p>
                   </div>
 
-                  <ChevronRight />
+                  <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -58,7 +58,7 @@ export default function Vehicle_Management() {
                     <p>Diagnostics</p>
                   </div>
 
-                  <ChevronRight />
+                  <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -69,13 +69,13 @@ export default function Vehicle_Management() {
                     <Image
                       src="/assets/icons/map.svg"
                       alt="Icon"
-                      width={20}
-                      height={20}
+                      width={15}
+                      height={15}
                     />
                     <p>Route Navigation</p>
                   </div>
 
-                  <ChevronRight />
+                  <ChevronRight  className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>

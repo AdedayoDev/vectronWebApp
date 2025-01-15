@@ -24,7 +24,7 @@ export default function About_Vechtron() {
                 <div className="flex justify-between my-3 items-center">
                   <p>Terms and conditions</p>
 
-                  <ChevronRight />
+                  <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -32,7 +32,7 @@ export default function About_Vechtron() {
                 <div className="flex justify-between my-3 items-center">
                   <p>Privacy policy</p>
 
-                  <ChevronRight />
+                  <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
