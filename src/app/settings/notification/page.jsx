@@ -4,13 +4,15 @@ import { CheckSquare2 } from "lucide-react";
 import React, { useState } from "react";
 import { CldImage } from "next-cloudinary";
 import SettingsSideBar from "../components/SettingsSideBar";
+import { useRouter } from "next/navigation";
 
 export default function Settings() {
-  
+  const router = useRouter();
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
   const [selectedAlert, setSelectedAlert] = useState("");
   const [selectedChannel, setSelectedChannel] = useState("");
   const [selectedSynapse, setSelectedSynapse] = useState("");
+  const [save, setSave] = useState("");
 
   const toggleNotifications = () => {
     setIsNotificationsEnabled((prev) => !prev);
@@ -21,6 +23,10 @@ export default function Settings() {
     if (section === "channel") setSelectedChannel(option);
     if (section === "synapse") setSelectedSynapse(option);
   };
+
+  function handleSave() {
+    router.push("/settings");
+  }
   return (
     <>
       <div className="mt-4">
@@ -36,7 +42,7 @@ export default function Settings() {
           )}
         </div>
         <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto ">
-        <SettingsSideBar />
+          <SettingsSideBar />
           <div className="lg:w-[60%] w-full">
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold">Notifications</h1>
@@ -126,6 +132,7 @@ export default function Settings() {
             {/* Save and Cancel Buttons */}
             <div className="save-btn flex items-center my-16 gap-2">
               <button
+                onClick={handleSave}
                 type="button"
                 className="flex items-center gap-2 bg-blue-800 text-white rounded-full p-3"
               >

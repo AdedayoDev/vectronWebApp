@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 export default function Password() {
   const router = useRouter();
@@ -41,21 +40,6 @@ export default function Password() {
   
     if (Object.keys(validationErrors).length === 0) {
       try {
-        // API request
-        const response = await axios.post(
-          "https://api-staging.vechtron.com/api/v1/users/password-change",
-          {
-            current_password: oldPassword,
-            password: newPassword,
-            confirm_password: confirmPassword,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-  
         // success response
         setAlert("Password changed successfully");
         setTimeout(() => {
