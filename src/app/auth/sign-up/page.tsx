@@ -7,13 +7,9 @@ import React from "react";
 
 const SignUp = () => {
   return (
-    <AuthProvider>
-      <ProtectedRoute>
         <main>
           <SignUpPages />
         </main>
-      </ProtectedRoute>
-    </AuthProvider>
   );
 };
 

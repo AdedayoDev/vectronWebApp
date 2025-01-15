@@ -2,8 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Conversation from "./_components/Conversation";
 import Input from "./_components/Input";
-import Profile from "./_components/Profile";
-import SideBar from "./_components/SideBar";
 
 export const metadata = {
   title: "Chat with AI",
@@ -32,12 +30,6 @@ export default function Chat() {
 
   return (
     <>
-      {/* <div className="flex flex-col">
-        <div className="flex justify-end p-2">
-          <Profile />
-        </div>
-        <div className="flex flex-col items-start gap-1 lg:flex-row lg:gap-0">
-          <div className="flex flex-1 justify-center items-center w-full"> */}
       <div>
         <div className="relative w-full h-40">
           <Image
@@ -80,12 +72,6 @@ export default function Chat() {
           </div>
         </div>
       </div>
-      {/* </div>
-          <div className="flex place-self-center w-72 xl:w-80 lg:place-self-start">
-            <SideBar />
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }

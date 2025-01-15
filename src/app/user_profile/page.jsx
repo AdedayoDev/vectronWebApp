@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "@components/navbar/chatNav";
 
+export const dynamic = 'force-dynamic';
+
 export default function Profile() {
   const router = useRouter();
   const [formData, setFormData] = useState({
