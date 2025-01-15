@@ -68,7 +68,7 @@ export default function Profile() {
   };
 
   const handleGoHome = () => {
-    router.push("/");
+    router.push("/settings");
   };
 
   return (

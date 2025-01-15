@@ -20,7 +20,7 @@ export default function Vehicle_Management() {
           <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]">
             <div>
               <Link
-                href="/"
+                href="/settings"
                 className="flex items-center gap-2 w-44 text-blue-500 mb-4"
               >
                 <Home size={20} />

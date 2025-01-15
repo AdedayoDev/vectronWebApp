@@ -3,6 +3,7 @@ import Image from "next/image";
 import SettingsSideBar from "../components/SettingsSideBar";
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function Password() {
@@ -12,6 +13,11 @@ export default function Password() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [alert, setAlert] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState({
+    old: false,
+    new: false,
+    confirm: false,
+  });
 
   const validateInputs = () => {
     const validationErrors = {};
@@ -59,6 +65,14 @@ export default function Password() {
     setErrors({});
     setAlert("");
   };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
   return (
     <>
       <section>
@@ -75,29 +89,51 @@ export default function Password() {
             <div>
               <h1 className="text-2xl font-semibold mb-6">Edit Password</h1>
               <form onSubmit={handleUpdate} className="lg:w-[80%]">
-                <div className="mb-4">
+                {/* Old Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     Old Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.old ? "text" : "password"}
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
                     required
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("old")}
+                  >
+                    {showPassword.old ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                 </div>
 
-                <div className="mb-4">
+                {/* New Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     New Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.new ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("new")}
+                  >
+                    {showPassword.new ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-1">
                     Minimum 12 characters.
                   </p>
@@ -108,16 +144,27 @@ export default function Password() {
                   )}
                 </div>
 
-                <div className="mb-4">
+                {/* Confirm Password */}
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 font-medium mb-2">
                     Confirm Password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword.confirm ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-300"
                   />
+                  <div
+                    className="absolute top-[45px] right-3 cursor-pointer"
+                    onClick={() => togglePasswordVisibility("confirm")}
+                  >
+                    {showPassword.confirm ? (
+                      <Eye size={15} />
+                    ) : (
+                      <EyeOff size={15} />
+                    )}
+                  </div>
                   <p className="text-gray-500 text-sm mt-1">
                     Minimum 12 characters.
                   </p>
