@@ -41,7 +41,7 @@ const SignUpSchema = z
 const SignUpForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState({ type: "", text: "" });
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -56,12 +56,16 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     if (!isChecked) {
-      alert("You must agree to the terms and conditions before signing up.");
+      setMessage({
+        type: "error",
+        text: "You must agree to the terms and conditions before signing up."
+      });
       return;
     }
 
     setIsLoading(true);
-    setMessage("");
+    setMessage({ type: "", text: "" });
+    
     try {
       const response = await signup(data);
       const user = {
@@ -72,13 +76,19 @@ const SignUpForm = () => {
         last_name: data.last_name,
       };
       
-      setMessage("Sign up successful!");
+      setMessage({
+        type: "success",
+        text: "Sign up successful! Redirecting to login..."
+      });
 
       setTimeout(() => {
         window.location.href = "/auth/log-in";
       }, 2000);
     } catch (error) {
-      setMessage("Sign up failed. Please try again.");
+      setMessage({
+        type: "error",
+        text: "Sign up failed. Please try again."
+      });
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +110,18 @@ const SignUpForm = () => {
       smallScreenPadding="pt-72"
       largeScreenPadding="lg:pt-60"
     >
+      {message.text && (
+        <div 
+          className={`p-4 mb-4 rounded-lg ${
+            message.type === 'error' 
+              ? 'bg-red-100 text-red-700 border border-red-400' 
+              : 'bg-green-100 text-green-700 border border-green-400'
+          }`}
+        >
+          {message.text}
+        </div>
+      )}
+      
       <div className="space-y-2 mb-2">
         <GoogleLogIn userData={userData} mode="login">
           Continue with Google
@@ -108,24 +130,23 @@ const SignUpForm = () => {
           Continue with Apple
         </AppleLogIn>
       </div>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-4">
-            {/* First Name Field */}
-            <FormField
+                        <FormField
               control={form.control}
               name="first_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="John" />
+                    <Input {...field} type="text" placeholder="John" disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Last Name Field */}
             <FormField
               control={form.control}
               name="last_name"
@@ -133,13 +154,12 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Doe" />
+                    <Input {...field} type="text" placeholder="Doe" disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
@@ -147,13 +167,12 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Name" />
+                    <Input {...field} type="text" placeholder="Name" disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Email Field */}
             <FormField
               control={form.control}
               name="email"
@@ -165,13 +184,13 @@ const SignUpForm = () => {
                       {...field}
                       type="email"
                       placeholder="Enter your Email"
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -183,13 +202,13 @@ const SignUpForm = () => {
                       {...field}
                       type="password"
                       placeholder="Create a Password"
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Password Field */}
             <FormField
               control={form.control}
               name="confirm_password"
@@ -201,13 +220,14 @@ const SignUpForm = () => {
                       {...field}
                       type="password"
                       placeholder="Confirm Password"
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Checkbox Field */}
+            
             <div className="flex items-center gap-4">
               <input
                 type="checkbox"
@@ -215,6 +235,7 @@ const SignUpForm = () => {
                 className="w-5 h-5"
                 checked={isChecked}
                 onChange={() => setIsChecked(!isChecked)}
+                disabled={isLoading}
               />
               <label
                 htmlFor="terms-checkbox"
@@ -232,17 +253,24 @@ const SignUpForm = () => {
               </label>
             </div>
           </div>
-          <Button
-            className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
+          
+          <button
+            className={`w-full h-12 rounded-full flex items-center justify-center transition-colors
+              ${isLoading || !isChecked 
+                ? 'bg-[#7F56D9]/70 cursor-not-allowed' 
+                : 'bg-[#7F56D9] hover:bg-[#683ec2]'}`}
             type="submit"
             disabled={!isChecked || isLoading}
           >
             {isLoading ? (
-              <BeatLoader size={8} color="#ffffff" />
+              <div className="flex items-center justify-center space-x-2">
+                <BeatLoader size={8} color="#ffffff" />
+                <span className="text-white ml-2">Creating Account...</span>
+              </div>
             ) : (
-              "Create Account"
+              <span className="text-white">Create Account</span>
             )}
-          </Button>
+          </button>
         </form>
       </Form>
     </CardWrapper>
