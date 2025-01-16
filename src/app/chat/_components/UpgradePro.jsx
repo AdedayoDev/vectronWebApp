@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 function UpgradePro() {
   return (
@@ -13,15 +14,19 @@ function UpgradePro() {
         height={120}
         className="my-3"
       />
-      <div className="flex items-center justify-center w-full rounded-full text-white bg-blue-700 font-bold space-x-3 p-3 hover:cursor-pointer">
-        <span>Upgrade to Pro</span>
-        <Image
-          src="/assets/icons/Solid.png"
-          alt="message icon"
-          width={20}
-          height={20}
-        />
-      </div>
+
+      <Link href="/pricing" className="w-full">
+        <div className="flex items-center justify-center w-full rounded-full text-white bg-blue-700 font-bold space-x-3 p-3 hover:cursor-pointer">
+          <span>Upgrade to Pro</span>
+          <Image
+            src="/assets/icons/Solid.png"
+            alt="message icon"
+            width={20}
+            height={20}
+          />
+        </div>
+      </Link>
+      
     </div>
   );
 }
