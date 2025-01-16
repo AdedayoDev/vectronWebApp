@@ -16,7 +16,7 @@ function UpgradePro() {
       <div className="flex items-center justify-center w-full rounded-full text-white bg-blue-700 font-bold space-x-3 p-3 hover:cursor-pointer">
         <span>Upgrade to Pro</span>
         <Image
-          src="/assets/icons/solid.png"
+          src="/assets/icons/Solid.png"
           alt="message icon"
           width={20}
           height={20}
