@@ -4,6 +4,8 @@ import api from '../../../lib/chatapi';
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
+import ChatBodyNew from "../_components/ChatBodyNew";
+import ChatBody from "../_components/ChatBody";
 import {
   CirclePlus,
   Copy,
@@ -153,20 +155,7 @@ export default function Chatdetail() {
                       <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center">
                         Good day! How may I assist you today?
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                        <div className="bg-blue-400 text-white p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold mb-2">Explore</h3>
-                          <p className="text-sm">Learn how to use Vechtron.ai for needs</p>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold mb-2">Entertainment</h3>
-                          <p className="text-sm">What Music do you want to listen to?</p>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold mb-2">Entertainment</h3>
-                          <p className="text-sm">What Music do you want to listen to?</p>
-                        </div>
-                      </div>
+                        <ChatBodyNew />
                     </>
                   ) : (
                     messages.map((message) => (
