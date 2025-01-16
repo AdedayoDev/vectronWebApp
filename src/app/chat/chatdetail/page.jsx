@@ -147,7 +147,7 @@ export default function Chatdetail() {
         <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
           <div className="relative flex flex-col w-full min-h-96 lg:min-h-[35rem] lg:min-w-[760px] xl:w-[960px] -mt-24 bg-white z-10 p-2 sm:p-7 rounded-2xl shadow-xl">
             <div className="flex-1 overflow-hidden">
-              <div className="w-full h-[calc(100vh-400px)] overflow-y-auto" ref={messagesEndRef}>
+              <div className="w-full h-[calc(105vh-400px)] overflow-y-auto" ref={messagesEndRef}>
                 <div className="max-w-4xl mx-auto px-4">
                   {showWelcome && messages.length === 0 ? (
                     <>
@@ -237,7 +237,7 @@ export default function Chatdetail() {
             </div>
           </div>
 
-          <div className="mx-auto -mt-8">
+          <div className="sticky bottom-0 w-full bg-white p-4">
             <Input 
               onClick={() => {}} 
               onSubmit={handleMessageSubmit}
