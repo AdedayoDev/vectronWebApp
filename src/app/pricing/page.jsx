@@ -4,14 +4,25 @@ import React from "react";
 import Faq from "./components/Faq";
 import PricingSlider from "./components/PricingSlider";
 import "./pricing.css";
-import NavBar from "@components/navbar/navbar";
+import Profile from "../chat/_components/Profile";
 import { CldImage } from "next-cloudinary";
 
 export default function Settings() {
   return (
     <>
-      <NavBar text="My account" icon="/assets/icons/user.png" />
-      <div className="settings-container mt-14">
+      <div className="flex flex-col">
+      <div className="flex justify-end p-2">
+      <Profile />
+      </div>
+      <div className="relative w-full h-40">
+          <Image
+            src="/assets/images/bg-img3.png"
+            alt="Background image"
+            fill
+            className="object-cover"
+          />
+        </div>
+        <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
         <div className="settings-main">
           {process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME && (
             <CldImage
@@ -53,6 +64,7 @@ export default function Settings() {
           </div>
           <Faq />
         </div>
+      </div>
       </div>
     </>
   );
