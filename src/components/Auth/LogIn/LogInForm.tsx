@@ -33,11 +33,11 @@ const LogInSchema = z.object({
 
 const LogInForm = () => {
   const { login } = useAuthStore();
-  const [isChecked, setIsChecked] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [statusBarVisible, setStatusBarVisible] = useState(false);
+  const [statusBarProgress, setStatusBarProgress] = useState(0);
+  const [statusBarType, setStatusBarType] = useState<"success" | "error" | null>(null);
 
   const form = useForm({
     resolver: zodResolver(LogInSchema),
@@ -48,29 +48,29 @@ const LogInForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
-    if (!isChecked) {
-      setMessage("You must agree to the terms and conditions before logging in.");
-      setMessageType("error");
-      return;
-    }
-
     setIsLoading(true);
-    setMessage("");
-    setMessageType("");
+    setStatusBarVisible(false);
+    setStatusBarProgress(0);
+    setStatusBarType(null);
 
     try {
       await login(data.email, data.password);
-      setMessage("Login successful! Redirecting...");
-      setMessageType("success");
+      setStatusBarType("success");
+      setStatusBarVisible(true);
 
-      setTimeout(() => {
-        window.location.href = "/chat";
-      }, 2000);
+      const interval = setInterval(() => {
+        setStatusBarProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            window.location.href = "/chat";
+          }
+          return prev + 5;
+        });
+      }, 100);
     } catch (error: any) {
-      setMessage(
-        error.response?.data?.message || "Log in failed. Please try again."
-      );
-      setMessageType("error");
+      setStatusBarType("error");
+      setStatusBarVisible(true);
+      setStatusBarProgress(100);
     } finally {
       setIsLoading(false);
     }
@@ -150,13 +150,7 @@ const LogInForm = () => {
 
           {/* Checkbox Field */}
           <div className="flex items-center gap-4">
-            <input
-              type="checkbox"
-              id="terms-checkbox"
-              className="w-5 h-5"
-              checked={isChecked}
-              onChange={() => setIsChecked(!isChecked)}
-            />
+            <input type="checkbox" id="terms-checkbox" className="w-5 h-5" />
             <label
               htmlFor="terms-checkbox"
               className="font-inter w-full text-[#040308] flex items-center justify-between"
@@ -171,6 +165,7 @@ const LogInForm = () => {
               </Link>
             </label>
           </div>
+
           <Button
             className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             disabled={isLoading}
@@ -181,16 +176,28 @@ const LogInForm = () => {
         </form>
       </Form>
 
-      {/* Popup Message */}
-      {messageType && (
+      {/* Status Bar */}
+      {statusBarVisible && (
         <div
-          className={`fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
-            messageType === "success"
+          className={`fixed bottom-4 left-4 right-4 max-w-md mx-auto p-4 rounded-lg shadow-lg z-50 ${
+            statusBarType === "success"
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
           }`}
         >
-          {message}
+          <p>
+            {statusBarType === "success"
+              ? "Login successful! Redirecting..."
+              : "Login failed. Please try again."}
+          </p>
+          {statusBarType === "success" && (
+            <div className="h-2 bg-green-500 rounded mt-2 relative overflow-hidden">
+              <div
+                className="absolute top-0 left-0 h-full bg-green-700 transition-all"
+                style={{ width: `${statusBarProgress}%` }}
+              ></div>
+            </div>
+          )}
         </div>
       )}
     </CardWrapper>
