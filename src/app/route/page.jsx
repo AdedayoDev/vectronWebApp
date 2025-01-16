@@ -1,6 +1,6 @@
 "use client";
 
-import SideBar from "@app/voicechat/components/sideBar";
+
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import Navbar from "@components/navbar/chatNav";
 import "./route.css";
 import SearchOverlay from "../route/component/SearchOverlay";
 import PlacesSlider from "../route/component/PlacesSlider";
+import SideBar from "../chat/_components/SideBar";
 
 export default function Route() {
   const mapRef = useRef(null);
@@ -124,7 +125,7 @@ export default function Route() {
           </div>
         </div>
         <div className="side-container">
-          <SideBar showSideBar={ShowsideBar} handleShow={handleShowSideBar} />
+          <SideBar />
         </div>
       </div>
     </>

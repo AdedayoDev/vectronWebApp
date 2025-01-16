@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 function ChatBody() {
     return (
@@ -158,12 +159,14 @@ function NavigationFeed() {
               Get your directions faster
             </p>
             <div className="relative w-3 h-2">
+            <Link href="/route" className="w-full">
               <Image
                 src="/assets/icons/arrow.png"
                 alt="arrow"
                 fill
                 className="object-cover"
               />
+              </Link>
             </div>
           </div>
         </div>
