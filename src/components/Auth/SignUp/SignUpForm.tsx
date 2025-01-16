@@ -88,6 +88,10 @@ const SignUpForm = () => {
     }
   };
 
+  const userData = {
+    email: form.getValues("email"),
+  };
+
   return (
     <CardWrapper
       image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
@@ -99,10 +103,10 @@ const SignUpForm = () => {
       largeScreenPadding="lg:pt-60"
     >
       <div className="space-y-2 mb-2">
-        <GoogleLogIn userData={{ email: form.getValues("email") }} mode="login">
+        <GoogleLogIn userData={userData} mode="login">
           Continue with Google
         </GoogleLogIn>
-        <AppleLogIn userData={{ email: form.getValues("email") }} mode="login">
+        <AppleLogIn userData={userData} mode="login">
           Continue with Apple
         </AppleLogIn>
       </div>
@@ -211,7 +215,9 @@ const SignUpForm = () => {
                       />
                       <span
                         className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
-                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        onClick={() =>
+                          setShowConfirmPassword((prev) => !prev)
+                        }
                       >
                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                       </span>

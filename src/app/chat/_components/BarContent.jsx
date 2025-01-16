@@ -4,6 +4,7 @@ import Recent from "./Recent";
 import Switchs from "./Switchs";
 import ListComp from "./ListComp";
 import UpgradePro from "./UpgradePro";
+import NewChatButton from './NewChat';
 
 export default function BarContent() {
   return (
@@ -21,18 +22,8 @@ export default function BarContent() {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <Link href="/chat/newchat">
-          <div className="flex items-center justify-center w-44 xl:w-52 px-3 py-2 rounded-full space-x-2 hover:cursor-pointer bg-purple-400">
-            <div className="relative w-5 h-5">
-              <Image
-                src="/assets/icons/chat-add2.png"
-                alt="chat-add"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <p className="text-white">New Chat</p>
-          </div>
+        <Link href="/chat/chatdetail">
+            <NewChatButton />
         </Link>
         <Link href="/chat/searchchat">
           <div className="relative w-10 h-10">

@@ -16,8 +16,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BeatLoader } from "react-spinners";
 import { z } from "zod";
+import { useAuthStore } from "../../../store/useStore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import axios from "axios"; // Import Axios for API requests
 import CardWrapper from "../CardWrapper";
 import AppleLogIn from "./AppleLogIn";
 import GoogleLogIn from "./GoogleLogIn";
@@ -32,6 +32,8 @@ const LogInSchema = z.object({
 });
 
 const LogInForm = () => {
+  const { login } = useAuthStore();
+  const [isChecked, setIsChecked] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [isLoading, setIsLoading] = useState(false);
@@ -46,36 +48,27 @@ const LogInForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof LogInSchema>) => {
+    if (!isChecked) {
+      setMessage("You must agree to the terms and conditions before logging in.");
+      setMessageType("error");
+      return;
+    }
+
     setIsLoading(true);
     setMessage("");
     setMessageType("");
 
     try {
-      const response = await axios.post(
-        "https://api-staging.vechtron.com/auth/api/v1/auth/account/login",
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await login(data.email, data.password);
+      setMessage("Login successful! Redirecting...");
+      setMessageType("success");
 
-      if (response.status === 200) {
-        setMessage("Login successful! Redirecting...");
-        setMessageType("success");
-
-        
-        setTimeout(() => {
-          window.location.href = "/auth/email-verification";
-        }, 2000);
-      } else {
-        setMessage("Unexpected response from the server.");
-        setMessageType("error");
-      }
+      setTimeout(() => {
+        window.location.href = "/chat";
+      }, 2000);
     } catch (error: any) {
       setMessage(
-        error.response?.data?.message || "Login failed. Please try again."
+        error.response?.data?.message || "Log in failed. Please try again."
       );
       setMessageType("error");
     } finally {
@@ -85,8 +78,6 @@ const LogInForm = () => {
 
   const userData = {
     email: form.getValues("email"),
-    name: undefined,
-    password: undefined,
   };
 
   return (
@@ -159,7 +150,13 @@ const LogInForm = () => {
 
           {/* Checkbox Field */}
           <div className="flex items-center gap-4">
-            <input type="checkbox" id="terms-checkbox" className="w-5 h-5" />
+            <input
+              type="checkbox"
+              id="terms-checkbox"
+              className="w-5 h-5"
+              checked={isChecked}
+              onChange={() => setIsChecked(!isChecked)}
+            />
             <label
               htmlFor="terms-checkbox"
               className="font-inter w-full text-[#040308] flex items-center justify-between"

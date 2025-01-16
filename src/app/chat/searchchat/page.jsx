@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Profile from "../_components/Profile";
 import SideBar from "../_components/SideBar";
@@ -6,12 +8,6 @@ import Search from "../_components/Search";
 export default function Chat() {
   return (
     <>
-      {/* <div className="flex flex-col">
-        <div className="flex justify-end p-2">
-          <Profile />
-        </div>
-        <div className="flex flex-col items-start lg:flex-row">
-          <div className="flex flex-1 justify-center items-start w-full"> */}
       <div className="relative">
         <div className="relative w-full h-40">
           <Image
@@ -40,12 +36,6 @@ export default function Chat() {
           </div>
         </div>
       </div>
-      {/* </div>
-          <div className="flex place-self-center w-full lg:w-72 xl:w-80 lg:place-self-start">
-            <SideBar />
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }
