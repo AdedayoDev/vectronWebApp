@@ -2,7 +2,7 @@ import Image from "next/image";
 
 function UpgradePro() {
   return (
-    <div className="relative flex flex-col items-center justify-center w-full bg-purple-400 p-5 rounded-3xl">
+    <div className="relative flex flex-col items-center justify-center w-full bg-[#9FB8FF] p-5 rounded-3xl">
       <button className="absolute top-3 right-3 font-semibold bg-white h-10 w-10 p-1 rounded-full hover:cursor-pointer">
         X
       </button>
