@@ -1,59 +1,33 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
-import { useAuthStore } from "@store/useStore"; 
-import axios from "axios";
 
 const InputToken = () => {
-  const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState(["", "", "", ""]);
   const [email, setEmail] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]); 
-  const router = useRouter();
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter(); // Initialize useRouter
 
-  
-  const bearerToken = useAuthStore((state) => state.token);
-
- 
-  useEffect(() => {
-    const emailFromStorage = localStorage.getItem("user");
-    if (emailFromStorage) {
-      try {
-        const user = JSON.parse(emailFromStorage);
-        if (user && user.email) {
-          setEmail(user.email);
-        } else {
-          setError("Invalid user data in storage. Please log in again.");
-        }
-      } catch {
-        setError("Failed to parse user data from storage.");
-      }
-    } else {
-      setError("No email found. Please log in first.");
-    }
-  }, []);
-
-  // Function to handle changes in individual input fields
+  // Function to handle input change
   const handleInputChange = (value: string, index: number) => {
     if (/^[0-9]?$/.test(value)) {
       const updatedToken = [...token];
       updatedToken[index] = value;
       setToken(updatedToken);
 
-      // Move focus to the next input if valid
+      // Move to the next input
       if (value && index < 3) {
         inputRefs.current[index + 1]?.focus();
       }
     }
   };
 
-  // Function to handle backspace or delete input
+  // Function to handle deletion of input
   const handleInputDelete = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Backspace" || event.key === "Delete") {
       const updatedToken = [...token];
@@ -64,85 +38,89 @@ const InputToken = () => {
         setToken(updatedToken);
       }
 
-      // Move focus to the previous input
+      // Move focus to the previous input if "Backspace" is pressed
       if (event.key === "Backspace" && index > 0) {
         inputRefs.current[index - 1]?.focus();
       }
     }
   };
 
-  // Function to handle pasting a token directly
+  // Function to handle pasting into inputs
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    const pastedData = e.clipboardData.getData("text").slice(0, 4); // Restrict to 4 characters
+    const pastedData = e.clipboardData.getData("text").slice(0, 4);
     const updatedToken = pastedData.split("");
     setToken(updatedToken);
 
-    // Autofill inputs
+    // Autofill all inputs
     updatedToken.forEach((value, index) => {
       if (inputRefs.current[index]) {
         inputRefs.current[index]!.value = value;
       }
     });
 
-    // Move focus to the last input if all are filled
+    // Move focus to the last input
     if (updatedToken.length === 4) {
       inputRefs.current[3]?.focus();
     }
   };
 
-  // Function to handle form submission
+  // Function to fetch email
+  React.useEffect(() => {
+    const fetchEmail = async () => {
+      try {
+        const response = await fetch(
+          "https://your-backend-endpoint.com/api/get-email",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setEmail(data.email);
+        } else {
+          console.error("Failed to fetch email", await response.json());
+        }
+      } catch (error) {
+        console.error("Error fetching email:", error);
+      }
+    };
+
+    fetchEmail();
+  }, []);
+
+  // Function to submit the token
   const handleSubmitToken = async () => {
     const tokenString = token.join("");
-    setError(null);
-  
-    if (!email) {
-      setError("No email found. Please log in again.");
-      return;
-    }
-  
-    if (!bearerToken) {
-      setError("No authorization token found. Please log in again.");
-      return;
-    }
-  
-    if (tokenString.length !== 4) {
-      setError("Please enter a 4-digit verification code.");
-      return;
-    }
-  
-    setIsSubmitting(true);
-  
     try {
-      // Use axios for the POST request
-      const response = await axios.post(
-        "https://api-staging.vechtron.com/auth/api/v1/users/verify-email/",
+      const response = await fetch(
+        "https://your-backend-endpoint.com/api/verify-token",
         {
-          email,
-          token: tokenString,
-        },
-        {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken}`, // Include the Bearer token for authorization
           },
+          body: JSON.stringify({
+            email,
+            token: tokenString,
+          }),
         }
       );
-  
-      // If the request is successful, redirect to the email-verified page
-      if (response.status === 200) {
+
+      if (response.ok) {
+        console.log("Token verified successfully");
+        // Redirect to /auth/email-verified after successful verification
         router.push("/auth/email-verified");
-      }
-    } catch (error: any) {
-      console.error("Error verifying token:", error);
-  
-      // Handle error response from the server
-      if (error.response && error.response.data) {
-        setError(error.response.data.message || "Invalid verification code. Please try again.");
       } else {
-        setError("An unexpected error occurred. Please try again later.");
+        console.error("Invalid token", await response.json());
+        // Handle error (e.g., show error message)
+        alert("Invalid token. Please try again.");
       }
-    } finally {
-      setIsSubmitting(false);
+    } catch (error) {
+      console.error("Error verifying token:", error);
     }
   };
 
@@ -160,16 +138,15 @@ const InputToken = () => {
         </div>
         <div>
           <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
-            Check your mail
+            Enter the verification code
           </h2>
-          <p className="w-[360px] text-[#667085] mx-auto text-center">
-            We sent a verification code to{" "}
+          <p>
+            We sent a verification link to{" "}
             <span className="font-medium text-[#7f56d9]">
               {email || "loading..."}
             </span>
           </p>
         </div>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div className="flex space-x-4">
           {token.map((value, index) => (
             <input
@@ -189,19 +166,13 @@ const InputToken = () => {
         </div>
         <Button
           onClick={handleSubmitToken}
-          disabled={isSubmitting}
-          className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
+          className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white"
         >
-          {isSubmitting ? "Verifying..." : "Verify Token"}
+          Verify Token
         </Button>
         <p className="font-inter font-normal text-sm text-[#667085]">
-          Didn&apos;t receive the email?{" "}
-          <span
-            className="text-[#6941c6] cursor-pointer"
-            onClick={() => router.push("/auth/resend-email")}
-          >
-            Click to resend
-          </span>
+          Didn&apos;t receive the email?
+          <span className="text-[#6941c6] cursor-pointer">Click to resend</span>
         </p>
         <Link href="/auth/log-in">
           <Button size="lg" className="bg-transparent hover:bg-transparent">

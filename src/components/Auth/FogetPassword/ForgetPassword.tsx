@@ -37,10 +37,6 @@ const ForgetPassword = () => {
     },
   });
 
-  const [loading, setLoading] = useState(false); 
-  const [successMessage, setSuccessMessage] = useState<string | null>(null); 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); 
-
   const onSubmit = async (data: z.infer<typeof ForgetPasswordSchema>) => {
     setIsLoading(true);
     try {
