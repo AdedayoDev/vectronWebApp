@@ -42,7 +42,7 @@ export default function Chat() {
         <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
           <div className="relative flex flex-col text-center w-full -mt-24 bg-white z-10 p-2 sm:p-7 lg:py-7 lg:px-10 xl:px-52 rounded-2xl shadow-xl">
             <Link
-              href="/chat/newchat"
+              href="/chat/chatdetail"
               className="absolute top-3 right-3 border-2 border-purple-600 w-7 md:w-10 p-1 rounded-xl"
             >
               <div className="relative w-4 h-4 md:w-7 md:h-7">
