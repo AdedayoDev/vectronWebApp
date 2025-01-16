@@ -7,55 +7,36 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import api from "../../../lib/protectedapi";
 import { useAuthStore } from "@store/useStore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
-  const [statusBarVisible, setStatusBarVisible] = useState(false);
-  const [statusBarProgress, setStatusBarProgress] = useState(0);
-  const [statusBarType, setStatusBarType] = useState<"success" | "error" | null>(null);
 
   const { user } = useAuthStore();
-  const router = useRouter();
 
   const handleSendVerification = async () => {
-    setStatusBarVisible(false);
-    setStatusBarProgress(0);
-    setStatusBarType(null);
-
     try {
       const response = await api.post("/auth/api/v1/users/send-verify-mail/", {});
 
       if (response.status === 200) {
         setEmail(user?.email || "");
-        setStatusBarType("success");
-        setStatusBarVisible(true);
-
-        // Simulate progress bar
-        const interval = setInterval(() => {
-          setStatusBarProgress((prev) => {
-            if (prev >= 100) {
-              clearInterval(interval);
-              router.push("/components/auth/input-token"); // Navigate to input-token after progress completes
-            }
-            return prev + 5;
-          });
-        }, 100);
-      } else {
-        setStatusBarType("error");
-        setStatusBarVisible(true);
-        setStatusBarProgress(100);
+        toast.success("Verification email sent successfully!", {
+          position: "top-right",
+          autoClose: 5000,
+        });
       }
     } catch (error) {
       console.error("Error sending verification email:", error);
-      setStatusBarType("error");
-      setStatusBarVisible(true);
-      setStatusBarProgress(100);
+      toast.error("Failed to send verification email. Please try again.", {
+        position: "top-right",
+        autoClose: 5000,
+      });
     }
   };
 
   useEffect(() => {
-    // Automatically send verification email on component mount
     handleSendVerification();
   }, []);
 
@@ -98,30 +79,8 @@ const EmailVerification = () => {
         </Link>
       </div>
 
-      {/* Status Bar */}
-      {statusBarVisible && (
-        <div
-          className={`fixed bottom-4 left-4 right-4 max-w-md mx-auto p-4 rounded-lg shadow-lg z-50 ${
-            statusBarType === "success"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          <p>
-            {statusBarType === "success"
-              ? "Verification email sent successfully!"
-              : "Failed to send verification email. Please try again."}
-          </p>
-          {statusBarType === "success" && (
-            <div className="h-2 bg-green-500 rounded mt-2 relative overflow-hidden">
-              <div
-                className="absolute top-0 left-0 h-full bg-green-700 transition-all"
-                style={{ width: `${statusBarProgress}%` }}
-              ></div>
-            </div>
-          )}
-        </div>
-      )}
+      {/* ToastContainer */}
+      <ToastContainer />
     </main>
   );
 };

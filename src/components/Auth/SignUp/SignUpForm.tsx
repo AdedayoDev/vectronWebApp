@@ -42,10 +42,8 @@ const SignUpSchema = z
 const SignUpForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [statusBarVisible, setStatusBarVisible] = useState(false);
-  const [statusBarProgress, setStatusBarProgress] = useState(0);
-  const [statusBarType, setStatusBarType] = useState<"success" | "error" | null>(null);
-
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error" | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -63,34 +61,28 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     if (!isChecked) {
-      setStatusBarType("error");
-      setStatusBarProgress(100);
+      setPopupMessage("You must agree to the terms and conditions before signing up.");
+      setPopupType("error");
       return;
     }
 
     setIsLoading(true);
-    setStatusBarVisible(false);
-    setStatusBarProgress(0);
-    setStatusBarType(null);
+    setPopupMessage("");
+    setPopupType(null);
 
     try {
       await signup(data);
-      setStatusBarType("success");
-      setStatusBarVisible(true);
+      setPopupMessage("Sign up successful!");
+      setPopupType("success");
 
-      const interval = setInterval(() => {
-        setStatusBarProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            window.location.href = "/auth/log-in";
-          }
-          return prev + 5;
-        });
-      }, 100);
+      setTimeout(() => {
+        window.location.href = "/auth/log-in";
+      }, 2000);
     } catch (error: any) {
-      setStatusBarType("error");
-      setStatusBarVisible(true);
-      setStatusBarProgress(100);
+      setPopupMessage(
+        error.message || "An error occurred during sign up. Please try again."
+      );
+      setPopupType("error");
     } finally {
       setIsLoading(false);
     }
@@ -267,29 +259,14 @@ const SignUpForm = () => {
           </Button>
         </form>
       </Form>
-
-      {/* Status Bar */}
-      {statusBarVisible && (
+      {/* Popup Message */}
+      {popupType && (
         <div
-          className={`fixed bottom-4 left-4 right-4 max-w-md mx-auto p-4 rounded-lg shadow-lg z-50 ${
-            statusBarType === "success"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
+          className={`fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+            popupType === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
           }`}
         >
-          <p>
-            {statusBarType === "success"
-              ? "Sign up successful! Redirecting..."
-              : "You must agree to the terms and conditions before signing up."}
-          </p>
-          {statusBarType === "success" && (
-            <div className="h-2 bg-green-500 rounded mt-2 relative overflow-hidden">
-              <div
-                className="absolute top-0 left-0 h-full bg-green-700 transition-all"
-                style={{ width: `${statusBarProgress}%` }}
-              ></div>
-            </div>
-          )}
+          {popupMessage}
         </div>
       )}
     </CardWrapper>
