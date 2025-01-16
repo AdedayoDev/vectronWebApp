@@ -5,6 +5,7 @@ import Switchs from "./Switchs";
 import ListComp from "./ListComp";
 import UpgradePro from "./UpgradePro";
 import NewChatButton from './NewChat';
+import AddVehicleButton from './AddVehicles';
 
 export default function BarContent() {
   return (
@@ -36,6 +37,7 @@ export default function BarContent() {
           </div>
         </Link>
       </div>
+      <Switchs />
       <div className="flex items-center justify-between py-3 border-y border-slate-400">
         <p className="text-purple-400 hover:cursor-pointer">
           Your conversations
@@ -45,8 +47,9 @@ export default function BarContent() {
       <div>
         <Recent />
       </div>
-
-      <Switchs />
+      <div>
+        <AddVehicleButton />
+      </div>
       <div>
         <ListComp
           src="/assets/icons/bar.png"

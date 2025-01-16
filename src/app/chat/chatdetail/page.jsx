@@ -4,6 +4,7 @@ import api from '../../../lib/chatapi';
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
+import ChatBodyNew from "../_components/ChatBodyNew";
 import ChatBody from "../_components/ChatBody";
 import {
   CirclePlus,
@@ -154,9 +155,7 @@ export default function Chatdetail() {
                       <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center">
                         Good day! How may I assist you today?
                       </div>
-                        <ChatBody />
-                        <ChatBody />
-                        <ChatBody />
+                        <ChatBodyNew />
                     </>
                   ) : (
                     messages.map((message) => (
