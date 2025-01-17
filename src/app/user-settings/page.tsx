@@ -8,7 +8,7 @@ import VehicleProfile from "@components/UserSetting/VehicleManagement/VehiclePro
 import VehicleManagement from "@components/UserSetting/VehicleManagement/VehicleManagement";
 import History from "@components/UserSetting/History/History";
 
-const page = () => {
+const Page = () => {
   const [selectComponent, setSelectComponent] = useState<string>("Profile");
 
   const componentsMap: { [key: string]: React.ReactNode } = {
@@ -32,4 +32,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

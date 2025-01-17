@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import WelcomeToVechtron from "./WelcomeToVechtron";
 import {AuthGuard} from "../../guards/AuthGuards"
@@ -27,15 +27,8 @@ const LandingPage = () => {
     },
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [currentIndex]);
-
-  const handleNext = () => {
+  // Move handleNext into useCallback
+  const handleNext = useCallback(() => {
     setIsAnimating(true);
     setTimeout(() => {
       setCurrentIndex((prevIndex) =>
@@ -43,7 +36,16 @@ const LandingPage = () => {
       );
       setIsAnimating(false);
     }, 500);
-  };
+  }, [textArray.length]); // Add textArray.length as dependency
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [handleNext]); // Add handleNext to dependency array
+
 
   const handleDotClick = (index: number) => {
     if (currentIndex !== index) {

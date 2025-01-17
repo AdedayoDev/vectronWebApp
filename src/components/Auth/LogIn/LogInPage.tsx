@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback } from "react";
 import LogInForm from "./LogInForm";
 import Image from "next/image";
 
@@ -27,23 +27,26 @@ const LogInPage = () => {
       },
     ];
   
-    useEffect(() => {
-      const interval = setInterval(() => {
-        handleNext();
-      }, 5000);
-  
-      return () => clearInterval(interval);
-    }, [currentIndex]);
-  
-    const handleNext = () => {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) =>
-          prevIndex === textArray.length - 1 ? 0 : prevIndex + 1
-        );
-        setIsAnimating(false);
-      }, 500);
-    };
+  // Move handleNext into useCallback
+  const handleNext = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === textArray.length - 1 ? 0 : prevIndex + 1
+      );
+      setIsAnimating(false);
+    }, 500);
+  }, [textArray.length]); // Add textArray.length as dependency
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [handleNext, currentIndex]); // Add handleNext to dependency array
+
+
   
     const handleDotClick = (index: number) => {
       if (currentIndex !== index) {
