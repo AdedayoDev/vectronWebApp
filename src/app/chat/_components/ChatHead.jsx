@@ -1,7 +1,16 @@
+import { Image  } from "next/image";
+
+
 function ChatHead() {
   return (
-    <div className="flex justify-center bg-[#9FB8FF] text-white text-lg md:text-xl p-2 md:p-3 rounded-2xl">
-      VECHTRON UI
+    <div className="flex justify-center  p-2 md:p-3 rounded-2xl">
+      <img
+        src="/assets/icons/Media.jpeg (1).png"
+        alt="sidebar"
+        width={50}
+        height={50}
+        className="object-cover"
+      />
     </div>
   );
 }

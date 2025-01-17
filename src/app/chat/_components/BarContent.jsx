@@ -24,17 +24,27 @@ function SidebarLink({ href, icon, text }) {
 export default function BarContent() {
   return (
     <div className="w-full lg:flex flex-col space-y-10 p-3 md:p-5 bg-[#FBFDFF] lg:rounded-2xl">
-      <div className="flex items-center justify-between mt-10 lg:mt-0">
-        <p className="uppercase text-lg lg:text-2xl">VECHTRON ui</p>
-        <div className="relative w-7 h-7">
-          <Image
-            src="/assets/icons/sidebar.png"
-            alt="sidebar"
-            fill
-            className="object-cover"
-          />
-        </div>
-      </div>
+<div className="flex items-center justify-between mt-10 lg:mt-0">
+  <div className="flex-1 flex justify-center">
+    <div className="relative w-7 h-7">
+      <Image
+        src="/assets/icons/Media.jpeg (1).png"
+        alt="sidebar"
+        width={50}
+        height={50}
+        className="object-cover"
+      />
+    </div>
+  </div>
+  <div className="relative w-7 h-7">
+    <Image
+      src="/assets/icons/sidebar.png"
+      alt="sidebar"
+      fill
+      className="object-cover"
+    />
+  </div>
+</div>
 
       <div className="flex w-full items-center justify-between">
         <Link href="/chat/chatdetail">

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import WelcomeToVechtron from "./WelcomeToVechtron";
+import {AuthGuard} from "../../guards/AuthGuards"
 
 const LandingPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -55,6 +56,7 @@ const LandingPage = () => {
   };
 
   return (
+    <AuthGuard>
     <main className="w-full flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
@@ -138,6 +140,7 @@ const LandingPage = () => {
         <WelcomeToVechtron />
       </section>
     </main>
+    </AuthGuard>
   );
 };
 
