@@ -94,7 +94,7 @@ const SignUpForm = () => {
 
   return (
     <CardWrapper
-      image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
+      image="/assets/icons/Media.jpeg (1).png"
       title="Sign Up"
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"

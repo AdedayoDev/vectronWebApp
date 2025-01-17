@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import SignUpForm from "./SignUpForm";
 import Image from "next/image";
+import WelcomeToVechtron from "./WelcomeToVechtron";
 
-const SignUpPages = () => {
+const LandingPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
   const textArray = [
     {
       id: 1,
@@ -58,16 +57,13 @@ const SignUpPages = () => {
   return (
     <main className="w-full flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
-      {/* Left Section with Background Image and Overlay */}
       <section
-        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[980px] py-10 my-auto relative"
+        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[680px] relative"
         style={{
           backgroundImage: `url('/assets/images/vectron-car.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          paddingTop: "20px", 
-          paddingBottom: "20px", 
         }}
       >
         <div
@@ -91,8 +87,8 @@ const SignUpPages = () => {
 
             <div className="flex flex-col justify-between h-screen w-full mt-10">
               <div>
-                <p className="font-medium font-inter text-5xl text-white w-[525px] mb-4">
-                  Meet Your New Car-Savvy Friend
+                <p className="font-medium font-inter text-3xl text-white w-[525px] mb-4">
+                  Turn Every Drive Into a Smarter Journey.
                 </p>
               </div>
               <div className="space-y-20">
@@ -138,11 +134,11 @@ const SignUpPages = () => {
       </section>
 
       {/* Right Section with SignUpForm */}
-      <section className="w-full lg:w-1/2 h-[1200px] flex items-center justify-center">
-        <SignUpForm />
+      <section className="w-full lg:w-1/2 h-full flex items-center">
+        <WelcomeToVechtron />
       </section>
     </main>
   );
 };
 
-export default SignUpPages;
+export default LandingPage;

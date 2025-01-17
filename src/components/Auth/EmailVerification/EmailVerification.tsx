@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 
 const EmailVerification = () => {
   const [email, setEmail] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user } = useAuthStore();
 
@@ -34,6 +35,14 @@ const EmailVerification = () => {
         autoClose: 5000,
       });
     }
+  };
+
+  const handleManualCode = () => {
+    setIsModalOpen(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal
   };
 
   useEffect(() => {
@@ -65,7 +74,7 @@ const EmailVerification = () => {
         </div>
         <Button
           className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
-          onClick={handleSendVerification}
+          onClick={handleManualCode}
         >
           Enter Code Manually
         </Button>
@@ -78,6 +87,41 @@ const EmailVerification = () => {
           </Button>
         </Link>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-96 p-6">
+            <h3 className="text-xl font-semibold text-gray-800">Confirm Your Email</h3>
+            <p className="mt-2 text-gray-600">
+              We detected the email you used for registration. Click below to confirm:
+            </p>
+            <div className="mt-4 p-3 bg-green-100 rounded-md text-center">
+              <span className="text-green-700 font-medium">{email || "No email available"}</span>
+            </div>
+            <div className="mt-6 flex space-x-4 justify-end">
+              <Button
+                className="bg-gray-200 text-gray-800"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="bg-[#7f56d9] text-white"
+                onClick={() => {
+                  toast.success("Check your email for the verification code!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                  });
+                  handleCloseModal();
+                }}
+              >
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ToastContainer */}
       <ToastContainer />

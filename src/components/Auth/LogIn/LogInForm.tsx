@@ -82,7 +82,7 @@ const LogInForm = () => {
 
   return (
     <CardWrapper
-      image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
+      image="/assets/icons/Media.jpeg (1).png"
       title="Welcome back"
       label="Welcome back! Please enter your details."
       backButtonHref="/auth/sign-up"
@@ -162,7 +162,7 @@ const LogInForm = () => {
               className="font-inter w-full text-[#040308] flex items-center justify-between"
             >
               <span className="font-inter font-medium text-sm text-[#344054]">
-                Remember for 30 days
+                Keep me signed in
               </span>
               <Link href="/auth/forget-password">
                 <span className="font-inter font-medium text-sm text-[#6941c6] hover:underline cursor-pointer">
@@ -176,7 +176,7 @@ const LogInForm = () => {
             disabled={isLoading}
             type="submit"
           >
-            {isLoading ? <BeatLoader size={8} color="#fff" /> : "Login"}
+            {isLoading ? <BeatLoader size={8} color="#fff" /> : "Sign In"}
           </Button>
         </form>
       </Form>
