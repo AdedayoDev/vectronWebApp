@@ -38,23 +38,23 @@ export const signup = async (data: {
 };
 
 // LogIn API
-export const login = async (data: { email: string; password: string }) => {
-  try {
-    const response = await axiosInstance.post(
-      "/api/v1/users/send-verify-mail/",
-      data
-    );
-    return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      throw new Error(error.response.data?.message || "Login failed");
-    } else if (error.request) {
-      throw new Error("No response from server. Please try again later");
-    } else {
-      throw new Error(error.message || "An unexpected error occured.");
-    }
-  }
-};
+// export const login = async (data: { email: string; password: string }) => {
+//   try {
+//     const response = await axiosInstance.post(
+//       "/api/v1/users/send-verify-mail/",
+//       data
+//     );
+//     return response.data;
+//   } catch (error: any) {
+//     if (error.response) {
+//       throw new Error(error.response.data?.message || "Login failed");
+//     } else if (error.request) {
+//       throw new Error("No response from server. Please try again later");
+//     } else {
+//       throw new Error(error.message || "An unexpected error occured.");
+//     }
+//   }
+// };
 
 export const forgetPassword = async (data: { email: string }) => {
   try {
@@ -75,13 +75,13 @@ export const forgetPassword = async (data: { email: string }) => {
 };
 
 // Request an OTP
-export const emailVerification = async (data: { email: string }) => {
-  const response = await axiosInstance.post(
-    "/api/v1/users/send-verify-mail/",
-    data
-  );
-  return response.data;
-};
+// export const emailVerification = async (data: { email: string }) => {
+//   const response = await axiosInstance.post(
+//     "/api/v1/users/send-verify-mail/",
+//     data
+//   );
+//   return response.data;
+// };
 
 // Verify OTP
 export const verifyOTP = async (otp: string) => {

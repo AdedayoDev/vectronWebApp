@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
-import { VehicleForm } from "@components/AceternityForm/VehicleForm";
+import VehicleForm  from "@components/AceternityForm/VehicleForm";
 
 const VehicleProfile = () => {
   return (

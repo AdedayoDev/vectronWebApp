@@ -15,42 +15,75 @@ const UserOnboarding = () => {
     null
   );
 
-  const { updateVehicleOwnerStatus } = useAuthStore();
+  const { updateVehicleOwnerStatus,user } = useAuthStore();
 
-  const handleVehicleOwnerStatus = async (status: boolean) => {
-    setIsLoading(true);
-    setLoadingType(status ? "vehicle" : "pricing");
+  // const handleVehicleOwnerStatus = async (status: boolean) => {
+  //   setIsLoading(true);
+  //   setLoadingType(status ? "vehicle" : "pricing");
   
-    try {
-      const token = useAuthStore.getState().token;
+  //   try {
+  //     const token = useAuthStore.getState().token;
   
       
+  //     if (!token) {
+  //       console.error("Authorization token is missing. Redirecting to login.");
+  //       router.push("/auth/log-in");
+  //       return;
+  //     }
+  
+  //     const response = await fetch(
+  //       "https://api-staging.vechtron.com/auth/api/v1/auth/account/vehicle-owner-status",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ is_vehicle_owner: status }),
+  //       }
+  //     );
+  
+  //     if (!response.ok) {
+  //       throw new Error(`Error: ${response.statusText}`);
+  //     }
+  
+  //     updateVehicleOwnerStatus(status);
+  
+      
+  //     router.push(status ? "/vehicleprofile" : "/pricing");
+  //   } catch (error) {
+  //     console.error("Error updating vehicle owner status:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setLoadingType(null);
+  //   }
+  // };
+  
+  const handleVehicleOwnerStatus = async (status: boolean) => {
+    setIsLoading(true);
+    try {
+      const token = useAuthStore.getState().token;
       if (!token) {
         console.error("Authorization token is missing. Redirecting to login.");
         router.push("/auth/log-in");
         return;
       }
-  
-      const response = await fetch(
-        "https://api-staging.vechtron.com/auth/api/v1/auth/account/vehicle-owner-status",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ is_vehicle_owner: status }),
+      const response = await api.post('/api/v1/auth/account/vehicle-owner-status', {
+        is_vehicle_owner: status
+      });
+
+      if (response) {
+        // Update local storage
+        updateVehicleOwnerStatus(status);
+        
+        // If they have a vehicle, route to vehicle profile
+        if (status) {
+          router.push("/vehicleprofile");
+        } else {
+          router.push("/chat"); // or wherever non-vehicle owners should go
+          
         }
-      );
-  
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
       }
-  
-      updateVehicleOwnerStatus(status);
-  
-      
-      router.push(status ? "/vehicleprofile" : "/pricing");
     } catch (error) {
       console.error("Error updating vehicle owner status:", error);
     } finally {
@@ -58,8 +91,6 @@ const UserOnboarding = () => {
       setLoadingType(null);
     }
   };
-  
-
 
   return (
     <main className="w-full h-screen flex items-center justify-center">

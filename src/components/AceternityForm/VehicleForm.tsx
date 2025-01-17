@@ -1,6 +1,6 @@
 "use client";
 
-import "./vehicleprofile.css";
+import "../../app/vehicleprofile/vehicleprofile.css";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
