@@ -6,11 +6,7 @@ import React from "react";
 const NewPassword = () => {
   return (
     <main>
-      <AuthProvider>
-        <ProtectedRoute>
           <SetNewPassword />
-        </ProtectedRoute>
-      </AuthProvider>
     </main>
   );
 };
