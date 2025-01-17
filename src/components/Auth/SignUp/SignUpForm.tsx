@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import GoogleLogIn from "../LogIn/GoogleLogIn";
 import AppleLogIn from "../LogIn/AppleLogIn";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUpSchema = z
   .object({
@@ -41,7 +42,11 @@ const SignUpSchema = z
 const SignUpForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error" | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -56,39 +61,28 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     if (!isChecked) {
-      setMessage({
-        type: "error",
-        text: "You must agree to the terms and conditions before signing up."
-      });
+      setPopupMessage("You must agree to the terms and conditions before signing up.");
+      setPopupType("error");
       return;
     }
 
     setIsLoading(true);
-    setMessage({ type: "", text: "" });
-    
+    setPopupMessage("");
+    setPopupType(null);
+
     try {
-      const response = await signup(data);
-      const user = {
-        email: data.email,
-        username: data.username,
-        password: data.password,
-        first_name: data.first_name,
-        last_name: data.last_name,
-      };
-      
-      setMessage({
-        type: "success",
-        text: "Sign up successful! Redirecting to login..."
-      });
+      await signup(data);
+      setPopupMessage("Sign up successful!");
+      setPopupType("success");
 
       setTimeout(() => {
         window.location.href = "/auth/log-in";
       }, 2000);
-    } catch (error) {
-      setMessage({
-        type: "error",
-        text: "Sign up failed. Please try again."
-      });
+    } catch (error: any) {
+      setPopupMessage(
+        error.message || "An error occurred during sign up. Please try again."
+      );
+      setPopupType("error");
     } finally {
       setIsLoading(false);
     }
@@ -96,13 +90,11 @@ const SignUpForm = () => {
 
   const userData = {
     email: form.getValues("email"),
-    name: undefined,
-    password: undefined,
   };
 
   return (
     <CardWrapper
-      image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
+      image="/assets/icons/Media.jpeg (1).png"
       title="Sign Up"
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"
@@ -110,18 +102,6 @@ const SignUpForm = () => {
       smallScreenPadding="pt-72"
       largeScreenPadding="lg:pt-60"
     >
-      {message.text && (
-        <div 
-          className={`p-4 mb-4 rounded-lg ${
-            message.type === 'error' 
-              ? 'bg-red-100 text-red-700 border border-red-400' 
-              : 'bg-green-100 text-green-700 border border-green-400'
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
-      
       <div className="space-y-2 mb-2">
         <GoogleLogIn userData={userData} mode="login">
           Continue with Google
@@ -130,23 +110,24 @@ const SignUpForm = () => {
           Continue with Apple
         </AppleLogIn>
       </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-4">
-                        <FormField
+            {/* First Name Field */}
+            <FormField
               control={form.control}
               name="first_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="John" disabled={isLoading} />
+                    <Input {...field} type="text" placeholder="John" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Last Name Field */}
             <FormField
               control={form.control}
               name="last_name"
@@ -154,12 +135,13 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Doe" disabled={isLoading} />
+                    <Input {...field} type="text" placeholder="Doe" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
@@ -167,12 +149,13 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Name" disabled={isLoading} />
+                    <Input {...field} type="text" placeholder="Name" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Email Field */}
             <FormField
               control={form.control}
               name="email"
@@ -184,13 +167,13 @@ const SignUpForm = () => {
                       {...field}
                       type="email"
                       placeholder="Enter your Email"
-                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -198,17 +181,25 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Create a Password"
-                      disabled={isLoading}
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a Password"
+                      />
+                      <span
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            {/* Confirm Password Field */}
             <FormField
               control={form.control}
               name="confirm_password"
@@ -216,18 +207,27 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Confirm Password"
-                      disabled={isLoading}
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm Password"
+                      />
+                      <span
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() =>
+                          setShowConfirmPassword((prev) => !prev)
+                        }
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+            {/* Checkbox Field */}
             <div className="flex items-center gap-4">
               <input
                 type="checkbox"
@@ -235,44 +235,40 @@ const SignUpForm = () => {
                 className="w-5 h-5"
                 checked={isChecked}
                 onChange={() => setIsChecked(!isChecked)}
-                disabled={isLoading}
               />
               <label
                 htmlFor="terms-checkbox"
                 className="font-inter text-[#040308]"
               >
                 I agree to Vechtron{" "}
-                <span className="font-inter text-[#2869d4]">
-                  Terms of Service
-                </span>{" "}
-                and{" "}
-                <span className="font-inter text-[#2869d4]">
-                  Privacy Policy
-                </span>
-                .
+                <span className="font-inter text-[#2869d4]">Terms of Service</span> and{" "}
+                <span className="font-inter text-[#2869d4]">Privacy Policy</span>.
               </label>
             </div>
           </div>
-          
-          <button
-            className={`w-full h-12 rounded-full flex items-center justify-center transition-colors
-              ${isLoading || !isChecked 
-                ? 'bg-[#7F56D9]/70 cursor-not-allowed' 
-                : 'bg-[#7F56D9] hover:bg-[#683ec2]'}`}
+          <Button
+            className="w-full bg-[#7F56D9] rounded-full hover:bg-[#683ec2]"
             type="submit"
             disabled={!isChecked || isLoading}
           >
             {isLoading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <BeatLoader size={8} color="#ffffff" />
-                <span className="text-white ml-2">Creating Account...</span>
-              </div>
+              <BeatLoader size={8} color="#ffffff" />
             ) : (
-              <span className="text-white">Create Account</span>
+              "Create Account"
             )}
-          </button>
+          </Button>
         </form>
       </Form>
+      {/* Popup Message */}
+      {popupType && (
+        <div
+          className={`fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+            popupType === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+          }`}
+        >
+          {popupMessage}
+        </div>
+      )}
     </CardWrapper>
   );
 };

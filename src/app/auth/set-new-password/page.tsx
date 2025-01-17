@@ -5,12 +5,9 @@ import React from "react";
 
 const NewPassword = () => {
   return (
-
-
-        <main>
+    <main>
           <SetNewPassword />
-        </main>
-
+    </main>
   );
 };
 

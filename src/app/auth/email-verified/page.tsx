@@ -6,9 +6,9 @@ import React from "react";
 const page = () => {
   return (
     <AuthProvider>
-        <main>
-          <EmailVerified />
-        </main>
+      <main>
+        <EmailVerified />
+      </main>
     </AuthProvider>
   );
 };
