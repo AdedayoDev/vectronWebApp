@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 function Profile() {
   return (
@@ -25,12 +26,14 @@ function Profile() {
         className="hover:cursor-pointer"
       />
       <div className="relative w-7 h-7">
+      <Link href="/settings">
         <Image
           src="/assets/images/Avatar.png"
           alt="attachment image"
           fill
           className="object-cover hover:cursor-pointer"
         />
+        </Link>
       </div>
     </div>
   );
