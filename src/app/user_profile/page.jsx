@@ -1,72 +1,130 @@
 "use client";
+
 import { Check, CloudUpload } from "lucide-react";
 import SettingsSideBar from "../settings/components/SettingsSideBar";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "@components/navbar/chatNav";
+import api from "../../lib/protectedapi";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function Profile() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    phoneNumber: "",
-    location: "",
+    profilePic: null,
+    is_vehicle_owner: true,
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
+  const [userProfilePic, setUserProfilePic] = useState(
+    "/assets/icons/avatar.png"
+  );
 
+  // Validate inputs
   const validateInputs = () => {
     const validationErrors = {};
-
-    // Full Name validation
     if (!formData.fullName.trim()) {
       validationErrors.fullName = "Full name is required.";
     }
-
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
       validationErrors.email = "Email is required.";
     } else if (!emailRegex.test(formData.email)) {
       validationErrors.email = "Invalid email format.";
     }
-
-    // Phone Number validation
-    const phoneRegex = /^\d{10,15}$/;
-    if (!formData.phoneNumber.trim()) {
-      validationErrors.phoneNumber = "Phone number is required.";
-    } else if (!phoneRegex.test(formData.phoneNumber)) {
-      validationErrors.phoneNumber = "Phone number must be 10-15 digits.";
-    }
-
-    // Location validation
-    if (!formData.location.trim()) {
-      validationErrors.location = "Location is required.";
-    }
-
     return validationErrors;
   };
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    const validationErrors = validateInputs();
-    setErrors(validationErrors);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await api.get("/auth/api/v1/users/get-profile/");
 
-    if (Object.keys(validationErrors).length === 0) {
-      setAlert("Profile updated successfully!");
-      setTimeout(() => setAlert(""), 3000);
+        if (response) {
+          const { first_name, last_name, email, profile_picture } = response;
+
+          const updatedData = {
+            fullName: `${first_name} ${last_name}`,
+            email: email,
+            profilePic: null,
+          };
+
+          setFormData(updatedData);
+          setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
+        } else {
+          console.warn("Response is null or undefined.");
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error.message);
+        console.log("Error details:", error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  // Handle profile picture change
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({ ...formData, profilePic: file });
+      setUserProfilePic(URL.createObjectURL(file));
     }
-    //Reset forms
-    setFormData({
-      fullName: "",
-      email: "",
-      phoneNumber: "",
-      location: "",
-    });
+  };
+
+  // Handle form submission
+  const handleEdit = async (e) => {
+    e.preventDefault();
+
+    // Validate inputs
+    const validationErrors = validateInputs();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // Prepare form data
+    const updatedFormData = new FormData();
+    const [firstName, ...lastNameParts] = formData.fullName.split(" ");
+    const lastName = lastNameParts.join(" ");
+    updatedFormData.append("first_name", firstName || "");
+    updatedFormData.append("last_name", lastName || "");
+    updatedFormData.append("email", formData.email);
+    if (formData.profilePic) {
+      updatedFormData.append("profile_picture", formData.profilePic);
+    }
+
+    try {
+      // Make the POST request
+      const response = await api.post(
+        "/auth/api/v1/users/update-profile/",
+        updatedFormData,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response?.status === 200) {
+        const { first_name, last_name, email, profile_picture } = response;
+        setFormData({
+          fullName: `${first_name} ${last_name}`,
+          email,
+          profilePic: null,
+        });
+
+        setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
+        setAlert("Profile updated successfully!");
+        setTimeout(() => setAlert(""), 3000);
+      } else {
+        console.warn("Failed to update profile:", response);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error.message);
+    }
   };
 
   const handleGoHome = () => {
@@ -75,7 +133,7 @@ export default function Profile() {
 
   return (
     <>
-    <NavBar/>
+      <NavBar />
       <section>
         <Image
           src="/assets/images/bg-img3.png"
@@ -84,36 +142,37 @@ export default function Profile() {
           height={20}
           className="w-[95%] h-[50px] object-cover mt-11 mx-auto"
         />
-        <div className="block md:block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto ">
+        <div className="block lg:flex gap-[100px] w-[90%] relative -top-5 px-4 pt-11 bg-white rounded-sm shadow mx-auto">
           <SettingsSideBar />
           <div className="w-full lg:mt-0 h-[630px]">
             <h1 className="font-semibold text-lg">Personal Information</h1>
 
             <div className="flex gap-4 mt-5 items-center">
+              <Image
+                src={userProfilePic}
+                alt="user"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
               <div>
-                <Image
-                  src="/assets/icons/avatar.png"
-                  alt="user"
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              </div>
-              <div>
-                <div className="flex text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2">
-                  <p>Upload a new image</p>
-                  <CloudUpload size={15} color="black" />
+                <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
+                  <p className="text-gray-400">Upload a new image</p>
+                  <CloudUpload size={15} color="gray" />
+                  <input
+                    type="file"
+                    onChange={handleProfilePicChange}
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                  />
                 </div>
-                <p className="lg:text-base w-[80%] text-gray-400 text-sm">
-                  800x800 PNG, JPG is recommended. Maximum file size: 2Mb
+                <p className="text-sm text-gray-400">
+                  800x800 PNG, JPG recommended. Max file size: 2MB.
                 </p>
               </div>
             </div>
 
-            <form
-              onSubmit={handleEdit}
-              className="lg:grid grid-cols-2 lg:w-[80%] items-center"
-            >
+            <form onSubmit={handleEdit} className="lg:w-[33%]">
               <div className="my-6 lg:mr-11">
                 <label className="block text-gray-700 font-medium mb-2">
                   Full Name:
@@ -131,26 +190,7 @@ export default function Profile() {
                 )}
               </div>
 
-              <div className="mb-4 lg:mb-0">
-                <label className="block text-gray-700 font-medium mb-2">
-                  Phone Number:
-                </label>
-                <input
-                  type="text"
-                  value={formData.phoneNumber}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phoneNumber: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors.phoneNumber && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.phoneNumber}
-                  </p>
-                )}
-              </div>
-
-              <div className="mb-4 lg:mr-11 lg:mb-0">
+              <div className="mb-4 lg:mr-11">
                 <label className="block text-gray-700 font-medium mb-2">
                   Email:
                 </label>
@@ -167,48 +207,27 @@ export default function Profile() {
                 )}
               </div>
 
-              <div className="mb-4 lg:mb-0">
-                <label className="block text-gray-700 font-medium mb-2">
-                  Location:
-                </label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {errors.location && (
-                  <p className="text-red-500 text-sm mt-1">{errors.location}</p>
-                )}
-              </div>
-
-              <div className="flex items-center gap-7 my-7 justify-center lg:w-full lg:mx-[50%]">
+              <div className="flex items-center gap-7 my-7">
                 <button
                   type="submit"
-                  className="px-4 py-2 cursor-pointer w-36 bg-blue-800 text-white font-medium rounded-full focus:bg-blue-600 focus:outline-none"
+                  className="px-4 py-2 w-36 bg-blue-800 text-white font-medium rounded-full"
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   onClick={handleGoHome}
-                  className="px-4 py-[6px] w-36 text-gray-500 cursor-pointer font-medium rounded-full focus:outline-none border-2 border-solid border-purple-300"
+                  className="px-4 py-[6px] w-36 text-gray-500 font-medium rounded-full border-2 border-purple-300"
                 >
                   Go Home
                 </button>
               </div>
             </form>
 
-            {/* Alert */}
             {alert && (
-              <div className="mt-4 p-3 bg-customGreen flex gap-3 items-center absolute right-3 top-0 w-[60%] lg:w-[25%] text-center rounded-md">
-                <div className="bg-green-600 rounded-full">
-                  <Check color="white" />
-                </div>
-
-                {alert}
+              <div className="mt-4 p-3 bg-green-100 flex gap-3 items-center rounded-md">
+                <Check color="green" />
+                <p>{alert}</p>
               </div>
             )}
           </div>
