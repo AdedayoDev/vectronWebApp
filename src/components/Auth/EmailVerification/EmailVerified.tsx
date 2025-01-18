@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@components/ui/button";
@@ -94,7 +93,7 @@ const EmailVerified = () => {
                 {verificationStatus === 'success' && (
                     <Button 
                         onClick={handleContinue}
-                        className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white"
+                        className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white"
                     >
                         Continue
                     </Button>

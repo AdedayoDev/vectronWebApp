@@ -3,33 +3,38 @@
 import { Button } from "@components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import api from '../../../lib/protectedapi';
-import { useAuthStore } from '@store/useStore'
+import React, { useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import api from "../../../lib/protectedapi";
+import { useAuthStore } from "@store/useStore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EmailVerification = () => {
-  const [email, setEmail] = useState<string | null>(null);
-  const { token, user } = useAuthStore()
+  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuthStore();
 
-  useEffect(() => {
-    const fetchEmail = async () => {
-      try {
-        const response = await api.post('/auth/api/v1/users/send-verify-mail/',{}); 
-
-        // if (response.ok) {
-        //   const data = await response.json();
-        //   setEmail(data.email);
-        // } else {
-        //   console.error("Failed to fetch email", await response.json());
-        // }
-      } catch (error) {
-        console.error("Error fetching email:", error);
+  const handleSendVerification = async () => {
+    setIsLoading(true);
+    try {
+      const response = await api.post("/auth/api/v1/users/send-verify-mail/", {});
+      console.log(response)
+      if (response.status_code === 200) {
+        toast.success(`New verification email sent to ${user?.email}`, {
+          position: "top-right",
+          autoClose: 5000,
+        });
       }
-    };
-
-    fetchEmail(); // Call the fetchEmail function on component mount
-  }, []);
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      toast.error("Failed to send verification email. Please try again.", {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <main className="w-full h-screen flex items-center justify-center">
@@ -38,39 +43,39 @@ const EmailVerification = () => {
           <Image
             src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734714374/Featured_icon_mcn2x0.png"
             alt="Email Verification Icon"
-            width={56} 
+            width={56}
             height={56}
             className="w-14 h-14"
           />
         </div>
         <div>
           <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
-            Check your email
+            Verify your email
           </h2>
-          <p>
-            We sent a verification link to&nbsp; 
+          <p className="text-center mt-2">
+            Click below to send a verification link to&nbsp;
             <span className="font-medium text-[#7f56d9]">
-               {user?.email }
+              {user?.email || "your email"}
             </span>
           </p>
         </div>
-        <Link href="/components/Auth/input-token">
-          {" "}
-          <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
-            Enter Code manually
-          </Button>{" "}
-        </Link>
-
+        <Button
+          className="bg-[#7f56d9] w-80 h-11 text-base font-inter font-medium text-white hover:bg-[#6645ae]"
+          onClick={handleSendVerification}
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : "Send Verification Email"}
+        </Button>
         <Link href="/auth/log-in">
-          {" "}
-          <Button size="lg" className="bg-transparent hover:bg-transparent">
-            <FaArrowLeft className="text-lg lg:text-xl text-[#667085]" />
+          <Button size="lg" className="bg-transparent hover:bg-transparent flex items-center">
+            <FaArrowLeft className="text-lg lg:text-xl text-[#667085] mr-2" />
             <span className="font-urbanist font-medium text-sm text-[#667085]">
               Back to log in
             </span>
           </Button>
         </Link>
       </div>
+      <ToastContainer />
     </main>
   );
 };

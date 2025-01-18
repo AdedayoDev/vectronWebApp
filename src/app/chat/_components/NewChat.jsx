@@ -14,7 +14,7 @@ function NewChatButton() {
   return (
     <div 
       onClick={handleNewChat}
-      className="flex items-center justify-center w-44 xl:w-52 px-3 py-2 rounded-full space-x-2 hover:cursor-pointer bg-purple-400 hover:bg-purple-500 transition-colors"
+      className="flex items-center justify-center w-44 xl:w-52 px-3 py-2 rounded-full space-x-2 hover:cursor-pointer bg-[#5377DC] hover:bg-purple-500 transition-colors"
     >
       <div className="relative w-5 h-5">
         <Image

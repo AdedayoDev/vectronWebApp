@@ -17,7 +17,7 @@ import { Button } from "@components/ui/button";
 import Image from "next/image";
 import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
-import api from '../../../lib/protectedapi';
+import api from "../../../lib/protectedapi";
 import { toast } from "react-toastify";
 
 const ForgetPasswordSchema = z.object({
@@ -28,7 +28,9 @@ const ForgetPasswordSchema = z.object({
 
 const ForgetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
+  const [statusBarVisible, setStatusBarVisible] = useState(false);
+  const [statusBarProgress, setStatusBarProgress] = useState(0);
+  const [statusBarType, setStatusBarType] = useState<"success" | "error" | null>(null);
 
   const form = useForm<z.infer<typeof ForgetPasswordSchema>>({
     resolver: zodResolver(ForgetPasswordSchema),
@@ -39,28 +41,37 @@ const ForgetPassword = () => {
 
   const onSubmit = async (data: z.infer<typeof ForgetPasswordSchema>) => {
     setIsLoading(true);
+    setStatusBarVisible(false);
+    setStatusBarProgress(0);
+    setStatusBarType(null);
+
     try {
-      await api.post('/auth/api/v1/auth/account/forgot-password/', {
-        email: data.email
+      await api.post("/auth/api/v1/auth/account/forgot-password/", {
+        email: data.email,
       });
 
-      toast.success("Reset instructions sent to your email!", {
-        position: "top-right",
-        autoClose: 3000
-      });
-      
-      setEmailSent(true);
+      setStatusBarType("success");
+      setStatusBarVisible(true);
 
-      // Optional: Redirect after successful submission
-      setTimeout(() => {
-        window.location.href = "/auth/log-in";
-      }, 3000);
-
+      // Simulate progress bar and route to the next page
+      const interval = setInterval(() => {
+        setStatusBarProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            window.location.href = "/auth/set-new-password";
+          }
+          return prev + 5;
+        });
+      }, 100);
     } catch (error) {
       console.error("Error during password reset:", error);
+      setStatusBarType("error");
+      setStatusBarVisible(true);
+      setStatusBarProgress(100);
+
       toast.error("Failed to send reset instructions. Please try again.", {
         position: "top-right",
-        autoClose: 3000
+        autoClose: 3000,
       });
     } finally {
       setIsLoading(false);
@@ -71,26 +82,26 @@ const ForgetPassword = () => {
     if (!form.getValues().email) {
       toast.error("Please enter your email first", {
         position: "top-right",
-        autoClose: 3000
+        autoClose: 3000,
       });
       return;
     }
 
     setIsLoading(true);
     try {
-      await api.post('/auth/api/v1/auth/account/forgot-password/', {
-        email: form.getValues().email
+      await api.post("/auth/api/v1/auth/account/forgot-password/", {
+        email: form.getValues().email,
       });
-      
+
       toast.success("Reset instructions resent!", {
         position: "top-right",
-        autoClose: 3000
+        autoClose: 3000,
       });
     } catch (error) {
       console.error("Error resending email:", error);
       toast.error("Failed to resend instructions. Please try again.", {
         position: "top-right",
-        autoClose: 3000
+        autoClose: 3000,
       });
     } finally {
       setIsLoading(false);
@@ -133,7 +144,7 @@ const ForgetPassword = () => {
                         {...field}
                         type="email"
                         placeholder="Enter your Email"
-                        className="w-96"
+                        className="w-80"
                         disabled={isLoading}
                       />
                     </FormControl>
@@ -153,17 +164,15 @@ const ForgetPassword = () => {
           </form>
         </Form>
 
-        {emailSent && (
-          <p className="font-inter font-normal text-sm text-[#667085]">
-            Didn&apos;t receive the email?{" "}
-            <span 
-              className="text-[#6941c6] cursor-pointer"
-              onClick={handleResendEmail}
-            >
-              Click to resend
-            </span>
-          </p>
-        )}
+        <p className="font-inter font-normal text-sm text-[#667085]">
+          Didn&apos;t receive the email?{" "}
+          <span
+            className="text-[#6941c6] cursor-pointer"
+            onClick={handleResendEmail}
+          >
+            Click to resend
+          </span>
+        </p>
 
         <Link href="/auth/log-in">
           <Button size="lg" className="bg-transparent hover:bg-transparent">
@@ -174,6 +183,31 @@ const ForgetPassword = () => {
           </Button>
         </Link>
       </div>
+
+      {/* Status Bar */}
+      {statusBarVisible && (
+        <div
+          className={`fixed bottom-4 left-4 right-4 max-w-md mx-auto p-4 rounded-lg shadow-lg z-50 ${
+            statusBarType === "success"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          <p>
+            {statusBarType === "success"
+              ? "Reset instructions sent successfully!"
+              : "Failed to send reset instructions."}
+          </p>
+          {statusBarType === "success" && (
+            <div className="h-2 bg-green-500 rounded mt-2 relative overflow-hidden">
+              <div
+                className="absolute top-0 left-0 h-full bg-green-700 transition-all"
+                style={{ width: `${statusBarProgress}%` }}
+              ></div>
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 };
