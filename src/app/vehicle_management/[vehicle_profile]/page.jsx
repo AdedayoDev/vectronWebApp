@@ -241,7 +241,7 @@ export default function Vehicle_Profile() {
               <section className="w-full block lg:flex mt-4 items-center gap-20">
                 <div>
                   <h1 className=" font-medium text-gray-700 mb-4">
-                    {formData.make}
+                    Basic Information
                   </h1>
                   <form className="w-full">
                     {["vehicleId", "type", "make", "trim", "vin"].map(
