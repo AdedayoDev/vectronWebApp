@@ -34,9 +34,10 @@ const router = useRouter()
     fetchVehicles();
   }, []);
 
-  const goToVehicleProfile = (vehicle_id) => {
-    router.push(`/vehicle/${vehicle_id}`);
-  };
+
+    const goToVehicleProfile = (vehicle_id) => {
+      router.push(`/vehicle_management/vehicle_profile?id=${vehicle_id}`);
+    };
 
   return (
     <>
@@ -64,31 +65,31 @@ const router = useRouter()
               Your Vehicle Profiles
             </h1>
             <div className="lg:w-[80%]">
-              <div>
-                {vehicles.length > 0 ? (
-                  vehicles.map((vehicle) => (
-                    <div
-                      key={vehicle.id}
-                      className="flex gap-3 items-center cursor-pointer"
-                      onClick={() => goToVehicleProfile(vehicle.id)}
-                    >
-                      <Image
-                        src={`/assets/images/${vehicle.id}.svg`}
-                        alt={`${vehicle.make}`}
-                        width={15}
-                        height={15}
-                      />
-                      <p className="font-semibold text-xl text-blue-600">
-                         {vehicle.make}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-lg">
-                    No vehicles available at the moment.
-                  </p>
-                )}
-              </div>
+<div className="space-y-4"> {/* Added spacing between vehicles */}
+  {Array.isArray(vehicles) && vehicles.length > 0 ? (
+    vehicles.map((vehicle) => (
+      <div
+        key={vehicle.id}
+        className="flex gap-3 items-center cursor-pointer hover:bg-gray-50 p-2 rounded-lg"
+        onClick={() => goToVehicleProfile(vehicle.id)}
+      >
+        <Image
+          src="/assets/icons/black_car.png"
+          alt={vehicle.make || 'Vehicle'}
+          width={50}
+          height={50}
+        />
+        <p className="font-semibold text-xl text-blue-600">
+          {vehicle.make || 'Unknown'}
+        </p>
+      </div>
+    ))
+  ) : (
+    <p className="text-lg text-gray-600">
+      No vehicles available at the moment.
+    </p>
+  )}
+</div>
             </div>
           </div>
         </div>

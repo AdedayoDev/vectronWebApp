@@ -4,12 +4,13 @@ import SettingsSideBar from "../../settings/components/SettingsSideBar";
 import api from "@lib/protectedapi";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export default function Vehicle_Profile() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [formData, setFormData] = useState({
     vehicleId: "",
@@ -23,6 +24,7 @@ export default function Vehicle_Profile() {
     plate: "",
     mileage: "",
   });
+  const [basicInfo, setBasicInfo] = useState({});
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
 
@@ -70,15 +72,10 @@ export default function Vehicle_Profile() {
       setTimeout(() => setErrors({}), 3000);
     }
     setFormData({
-      vehicleId: "",
       type: "",
-      make: "",
       trim: "",
-      vin: "",
       nickname: "",
-      year: "",
-      model: "",
-      plate: "",
+      license_plate: "",
       mileage: "",
     });
   };
@@ -103,27 +100,32 @@ export default function Vehicle_Profile() {
   //Fetch vehicle by Id
 
   useEffect(() => {
-    if (router.query && router.query.vehicle_id) {
+    const id = searchParams.get('id');
+    if (id) {
       const fetchVehicle = async () => {
         try {
-          const { vehicle_id } = router.query; 
-          const response = await api.get(`/vehicle/api/v1/vehicles/${vehicle_id}`);
-  
-          if (response.data && response.data.length > 0) {
-            const vehicle = response.data[0];
-  
+          // const { vehicle_id } = router.query; 
+          const response = await api.get(`/vehicle/api/v1/vehicles/${id}`);
+          console.log("got here")
+          console.log(response)
+          if (response.data) {
+            const vehicle = response.data.vehicle;
+            console.log(vehicle);
             // Update the form data with the vehicle details
-            setFormData({
-              vehicleId: vehicle.id || "Mustang",       
-              type: vehicle.type || "",           
-              make: vehicle.make || "",
-              trim: vehicle.trim || "",          
-              vin: vehicle.vin || "",
-              nickname: vehicle.nickname || "",  
+            setBasicInfo({
+              vehicleId: vehicle.id || "",
               year: vehicle.year || "",
+              make: vehicle.make || "",
               model: vehicle.model || "",
-              plate: vehicle.license_plate || "", 
-              mileage: vehicle.mileage || "",    
+              vin: vehicle.vin || "",
+            });
+
+            setFormData({
+              nickname: vehicle.nickname || "",
+              type: vehicle.type?.toString() || "",
+              trim: vehicle.trim || "",
+              license_plate: vehicle.license_plate || "",
+              mileage: vehicle.mileage?.toString() || "",
             });
           }
         } catch (error) {
@@ -133,7 +135,7 @@ export default function Vehicle_Profile() {
   
       fetchVehicle();
     }
-  }, [router.query]);
+  }, [searchParams]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -168,29 +170,29 @@ export default function Vehicle_Profile() {
               <section className="w-full block lg:flex mt-4 items-center gap-20">
                 <div>
                   <h1 className=" font-medium text-gray-700 mb-4">
-                    {formData.make}
+                    {basicInfo.make}
                   </h1>
                   <form className="w-full">
-                    {["vehicleId", "type", "make", "trim", "vin"].map(
-                      (field) => (
-                        <div key={field}>
-                          <label className="block text-gray-700 font-medium capitalize mb-1">
-                            {field.replace(/([A-Z])/g, " $1")}:
-                          </label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {errors[field] && (
-                            <p className="text-red-500 text-sm">
-                              {errors[field]}
-                            </p>
-                          )}
-                        </div>
-                      )
+                    {Object.keys(basicInfo).length > 0 ? (
+                      Object.entries(basicInfo).map(([field, value]) => {
+                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        return (
+                          <div key={field}>
+                            <label className="block text-gray-700 font-medium capitalize mb-1">
+                              {field.replace(/([A-Z])/g, " $1")}:
+                            </label>
+                            <input
+                              type="text"
+                              name={field}
+                              value={value || ""} // Ensure value is never undefined
+                              disabled
+                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                            />
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>Loading vehicle information...</p>
                     )}
                   </form>
                 </div>
@@ -200,26 +202,26 @@ export default function Vehicle_Profile() {
                     Additional Information
                   </h1>
                   <form className="w-full">
-                    {["nickname", "year", "model", "plate", "mileage"].map(
-                      (field) => (
-                        <div key={field}>
-                          <label className="block text-gray-700 font-medium capitalize mb-1">
-                            {field.replace(/([A-Z])/g, " $1")}:
-                          </label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="w-full lg:w-[361px] px-4 mb-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {errors[field] && (
-                            <p className="text-red-500 text-sm">
-                              {errors[field]}
-                            </p>
-                          )}
-                        </div>
-                      )
+                    {Object.keys(formData).length > 0 ? (
+                      Object.entries(formData).map(([field, value]) => {
+                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        return (
+                          <div key={field}>
+                            <label className="block text-gray-700 font-medium capitalize mb-1">
+                              {field.replace(/([A-Z])/g, " $1")}:
+                            </label>
+                            <input
+                              type="text"
+                              name={field}
+                              value={value || ""} // Ensure value is never undefined
+                              disabled
+                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                            />
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>Loading vehicle information...</p>
                     )}
                   </form>
                 </div>
