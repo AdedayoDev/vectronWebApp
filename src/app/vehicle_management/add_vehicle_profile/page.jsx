@@ -35,7 +35,7 @@ export default function Vehicle_Profile() {
                 vehicle profile to track and get reminders regarding your
                 vehicle(s)
               </p>
-              <Link href='/vehicle_management/vehicle_profile'>
+              <Link href='/vehicleprofile'>
               <div className="flex justify-center items-center gap-2 text-purple-800 mt-4 font-medium">
                 <Image
                   src="/assets/icons/add-circle.svg"

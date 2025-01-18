@@ -1,16 +1,17 @@
 "use client";
 import Image from "next/image";
 import SettingsSideBar from "../../settings/components/SettingsSideBar";
-
-import {  Home } from "lucide-react";
+import api from "@lib/protectedapi";
+import { Home } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export default function Vehicle_Profile() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    const router=useRouter()
   const [formData, setFormData] = useState({
     vehicleId: "",
     type: "",
@@ -23,8 +24,9 @@ export default function Vehicle_Profile() {
     plate: "",
     mileage: "",
   });
+  const [basicInfo, setBasicInfo] = useState({});
   const [errors, setErrors] = useState({});
-  const [alert, setAlert] = useState('');
+  const [alert, setAlert] = useState("");
 
   const validateInputs = () => {
     const validationErrors = {};
@@ -65,24 +67,17 @@ export default function Vehicle_Profile() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-        router.push('/vehicle_management/vehicle_profile/edit_vehicle_profile')
-
+      router.push("/vehicle_management/vehicle_profile/edit_vehicle_profile");
     } else {
       setTimeout(() => setErrors({}), 3000);
     }
     setFormData({
-        vehicleId: "",
-        type: "",
-        make: "",
-        trim: "",
-        vin: "",
-        nickname: "",
-        year: "",
-        model: "",
-        plate: "",
-        mileage: "",
-      });
-    
+      type: "",
+      trim: "",
+      nickname: "",
+      license_plate: "",
+      mileage: "",
+    });
   };
 
   const handleDelete = () => {
@@ -102,10 +97,52 @@ export default function Vehicle_Profile() {
     setTimeout(() => setAlert(""), 3000);
   };
 
+  //Fetch vehicle by Id
+
+  useEffect(() => {
+    const id = searchParams.get('id');
+    if (id) {
+      const fetchVehicle = async () => {
+        try {
+          // const { vehicle_id } = router.query; 
+          const response = await api.get(`/vehicle/api/v1/vehicles/${id}`);
+          console.log("got here")
+          console.log(response)
+          if (response.data) {
+            const vehicle = response.data.vehicle;
+            console.log(vehicle);
+            // Update the form data with the vehicle details
+            setBasicInfo({
+              vehicleId: vehicle.id || "",
+              year: vehicle.year || "",
+              make: vehicle.make || "",
+              model: vehicle.model || "",
+              vin: vehicle.vin || "",
+            });
+
+            setFormData({
+              nickname: vehicle.nickname || "",
+              type: vehicle.type?.toString() || "",
+              trim: vehicle.trim || "",
+              license_plate: vehicle.license_plate || "",
+              mileage: vehicle.mileage?.toString() || "",
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching Vehicle profile", error);
+        }
+      };
+  
+      fetchVehicle();
+    }
+  }, [searchParams]);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  
+
   return (
     <>
       <section>
@@ -121,7 +158,7 @@ export default function Vehicle_Profile() {
           <div className="w-full lg:mt-0 lg:h-[630px]">
             <div>
               <Link
-                href="/"
+                href="/settings"
                 className="flex items-center gap-2 w-44 text-blue-500 mb-4"
               >
                 <Home size={20} />
@@ -132,60 +169,64 @@ export default function Vehicle_Profile() {
             <div>
               <section className="w-full block lg:flex mt-4 items-center gap-20">
                 <div>
-                  <h1 className=" font-medium text-gray-700 mb-4">Basic Information</h1>
+                  <h1 className=" font-medium text-gray-700 mb-4">
+                    {basicInfo.make}
+                  </h1>
                   <form className="w-full">
-                    {["vehicleId", "type", "make", "trim", "vin"].map(
-                      (field) => (
-                        <div key={field}>
-                          <label className="block text-gray-700 font-medium capitalize mb-1">
-                            {field.replace(/([A-Z])/g, " $1")}:
-                          </label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {errors[field] && (
-                            <p className="text-red-500 text-sm">
-                              {errors[field]}
-                            </p>
-                          )}
-                        </div>
-                      )
+                    {Object.keys(basicInfo).length > 0 ? (
+                      Object.entries(basicInfo).map(([field, value]) => {
+                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        return (
+                          <div key={field}>
+                            <label className="block text-gray-700 font-medium capitalize mb-1">
+                              {field.replace(/([A-Z])/g, " $1")}:
+                            </label>
+                            <input
+                              type="text"
+                              name={field}
+                              value={value || ""} // Ensure value is never undefined
+                              disabled
+                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                            />
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>Loading vehicle information...</p>
                     )}
                   </form>
                 </div>
 
                 <div className="mt-7 lg:mt-0">
-                  <h1 className=" font-medium text-gray-700 mb-4">Additional Information</h1>
+                  <h1 className=" font-medium text-gray-700 mb-4">
+                    Additional Information
+                  </h1>
                   <form className="w-full">
-                    {["nickname", "year", "model", "plate", "mileage"].map(
-                      (field) => (
-                        <div key={field}>
-                          <label className="block text-gray-700 font-medium capitalize mb-1">
-                            {field.replace(/([A-Z])/g, " $1")}:
-                          </label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="w-full lg:w-[361px] px-4 mb-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {errors[field] && (
-                            <p className="text-red-500 text-sm">
-                              {errors[field]}
-                            </p>
-                          )}
-                        </div>
-                      )
+                    {Object.keys(formData).length > 0 ? (
+                      Object.entries(formData).map(([field, value]) => {
+                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        return (
+                          <div key={field}>
+                            <label className="block text-gray-700 font-medium capitalize mb-1">
+                              {field.replace(/([A-Z])/g, " $1")}:
+                            </label>
+                            <input
+                              type="text"
+                              name={field}
+                              value={value || ""} // Ensure value is never undefined
+                              disabled
+                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                            />
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>Loading vehicle information...</p>
                     )}
                   </form>
                 </div>
               </section>
-              
+
               <div className="flex items-center justify-center mx-auto w-full gap-11 mt-6">
                 <button
                   onClick={handleEdit}
@@ -200,8 +241,6 @@ export default function Vehicle_Profile() {
                   Delete
                 </button>
               </div>
-
-            
             </div>
           </div>
         </div>
