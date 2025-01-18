@@ -26,12 +26,12 @@ export default function BarContent() {
     <div className="w-full lg:flex flex-col space-y-10 p-3 md:p-5 bg-[#FBFDFF] lg:rounded-2xl">
 <div className="flex items-center justify-between mt-10 lg:mt-0">
   <div className="flex-1 flex justify-center">
-    <div className="relative w-7 h-7">
+    <div className="relative w-10 h-10">
       <Image
         src="/assets/icons/Media.jpeg (1).png"
         alt="sidebar"
-        width={50}
-        height={50}
+        width={200}
+        height={200}
         className="object-cover"
       />
     </div>
