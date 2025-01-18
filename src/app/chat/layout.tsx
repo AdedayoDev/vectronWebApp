@@ -10,7 +10,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-function layout({ children }: Props) {
+function Layout({ children }: Props) {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
 
@@ -67,4 +67,4 @@ function layout({ children }: Props) {
   );
 }
 
-export default layout;
+export default Layout;
