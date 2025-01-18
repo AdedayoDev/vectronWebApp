@@ -35,8 +35,8 @@ const router = useRouter()
   }, []);
 
   const goToVehicleProfile = (vehicle_id) => {
-    router.push(`/vehicle/${vehicle_id}`);
-  };
+    router.push(`/vehicle_management/vehicle_profile?id=${vehicle_id}`);
+  };  
 
   return (
     <>

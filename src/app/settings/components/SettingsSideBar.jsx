@@ -16,22 +16,6 @@ export default function SettingsSideBar() {
 
   const isActive = (path) => pathname === path;
 
-  const handleVehicleProfile = async () => {
-    try {
-      const response = await api.get("/vehicle/api/v1/vehicles");
-      
-      // Check if 'vehicles' is an array and contains at least one vehicle
-      if (Array.isArray(response.data.vehicles) && response.data.vehicles.length > 0) {
-        router.push("/vehicle_management/vehicle_profile_list");
-      } else {
-        router.push("/vehicleprofile");
-      }
-    } catch (error) {
-      console.error("Error fetching vehicle profile:", error);
-      alert("Failed to fetch vehicle profiles. Please try again later.");
-    }
-  };
-  
   return (
     <>
       {/* Mobile */}
@@ -62,9 +46,9 @@ export default function SettingsSideBar() {
             iconSrc="/assets/icons/vehicle-services.svg"
             label="Vehicle Management"
             isActive={isActive("/vehicle_management")}
-            onClick={() => {
+            onClick={()=>{
               setShowSideBar(false);
-              handleVehicleProfile();
+              router.push('/vehicle_management')
             }}
           />
           <SidebarLink
@@ -129,8 +113,10 @@ export default function SettingsSideBar() {
         <SidebarLink
           iconSrc="/assets/icons/vehicle-services.svg"
           label="Vehicle Management"
-          isActive={isActive("/settings/vehicle_management")}
-          onClick={handleVehicleProfile}
+          isActive={isActive("/vehicle_management")}
+          onClick={()=>{
+            router.push('/vehicle_management')
+          }}
         />
         <SidebarLink
           onClick={() => router.push("/history")}

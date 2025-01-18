@@ -5,10 +5,18 @@ import api from "@lib/protectedapi";
 import { Home } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import ConfirmationModal from "../components/ComfirmationModal";
 
 export const dynamic = "force-dynamic";
+
 export default function Vehicle_Profile() {
+  const searchParams = useSearchParams();
+  const vehicleId = searchParams.get("id");
+  const [vehicle, setVehicle] = useState(null);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -59,87 +67,152 @@ export default function Vehicle_Profile() {
     return validationErrors;
   };
 
-  const handleEdit = (e) => {
+  const handleDelete = async () => {
+    if (!vehicleId) {
+      setError("Vehicle ID is missing.");
+      return;
+    }
+
+    try {
+      const response = await api.delete(
+        `/vehicle/api/v1/vehicles/${vehicleId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setAlert("Vehicle deleted successfully!");
+        setTimeout(() => {
+          setAlert("");
+          router.push("/vehicles/vehicle_profile_list");
+        }, 3000);
+      } else {
+        setError("Failed to delete vehicle. Please try again.");
+        setTimeout(() => setError(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error deleting vehicle:", error);
+      setError(
+        "An error occurred while deleting the vehicle. Please try again."
+      );
+      setTimeout(() => setError(""), 3000);
+    } finally {
+      setShowModal(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowModal(false);
+  };
+
+  const openConfirmModal = () => {
+    setShowModal(true);
+  };
+  //Fetch vehicle by Id
+  useEffect(() => {
+    if (!vehicleId) {
+      setError("Vehicle ID is missing.");
+      return;
+    }
+    const fetchVehicleDetails = async () => {
+      try {
+        const response = await api.get(
+          `/vehicle/api/v1/vehicles/${vehicleId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.data) {
+          setVehicle(response.data);
+          setFormData((prev) => ({
+            ...prev,
+            vehicleId: response.data.vehicle.id || "",
+            make: response.data.vehicle.make || "",
+            vin: response.data.vehicle.vin || "",
+            year: response.data.vehicle.year,
+            model: response.data.vehicle.model || "",
+            plate: response.data.vehicle.license_plate || "",
+          }));
+        } else {
+          setError("Vehicle details not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching vehicle details:", error);
+        setError("Unable to fetch vehicle details. Please try again later.");
+      }
+    };
+
+    fetchVehicleDetails();
+  }, [vehicleId]);
+
+  if (error) {
+    return <p className="text-lg text-red-500">{error}</p>;
+  }
+
+  if (!vehicleId) {
+    return <p className="text-lg">Loading vehicle details...</p>;
+  }
+
+  //Edit Vehicle Profile
+  const handleEdit = async (e) => {
     e.preventDefault();
+
+    // Validate inputs
     const validationErrors = validateInputs();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      router.push("/vehicle_management/vehicle_profile/edit_vehicle_profile");
+      try {
+        const response = await api.post(
+          `/vehicle/api/v1/vehicles/${formData.vehicleId}`,
+          {
+            // make: formData.make,
+            // model: formData.model,
+            // vin: formData.vin,
+            // license_plate: formData.plate,
+            // year: formData.year,
+            // type: formData.type,
+            // trim: formData.trim,
+            // nickname: formData.nickname,
+            // mileage: formData.mileage,
+            ...prev,
+            make: formData.make,
+            vin: formData.vin,
+            year: formData.year,
+            model: formData.model,
+            license_plate: formData.plate,
+          }
+        );
+
+        if (response.status === 200) {
+          setAlert("Vehicle details updated successfully!");
+          setTimeout(() => setAlert(""), 3000);
+
+          setVehicle(response.data.vehicle);
+        } else {
+          setAlert("Failed to update vehicle details. Please try again.");
+          setTimeout(() => setAlert(""), 3000);
+        }
+      } catch (error) {
+        console.error("Error updating vehicle details:", error);
+        setAlert("An error occurred while updating. Please try again.");
+        setTimeout(() => setAlert(""), 3000);
+      }
     } else {
       setTimeout(() => setErrors({}), 3000);
     }
-    setFormData({
-      vehicleId: "",
-      type: "",
-      make: "",
-      trim: "",
-      vin: "",
-      nickname: "",
-      year: "",
-      model: "",
-      plate: "",
-      mileage: "",
-    });
   };
 
-  const handleDelete = () => {
-    setFormData({
-      vehicleId: "",
-      type: "",
-      make: "",
-      trim: "",
-      vin: "",
-      nickname: "",
-      year: "",
-      model: "",
-      plate: "",
-      mileage: "",
-    });
-    setAlert("Vehicle information deleted successfully.");
-    setTimeout(() => setAlert(""), 3000);
-  };
-
-  //Fetch vehicle by Id
-
-  useEffect(() => {
-    if (router.query && router.query.vehicle_id) {
-      const fetchVehicle = async () => {
-        try {
-          const { vehicle_id } = router.query; 
-          const response = await api.get(`/vehicle/api/v1/vehicles/${vehicle_id}`);
-  
-          if (response.data && response.data.length > 0) {
-            const vehicle = response.data[0];
-  
-            // Update the form data with the vehicle details
-            setFormData({
-              vehicleId: vehicle.id || "Mustang",       
-              type: vehicle.type || "",           
-              make: vehicle.make || "",
-              trim: vehicle.trim || "",          
-              vin: vehicle.vin || "",
-              nickname: vehicle.nickname || "",  
-              year: vehicle.year || "",
-              model: vehicle.model || "",
-              plate: vehicle.license_plate || "", 
-              mileage: vehicle.mileage || "",    
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching Vehicle profile", error);
-        }
-      };
-  
-      fetchVehicle();
-    }
-  }, [router.query]);
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  
 
   return (
     <>
@@ -233,7 +306,7 @@ export default function Vehicle_Profile() {
                   Edit
                 </button>
                 <button
-                  onClick={handleDelete}
+                  onClick={openConfirmModal}
                   className="px-6 py-1 w-32 font-medium border-4 border-solid border-purple-400 rounded-full focus:outline-none"
                 >
                   Delete
@@ -241,6 +314,16 @@ export default function Vehicle_Profile() {
               </div>
             </div>
           </div>
+
+          {/* Custom Confirmation Modal */}
+          <ConfirmationModal
+            show={showModal}
+            message="Are you sure you want to delete this vehicle?"
+            onConfirm={handleDelete}
+            onCancel={handleCancelDelete}
+            button1="Cancel"
+            button2="Confirm"
+          />
         </div>
       </section>
     </>
