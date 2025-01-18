@@ -5,10 +5,9 @@ import { AuthProvider } from "@components/guards/AuthProvider";
 
 const ForgetPasswords = () => {
   return (
-
-        <main>
+    <main>
           <ForgetPassword />
-        </main>
+    </main>
   );
 };
 

@@ -5,7 +5,6 @@ const BASE_URL = "https://api-staging.vechtron.com/auth";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: { "Content-Type": "application/json" },
- 
 });
 
 export const signup = async (data: {
@@ -24,7 +23,12 @@ export const signup = async (data: {
     return response.data;
   } catch (error: any) {
     if (error.response) {
-      throw new Error(error.response.data?.message || "Sign up failed.");
+      const errorMessage = error.response.data?.message || "Sign up failed.";
+      if (error.response.status === 400) { 
+        throw new Error("This email is already registered. Please log in.");
+      }
+
+      throw new Error(errorMessage);
     } else if (error.request) {
       throw new Error("No response from server. Please try again later.");
     } else {
@@ -34,32 +38,50 @@ export const signup = async (data: {
 };
 
 // LogIn API
-export const login = async (data: { email: string; password: string }) => {
+// export const login = async (data: { email: string; password: string }) => {
+//   try {
+//     const response = await axiosInstance.post(
+//       "/api/v1/users/send-verify-mail/",
+//       data
+//     );
+//     return response.data;
+//   } catch (error: any) {
+//     if (error.response) {
+//       throw new Error(error.response.data?.message || "Login failed");
+//     } else if (error.request) {
+//       throw new Error("No response from server. Please try again later");
+//     } else {
+//       throw new Error(error.message || "An unexpected error occured.");
+//     }
+//   }
+// };
+
+export const forgetPassword = async (data: { email: string }) => {
   try {
     const response = await axiosInstance.post(
-      "/api/v1/auth/account/login",
+      "/api/v1/auth/account/forgot-password/",
       data
     );
     return response.data;
   } catch (error: any) {
     if (error.response) {
-      throw new Error(error.response.data?.message || "Login failed");
+      throw new Error(error.response.data?.message || "Forgot password request failed.");
     } else if (error.request) {
-      throw new Error("No response from server. Please try again later");
+      throw new Error("No response from server. Please try again later.");
     } else {
-      throw new Error(error.message || "An unexpected error occured.");
+      throw new Error(error.message || "An unexpected error occurred.");
     }
   }
 };
 
 // Request an OTP
-export const forgetPassword = async (data: { email: string }) => {
-  const response = await axiosInstance.post(
-    "/api/v1/auth/account/forgot-password/",
-    data
-  );
-  return response.data;
-};
+// export const emailVerification = async (data: { email: string }) => {
+//   const response = await axiosInstance.post(
+//     "/api/v1/users/send-verify-mail/",
+//     data
+//   );
+//   return response.data;
+// };
 
 // Verify OTP
 export const verifyOTP = async (otp: string) => {

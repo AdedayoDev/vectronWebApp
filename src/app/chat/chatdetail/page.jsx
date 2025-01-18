@@ -4,6 +4,8 @@ import api from '../../../lib/chatapi';
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
+import ChatBodyNew from "../_components/ChatBodyNew";
+import ChatBody from "../_components/ChatBody";
 import {
   CirclePlus,
   Copy,
@@ -145,7 +147,7 @@ export default function Chatdetail() {
         <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
           <div className="relative flex flex-col w-full min-h-96 lg:min-h-[35rem] lg:min-w-[760px] xl:w-[960px] -mt-24 bg-white z-10 p-2 sm:p-7 rounded-2xl shadow-xl">
             <div className="flex-1 overflow-hidden">
-              <div className="w-full h-[calc(100vh-400px)] overflow-y-auto" ref={messagesEndRef}>
+              <div className="w-full h-[calc(105vh-400px)] overflow-y-auto" ref={messagesEndRef}>
                 <div className="max-w-4xl mx-auto px-4">
                   {showWelcome && messages.length === 0 ? (
                     <>
@@ -153,20 +155,7 @@ export default function Chatdetail() {
                       <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center">
                         Good day! How may I assist you today?
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                        <div className="bg-blue-400 text-white p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold mb-2">Explore</h3>
-                          <p className="text-sm">Learn how to use Vechtron.ai for needs</p>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold mb-2">Entertainment</h3>
-                          <p className="text-sm">What Music do you want to listen to?</p>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-lg">
-                          <h3 className="text-lg font-semibold mb-2">Entertainment</h3>
-                          <p className="text-sm">What Music do you want to listen to?</p>
-                        </div>
-                      </div>
+                        <ChatBodyNew />
                     </>
                   ) : (
                     messages.map((message) => (
@@ -248,7 +237,7 @@ export default function Chatdetail() {
             </div>
           </div>
 
-          <div className="mx-auto -mt-8">
+          <div className="sticky bottom-0 w-full bg-white p-4">
             <Input 
               onClick={() => {}} 
               onSubmit={handleMessageSubmit}

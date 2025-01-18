@@ -283,17 +283,15 @@ export default function SideBar() {
               height={86}
               className="mx-auto"
             />
-            <Link href="/pricing">
-              <button className="justify-center items-center gap-2 flex w-full rounded-full p-2 bg-blue-700 text-white">
-                Upgrade to Pro
-                <Image
-                  src="/assets/icons/Solid.png"
-                  alt="search action"
-                  width={20}
-                  height={20}
-                />
-              </button>
-            </Link>
+            <button className="justify-center items-center gap-2 flex w-full rounded-full p-2 bg-blue-700 text-white">
+              Upgrade to Pro
+              <Image
+                src="/assets/icons/Solid.png"
+                alt="search action"
+                width={20}
+                height={20}
+              />
+            </button>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import SettingsSideBar from "../../settings/components/SettingsSideBar";
 import api from "@lib/protectedapi";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ConfirmationModal from "../components/ComfirmationModal";
@@ -18,6 +19,7 @@ export default function Vehicle_Profile() {
   const [showModal, setShowModal] = useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [formData, setFormData] = useState({
     vehicleId: "",
@@ -31,6 +33,7 @@ export default function Vehicle_Profile() {
     plate: "",
     mileage: "",
   });
+  const [basicInfo, setBasicInfo] = useState({});
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
 
@@ -244,26 +247,26 @@ export default function Vehicle_Profile() {
                     Basic Information
                   </h1>
                   <form className="w-full">
-                    {["vehicleId", "type", "make", "trim", "vin"].map(
-                      (field) => (
-                        <div key={field}>
-                          <label className="block text-gray-700 font-medium capitalize mb-1">
-                            {field.replace(/([A-Z])/g, " $1")}:
-                          </label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {errors[field] && (
-                            <p className="text-red-500 text-sm">
-                              {errors[field]}
-                            </p>
-                          )}
-                        </div>
-                      )
+                    {Object.keys(basicInfo).length > 0 ? (
+                      Object.entries(basicInfo).map(([field, value]) => {
+                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        return (
+                          <div key={field}>
+                            <label className="block text-gray-700 font-medium capitalize mb-1">
+                              {field.replace(/([A-Z])/g, " $1")}:
+                            </label>
+                            <input
+                              type="text"
+                              name={field}
+                              value={value || ""} // Ensure value is never undefined
+                              disabled
+                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                            />
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>Loading vehicle information...</p>
                     )}
                   </form>
                 </div>
@@ -273,26 +276,26 @@ export default function Vehicle_Profile() {
                     Additional Information
                   </h1>
                   <form className="w-full">
-                    {["nickname", "year", "model", "plate", "mileage"].map(
-                      (field) => (
-                        <div key={field}>
-                          <label className="block text-gray-700 font-medium capitalize mb-1">
-                            {field.replace(/([A-Z])/g, " $1")}:
-                          </label>
-                          <input
-                            type="text"
-                            name={field}
-                            value={formData[field]}
-                            onChange={handleChange}
-                            className="w-full lg:w-[361px] px-4 mb-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          />
-                          {errors[field] && (
-                            <p className="text-red-500 text-sm">
-                              {errors[field]}
-                            </p>
-                          )}
-                        </div>
-                      )
+                    {Object.keys(formData).length > 0 ? (
+                      Object.entries(formData).map(([field, value]) => {
+                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        return (
+                          <div key={field}>
+                            <label className="block text-gray-700 font-medium capitalize mb-1">
+                              {field.replace(/([A-Z])/g, " $1")}:
+                            </label>
+                            <input
+                              type="text"
+                              name={field}
+                              value={value || ""} // Ensure value is never undefined
+                              disabled
+                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                            />
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>Loading vehicle information...</p>
                     )}
                   </form>
                 </div>

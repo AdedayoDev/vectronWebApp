@@ -4,23 +4,24 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 const BASE_URL = "https://api-staging.vechtron.com/auth/api/v1/auth/account";
 
+// Create axios instance with base configuration
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 interface User {
-  id: number
-  email: string
-  username: string
-  last_login: string
-  email_verified: boolean
-  email_verified_at: string
-  is_vehicle_owner: boolean
-  profile_picture: string
+  id: number;
+  email: string;
+  username: string;
+  last_login: string;
+  email_verified: boolean;
+  email_verified_at: string;
+  is_vehicle_owner: boolean;
+  profile_picture: string;
 }
 
 interface AuthState {
@@ -39,45 +40,59 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set,get) => ({
+    (set, get) => ({
       user: null,
       token: null,
       refreshToken: null,
       isLoading: false,
 
+      // Set user
       setUser: (user) => set({ user }),
-      setToken: (token) => set({ token }),
+
+      // Set token and dynamically add/remove Authorization header
+      setToken: (token) => {
+        set({ token });
+
+        if (token) {
+          axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        } else {
+          delete axiosInstance.defaults.headers.common["Authorization"];
+        }
+      },
+
+      // Set refresh token
       setRefreshToken: (refreshToken) => set({ refreshToken }),
+
+      // Login function
       login: async (email, password) => {
         set({ isLoading: true });
         try {
-          const response = await axiosInstance.post('/login', { email, password });
-          console.log("response", response.data);
+          const response = await axiosInstance.post("/login", { email, password });
+          const { user, access_token, refresh_token } = response.data.data;
+
+          // Update state and set Authorization header
           set({
-            user: response.data.data.user,
-            token: response.data.data.access_token,
-            refreshToken: response.data.data.refresh_token
+            user,
+            token: access_token,
+            refreshToken: refresh_token,
           });
-          console.log("user", response.data.data.user);
-      
-          // Verify the state was updated
-          console.log('State after update:', useAuthStore.getState());
-          console.log("here!!!")
-          if (response.data.access_token) {
-            axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.access_token}`;
-          }
-          console.log(useAuthStore.getState()) // Should show current state
-          console.log(localStorage.getItem('auth-storage')) 
+          axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+          console.log("Bearer token for Postman:", access_token);
         } catch (error) {
-          console.error('Error during login:', error);
-          throw error; // Re-throw to handle in the component
+          console.error("Error during login:", error);
+          throw error;
         } finally {
           set({ isLoading: false });
         }
       },
+
+      // Logout function
       logout: () => {
         set({ user: null, token: null, refreshToken: null });
+        delete axiosInstance.defaults.headers.common["Authorization"];
       },
+
+      // Update email verification status
       updateUserVerification: () => {
         const currentUser = get().user;
         if (currentUser) {
@@ -85,25 +100,27 @@ export const useAuthStore = create<AuthState>()(
             user: {
               ...currentUser,
               email_verified: true,
-              email_verified_at: new Date().toISOString()
-            }
+              email_verified_at: new Date().toISOString(),
+            },
           });
         }
       },
+
+      // Update vehicle owner status
       updateVehicleOwnerStatus: (status: boolean) => {
         const currentUser = get().user;
         if (currentUser) {
           set({
             user: {
               ...currentUser,
-              is_vehicle_owner: status
-            }
+              is_vehicle_owner: status,
+            },
           });
         }
       },
     }),
     {
-      name: "auth-storage",
+      name: "auth-storage", // Key for localStorage
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         user: state.user,
@@ -112,33 +129,9 @@ export const useAuthStore = create<AuthState>()(
       }),
       skipHydration: true,
       version: 1,
-
-    },
-    
+    }
   )
 );
 
-
-// // Hydration helper
-// export const initializeAuth = () => {
-//   const stored = localStorage.getItem('auth-storage');
-//   if (stored) {
-//     try {
-//       const { state } = JSON.parse(stored);
-//       useAuthStore.setState({ 
-//         ...state, 
-//         isInitialized: true 
-//       });
-      
-//       // Restore axios headers if token exists
-//       if (state.token) {
-//         axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
-//       }
-//     } catch (error) {
-//       console.error('Error initializing auth state:', error);
-//       useAuthStore.setState({ isInitialized: true });
-//     }
-//   } else {
-//     useAuthStore.setState({ isInitialized: true });
-//   }
-// };
+// Export axiosInstance for external use
+export { axiosInstance };

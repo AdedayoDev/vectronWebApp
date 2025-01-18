@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@components/ui/button";
 import GoogleLogIn from "../LogIn/GoogleLogIn";
 import AppleLogIn from "../LogIn/AppleLogIn";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUpSchema = z
   .object({
@@ -41,7 +42,11 @@ const SignUpSchema = z
 const SignUpForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error" | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -56,29 +61,28 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     if (!isChecked) {
-      alert("You must agree to the terms and conditions before signing up.");
+      setPopupMessage("You must agree to the terms and conditions before signing up.");
+      setPopupType("error");
       return;
     }
 
     setIsLoading(true);
-    setMessage("");
+    setPopupMessage("");
+    setPopupType(null);
+
     try {
-      const response = await signup(data);
-      const user = {
-        email: data.email,
-        username: data.username,
-        password: data.password,
-        first_name: data.first_name,
-        last_name: data.last_name,
-      };
-      
-      setMessage("Sign up successful!");
+      await signup(data);
+      setPopupMessage("Sign up successful!");
+      setPopupType("success");
 
       setTimeout(() => {
         window.location.href = "/auth/log-in";
       }, 2000);
-    } catch (error) {
-      setMessage("Sign up failed. Please try again.");
+    } catch (error: any) {
+      setPopupMessage(
+        error.message || "An error occurred during sign up. Please try again."
+      );
+      setPopupType("error");
     } finally {
       setIsLoading(false);
     }
@@ -86,13 +90,11 @@ const SignUpForm = () => {
 
   const userData = {
     email: form.getValues("email"),
-    name: undefined,
-    password: undefined,
   };
 
   return (
     <CardWrapper
-      image="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734698485/Content_coc8x0.png"
+      image="/assets/icons/Media.jpeg (1).png"
       title="Sign Up"
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"
@@ -179,17 +181,25 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Create a Password"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a Password"
+                      />
+                      <span
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Password Field */}
+            {/* Confirm Password Field */}
             <FormField
               control={form.control}
               name="confirm_password"
@@ -197,11 +207,21 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Confirm Password"
-                    />
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm Password"
+                      />
+                      <span
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+                        onClick={() =>
+                          setShowConfirmPassword((prev) => !prev)
+                        }
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -221,14 +241,8 @@ const SignUpForm = () => {
                 className="font-inter text-[#040308]"
               >
                 I agree to Vechtron{" "}
-                <span className="font-inter text-[#2869d4]">
-                  Terms of Service
-                </span>{" "}
-                and{" "}
-                <span className="font-inter text-[#2869d4]">
-                  Privacy Policy
-                </span>
-                .
+                <span className="font-inter text-[#2869d4]">Terms of Service</span> and{" "}
+                <span className="font-inter text-[#2869d4]">Privacy Policy</span>.
               </label>
             </div>
           </div>
@@ -245,6 +259,16 @@ const SignUpForm = () => {
           </Button>
         </form>
       </Form>
+      {/* Popup Message */}
+      {popupType && (
+        <div
+          className={`fixed top-5 right-5 p-4 rounded-md shadow-lg z-50 ${
+            popupType === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+          }`}
+        >
+          {popupMessage}
+        </div>
+      )}
     </CardWrapper>
   );
 };

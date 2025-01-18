@@ -1,4 +1,4 @@
-"use c";
+
 
 import SignUpPages from "@components/Auth/SignUp/SignUpPages";
 import { AuthProvider } from "@components/guards/AuthProvider";
