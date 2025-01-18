@@ -1,16 +1,16 @@
 "use client";
 import Image from "next/image";
 import SettingsSideBar from "../../settings/components/SettingsSideBar";
-
-import {  Home } from "lucide-react";
+import api from "@lib/protectedapi";
+import { Home } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 export default function Vehicle_Profile() {
+  const router = useRouter();
 
-    const router=useRouter()
   const [formData, setFormData] = useState({
     vehicleId: "",
     type: "",
@@ -24,7 +24,7 @@ export default function Vehicle_Profile() {
     mileage: "",
   });
   const [errors, setErrors] = useState({});
-  const [alert, setAlert] = useState('');
+  const [alert, setAlert] = useState("");
 
   const validateInputs = () => {
     const validationErrors = {};
@@ -65,24 +65,22 @@ export default function Vehicle_Profile() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-        router.push('/vehicle_management/vehicle_profile/edit_vehicle_profile')
-
+      router.push("/vehicle_management/vehicle_profile/edit_vehicle_profile");
     } else {
       setTimeout(() => setErrors({}), 3000);
     }
     setFormData({
-        vehicleId: "",
-        type: "",
-        make: "",
-        trim: "",
-        vin: "",
-        nickname: "",
-        year: "",
-        model: "",
-        plate: "",
-        mileage: "",
-      });
-    
+      vehicleId: "",
+      type: "",
+      make: "",
+      trim: "",
+      vin: "",
+      nickname: "",
+      year: "",
+      model: "",
+      plate: "",
+      mileage: "",
+    });
   };
 
   const handleDelete = () => {
@@ -102,10 +100,47 @@ export default function Vehicle_Profile() {
     setTimeout(() => setAlert(""), 3000);
   };
 
+  //Fetch vehicle by Id
+
+  useEffect(() => {
+    if (router.query && router.query.vehicle_id) {
+      const fetchVehicle = async () => {
+        try {
+          const { vehicle_id } = router.query; 
+          const response = await api.get(`/vehicle/api/v1/vehicles/${vehicle_id}`);
+  
+          if (response.data && response.data.length > 0) {
+            const vehicle = response.data[0];
+  
+            // Update the form data with the vehicle details
+            setFormData({
+              vehicleId: vehicle.id || "Mustang",       
+              type: vehicle.type || "",           
+              make: vehicle.make || "",
+              trim: vehicle.trim || "",          
+              vin: vehicle.vin || "",
+              nickname: vehicle.nickname || "",  
+              year: vehicle.year || "",
+              model: vehicle.model || "",
+              plate: vehicle.license_plate || "", 
+              mileage: vehicle.mileage || "",    
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching Vehicle profile", error);
+        }
+      };
+  
+      fetchVehicle();
+    }
+  }, [router.query]);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  
+
   return (
     <>
       <section>
@@ -121,7 +156,7 @@ export default function Vehicle_Profile() {
           <div className="w-full lg:mt-0 lg:h-[630px]">
             <div>
               <Link
-                href="/"
+                href="/settings"
                 className="flex items-center gap-2 w-44 text-blue-500 mb-4"
               >
                 <Home size={20} />
@@ -132,7 +167,9 @@ export default function Vehicle_Profile() {
             <div>
               <section className="w-full block lg:flex mt-4 items-center gap-20">
                 <div>
-                  <h1 className=" font-medium text-gray-700 mb-4">Basic Information</h1>
+                  <h1 className=" font-medium text-gray-700 mb-4">
+                    {formData.make}
+                  </h1>
                   <form className="w-full">
                     {["vehicleId", "type", "make", "trim", "vin"].map(
                       (field) => (
@@ -159,7 +196,9 @@ export default function Vehicle_Profile() {
                 </div>
 
                 <div className="mt-7 lg:mt-0">
-                  <h1 className=" font-medium text-gray-700 mb-4">Additional Information</h1>
+                  <h1 className=" font-medium text-gray-700 mb-4">
+                    Additional Information
+                  </h1>
                   <form className="w-full">
                     {["nickname", "year", "model", "plate", "mileage"].map(
                       (field) => (
@@ -185,7 +224,7 @@ export default function Vehicle_Profile() {
                   </form>
                 </div>
               </section>
-              
+
               <div className="flex items-center justify-center mx-auto w-full gap-11 mt-6">
                 <button
                   onClick={handleEdit}
@@ -200,8 +239,6 @@ export default function Vehicle_Profile() {
                   Delete
                 </button>
               </div>
-
-            
             </div>
           </div>
         </div>

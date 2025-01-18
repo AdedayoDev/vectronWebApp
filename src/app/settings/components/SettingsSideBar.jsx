@@ -1,27 +1,43 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import { useAuthStore } from "@store/useStore";
-import { handleLogout } from '../../../lib/utils';
+import { handleLogout } from "../../../lib/utils";
+import api from "@lib/protectedapi";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+
 export default function SettingsSideBar() {
   const [showSideBar, setShowSideBar] = useState(false);
-  const router = useRouter(); 
+  const router = useRouter();
+  const pathname = usePathname();
   const { user } = useAuthStore();
 
-  const isActive = (path) => router.pathname === path;
+  const isActive = (path) => pathname === path;
 
+  const handleVehicleProfile = async () => {
+    try {
+      const response = await api.get("/vehicle/api/v1/vehicles");
+      
+      // Check if 'vehicles' is an array and contains at least one vehicle
+      if (Array.isArray(response.data.vehicles) && response.data.vehicles.length > 0) {
+        router.push("/vehicle_management/vehicle_profile_list");
+      } else {
+        router.push("/vehicleprofile");
+      }
+    } catch (error) {
+      console.error("Error fetching vehicle profile:", error);
+      alert("Failed to fetch vehicle profiles. Please try again later.");
+    }
+  };
+  
   return (
     <>
       {/* Mobile */}
       <div
-        className="flex absolute -top-[57px] -left-2 z-20 lg:hidden md:flex cursor-pointer items-center gap-2 mb-5"
-        onClick={() => {
-          setShowSideBar((prev) => !prev);
-        }}
+        className="flex absolute -top-[57px] z-50 -left-2 lg:hidden md:flex cursor-pointer items-center gap-2 mb-5"
+        onClick={() => setShowSideBar((prev) => !prev)}
       >
         <Image
           src="/assets/icons/user-settings.png"
@@ -34,32 +50,40 @@ export default function SettingsSideBar() {
       {showSideBar && (
         <section className="block lg:hidden absolute -top-8 -left-7 px-7 py-11 shadow-lg z-30 bg-white h-screen">
           <SidebarLink
-            href="/user_profile"
             iconSrc="/assets/icons/user-octagon.svg"
             label="Profile"
             isActive={isActive("/user_profile")}
-            onClick={()=>{setShowSideBar(false)}}
+            onClick={() => {
+              router.push("/user_profile");
+              setShowSideBar(false);
+            }}
           />
           <SidebarLink
-            href="/vehicle_management"
             iconSrc="/assets/icons/vehicle-services.svg"
             label="Vehicle Management"
-            isActive={isActive("/settings/vehicle_management")}
-            onClick={()=>{setShowSideBar(false)}}
+            isActive={isActive("/vehicle_management")}
+            onClick={() => {
+              setShowSideBar(false);
+              handleVehicleProfile();
+            }}
           />
           <SidebarLink
-            href="/history"
             iconSrc="/assets/icons/history.svg"
             label="History"
-            isActive={isActive("/settings/history")}
-            onClick={()=>{setShowSideBar(false)}}
+            isActive={isActive("/history")}
+            onClick={() => {
+              router.push("/history");
+              setShowSideBar(false);
+            }}
           />
           <SidebarLink
-            href="/settings"
             iconSrc="/assets/icons/settings-ai.svg"
             label="AI Settings"
             isActive={isActive("/settings")}
-            onClick={()=>{setShowSideBar(false)}}
+            onClick={() => {
+              router.push("/settings");
+              setShowSideBar(false);
+            }}
           />
           <div className="flex rounded-full shadow-lg p-2 items-center justify-between mt-64 cursor-pointer">
             <div className="flex items-center gap-3">
@@ -72,10 +96,7 @@ export default function SettingsSideBar() {
               />
               <p>{user?.username || "John Doe"}</p>
             </div>
-            <div 
-              onClick={handleLogout}
-              className="cursor-pointer"
-            >
+            <div onClick={handleLogout} className="cursor-pointer">
               <Image
                 src="/assets/icons/logout-icon.svg"
                 alt="Logout"
@@ -100,25 +121,25 @@ export default function SettingsSideBar() {
           <h1 className="font-bold text-base">User Settings</h1>
         </div>
         <SidebarLink
-          href="/user_profile"
+          onClick={() => router.push("/user_profile")}
           iconSrc="/assets/icons/user-octagon.svg"
           label="Profile"
           isActive={isActive("/user_profile")}
         />
         <SidebarLink
-          href="/vehicle_management"
           iconSrc="/assets/icons/vehicle-services.svg"
           label="Vehicle Management"
           isActive={isActive("/settings/vehicle_management")}
+          onClick={handleVehicleProfile}
         />
         <SidebarLink
-          href="/history"
+          onClick={() => router.push("/history")}
           iconSrc="/assets/icons/history.svg"
           label="History"
-          isActive={isActive("/settings/history")}
+          isActive={isActive("/history")}
         />
         <SidebarLink
-          href="/settings"
+          onClick={() => router.push("/settings")}
           iconSrc="/assets/icons/settings-ai.svg"
           label="AI Settings"
           isActive={isActive("/settings")}
@@ -148,23 +169,22 @@ export default function SettingsSideBar() {
 }
 
 // SidebarLink Component
-const SidebarLink = ({ href, iconSrc, label, isActive }) => {
+const SidebarLink = ({ iconSrc, label, isActive, onClick }) => {
   return (
-    <Link href={href}>
-      <div
-        className={`flex items-center gap-2 border rounded p-2 w-[274px] mb-3 ${
-          isActive ? "bg-blue-600 text-white" : "bg-white text-black"
-        }`}
-      >
-        <Image
-          src={iconSrc}
-          alt={`${label} icon`}
-          width={20}
-          height={20}
-          className={`${isActive ? "text-white" : "text-black"}`}
-        />
-        <p>{label}</p>
-      </div>
-    </Link>
+    <div
+      onClick={onClick}
+      className={`flex items-center gap-2 border rounded p-2 w-[274px] mb-3 cursor-pointer ${
+        isActive ? "bg-blue-600 text-white" : "bg-white text-black"
+      }`}
+    >
+      <Image
+        src={iconSrc}
+        alt={`${label} icon`}
+        width={15}
+        height={15}
+        className="text-current"
+      />
+      <p>{label}</p>
+    </div>
   );
 };
