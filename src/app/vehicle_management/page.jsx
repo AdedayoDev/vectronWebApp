@@ -20,7 +20,7 @@ export default function Vehicle_Management() {
       if (Array.isArray(response.data.vehicles) && response.data.vehicles.length > 0) {
         router.push("/vehicle_management/vehicle_profile_list");
       } else {
-        router.push("/vehicleprofile");
+        router.push("/vehicle_management/add_vehicle_profile");
       }
     } catch (error) {
       console.error("Error fetching vehicle profile:", error);
