@@ -135,8 +135,8 @@ export default function Chatdetail() {
 
   return (
     <>
-      <div>
-        <div className="relative w-full h-40">
+      <div className="h-screen flex flex-col overflow-hidden">
+        <div className="relative w-full h-40 flex-shrink-0">
           <Image
             src="/assets/images/bg-img.png"
             alt="Background image"
@@ -144,11 +144,11 @@ export default function Chatdetail() {
             className="object-cover"
           />
         </div>
-        <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
-          <div className="relative flex flex-col w-full min-h-96 lg:min-h-[35rem] lg:min-w-[760px] xl:w-[960px] -mt-24 bg-white z-10 p-2 sm:p-7 rounded-2xl shadow-xl">
-            <div className="flex-1 overflow-hidden">
-              <div className="w-full h-[calc(105vh-400px)] overflow-y-auto" ref={messagesEndRef}>
-                <div className="max-w-4xl mx-auto px-4">
+        <div className="flex-1 flex flex-col -mt-24 px-4 relative">
+          <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)]">
+            <div className="bg-white rounded-2xl shadow-xl h-full flex flex-col">
+              <div className="flex-1 overflow-y-auto"  ref={messagesEndRef}>
+                <div className="p-6 pb-[200px]">
                   {showWelcome && messages.length === 0 ? (
                     <>
                       <ChatHead />
@@ -237,11 +237,13 @@ export default function Chatdetail() {
             </div>
           </div>
 
-          <div className="sticky bottom-0 w-full bg-white p-4">
+          <div className="absolute bottom-0 left-0 right-0 bg-white border-t shadow-lg">
+            <div className="max-w-[1200px] mx-auto">
             <Input 
               onClick={() => {}} 
               onSubmit={handleMessageSubmit}
             />
+            </div>
           </div>
         </div>
       </div>

@@ -329,3 +329,8 @@ border: none !important;
   }
   /*  */
 }
+
+.side-chat-container {
+  transition: transform 0.3s ease-in-out;
+}
+

@@ -34,7 +34,7 @@ function SearchBar() {
 
   return (
     <div className="relative flex flex-col w-full xl:w-[800px] mx-auto px-5 lg:px-10 items-center justify-center my-5 md:my-10 space-y-3">
-      <div className="flex flex-col w-full mb-5">
+      <div className="flex flex-col sticky top-0  w-full mb-5">
         <div className="flex w-full rounded-xl p-1 lg:p-3 space-x-2 border border-purple-400">
           <Image
             src="/assets/icons/search.png"
@@ -54,7 +54,7 @@ function SearchBar() {
           You have {conversations.length} previous chats with Vechtron
         </div>
       </div>
-      
+      <div className="w-full overflow-y-auto max-h-[calc(100vh-200px)] pb-60">
       {isLoading ? (
         <div className="text-center text-blue-800">Loading conversations...</div>
       ) : filteredConversations.length > 0 ? (
@@ -69,6 +69,7 @@ function SearchBar() {
       ) : (
         <div className="text-center text-blue-800">No conversations found</div>
       )}
+      </div>
     </div>
   );
 }
