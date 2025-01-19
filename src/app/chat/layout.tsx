@@ -3,6 +3,7 @@ import { AuthProvider } from "@components/guards/AuthProvider";
 import { ProtectedRoute } from "@components/guards/ProtectedRoute";
 import Profile from "./_components/Profile";
 import SideBar from "./_components/SideBar";
+import PortalSwitcher from './_components/PortalSwitcher';
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 
@@ -16,7 +17,7 @@ function Layout({ children }: Props) {
 
   useEffect(() => {
     const checkMobile = () => {
-      const isMobile = window.innerWidth < 600;
+      const isMobile = window.innerWidth < 1020;
       setShowSnackbar(isMobile && !showMobileSidebar);
     };
 
@@ -29,8 +30,10 @@ function Layout({ children }: Props) {
     <AuthProvider>
       <ProtectedRoute>
         <>
+        
           <div className="h-screen flex flex-col">
             <div className="flex justify-end p-2 flex-shrink-0">
+            <PortalSwitcher />
               <Profile />
             </div>
 

@@ -70,8 +70,8 @@ export default function ChatHistory() {
   );
 
   return (
-    <div className="flex flex-col w-dvw lg:w-full p-3 sm:px-7">
-      <div className="relative w-full h-40">
+    <div className="h-screen flex flex-col overflow-hidden">
+      <div className="relative w-full h-40 flex-shrink-0">
         <Image
           src="/assets/images/bg-img.png"
           alt="Background image"
@@ -80,7 +80,7 @@ export default function ChatHistory() {
         />
       </div>
 
-      <div className="flex-1 max-w-4xl mx-auto w-full -mt-24 bg-white rounded-2xl shadow-xl p-6">
+      <div className="flex-1 flex flex-col -mt-24 px-4 relative bg-white rounded-2xl shadow-xl p-6">
         <div className="relative mb-6">
           <input
             type="text"
@@ -91,7 +91,8 @@ export default function ChatHistory() {
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
         </div>
-
+    
+        <div className="flex-1 overflow-y-auto px-6">
         <div className="space-y-4">
           {isLoading ? (
             <div className="text-center text-gray-500">Loading conversations...</div>
@@ -148,6 +149,7 @@ export default function ChatHistory() {
               </div>
             ))
           )}
+        </div>
         </div>
       </div>
 
