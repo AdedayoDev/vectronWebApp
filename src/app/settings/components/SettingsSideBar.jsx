@@ -36,16 +36,16 @@ export default function SettingsSideBar() {
     <>
       {/* Mobile */}
       <div
-        className="flex absolute -top-[57px] z-50 -left-2 lg:hidden md:flex cursor-pointer items-center gap-2 mb-5"
+        className="flex absolute absolute top-1 right-2 p-2  lg:hidden md:flex cursor-pointer items-center gap-2 mb-5 mt-7"
         onClick={() => setShowSideBar((prev) => !prev)}
       >
         <Image
-          src="/assets/icons/user-settings.png"
+          src="/assets/icons/Burger.png"
           alt="icon"
-          width={15}
-          height={15}
+          width={60}
+          height={60}
         />
-        <h1 className="font-bold text-base">User Settings</h1>
+        {/* <h1 className="font-bold text-base">User Settings</h1> */}
       </div>
       {showSideBar && (
         <section className="block lg:hidden absolute -top-8 -left-7 px-7 py-11 shadow-lg z-30 bg-white h-screen">
