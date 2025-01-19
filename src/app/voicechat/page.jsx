@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import SideBar from "../chat/_components/SideBar";
-// import Feed from "@components/chatComp/feed";
+import SideChat from "../voicechat/components/sideChat";
+import "@app/chat/chat.css";
 import VoiceChatFeed from "./components/voicechatfeed";
 import Navbar from "@components/navbar/chatNav";
 
@@ -21,7 +21,6 @@ export default function page() {
               height={200}
               className="banner-image w-full lg:w-[78%] absolute h-32 cover-fill"
             />
-            {/* <Feed /> */}
             <VoiceChatFeed />
           </div>
           <div>
