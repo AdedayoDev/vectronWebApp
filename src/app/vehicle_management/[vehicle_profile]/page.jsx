@@ -4,13 +4,16 @@ import SettingsSideBar from "../../settings/components/SettingsSideBar";
 import api from "@lib/protectedapi";
 import { Home } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ConfirmationModal from "../components/ComfirmationModal";
 
 export const dynamic = "force-dynamic";
 export default function Vehicle_Profile() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
     vehicleId: "",
@@ -80,37 +83,58 @@ export default function Vehicle_Profile() {
     });
   };
 
-  const handleDelete = () => {
-    setFormData({
-      vehicleId: "",
-      type: "",
-      make: "",
-      trim: "",
-      vin: "",
-      nickname: "",
-      year: "",
-      model: "",
-      plate: "",
-      mileage: "",
-    });
-    setAlert("Vehicle information deleted successfully.");
-    setTimeout(() => setAlert(""), 3000);
+  const handleDelete = async () => {
+    const id = searchParams.get("id");
+    try {
+      const response = await api.delete(`/vehicle/api/v1/vehicles/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (response.status === 200) {
+        setAlert("Vehicle deleted successfully!");
+        setShowModal(false);
+  
+       
+        setTimeout(() => {
+          setAlert(""); 
+          router.push("/vehicle_management/vehicle_profile_list");
+        }, 3000);
+      } else {
+        setError("Failed to delete vehicle. Please try again.");
+        setTimeout(() => setError(""), 3000);
+      }
+    } catch (error) {
+      console.error("Error deleting vehicle:", error);
+      setError(
+        "An error occurred while deleting the vehicle. Please try again."
+      );
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+  
+
+  const handleCancelDelete = () => {
+    setShowModal(false);
+  };
+
+  const openConfirmModal = () => {
+    setShowModal(true);
   };
 
   //Fetch vehicle by Id
-
   useEffect(() => {
-    const id = searchParams.get('id');
+    const id = searchParams.get("id");
     if (id) {
       const fetchVehicle = async () => {
         try {
-          // const { vehicle_id } = router.query; 
+         
           const response = await api.get(`/vehicle/api/v1/vehicles/${id}`);
-          console.log("got here")
-          console.log(response)
+       
           if (response.data) {
             const vehicle = response.data.vehicle;
-            console.log(vehicle);
+           
             // Update the form data with the vehicle details
             setBasicInfo({
               vehicleId: vehicle.id || "",
@@ -132,16 +156,15 @@ export default function Vehicle_Profile() {
           console.error("Error fetching Vehicle profile", error);
         }
       };
-  
+
       fetchVehicle();
     }
   }, [searchParams]);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  
 
   return (
     <>
@@ -175,7 +198,9 @@ export default function Vehicle_Profile() {
                   <form className="w-full">
                     {Object.keys(basicInfo).length > 0 ? (
                       Object.entries(basicInfo).map(([field, value]) => {
-                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        // console.log(
+                        //   `Rendering field: ${field} with value: ${value}`
+                        // ); // Debug log
                         return (
                           <div key={field}>
                             <label className="block text-gray-700 font-medium capitalize mb-1">
@@ -204,7 +229,9 @@ export default function Vehicle_Profile() {
                   <form className="w-full">
                     {Object.keys(formData).length > 0 ? (
                       Object.entries(formData).map(([field, value]) => {
-                        console.log(`Rendering field: ${field} with value: ${value}`); // Debug log
+                        // console.log(
+                        //   `Rendering field: ${field} with value: ${value}`
+                        // ); // Debug log
                         return (
                           <div key={field}>
                             <label className="block text-gray-700 font-medium capitalize mb-1">
@@ -213,7 +240,7 @@ export default function Vehicle_Profile() {
                             <input
                               type="text"
                               name={field}
-                              value={value || ""} // Ensure value is never undefined
+                              value={value || ""}
                               disabled
                               className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
                             />
@@ -235,7 +262,7 @@ export default function Vehicle_Profile() {
                   Edit
                 </button>
                 <button
-                  onClick={handleDelete}
+                  onClick={openConfirmModal}
                   className="px-6 py-1 w-32 font-medium border-4 border-solid border-purple-400 rounded-full focus:outline-none"
                 >
                   Delete
@@ -243,6 +270,14 @@ export default function Vehicle_Profile() {
               </div>
             </div>
           </div>
+          <ConfirmationModal
+            show={showModal}
+            message="Are you sure you want to delete this vehicle?"
+            onConfirm={handleDelete}
+            onCancel={handleCancelDelete}
+            button1="Cancel"
+            button2="Delete"
+          />
         </div>
       </section>
     </>

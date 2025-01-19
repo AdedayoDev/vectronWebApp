@@ -61,27 +61,60 @@ const router = useRouter()
                 <h1 className="text-sm">Back to home</h1>
               </Link>
             </div>
-            <h1 className="text-xl font-normal mb-7">
+           <div className='flex justify-between items-center mb-7'>
+             <h1 className="text-xl font-normal ">
               Your Vehicle Profiles
             </h1>
-            <div className="lg:w-[80%]">
+            <div onClick={()=>{router.push('/vehicleprofile')}} className='cursor-pointer flex items-center gap-2 text-purple-500'>
+            <Image
+          src="/assets/icons/add-circle.svg"
+          alt='add'
+          width={20}
+          height={20}
+        />
+        <p>Add vehicle</p>
+            </div>
+           </div>
+            <div className="lg:w-[100%]">
 <div className="space-y-4"> {/* Added spacing between vehicles */}
   {Array.isArray(vehicles) && vehicles.length > 0 ? (
     vehicles.map((vehicle) => (
       <div
         key={vehicle.id}
-        className="flex gap-3 items-center cursor-pointer hover:bg-gray-50 p-2 rounded-lg"
-        onClick={() => goToVehicleProfile(vehicle.id)}
+        className="border-solid border-gray-200 border-b-2 flex justify-between items-center hover:bg-gray-50 p-2 pb-2"
+        
       >
+        <div className='flex gap-3 items-start lg:items-center'>
         <Image
           src="/assets/icons/black_car.png"
           alt={vehicle.make || 'Vehicle'}
-          width={50}
-          height={50}
+          width={90}
+          height={90}
+          className='w-[50px] lg:w-[90px]'
         />
-        <p className="font-semibold text-xl text-blue-600">
+       <div>
+        <p className="text-lg font-semibold">
+          {vehicle.nickname || 'Unknown'}
+        </p>
+        <p className="text-base text-purple-600">
           {vehicle.make || 'Unknown'}
         </p>
+        <p className="text-base">
+          {vehicle.milleage || 'Unknown'}
+        </p>
+        <p className="text-base ">
+        </p>
+        <p className="text-base ">
+          Plate: {vehicle.license_plate || 'Unknown'}
+        </p>
+        <p className="text-base ">
+          VIN: {vehicle.vin || 'Unknown'}
+        </p>
+       </div>
+        </div>
+        <button onClick={() => goToVehicleProfile(vehicle.id)} className='cursor-pointer text-white bg-blue-700 rounded-full px-7 py-2 lg:w-[150px] text-semibold'>
+          View
+        </button>
       </div>
     ))
   ) : (
