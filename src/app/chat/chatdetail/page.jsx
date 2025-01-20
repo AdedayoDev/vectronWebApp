@@ -33,13 +33,13 @@ const formatMessage = (content) => {
   let formatted = content;
 
   // Replace markdown headers with styled elements
-  formatted = formatted.replace(/### (.*?)(\n|$)/g, '<h3 class="text-lg font-bold my-2">$1</h3>');
-  formatted = formatted.replace(/## (.*?)(\n|$)/g, '<h2 class="text-xl font-bold my-3">$1</h2>');
+  formatted = formatted.replace(/### (.*?)(\n|$)/g, '<h3 class="text-lg font-bold my-2 break-words">$1</h3>');
+  formatted = formatted.replace(/## (.*?)(\n|$)/g, '<h2 class="text-xl font-bold my-3 break-words">$1</h2>');
 
 
   // Handle code blocks with language specification
   formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-    return `<pre class="bg-gray-100 p-4 rounded-lg my-2 overflow-x-auto"><code class="text-sm font-mono ${lang ? `language-${lang}` : ''}">${code.trim()}</code></pre>`;
+    return `<pre class="bg-gray-100 p-4 rounded-lg my-2 overflow-x-auto"><code class="whitespace-pre-wrap break-words font-mono ${lang ? `language-${lang}` : ''}">${code.trim()}</code></pre>`;
   });
 
   // Clean up other markdown elements
@@ -157,7 +157,7 @@ export default function Chatdetail() {
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-hidden">
+      <div className="h-screen flex flex-col overflow-hidden max-w-full">
         <div className="relative w-full h-40 flex-shrink-0">
           <Image
             src="/assets/images/bg-img.png"
@@ -167,7 +167,7 @@ export default function Chatdetail() {
           />
         </div>
         <div className="flex-1 flex flex-col -mt-24 px-4 relative">
-          <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)]">
+          <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)] ">
             <div className="bg-white rounded-2xl shadow-xl h-full flex flex-col">
               <div className="flex-1 overflow-y-auto"  ref={messagesEndRef}>
                 <div className="p-6 pb-[200px]">
@@ -194,7 +194,7 @@ export default function Chatdetail() {
                             className="rounded-full p-1 mr-3"
                           />
                         )}
-                        <div className={`flex flex-col max-w-[70%] ${message.role === "user" ? "items-end mr-4 md:mr-8 lg:mr-12" : "items-start ml-4"}`}>
+                        <div className={`flex flex-col max-w-[85%] sm:max-w-[70%] ${message.role === "user" ? "items-end mr-4 md:mr-8 lg:mr-12" : "items-start ml-4"}`}>
                           {/* <h4 className="font-bold text-sm mb-1">
                             {message.role === "assistant" ? "Vechtron" : "You"}
                           </h4> */}
