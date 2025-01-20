@@ -1,6 +1,4 @@
 "use client";
-
-
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import Image from "next/image";
@@ -13,121 +11,258 @@ import SideBar from "../chat/_components/SideBar";
 export default function Route() {
   const mapRef = useRef(null);
   const [searchLocation, setSearchLocation] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
-  const [toggleSearchInput, settoggleSearchInput] = useState(false);
-  const [isInputDisabled, setIsInputDisabled] = useState(false);
-  const [ShowsideBar, setShowsideBar] = useState("");
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
+  const [directionsService, setDirectionsService] = useState(null);
+  const [directionsRenderer, setDirectionsRenderer] = useState(null);
+  const [places, setPlaces] = useState([]);
+  const [placeService, setPlaceService] = useState(null);
 
-  function handleToggleSearchInput() {
-    settoggleSearchInput((prev) => !prev);
-    setIsInputDisabled((prev) => !prev);
+// Update the handleDirectionsSearch function
+const handleDirectionsSearch = (from, to) => {
+  if (!directionsService || !directionsRenderer) {
+    console.error('Directions services not initialized');
+    return;
   }
 
-  function handleSearchLocation(e) {
-    const value = e.target.value;
-    setSearchLocation(value);
-    setIsTyping(value.trim() !== "");
-  }
+  // Clear existing markers
+  if (marker) marker.setMap(null);
+  places.forEach(place => place.marker.setMap(null));
+  setPlaces([]);
 
-  function handleShowSideBar() {
-    setShowsideBar((prev) => !prev);
-  }
-  useEffect(() => {
-    const loader = new Loader({
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-      version: "weekly",
-    });
+  const request = {
+    origin: from,
+    destination: to,
+    travelMode: google.maps.TravelMode.DRIVING,
+    provideRouteAlternatives: true  // Changed from alternatives to provideRouteAlternatives
+  };
 
-    loader.load().then(() => {
-      if (mapRef.current) {
-        // Initialize the map
-        const map = new google.maps.Map(mapRef.current, {
-          center: { lat: 37.7749, lng: -122.4194 },
-          zoom: 10,
+  directionsService.route(request, (result, status) => {
+    if (status === 'OK') {
+      directionsRenderer.setMap(map);
+      directionsRenderer.setDirections(result);
+      
+      // Fit map to show the entire route
+      if (result.routes && result.routes[0] && result.routes[0].legs) {
+        const bounds = new google.maps.LatLngBounds();
+        result.routes[0].legs.forEach(leg => {
+          bounds.extend(leg.start_location);
+          bounds.extend(leg.end_location);
+        });
+        map.fitBounds(bounds);
+      }
+    } else {
+      console.error('Directions request failed:', status);
+      alert('Could not calculate directions. Please check the addresses and try again.');
+    }
+  });
+};
+
+  const handleSearchSubmit = (location) => {
+    if (!location || !map) return;
+    setSearchLocation(location);
+
+    // Clear existing directions
+    if (directionsRenderer) {
+      directionsRenderer.setMap(null);
+    }
+
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: location }, (results, status) => {
+      if (status === 'OK' && results[0]) {
+        const position = results[0].geometry.location;
+        map.setCenter(position);
+        map.setZoom(15);
+
+        if (marker) {
+          marker.setMap(null);
+        }
+
+        const newMarker = new google.maps.Marker({
+          map: map,
+          position: position,
+          animation: google.maps.Animation.DROP
         });
 
-        // Add a marker
-        new google.maps.Marker({
-          position: { lat: 37.7749, lng: -122.4194 },
-          map: map,
-          title: "San Francisco",
+        setMarker(newMarker);
+
+        const infoWindow = new google.maps.InfoWindow({
+          content: results[0].formatted_address
+        });
+
+        newMarker.addListener('click', () => {
+          infoWindow.open(map, newMarker);
         });
       }
     });
+  };
+
+// Update the searchNearbyPlaces function
+const searchNearbyPlaces = (placeType) => {
+  if (!map || !placeService) return;
+
+  // Clear existing markers
+  places.forEach(place => place.marker.setMap(null));
+  setPlaces([]);
+
+  const request = {
+    location: map.getCenter(),
+    radius: 5000, // 5km radius
+    type: placeType
+  };
+
+  placeService.nearbySearch(request, (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+      const newPlaces = results.map(place => {
+        const marker = new google.maps.Marker({
+          position: place.geometry.location,
+          map: map,
+          title: place.name,
+          animation: google.maps.Animation.DROP
+        });
+
+        // Add info window with business status instead of permanently_closed
+        const infowindow = new google.maps.InfoWindow({
+          content: `
+            <div>
+              <h3 class="font-bold">${place.name}</h3>
+              <p>${place.vicinity}</p>
+              ${place.rating ? `<p>Rating: ${place.rating} ⭐</p>` : ''}
+              ${place.business_status ? `<p>Status: ${place.business_status}</p>` : ''}
+            </div>
+          `
+        });
+
+        marker.addListener('click', () => {
+          infowindow.open(map, marker);
+        });
+
+        return { 
+          ...place,
+          marker,
+          infowindow
+        };
+      });
+
+      setPlaces(newPlaces);
+
+      // Adjust map bounds to show all markers
+      if (newPlaces.length > 0) {
+        const bounds = new google.maps.LatLngBounds();
+        newPlaces.forEach(place => {
+          if (place.geometry && place.geometry.location) {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+      }
+    }
+  });
+};
+
+  useEffect(() => {
+    const initMap = async () => {
+      try {
+        const loader = new Loader({
+          apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+          version: "weekly",
+          libraries: ["places"]
+        });
+
+        const google = await loader.load();
+        
+        if (mapRef.current && !map) {
+          const mapInstance = new google.maps.Map(mapRef.current, {
+            center: { lat: 37.7749, lng: -122.4194 },
+            zoom: 12,
+            mapTypeControl: false,
+            fullscreenControl: false,
+            streetViewControl: false,
+            zoomControl: true,
+            zoomControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_CENTER
+            }
+          });
+
+          // Initialize services
+          const directionsServiceInstance = new google.maps.DirectionsService();
+          const directionsRendererInstance = new google.maps.DirectionsRenderer({
+            map: mapInstance,
+            suppressMarkers: false,
+            polylineOptions: {
+              strokeColor: "#4A90E2",
+              strokeWeight: 6
+            }
+          });
+
+          setMap(mapInstance);
+          setDirectionsService(directionsServiceInstance);
+          setDirectionsRenderer(directionsRendererInstance);
+          setPlaceService(new google.maps.places.PlacesService(mapInstance));
+        }
+      } catch (error) {
+        console.error("Error loading Google Maps:", error);
+      }
+    };
+
+    initMap();
   }, []);
 
   return (
-    <>
+    <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
-      <div className="route-container mt-11 flex justify-between">
-        <div className="">
+      <div className="mt-11 flex h-[calc(100vh-7rem)]">
+        <div className="relative flex-1 overflow-hidden">
           <Image
             src="/assets/images/bg-img2.png"
             alt="Google map"
             width={200}
             height={200}
-            className="w-full lg:w-78 absolute h-28 mt-2"
+            className="w-full h-28 mt-2"
           />
-          <SearchOverlay
-            handleShowSearch={handleToggleSearchInput}
-            showSearch={toggleSearchInput}
-          />
-          <PlacesSlider />
-          <div className="left-6 lg:left-3 absolute w-[89%] lg:h-[900px] lg:w-[76%]  pt-20">
-            <div className="flex items-center gap-2 p-3 bg-white rounded-t-2xl">
-              <Image
-                src="/assets/icons/vechtron.png"
-                alt="background-image"
-                width={20}
-                height={20}
-              />
-              <div className="text-md">Vechtron</div>
-              <Image
-                src="/assets/icons/dropdown.png"
-                alt="background-image"
-                width={5}
-                height={5}
-                className="w-2 h-3"
-              />
-            </div>
-
-            <div className="map-container">
-              <div ref={mapRef} className="map-container" />
-
-              <div className="shadow-custom absolute rounded-3xl backdrop-blur-40 p-3 flex bottom-16 left-3 lg:left-16 items-center bg-slate-white-gradient gap-2 w-93 lg:w-919">
+          
+          <div className="absolute inset-0 pt-20 px-6">
+            <div className="h-full flex flex-col">
+              <div className="flex items-center gap-2 p-3 bg-white rounded-t-2xl">
                 <Image
-                  src="/assets/icons/google-map.png"
-                  alt="Google map"
+                  src="/assets/icons/Media.jpeg (1).png"
+                  alt="background-image"
                   width={20}
                   height={20}
                 />
-                <input
-                  type="text"
-                  value={searchLocation}
-                  onChange={handleSearchLocation}
-                  // disabled={isInputDisabled}
-                  onClick={handleToggleSearchInput}
-                  placeholder="Where are you off to?"
-                  className="bg-transparent rounded border-0 w-full outline-none"
-                />
+                <div className="text-md">Vechtron</div>
                 <Image
-                  src={
-                    isTyping
-                      ? "/assets/icons/send-icon.png"
-                      : "/assets/icons/voice-icon.png"
-                  }
-                  alt={isTyping ? "Send Icon" : "Voice Icon"}
-                  width={20}
-                  height={20}
+                  src="/assets/icons/map.svg"
+                  alt="background-image"
+                  width={5}
+                  height={5}
+                  className="w-2 h-3"
+                />
+              </div>
+
+              <div className="map-container relative flex-1 rounded-b-2xl overflow-hidden">
+                <div 
+                  ref={mapRef} 
+                  className="absolute inset-0"
+                  style={{ width: '100%', height: '100%' }}
+                />
+                
+                <PlacesSlider onPlaceSelect={searchNearbyPlaces} />
+                
+                <SearchOverlay
+                  onSearch={handleSearchSubmit}
+                  initialValue={searchLocation}
+                  onDirectionsSearch={handleDirectionsSearch}
                 />
               </div>
             </div>
           </div>
         </div>
-        <div className="side-container">
+
+        <div className="w-80 overflow-y-auto border-l scrollbar-thin">
           <SideBar />
         </div>
       </div>
-    </>
+    </div>
   );
 }

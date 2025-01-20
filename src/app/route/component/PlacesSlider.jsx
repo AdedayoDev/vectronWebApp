@@ -2,9 +2,23 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 import Image from 'next/image';
 
-const PlacesSlider = () => {
+const PlacesSlider = ({ onPlaceSelect }) => {
+  const places = [
+    { id: 1, name: 'Restaurants', type: 'restaurant' },
+    { id: 2, name: 'Grocery stores', type: 'grocery_or_supermarket' },
+    { id: 3, name: 'Hospitals', type: 'hospital' },
+    { id: 4, name: 'Hotels', type: 'lodging' },
+    { id: 5, name: 'Museums', type: 'museum' },
+    { id: 6, name: 'Transits', type: 'transit_station' },
+    { id: 7, name: 'Pharmacy', type: 'pharmacy' }
+  ];
+
+  const handlePlaceClick = (placeType) => {
+    onPlaceSelect(placeType);
+  };
+
   return (
-    <div className="absolute top-52 left-11 z-10">
+    <div className="absolute top-36 left-11 z-10 w-[calc(100%-88px)]">
       <Splide
         options={{
           type: 'slide',
@@ -14,89 +28,29 @@ const PlacesSlider = () => {
           pagination: false,
           drag: true,
           breakpoints: {
-            768: { perPage: 4 },
-            480: { perPage: 4 },
+            1024: { perPage: 4 },
+            768: { perPage: 3 },
+            640: { perPage: 2 },
           },
         }}
-        className="places"
+        className="places-slider"
       >
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Restaurants</p>
-          </div>
-        </SplideSlide>
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Grocery stores</p>
-          </div>
-        </SplideSlide>
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Hospitals</p>
-          </div>
-        </SplideSlide>
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Hotels</p>
-          </div>
-        </SplideSlide>
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Museums</p>
-          </div>
-        </SplideSlide>
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Transits</p>
-          </div>
-        </SplideSlide>
-        <SplideSlide>
-          <div className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md">
-            <Image
-              src="/assets/icons/vechtron.png"
-              alt="background-image"
-              width={20}
-              height={20}
-            />
-            <p>Pharmacy</p>
-          </div>
-        </SplideSlide>
+        {places.map((place) => (
+          <SplideSlide key={place.id}>
+            <div
+              onClick={() => handlePlaceClick(place.type)}
+              className="place flex items-center gap-2 cursor-pointer bg-white p-2 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              <Image
+                src="/assets/icons/vechtron.png"
+                alt="place-icon"
+                width={20}
+                height={20}
+              />
+              <p className="text-sm">{place.name}</p>
+            </div>
+          </SplideSlide>
+        ))}
       </Splide>
     </div>
   );
