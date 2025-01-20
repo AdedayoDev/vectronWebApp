@@ -7,6 +7,8 @@ import "./route.css";
 import SearchOverlay from "../route/component/SearchOverlay";
 import PlacesSlider from "../route/component/PlacesSlider";
 import SideBar from "../chat/_components/SideBar";
+import { AuthProvider } from "@components/guards/AuthProvider";
+import { ProtectedRoute } from "@components/guards/ProtectedRoute";
 
 export default function Route() {
   const mapRef = useRef(null);
@@ -209,6 +211,8 @@ const searchNearbyPlaces = (placeType) => {
   }, []);
 
   return (
+    <AuthProvider>
+      <ProtectedRoute>
     <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
       <div className="mt-11 flex h-[calc(100vh-7rem)]">
@@ -259,10 +263,12 @@ const searchNearbyPlaces = (placeType) => {
           </div>
         </div>
 
-        <div className="w-80 overflow-y-auto border-l scrollbar-thin">
+        <div className="side-container overflow-y-auto border-l scrollbar-thin">
           <SideBar />
         </div>
       </div>
     </div>
+    </ProtectedRoute>
+    </AuthProvider>
   );
 }
