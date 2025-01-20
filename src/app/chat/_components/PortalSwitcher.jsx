@@ -26,7 +26,13 @@ export default function PortalSwitcher() {
       icon: "/assets/icons/car_repair.png",
       path: "/vehicle_management/portal/home",
       description: "Vehicle diagnostics and alerts"
-    }
+    },
+    {
+        name: "Route Navigation",
+        icon: "/assets/icons/map.svg",
+        path: "/route",
+        description: "Vehicle Route Navigation"
+      }
   ];
 
   return (

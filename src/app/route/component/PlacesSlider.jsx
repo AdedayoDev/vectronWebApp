@@ -10,7 +10,9 @@ const PlacesSlider = ({ onPlaceSelect }) => {
     { id: 4, name: 'Hotels', type: 'lodging' },
     { id: 5, name: 'Museums', type: 'museum' },
     { id: 6, name: 'Transits', type: 'transit_station' },
-    { id: 7, name: 'Pharmacy', type: 'pharmacy' }
+    { id: 7, name: 'Pharmacy', type: 'pharmacy' },
+    { id: 8, name: 'Gas stations', type: 'gas_station' },
+    { id: 9, name: 'Police', type: 'police' }
   ];
 
   const handlePlaceClick = (placeType) => {
@@ -18,7 +20,7 @@ const PlacesSlider = ({ onPlaceSelect }) => {
   };
 
   return (
-    <div className="absolute top-36 left-11 z-10 w-[calc(100%-88px)]">
+    <div className="absolute top-20 left-11 z-10 w-[calc(100%-88px)]">
       <Splide
         options={{
           type: 'slide',
