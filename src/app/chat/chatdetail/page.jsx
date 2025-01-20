@@ -15,7 +15,7 @@ import {
   Share,
   ThumbsDown,
   ThumbsUp,
-  Volume2,
+  Volume2, Pause, X
 } from "lucide-react";
 import Input from "../_components/Input";
 import ChatHead from "../_components/ChatHead";
@@ -55,6 +55,90 @@ const formatMessage = (content) => {
   return formatted.trim();
 };
 
+// Updated textToSpeech utility
+const textToSpeech = (() => {
+  let speechSynthesis = null;
+  let currentUtterance = null;
+
+  const init = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      speechSynthesis = window.speechSynthesis;
+    }
+  };
+
+  const getFemaleVoice = () => {
+    const voices = speechSynthesis.getVoices();
+    // Try to find a female voice - typically contains 'female' in the name
+    // or has a female-associated name
+    return voices.find(voice => 
+      voice.name.toLowerCase().includes('female') ||
+      voice.name.includes('Samantha') ||
+      voice.name.includes('Victoria') ||
+      voice.name.includes('Karen') ||
+      voice.name.includes('Moira') ||
+      voice.name.includes('Tessa')
+    ) || voices[0]; // Fallback to first available voice if no female voice found
+  };
+
+  const speak = (text, options = {}) => {
+    if (!speechSynthesis) init();
+    if (currentUtterance) {
+      speechSynthesis.cancel();
+    }
+
+    if (!speechSynthesis) {
+      console.warn('Text-to-speech is not supported in this browser.');
+      return null;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Set female voice
+    utterance.voice = getFemaleVoice();
+    
+    utterance.rate = options.rate || 1.0;
+    utterance.pitch = options.pitch || 1.2; // Slightly higher pitch for female voice
+    utterance.volume = options.volume || 1.0;
+    
+    utterance.onstart = options.onStart || null;
+    utterance.onend = options.onEnd || null;
+    utterance.onpause = options.onPause || null;
+    utterance.onresume = options.onResume || null;
+
+    currentUtterance = utterance;
+    speechSynthesis.speak(utterance);
+
+    return utterance;
+  };
+
+
+  const cancel = () => {
+    if (speechSynthesis && currentUtterance) {
+      speechSynthesis.cancel();
+      currentUtterance = null;
+    }
+  };
+
+  const pause = () => {
+    if (speechSynthesis) {
+      speechSynthesis.pause();
+    }
+  };
+
+  const resume = () => {
+    if (speechSynthesis) {
+      speechSynthesis.resume();
+    }
+  };
+
+  return {
+    speak,
+    cancel,
+    pause,
+    resume
+  };
+})();
+
 export default function Chatdetail() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +147,50 @@ export default function Chatdetail() {
   const router = useRouter();
   const [conversationId, setConversationId] = useState(null);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState(null);
 
+  // Modify the text-to-speech handler
+  const handleTextToSpeech = (messageContent, messageId) => {  // Add messageId parameter
+    // Strip HTML tags for plain text
+    const plainText = messageContent.replace(/<[^>]*>/g, '');
+    
+    // Speak the message
+    const utterance = textToSpeech.speak(plainText, {
+      rate: 1.0,
+      pitch: 1.2,
+      onStart: () => {
+        setIsSpeaking(true);
+        setSpeakingMessageId(messageId);  // Set the speaking message ID
+      },
+      onEnd: () => {
+        setIsSpeaking(false);
+        setSpeakingMessageId(null);  // Clear the speaking message ID
+      },
+      onPause: () => {
+        setIsSpeaking(false);
+      },
+      onResume: () => {
+        setIsSpeaking(true);
+        setSpeakingMessageId(messageId);  // Restore the speaking message ID
+      }
+    });
+  };
+  // Add methods to control speech
+  const handlePauseSpeech = () => {
+    textToSpeech.pause();
+  };
+
+  const handleResumeSpeech = () => {
+    textToSpeech.resume();
+  };
+
+  const handleCancelSpeech = () => {
+    textToSpeech.cancel();
+    setIsSpeaking(false);
+    setSpeakingMessageId(null);  // Clear the speaking message ID
+  };
+  
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       const chatContainer = messagesEndRef.current;
@@ -216,9 +343,29 @@ export default function Chatdetail() {
                           {message.role === "assistant" && (
                             <div className="flex items-center mt-2 space-x-2">
                               <div className="flex border border-gray-200 p-1 rounded-lg space-x-2">
-                                <button className="rounded cursor-pointer p-1">
-                                  <Volume2 size={13} color="gray" />
-                                </button>
+                                {(!isSpeaking || speakingMessageId !== message.uuid) ? (
+                                    <button 
+                                      className="rounded cursor-pointer p-1"
+                                      onClick={() => handleTextToSpeech(message.content, message.uuid)}
+                                    >
+                                      <Volume2 size={13} color="gray" />
+                                    </button>
+                                  ) : (
+                                <>
+                                  <button 
+                                    className="rounded cursor-pointer p-1"
+                                    onClick={handlePauseSpeech}
+                                  >
+                                    <Pause size={13} color="gray" />
+                                  </button>
+                                  <button 
+                                    className="rounded cursor-pointer p-1"
+                                    onClick={handleCancelSpeech}
+                                  >
+                                    <X size={13} color="gray" />
+                                  </button>
+                                </>
+                              )}
                                 <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsUp size={13} color="gray" />
                                 </button>
