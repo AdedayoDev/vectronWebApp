@@ -19,7 +19,9 @@ export default function Route() {
   const [directionsRenderer, setDirectionsRenderer] = useState(null);
   const [places, setPlaces] = useState([]);
   const [placeService, setPlaceService] = useState(null);
+  const [showSearchOverlay, setShowSearchOverlay] = useState(true);
 
+// Update the handleDirectionsSearch function
 // Update the handleDirectionsSearch function
 const handleDirectionsSearch = (from, to) => {
   if (!directionsService || !directionsRenderer) {
@@ -36,15 +38,40 @@ const handleDirectionsSearch = (from, to) => {
     origin: from,
     destination: to,
     travelMode: google.maps.TravelMode.DRIVING,
-    provideRouteAlternatives: true  // Changed from alternatives to provideRouteAlternatives
+    provideRouteAlternatives: true
   };
 
   directionsService.route(request, (result, status) => {
     if (status === 'OK') {
+      // Set directions first
       directionsRenderer.setMap(map);
+      directionsRenderer.setOptions({
+        suppressMarkers: true, // Hide default markers as we'll add custom ones
+        polylineOptions: {
+          strokeColor: "#4A90E2",
+          strokeWeight: 6
+        }
+      });
       directionsRenderer.setDirections(result);
-      
-      // Fit map to show the entire route
+
+      // Create car marker for origin
+      const originMarker = new google.maps.Marker({
+        position: result.routes[0].legs[0].start_location,
+        map: map,
+        icon: {
+          url: '/assets/icons/black_car.png',
+          scaledSize: new google.maps.Size(32, 32),
+          anchor: new google.maps.Point(16, 16)
+        }
+      });
+
+      // Create default marker for destination
+      const destinationMarker = new google.maps.Marker({
+        position: result.routes[0].legs[0].end_location,
+        map: map
+      });
+
+      // Fit bounds to show the entire route
       if (result.routes && result.routes[0] && result.routes[0].legs) {
         const bounds = new google.maps.LatLngBounds();
         result.routes[0].legs.forEach(leg => {
@@ -59,7 +86,10 @@ const handleDirectionsSearch = (from, to) => {
     }
   });
 };
-
+          // Add a show overlay function
+  const handleShowOverlay = () => {
+            setShowSearchOverlay(true);
+          };
   const handleSearchSubmit = (location) => {
     if (!location || !map) return;
     setSearchLocation(location);
@@ -170,6 +200,7 @@ const searchNearbyPlaces = (placeType) => {
           version: "weekly",
           libraries: ["places"]
         });
+        
 
         const google = await loader.load();
         
@@ -185,6 +216,11 @@ const searchNearbyPlaces = (placeType) => {
               position: google.maps.ControlPosition.RIGHT_CENTER
             }
           });
+          mapInstance.addListener('click', () => {
+            setShowSearchOverlay(false);
+          });
+          
+
 
           // Initialize services
           const directionsServiceInstance = new google.maps.DirectionsService();
@@ -253,11 +289,29 @@ const searchNearbyPlaces = (placeType) => {
                 
                 <PlacesSlider onPlaceSelect={searchNearbyPlaces} />
                 
-                <SearchOverlay
-                  onSearch={handleSearchSubmit}
-                  initialValue={searchLocation}
-                  onDirectionsSearch={handleDirectionsSearch}
-                />
+                  {/* Only show search overlay if showSearchOverlay is true */}
+                  {showSearchOverlay && (
+                    <SearchOverlay
+                      onSearch={handleSearchSubmit}
+                      initialValue={searchLocation}
+                      onDirectionsSearch={handleDirectionsSearch}
+                    />
+                  )}
+                  
+                  {/* Add a button to show the overlay when it's hidden */}
+                  {!showSearchOverlay && (
+                    <button
+                      onClick={handleShowOverlay}
+                      className="absolute bottom-16 left-1/2 transform -translate-x-1/2 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 z-10"
+                    >
+                      <Image
+                        src="/assets/icons/search.png"
+                        alt="Show search"
+                        width={24}
+                        height={24}
+                      />
+                    </button>
+                  )}
               </div>
             </div>
           </div>
