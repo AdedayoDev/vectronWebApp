@@ -119,7 +119,7 @@ jobs:
       run: | 
         TAG_COMMIT=$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
         TAG_LATEST=$ECR_REGISTRY/$IMAGE_REPO_NAME:latest
-        docker build --cache-from $TAG_LATEST -t $TAG_COMMIT -t $TAG_LATEST .
+        docker build --cache-from $TAG_LATEST -t $TAG_COMMIT -t $TAG_LATEST --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} .
         echo "Docker image built successfully."
         echo "Pushing Docker image to AWS ECR...."
         docker push $TAG_COMMIT
