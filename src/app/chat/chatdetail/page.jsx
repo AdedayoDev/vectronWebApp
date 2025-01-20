@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import ChatBodyNew from "../_components/ChatBodyNew";
 import ChatBody from "../_components/ChatBody";
+import Loader from "../_components/Loader";
 import {
   CirclePlus,
   Copy,
@@ -228,7 +229,7 @@ export default function Chatdetail() {
                         className="p-1 ml-1 rounded-full"
                       />
                       <div className="flex items-center space-x-2">
-                        <div className="animate-pulse">Thinking...</div>
+                        <Loader />
                       </div>
                     </div>
                   )}
