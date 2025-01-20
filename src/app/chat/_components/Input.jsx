@@ -63,13 +63,13 @@ function Input({ onClick, onSubmit }) {
         <div className="flex flex-col bg-[#C8D6FF] rounded-2xl p-5 md:p-8 space-y-2">
           <div className="h-10 md:h-8">
             <textarea
-              placeholder="Message Vechtron"
+              placeholder="Ask me Anything"
               rows="3"
               cols="40"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="w-full bg-[#C8D6FF] text-sm md:text-lg placeholder:font-bold placeholder:text-blue-500 focus:outline-none resize-none"
+              className="w-full bg-[#C8D6FF] text-sm md:text-sm  placeholder:text-blue-500 focus:outline-none resize-none"
             />
           </div>
           <div className="flex items-center justify-between">

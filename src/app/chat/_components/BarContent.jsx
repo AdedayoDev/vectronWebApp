@@ -61,7 +61,7 @@ export default function BarContent() {
           </div>
         </Link>
       </div>
-      <Switchs />
+      {/* <Switchs /> */}
       <div className="flex items-center justify-between py-3 border-y border-slate-400">
         <p className="text-purple-400 hover:cursor-pointer">
           Your conversations
