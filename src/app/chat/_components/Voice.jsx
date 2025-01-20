@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Mic, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
+import PulsatingImage from "./PulsatingImage";
 
 export default function Voice({ onClick }) {
   const router = useRouter();
@@ -96,12 +97,13 @@ export default function Voice({ onClick }) {
       </div>
       <div className="my-10 w-36 md:w-64 h-48 sm:h-64 mx-auto flex flex-col items-center justify-between">
         <div className="relative rounded-full h-20 sm:h-32 w-20 sm:w-32">
-          <Image
+          {/* <Image
             src="/assets/icons/Media.jpeg (1).png"
             fill
             alt="voice recording icon"
             className={`object-cover ${isRecording ? 'animate-pulse' : ''}`}
-          />
+          /> */}
+          <PulsatingImage isRecording={isRecording} />
         </div>
         {isRecording && (
           <div className="text-center text-red-500 font-medium">
