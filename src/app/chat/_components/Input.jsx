@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from "next/link";
 
 function Input({ onClick, onSubmit }) {
@@ -14,6 +14,40 @@ function Input({ onClick, onSubmit }) {
     onSubmit(message);
     setMessage('');
   };
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (!message.trim() && !selectedFile) return;
+    
+  //   // Create FormData to handle both text and file
+  //   const formData = new FormData();
+  //   if (message.trim()) {
+  //     formData.append('message', message);
+  //   }
+  //   if (selectedFile) {
+  //     formData.append('file', selectedFile);
+  //   }
+    
+  //   onSubmit(formData);
+  //   setMessage('');
+  //   setSelectedFile(null);
+  // };
+
+
+  const handleFileClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      // Optionally add the filename to the message
+      setMessage(prev => prev + (prev ? '\n' : '') + `Attached: ${file.name}`);
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -21,6 +55,7 @@ function Input({ onClick, onSubmit }) {
       handleSubmit(e);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>
@@ -39,12 +74,23 @@ function Input({ onClick, onSubmit }) {
           </div>
           <div className="flex items-center justify-between">
             <div className="relative w-5 h-5 ">
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                accept="image/*,.pdf,.doc,.docx,.txt,.csv"
+              />
               <Image
                 src="/assets/icons/attach.png"
                 alt="attachment image"
                 fill
                 className="object-cover hover:cursor-pointer"
+                onClick={handleFileClick}
               />
+              {selectedFile && (
+                <div className="absolute -top-2 -right-2 w-2 h-2 bg-blue-500 rounded-full" />
+              )}
             </div>
             <div className="flex items-center justify-center space-x-3">
               <div className="relative w-5 h-5">
