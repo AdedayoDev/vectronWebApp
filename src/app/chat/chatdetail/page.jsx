@@ -20,12 +20,33 @@ import {
 import Input from "../_components/Input";
 import ChatHead from "../_components/ChatHead";
 
+// const formatMessage = (content) => {
+//   if (!content) return "";
+//   let formatted = content;
+//   formatted = formatted.replace(/\*\*(.*?)\*\*/g, '$1');
+//   formatted = formatted.replace(/\*/g, '');
+//   formatted = formatted.replace(/[^\S\n]+/g, ' ');
+//   return formatted.trim();
+// };
 const formatMessage = (content) => {
   if (!content) return "";
   let formatted = content;
-  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '$1');
-  formatted = formatted.replace(/\*/g, '');
+
+  // Replace markdown headers with styled elements
+  formatted = formatted.replace(/### (.*?)(\n|$)/g, '<h3 class="text-lg font-bold my-2">$1</h3>');
+  formatted = formatted.replace(/## (.*?)(\n|$)/g, '<h2 class="text-xl font-bold my-3">$1</h2>');
+
+
+  // Handle code blocks with language specification
+  formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+    return `<pre class="bg-gray-100 p-4 rounded-lg my-2 overflow-x-auto"><code class="text-sm font-mono ${lang ? `language-${lang}` : ''}">${code.trim()}</code></pre>`;
+  });
+
+  // Clean up other markdown elements
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
   formatted = formatted.replace(/[^\S\n]+/g, ' ');
+
   return formatted.trim();
 };
 
@@ -178,9 +199,14 @@ export default function Chatdetail() {
                             {message.role === "assistant" ? "Vechtron" : "You"}
                           </h4> */}
                           <div className={`rounded-lg p-3 ${message.role === "user" ? "bg-purple-50 rounded-tr-none" : "bg-gray-50 rounded-tl-none"}`}>
-                            <p className="text-xs lg:text-sm whitespace-pre-line">
+                            {/* <p className="text-xs lg:text-sm whitespace-pre-line">
                               {message.content}
-                            </p>
+                            </p> */}
+                            <p 
+                              className="text-xs lg:text-sm whitespace-pre-line"
+                              dangerouslySetInnerHTML={{ __html: message.content }}
+                            />
+
                           </div>
                           {message.role === "assistant" && (
                             <div className="flex items-center mt-2 space-x-2">
