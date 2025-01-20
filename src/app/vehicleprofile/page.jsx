@@ -36,7 +36,7 @@ export default function VehicleProfile() {
         license_plate: data.registrationNumber,
         make: data.make,
         model: data.model,
-        vin: data.registrationNumber, // Using registration number as VIN
+        vin: data.registrationNumber, 
         year: parseInt(new Date(data.year).getFullYear())
       };
 
@@ -80,6 +80,7 @@ export default function VehicleProfile() {
         <div className="vehicle-profile-right">
           <div className="vehicle-profile-right-content">
             <h1>Create Vehicle Profile</h1>
+            
             <form onSubmit={handleSubmit(onSubmit)} className="vehicle-form-content">
               {/* Vehicle Make */}
               <div className="form-group">
