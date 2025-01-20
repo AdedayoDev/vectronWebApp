@@ -34,6 +34,9 @@ spec:
           env:
           - name: NODE_ENV
             value: "production"
+          envFrom:
+          - secretRef:
+              name: frontend-secrets
           readinessProbe:
             httpGet:
               path: /
