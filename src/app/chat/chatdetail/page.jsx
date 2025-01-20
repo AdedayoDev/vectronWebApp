@@ -173,9 +173,9 @@ export default function Chatdetail() {
                           />
                         )}
                         <div className={`flex flex-col max-w-[70%] ${message.role === "user" ? "items-end mr-4 md:mr-8 lg:mr-12" : "items-start ml-4"}`}>
-                          <h4 className="font-bold text-sm mb-1">
+                          {/* <h4 className="font-bold text-sm mb-1">
                             {message.role === "assistant" ? "Vechtron" : "You"}
-                          </h4>
+                          </h4> */}
                           <div className={`rounded-lg p-3 ${message.role === "user" ? "bg-purple-50 rounded-tr-none" : "bg-gray-50 rounded-tl-none"}`}>
                             <p className="text-xs lg:text-sm whitespace-pre-line">
                               {message.content}
@@ -221,7 +221,7 @@ export default function Chatdetail() {
                   {isLoading && (
                     <div className="flex items-center justify-start space-x-3 mb-2">
                       <Image
-                        src="/assets/icons/ai-icon.png"
+                        src="/assets/icons/Media.jpeg (1).png"
                         alt="AI icon"
                         width={40}
                         height={40}
