@@ -165,7 +165,7 @@ export default function Chatdetail() {
                       >
                         {message.role === "assistant" && (
                           <Image
-                            src="/assets/icons/ai-icon.png"
+                            src="/assets/icons/Media.jpeg (1).png"
                             alt="AI icon"
                             width={40}
                             height={40}
