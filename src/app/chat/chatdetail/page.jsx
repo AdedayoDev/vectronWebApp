@@ -157,7 +157,7 @@ export default function Chatdetail() {
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-hidden max-w-full">
+      <div className="h-screen flex flex-col overflow-hidden ">
         <div className="relative w-full h-40 flex-shrink-0">
           <Image
             src="/assets/images/bg-img.png"
@@ -167,7 +167,7 @@ export default function Chatdetail() {
           />
         </div>
         <div className="flex-1 flex flex-col -mt-24 px-4 relative">
-          <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)] ">
+          <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)]">
             <div className="bg-white rounded-2xl shadow-xl h-full flex flex-col">
               <div className="flex-1 overflow-y-auto"  ref={messagesEndRef}>
                 <div className="p-6 pb-[200px]">
