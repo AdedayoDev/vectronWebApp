@@ -47,6 +47,11 @@ const formatMessage = (content) => {
   formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
   formatted = formatted.replace(/[^\S\n]+/g, ' ');
 
+  // Handle markdown links first
+  formatted = formatted.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" class="text-blue-600 hover:underline" target="_blank">$1</a>');
+   
+
+
   return formatted.trim();
 };
 
