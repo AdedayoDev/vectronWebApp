@@ -5,9 +5,11 @@ import VehicleProfile from "@components/Onboarding/VehicleProfile";
 export default function VehicleProfiles() {
   return (
     <div>
-      
+      <AuthProvider>
+        <ProtectedRoute>
           <VehicleProfile />
-      
+        </ProtectedRoute>
+      </AuthProvider>
     </div>
   );
 }
