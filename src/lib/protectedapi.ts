@@ -29,9 +29,7 @@ const api = {
   
       if (!response.ok) {
         if (response.status === 401) {
-        //   localStorage.removeItem('accessToken');
-        //   window.location.href = '/auth/log-in';
-        // console.log(token);
+        
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }

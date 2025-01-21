@@ -62,7 +62,7 @@ const LandingPage = () => {
     <main className="w-full flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
-        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[760px] relative"
+        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[690px] relative"
         style={{
           backgroundImage: `url('/assets/images/vectron-car.png')`,
           backgroundSize: "cover",

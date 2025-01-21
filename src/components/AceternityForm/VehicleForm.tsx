@@ -1,7 +1,6 @@
 "use client";
 
 import "../../app/vehicleprofile/vehicleprofile.css";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Input } from "@components/ui/input";
@@ -10,8 +9,10 @@ import { BeatLoader } from "react-spinners";
 import api from "../../lib/protectedapi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BiChevronLeft } from "react-icons/bi";
+import Link from "next/link";
 
-export default function VehicleProfile() {
+export default function VehicleForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     make: "",
@@ -41,16 +42,17 @@ export default function VehicleProfile() {
         make: formData.make,
         model: formData.model,
         vin: formData.registrationNumber,
-        
       };
 
-      const response = await api.post("/vehicle/api/v1/vehicles/create", vehicleData);
+      const response = await api.post(
+        "/vehicle/api/v1/vehicles/create",
+        vehicleData
+      );
 
       if (response.status === 201) {
         setPopupMessage("Vehicle profile created successfully!");
         setPopupType("success");
 
-        // Simulate a progress bar and redirect
         const interval = setInterval(() => {
           setProgress((prev) => {
             if (prev <= 0) {
@@ -63,7 +65,8 @@ export default function VehicleProfile() {
       }
     } catch (error: any) {
       setPopupMessage(
-        error.response?.data?.message || "An unexpected error occurred. Please try again later."
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later."
       );
       setPopupType("error");
     } finally {
@@ -72,22 +75,28 @@ export default function VehicleProfile() {
   };
 
   return (
-    <div className="max-w-lg w-full h-screen mx-auto rounded-none md:rounded-2xl py-24 md:p-8 shadow-input bg-white dark:bg-black">
+    <div className="max-w-xl w-full flex flex-col   h-screen  mx-auto rounded-none md:rounded-2xl py-24  shadow-input bg-white dark:bg-black">
       <ToastContainer />
-      <div className="flex justify-center mb-6">
-        <Image
-          src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734961047/vech4_wjjixn.png"
-          alt="Vectron car"
-          width={200}
-          height={200}
-          className="vectron-image"
-        />
-      </div>
-      <h2 className="font-semibold text-4xl font-inter text-[#181b1f] text-center mb-4">
-        Create Vehicle Profile
+      <Link href="/onboarding">
+        {" "}
+        <div className="flex items-center mb-14">
+          <BiChevronLeft className="  text-[#5377DC] text-xl  group-hover:opacity-100 group-hover:scale-125 transition-transform duration-300" />
+          <p className="text-[#5377DC]">Back</p>
+        </div>
+      </Link>
+      <h2 className="font-600 font-inter text-base text-[#c3cad7] ">
+        Step 2 of 2
       </h2>
+      <div className="space-y-2 mb-4">
+        <h2 className="font-semibold text-3xl font-inter text-[#181b1f] ">
+          Create Vehicle Profile
+        </h2>
+        <p className="font-inter font-normal text-xl text-[#9c9aa5] ">
+          Setup your Vehicle Profile for easy accessibility.
+        </p>
+      </div>
       <form
-        className="space-y-4 p-6 vehicle-form-content"
+        className="space-y-4 py-6 pr-6 vehicle-form-content"
         onSubmit={handleSubmit}
       >
         {/* Vehicle Make */}
@@ -128,7 +137,9 @@ export default function VehicleProfile() {
 
         {/* Vehicle Registration Number */}
         <LabelInputContainer>
-          <Label htmlFor="registrationNumber">Vehicle Registration Number</Label>
+          <Label htmlFor="registrationNumber">
+            Vehicle Registration Number
+          </Label>
           <Input
             id="registrationNumber"
             placeholder="Enter Number"
@@ -141,10 +152,10 @@ export default function VehicleProfile() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-[#1E3A8A] text-white rounded-full hover:bg-[#1E3A8A]/100 disabled:opacity-50 flex justify-center items-center"
+          className="w-full py-2 px-4 bg-[#3556B3] text-white  rounded-full hover:bg-[#1E3A8A]/100 disabled:opacity-50 flex justify-center items-center"
           disabled={isSubmitting}
         >
-          {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Add Vehicle"}
+          {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Continue"}
         </button>
       </form>
 
