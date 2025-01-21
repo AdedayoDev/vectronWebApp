@@ -5,6 +5,7 @@ import Faq from "./components/Faq";
 import PricingSlider from "./components/PricingSlider";
 import "./pricing.css";
 import Profile from "../chat/_components/Profile";
+import PortalSwitcher from '../chat/_components/PortalSwitcher';
 import { CldImage } from "next-cloudinary";
 
 export default function Settings() {
@@ -12,6 +13,7 @@ export default function Settings() {
     <>
       <div className="flex flex-col">
       <div className="flex justify-end p-2">
+      <PortalSwitcher />
       <Profile />
       </div>
       <div className="relative w-full h-40">

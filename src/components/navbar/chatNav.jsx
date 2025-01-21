@@ -1,14 +1,19 @@
+"use client";
 import React from "react";
 import "./chatNav.css";
 import Image from "next/image";
+import Link from "next/link";
+import PortalSwitcher from './PortalSwitcher';
 
 export default function chatNav() {
   return (
     <>
       <div className="chatnav-container">
+      <PortalSwitcher />
         <Image src="/assets/icons/notification.png" alt="images" width={15} height={15} />
         <Image src="/assets/icons/moon.png" alt="images" width={15} height={15} />
         <Image src="/assets/icons/info.svg" alt="images" width={15} height={15} />
+        <Link href="/settings">
         <Image
           src="/assets/icons/avatar.png"
           width={30}
@@ -16,6 +21,7 @@ export default function chatNav() {
           alt="images"
           className="user-avatar"
         />
+        </Link>
       </div>
     </>
   );

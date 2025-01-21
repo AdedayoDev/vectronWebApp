@@ -29,7 +29,9 @@ const api = {
   
       if (!response.ok) {
         if (response.status === 401) {
-        
+        //   localStorage.removeItem('accessToken');
+        //   window.location.href = '/auth/log-in';
+        console.log(token);
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -43,17 +45,20 @@ const api = {
       }
   
       const token = getAuthToken();
-      // console.log(token)
+      console.log(token)
       
       const headers = {
         'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : ''
       };
-
-      // console.log('Request headers:', headers);
+      
+      console.log('Request headers:', headers);
       const response = await fetch(`${BASE_URL}${url}`, {
         method: 'POST',
-        headers: headers,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
         body: JSON.stringify(data)
       });
   
@@ -66,7 +71,66 @@ const api = {
       }
   
       return response.json();
-    }
+    },
+
+
+    // Add PUT method
+    put: async (url: string, data: unknown) => {
+        if (typeof window === 'undefined') {
+          throw new Error('This function can only be used on the client side');
+        }
+  
+        const token = getAuthToken();
+        
+        const response = await fetch(`${BASE_URL}${url}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+          },
+          body: JSON.stringify(data)
+        });
+  
+        if (!response.ok) {
+          if (response.status === 401) {
+            // Handle unauthorized
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        return response.json();
+      },
+  
+      // Add DELETE method
+      delete: async (url: string) => {
+        if (typeof window === 'undefined') {
+          throw new Error('This function can only be used on the client side');
+        }
+  
+        const token = getAuthToken();
+        
+        const response = await fetch(`${BASE_URL}${url}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+          }
+        });
+  
+        if (!response.ok) {
+          if (response.status === 401) {
+            // Handle unauthorized
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        // For DELETE requests, some APIs might return no content
+        if (response.status === 204) {
+          return null;
+        }
+  
+        return response.json();
+      }
   };
   
   export default api;
