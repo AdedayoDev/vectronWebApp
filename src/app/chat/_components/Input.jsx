@@ -55,7 +55,12 @@ function Input({ onClick, onSubmit }) {
       handleSubmit(e);
     }
   };
-  
+  const handleVoiceClick = (e) => {
+    e.preventDefault(); // Prevent form submission
+    if (onClick) {
+      onClick(); // This will trigger the modal open in the parent component
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -94,15 +99,18 @@ function Input({ onClick, onSubmit }) {
             </div>
             <div className="flex items-center justify-center space-x-3">
               <div className="relative w-5 h-5">
-              <Link href="/chat/newchat">
-                <Image
-                  src="/assets/icons/voiceRecord.png"
-                  alt="voiceRecord image"
-                  fill
-                  className="object-cover hover:cursor-pointer"
-                  onClick={onClick}
-                />
-                </Link>
+              <button
+                  type="button" // Important: type="button" to prevent form submission
+                  onClick={handleVoiceClick}
+                  className="w-full h-full p-0 border-0 bg-transparent"
+                >
+                  <Image
+                    src="/assets/icons/voiceRecord.png"
+                    alt="voiceRecord image"
+                    fill
+                    className="object-cover hover:cursor-pointer"
+                  />
+                </button>
               </div>
               <button
                 type="submit"

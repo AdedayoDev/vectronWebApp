@@ -6,18 +6,19 @@ import { ChevronRight, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 import api from "@lib/protectedapi";
 
-
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function Vehicle_Management() {
-  
-  const router =useRouter();
+  const router = useRouter();
   const handleVehicleProfile = async () => {
     try {
       const response = await api.get("/vehicle/api/v1/vehicles");
-      
+
       // Check if 'vehicles' is an array and contains at least one vehicle
-      if (Array.isArray(response.data.vehicles) && response.data.vehicles.length > 0) {
+      if (
+        Array.isArray(response.data.vehicles) &&
+        response.data.vehicles.length > 0
+      ) {
         router.push("/vehicle_management/vehicle_profile_list");
       } else {
         router.push("/vehicle_management/add_vehicle_profile");
@@ -52,21 +53,23 @@ export default function Vehicle_Management() {
             </div>
             <h1 className="text-xl font-semibold mb-7">Vehicle Management</h1>
             <div className="lg:w-[80%]">
-
-                <div className="flex justify-between my-3 items-center cursor-pointer">
-                  <div className="flex items-center gap-2" onClick={handleVehicleProfile}>
-                    <Image
-                      src="/assets/icons/vehicle-services.svg"
-                      alt="Icon"
-                      width={20}
-                      height={20}
-                    />
-                    <p>Vehicle Profile</p>
-                  </div>
-
-                  <ChevronRight className="text-gray-400"/>
+              <div className="flex justify-between my-3 items-center cursor-pointer">
+                <div
+                  className="flex items-center gap-2"
+                  onClick={handleVehicleProfile}
+                >
+                  <Image
+                    src="/assets/icons/vehicle-services.svg"
+                    alt="Icon"
+                    width={20}
+                    height={20}
+                  />
+                  <p>Vehicle Profile</p>
                 </div>
-                <div className="w-full h-[2px] bg-gray-300 mb-3" />
+
+                <ChevronRight className="text-gray-400" />
+              </div>
+              <div className="w-full h-[2px] bg-gray-300 mb-3" />
               <Link href="#">
                 <div className="flex justify-between my-3 items-center">
                   <div className="flex items-center gap-2">
@@ -79,7 +82,7 @@ export default function Vehicle_Management() {
                     <p>Diagnostics</p>
                   </div>
 
-                  <ChevronRight className="text-gray-400"/>
+                  <ChevronRight className="text-gray-400" />
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
@@ -96,7 +99,7 @@ export default function Vehicle_Management() {
                     <p>Route Navigation</p>
                   </div>
 
-                  <ChevronRight  className="text-gray-400"/>
+                  <ChevronRight className="text-gray-400" />
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
