@@ -5,10 +5,10 @@ import VehicleForm  from "@components/AceternityForm/VehicleForm";
 
 const VehicleProfile = () => {
   return (
-    <main className="w-full h-screen flex items-center justify-center ">
+    <main className="w-11/12 mx-auto h-screen flex items-center justify-center ">
  
       <section
-        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[690px] relative"
+        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[730px] relative"
         style={{
           backgroundImage: `url('https://res.cloudinary.com/dpmy3egg2/image/upload/v1734961047/vech4_wjjixn.png')`,
           backgroundSize: "cover",

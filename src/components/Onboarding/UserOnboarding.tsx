@@ -53,10 +53,10 @@ const UserOnboarding = () => {
   };
 
   return (
-    <main className="w-full h-screen flex items-center justify-center">
+    <main className="w-11/12 mx-auto h-screen flex items-center justify-center">
       {/* Left Section for Desktop */}
       <section
-        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[690px] relative"
+        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[730px] relative"
         style={{
           backgroundImage: `url('/assets/images/vectron-car.png')`,
           backgroundSize: "cover",
@@ -92,14 +92,14 @@ const UserOnboarding = () => {
       </section>
 
       {/* Right Section */}
-      <section className="w-full lg:w-1/2 h-full">
+      <section className="w-full  lg:w-1/2 h-full">
         <div className="flex flex-col items-center justify-center h-screen ">
-          <div className="flex flex-col w-[580px]   mx-auto space-y-8">
+          <div className="flex flex-col w-auto space-y-8">
             <h2 className="font-600 font-inter text-base text-[#c3cad7] ">
               Step 1 of 2
             </h2>
 
-            <div className="flex flex-col items-center justify-center w-[580px] text-center h-full mx-auto space-y-8">
+            <div className="flex flex-col items-center justify-center text-center h-full mx-auto space-y-8">
               <h2 className="font-semibold text-5xl font-inter text-[#181b1f] text-center">
                 Do you have a vehicle?
               </h2>

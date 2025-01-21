@@ -37,11 +37,11 @@ body {
   width: 12px;
 }
 .vehicle-form-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #9a77ff, #735ffa);
+  background: linear-gradient(180deg, #9a77ff, #1e3a8a);
   border-radius: 4px;
 }
 .vehicle-form-content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #735ffa, #593dff);
+  background: linear-gradient(180deg, #1e3a8a, #593dff);
 }
 .vehicle-form-content::-webkit-scrollbar-track {
   background: #f4f4f4;
@@ -64,17 +64,7 @@ body {
   margin-bottom: 20px;
   font-size: 14px;
 }
-.vehicle-form-content button {
-  width: 352px;
-  padding: 12px;
-  border-radius: 40px;
-  outline: none;
-  border: none;
-  margin-bottom: 20px;
-  color: white;
-  font-weight: 500;
-  background: linear-gradient(180deg, #9a77ff 0%, #735ffa 100%);
-}
+
 .error-message,
 .hint-message {
   color: #ff0000cc;

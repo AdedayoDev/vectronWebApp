@@ -2,7 +2,7 @@
 
 import "../../app/vehicleprofile/vehicleprofile.css";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { BeatLoader } from "react-spinners";
@@ -25,6 +25,15 @@ export default function VehicleForm() {
   const [popupType, setPopupType] = useState<"success" | "error" | "">("");
   const [progress, setProgress] = useState(100);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setPopupMessage("");
+      setPopupType("");
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [popupMessage]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
@@ -36,12 +45,26 @@ export default function VehicleForm() {
     setPopupMessage("");
     setPopupType("");
 
+    // Validation to ensure all fields are filled
+    if (
+      !formData.make ||
+      !formData.model ||
+      !formData.year ||
+      !formData.registrationNumber
+    ) {
+      setPopupMessage("All fields are required.");
+      setPopupType("error");
+      setIsSubmitting(false);
+      return;
+    }
+    
     try {
       const vehicleData = {
         license_plate: formData.registrationNumber,
         make: formData.make,
         model: formData.model,
         vin: formData.registrationNumber,
+        year: new Date(formData.year).getFullYear(),
       };
 
       const response = await api.post(
@@ -50,8 +73,10 @@ export default function VehicleForm() {
       );
 
       if (response.status === 201) {
-        setPopupMessage("Vehicle profile created successfully!");
-        setPopupType("success");
+        toast.success("Vehicle profile created successfully!", {
+          position: "top-right",
+          autoClose: 2000,
+        });
 
         const interval = setInterval(() => {
           setProgress((prev) => {
@@ -64,39 +89,41 @@ export default function VehicleForm() {
         }, 100);
       }
     } catch (error: any) {
-      setPopupMessage(
+      toast.error(
         error.response?.data?.message ||
-          "An unexpected error occurred. Please try again later."
+          "An unexpected error occurred. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
       );
-      setPopupType("error");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-xl w-full flex flex-col   h-screen  mx-auto rounded-none md:rounded-2xl py-24  shadow-input bg-white dark:bg-black">
+    <div className="max-w-xl w-full flex flex-col h-screen mx-auto rounded-none md:rounded-2xl py-24 shadow-input bg-white dark:bg-black">
       <ToastContainer />
       <Link href="/onboarding">
-        {" "}
         <div className="flex items-center mb-14">
-          <BiChevronLeft className="  text-[#5377DC] text-xl  group-hover:opacity-100 group-hover:scale-125 transition-transform duration-300" />
+          <BiChevronLeft className="text-[#5377DC] text-xl" />
           <p className="text-[#5377DC]">Back</p>
         </div>
       </Link>
-      <h2 className="font-600 font-inter text-base text-[#c3cad7] ">
+      <h2 className="font-600 font-inter text-base text-[#c3cad7]">
         Step 2 of 2
       </h2>
       <div className="space-y-2 mb-4">
-        <h2 className="font-semibold text-3xl font-inter text-[#181b1f] ">
+        <h2 className="font-semibold text-3xl font-inter text-[#181b1f]">
           Create Vehicle Profile
         </h2>
-        <p className="font-inter font-normal text-xl text-[#9c9aa5] ">
+        <p className="font-inter font-normal text-xl text-[#9c9aa5]">
           Setup your Vehicle Profile for easy accessibility.
         </p>
       </div>
       <form
-        className="space-y-4 py-6 pr-6 vehicle-form-content"
+        className="space-y-4 py-6 pl-5 pr-4 vehicle-form-content"
         onSubmit={handleSubmit}
       >
         {/* Vehicle Make */}
@@ -128,7 +155,7 @@ export default function VehicleForm() {
           <Label htmlFor="year">Year</Label>
           <Input
             id="year"
-            placeholder="What year is it"
+            placeholder="Select year"
             type="date"
             value={formData.year}
             onChange={handleChange}
@@ -152,7 +179,7 @@ export default function VehicleForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-[#3556B3] text-white  rounded-full hover:bg-[#1E3A8A]/100 disabled:opacity-50 flex justify-center items-center"
+          className="w-7/12 mx-auto py-2 px-4 bg-[#1e3a8a] text-white rounded hover:bg-[#1E3A8A]/90 disabled:opacity-50 flex justify-center items-center"
           disabled={isSubmitting}
         >
           {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Continue"}
