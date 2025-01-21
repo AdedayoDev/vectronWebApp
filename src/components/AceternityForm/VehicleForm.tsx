@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Input } from "@components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { BeatLoader } from "react-spinners";
+import { useForm } from "react-hook-form";
 import api from "../../lib/protectedapi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,57 +14,32 @@ import Link from "next/link";
 
 export default function VehicleForm() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    make: "",
-    model: "",
-    year: "",
-    registrationNumber: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupType, setPopupType] = useState<"success" | "error" | "">("");
-  const [progress, setProgress] = useState(100);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setPopupMessage("");
-      setPopupType("");
+      clearErrors();
     }, 3000);
 
     return () => clearTimeout(timeout);
-  }, [popupMessage]);
+  }, [errors, clearErrors]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setPopupMessage("");
-    setPopupType("");
-
-    // Validation to ensure all fields are filled
-    if (
-      !formData.make ||
-      !formData.model ||
-      !formData.year ||
-      !formData.registrationNumber
-    ) {
-      setPopupMessage("All fields are required.");
-      setPopupType("error");
-      setIsSubmitting(false);
-      return;
-    }
-    
+  const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       const vehicleData = {
-        license_plate: formData.registrationNumber,
-        make: formData.make,
-        model: formData.model,
-        vin: formData.registrationNumber,
-        year: new Date(formData.year).getFullYear(),
+        license_plate: data.registrationNumber,
+        make: data.make,
+        model: data.model,
+        vin: data.registrationNumber, // Removed the invalid `VIN` keyword
+        year: parseInt(new Date(data.year).getFullYear()),
       };
 
       const response = await api.post(
@@ -72,33 +47,25 @@ export default function VehicleForm() {
         vehicleData
       );
 
-      if (response.status === 201) {
-        toast.success("Vehicle profile created successfully!", {
+      if (response) {
+        toast.success("Vehicle added successfully!", {
           position: "top-right",
           autoClose: 2000,
+          pauseOnHover: false,
         });
 
-        const interval = setInterval(() => {
-          setProgress((prev) => {
-            if (prev <= 0) {
-              clearInterval(interval);
-              router.push("/chat");
-            }
-            return prev - 5;
-          });
-        }, 100);
+        setTimeout(() => {
+          router.push("/chat");
+        }, 2000);
       }
-    } catch (error: any) {
-      toast.error(
-        error.response?.data?.message ||
-          "An unexpected error occurred. Please try again.",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
+    } catch (error) {
+      console.error("Error creating vehicle:", error);
+      toast.error(error.message || "Failed to add vehicle", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -124,18 +91,22 @@ export default function VehicleForm() {
       </div>
       <form
         className="space-y-4 py-6 pl-5 pr-4 vehicle-form-content"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
         {/* Vehicle Make */}
         <LabelInputContainer>
           <Label htmlFor="make">Vehicle Make</Label>
           <Input
             id="make"
-            placeholder="Make of Vehicle"
             type="text"
-            value={formData.make}
-            onChange={handleChange}
+            placeholder="Make of vehicle"
+            {...register("make", {
+              required: "Vehicle Make is required",
+            })}
           />
+          {errors.make && (
+            <p className="error-message">{errors.make.message}</p>
+          )}
         </LabelInputContainer>
 
         {/* Vehicle Model */}
@@ -143,11 +114,15 @@ export default function VehicleForm() {
           <Label htmlFor="model">Model</Label>
           <Input
             id="model"
-            placeholder="What model is your vehicle"
             type="text"
-            value={formData.model}
-            onChange={handleChange}
+            placeholder="What model is your car"
+            {...register("model", {
+              required: "Vehicle Model is required",
+            })}
           />
+          {errors.model && (
+            <p className="error-message">{errors.model.message}</p>
+          )}
         </LabelInputContainer>
 
         {/* Vehicle Year */}
@@ -155,11 +130,14 @@ export default function VehicleForm() {
           <Label htmlFor="year">Year</Label>
           <Input
             id="year"
-            placeholder="Select year"
             type="date"
-            value={formData.year}
-            onChange={handleChange}
+            {...register("year", {
+              required: "Vehicle Year is required",
+            })}
           />
+          {errors.year && (
+            <p className="error-message">{errors.year.message}</p>
+          )}
         </LabelInputContainer>
 
         {/* Vehicle Registration Number */}
@@ -169,43 +147,30 @@ export default function VehicleForm() {
           </Label>
           <Input
             id="registrationNumber"
-            placeholder="Enter Number"
             type="text"
-            value={formData.registrationNumber}
-            onChange={handleChange}
+            placeholder="Enter Number"
+            {...register("registrationNumber", {
+              required: "Registration Number is required",
+              minLength: {
+                value: 12,
+                message: "Registration Number must be at least 12 characters",
+              },
+            })}
           />
+          {errors.registrationNumber && (
+            <p className="error-message">{errors.registrationNumber.message}</p>
+          )}
         </LabelInputContainer>
 
         {/* Submit Button */}
         <button
           type="submit"
           className="w-7/12 mx-auto py-2 px-4 bg-[#1e3a8a] text-white rounded hover:bg-[#1E3A8A]/90 disabled:opacity-50 flex justify-center items-center"
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
-          {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Continue"}
+          {isLoading ? "Adding Vehicle..." : "Add Vehicle"}
         </button>
       </form>
-
-      {/* Popup Message */}
-      {popupType && (
-        <div
-          className={`fixed bottom-4 left-4 right-4 max-w-md mx-auto p-4 rounded-lg shadow-lg z-50 ${
-            popupType === "success"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          <p>{popupMessage}</p>
-          {popupType === "success" && (
-            <div className="h-2 bg-green-500 rounded mt-2 relative overflow-hidden">
-              <div
-                className="absolute top-0 left-0 h-full bg-green-700 transition-all"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
