@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import ChatBodyNew from "../_components/ChatBodyNew";
 import ChatBody from "../_components/ChatBody";
+import Loader from "../_components/Loader";
 import {
   CirclePlus,
   Copy,
@@ -14,19 +15,129 @@ import {
   Share,
   ThumbsDown,
   ThumbsUp,
-  Volume2,
+  Volume2, Pause, X
 } from "lucide-react";
 import Input from "../_components/Input";
 import ChatHead from "../_components/ChatHead";
 
+// const formatMessage = (content) => {
+//   if (!content) return "";
+//   let formatted = content;
+//   formatted = formatted.replace(/\*\*(.*?)\*\*/g, '$1');
+//   formatted = formatted.replace(/\*/g, '');
+//   formatted = formatted.replace(/[^\S\n]+/g, ' ');
+//   return formatted.trim();
+// };
 const formatMessage = (content) => {
   if (!content) return "";
   let formatted = content;
-  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '$1');
-  formatted = formatted.replace(/\*/g, '');
+
+  // Replace markdown headers with styled elements
+  formatted = formatted.replace(/### (.*?)(\n|$)/g, '<h3 class="text-lg font-bold my-2 break-words">$1</h3>');
+  formatted = formatted.replace(/## (.*?)(\n|$)/g, '<h2 class="text-xl font-bold my-3 break-words">$1</h2>');
+
+
+  // Handle code blocks with language specification
+  formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+    return `<pre class="bg-gray-100 p-4 rounded-lg my-2 overflow-x-auto"><code class="whitespace-pre-wrap break-words font-mono ${lang ? `language-${lang}` : ''}">${code.trim()}</code></pre>`;
+  });
+
+  // Clean up other markdown elements
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
   formatted = formatted.replace(/[^\S\n]+/g, ' ');
+
+  // Handle markdown links first
+  formatted = formatted.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" class="text-blue-600 hover:underline" target="_blank">$1</a>');
+   
+
+
   return formatted.trim();
 };
+
+// Updated textToSpeech utility
+const textToSpeech = (() => {
+  let speechSynthesis = null;
+  let currentUtterance = null;
+
+  const init = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      speechSynthesis = window.speechSynthesis;
+    }
+  };
+
+  const getFemaleVoice = () => {
+    const voices = speechSynthesis.getVoices();
+    // Try to find a female voice - typically contains 'female' in the name
+    // or has a female-associated name
+    return voices.find(voice => 
+      voice.name.toLowerCase().includes('female') ||
+      voice.name.includes('Samantha') ||
+      voice.name.includes('Victoria') ||
+      voice.name.includes('Karen') ||
+      voice.name.includes('Moira') ||
+      voice.name.includes('Tessa')
+    ) || voices[0]; // Fallback to first available voice if no female voice found
+  };
+
+  const speak = (text, options = {}) => {
+    if (!speechSynthesis) init();
+    if (currentUtterance) {
+      speechSynthesis.cancel();
+    }
+
+    if (!speechSynthesis) {
+      console.warn('Text-to-speech is not supported in this browser.');
+      return null;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Set female voice
+    utterance.voice = getFemaleVoice();
+    
+    utterance.rate = options.rate || 1.0;
+    utterance.pitch = options.pitch || 1.2; // Slightly higher pitch for female voice
+    utterance.volume = options.volume || 1.0;
+    
+    utterance.onstart = options.onStart || null;
+    utterance.onend = options.onEnd || null;
+    utterance.onpause = options.onPause || null;
+    utterance.onresume = options.onResume || null;
+
+    currentUtterance = utterance;
+    speechSynthesis.speak(utterance);
+
+    return utterance;
+  };
+
+
+  const cancel = () => {
+    if (speechSynthesis && currentUtterance) {
+      speechSynthesis.cancel();
+      currentUtterance = null;
+    }
+  };
+
+  const pause = () => {
+    if (speechSynthesis) {
+      speechSynthesis.pause();
+    }
+  };
+
+  const resume = () => {
+    if (speechSynthesis) {
+      speechSynthesis.resume();
+    }
+  };
+
+  return {
+    speak,
+    cancel,
+    pause,
+    resume
+  };
+})();
 
 export default function Chatdetail() {
   const [messages, setMessages] = useState([]);
@@ -36,7 +147,50 @@ export default function Chatdetail() {
   const router = useRouter();
   const [conversationId, setConversationId] = useState(null);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState(null);
 
+  // Modify the text-to-speech handler
+  const handleTextToSpeech = (messageContent, messageId) => {  // Add messageId parameter
+    // Strip HTML tags for plain text
+    const plainText = messageContent.replace(/<[^>]*>/g, '');
+    
+    // Speak the message
+    const utterance = textToSpeech.speak(plainText, {
+      rate: 1.0,
+      pitch: 1.2,
+      onStart: () => {
+        setIsSpeaking(true);
+        setSpeakingMessageId(messageId);  // Set the speaking message ID
+      },
+      onEnd: () => {
+        setIsSpeaking(false);
+        setSpeakingMessageId(null);  // Clear the speaking message ID
+      },
+      onPause: () => {
+        setIsSpeaking(false);
+      },
+      onResume: () => {
+        setIsSpeaking(true);
+        setSpeakingMessageId(messageId);  // Restore the speaking message ID
+      }
+    });
+  };
+  // Add methods to control speech
+  const handlePauseSpeech = () => {
+    textToSpeech.pause();
+  };
+
+  const handleResumeSpeech = () => {
+    textToSpeech.resume();
+  };
+
+  const handleCancelSpeech = () => {
+    textToSpeech.cancel();
+    setIsSpeaking(false);
+    setSpeakingMessageId(null);  // Clear the speaking message ID
+  };
+  
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       const chatContainer = messagesEndRef.current;
@@ -135,7 +289,7 @@ export default function Chatdetail() {
 
   return (
     <>
-      <div className="h-screen flex flex-col overflow-hidden">
+      <div className="h-screen flex flex-col overflow-hidden ">
         <div className="relative w-full h-40 flex-shrink-0">
           <Image
             src="/assets/images/bg-img.png"
@@ -165,28 +319,53 @@ export default function Chatdetail() {
                       >
                         {message.role === "assistant" && (
                           <Image
-                            src="/assets/icons/ai-icon.png"
+                            src="/assets/icons/Media.jpeg (1).png"
                             alt="AI icon"
                             width={40}
                             height={40}
                             className="rounded-full p-1 mr-3"
                           />
                         )}
-                        <div className={`flex flex-col max-w-[70%] ${message.role === "user" ? "items-end mr-4 md:mr-8 lg:mr-12" : "items-start ml-4"}`}>
-                          <h4 className="font-bold text-sm mb-1">
+                        <div className={`flex flex-col max-w-[85%] sm:max-w-[70%] ${message.role === "user" ? "items-end mr-4 md:mr-8 lg:mr-12" : "items-start ml-4"}`}>
+                          {/* <h4 className="font-bold text-sm mb-1">
                             {message.role === "assistant" ? "Vechtron" : "You"}
-                          </h4>
+                          </h4> */}
                           <div className={`rounded-lg p-3 ${message.role === "user" ? "bg-purple-50 rounded-tr-none" : "bg-gray-50 rounded-tl-none"}`}>
-                            <p className="text-xs lg:text-sm whitespace-pre-line">
+                            {/* <p className="text-xs lg:text-sm whitespace-pre-line">
                               {message.content}
-                            </p>
+                            </p> */}
+                            <p 
+                              className="text-xs lg:text-sm whitespace-pre-line"
+                              dangerouslySetInnerHTML={{ __html: message.content }}
+                            />
+
                           </div>
                           {message.role === "assistant" && (
                             <div className="flex items-center mt-2 space-x-2">
                               <div className="flex border border-gray-200 p-1 rounded-lg space-x-2">
-                                <button className="rounded cursor-pointer p-1">
-                                  <Volume2 size={13} color="gray" />
-                                </button>
+                                {(!isSpeaking || speakingMessageId !== message.uuid) ? (
+                                    <button 
+                                      className="rounded cursor-pointer p-1"
+                                      onClick={() => handleTextToSpeech(message.content, message.uuid)}
+                                    >
+                                      <Volume2 size={13} color="gray" />
+                                    </button>
+                                  ) : (
+                                <>
+                                  <button 
+                                    className="rounded cursor-pointer p-1"
+                                    onClick={handlePauseSpeech}
+                                  >
+                                    <Pause size={13} color="gray" />
+                                  </button>
+                                  <button 
+                                    className="rounded cursor-pointer p-1"
+                                    onClick={handleCancelSpeech}
+                                  >
+                                    <X size={13} color="gray" />
+                                  </button>
+                                </>
+                              )}
                                 <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsUp size={13} color="gray" />
                                 </button>
@@ -221,14 +400,14 @@ export default function Chatdetail() {
                   {isLoading && (
                     <div className="flex items-center justify-start space-x-3 mb-2">
                       <Image
-                        src="/assets/icons/ai-icon.png"
+                        src="/assets/icons/Media.jpeg (1).png"
                         alt="AI icon"
                         width={40}
                         height={40}
                         className="p-1 ml-1 rounded-full"
                       />
                       <div className="flex items-center space-x-2">
-                        <div className="animate-pulse">Thinking...</div>
+                        <Loader />
                       </div>
                     </div>
                   )}
