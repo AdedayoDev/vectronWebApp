@@ -15,7 +15,12 @@ import {
   Share,
   ThumbsDown,
   ThumbsUp,
-  Volume2, Pause, X
+  Volume2, 
+  Pause, 
+  X,
+  Check,
+  ArrowLeft, 
+  ArrowRight
 } from "lucide-react";
 import Input from "../_components/Input";
 import ChatHead from "../_components/ChatHead";
@@ -149,6 +154,11 @@ export default function Chatdetail() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speakingMessageId, setSpeakingMessageId] = useState(null);
+  const [copiedMessageId, setCopiedMessageId] = useState(null);
+  const [messageVersions, setMessageVersions] = useState({}); // Store versions for each message
+  const [currentVersionIndex, setCurrentVersionIndex] = useState({}); // Track current version for each message
+  const isVersionSwitching = useRef(false);
+
 
   // Modify the text-to-speech handler
   const handleTextToSpeech = (messageContent, messageId) => {  // Add messageId parameter
@@ -198,6 +208,120 @@ export default function Chatdetail() {
     }
   };
 
+  const handleCopyText = async (content, messageId) => {
+    try {
+      // Strip HTML tags to get plain text
+      const plainText = content.replace(/<[^>]*>/g, '');
+      await navigator.clipboard.writeText(plainText);
+      
+      // Show copied status for this message
+      setCopiedMessageId(messageId);
+      
+      // Reset copied status after 2 seconds
+      setTimeout(() => {
+        setCopiedMessageId(null);
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
+
+  // Also modify the handleRegenerateResponse function to handle HTML content correctly
+const handleRegenerateResponse = async (userMessage, messageId) => {
+  try {
+    setIsLoading(true);
+    
+    // Call API to get new response
+    const response = await api.post('/chat/api/v1/chat', {
+      conversation_id: conversationId,
+      message: userMessage,
+      regenerate: true
+    });
+
+    if (response.status === "success") {
+      // Format the new response with HTML
+      const newResponse = formatMessage(response.data.message);
+      
+      // Update versions for this message
+      setMessageVersions(prev => {
+        const existingVersions = prev[messageId] || [messages.find(m => m.uuid === messageId)?.content];
+        return {
+          ...prev,
+          [messageId]: [...existingVersions, newResponse]
+        };
+      });
+      
+      // Set current version to latest
+      setCurrentVersionIndex(prev => ({
+        ...prev,
+        [messageId]: (prev[messageId] || 0) + 1
+      }));
+      
+      // Update the message in the messages array
+      setMessages(prev => prev.map(msg => {
+        if (msg.uuid === messageId) {
+          return { ...msg, content: newResponse };
+        }
+        return msg;
+      }));
+    }
+  } catch (error) {
+    console.error('Error regenerating response:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+// Update version navigation functions to handle HTML content
+const handlePreviousVersion = (messageId) => {
+  isVersionSwitching.current = true; 
+  const currentIndex = currentVersionIndex[messageId] || 0;
+  if (currentIndex > 0) {
+    setCurrentVersionIndex(prev => ({
+      ...prev,
+      [messageId]: currentIndex - 1
+    }));
+    
+    // Get previous version with HTML formatting
+    const previousVersion = messageVersions[messageId][currentIndex - 1];
+    setMessages(prev => prev.map(msg => {
+      if (msg.uuid === messageId) {
+        return { ...msg, content: previousVersion };
+      }
+      return msg;
+    }));
+  }
+    // Reset flag after a short delay
+    setTimeout(() => {
+      isVersionSwitching.current = false;
+    }, 100);
+};
+
+const handleNextVersion = (messageId) => {
+  isVersionSwitching.current = true; 
+  const currentIndex = currentVersionIndex[messageId] || 0;
+  const versions = messageVersions[messageId] || [];
+  if (currentIndex < versions.length - 1) {
+    setCurrentVersionIndex(prev => ({
+      ...prev,
+      [messageId]: currentIndex + 1
+    }));
+    
+    // Get next version with HTML formatting
+    const nextVersion = versions[currentIndex + 1];
+    setMessages(prev => prev.map(msg => {
+      if (msg.uuid === messageId) {
+        return { ...msg, content: nextVersion };
+      }
+      return msg;
+    }));
+  }
+    // Reset flag after a short delay
+    setTimeout(() => {
+      isVersionSwitching.current = false;
+    }, 100);
+};
+
   useEffect(() => {
     const id = searchParams.get('id');
     if (id) {
@@ -208,7 +332,9 @@ export default function Chatdetail() {
   }, [searchParams]);
 
   useEffect(() => {
-    scrollToBottom();
+    if (!isVersionSwitching.current) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   const fetchConversation = async (id) => {
@@ -372,16 +498,71 @@ export default function Chatdetail() {
                                 <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsDown size={13} color="gray" />
                                 </button>
-                                <button className="rounded cursor-pointer p-1 border">
+                                {/* <button className="rounded cursor-pointer p-1 border">
                                   <Share size={13} color="gray" />
+                                </button> */}
+                                <button 
+                                  className={`rounded cursor-pointer p-1 border transition-colors duration-200 ${
+                                    copiedMessageId === message.uuid ? 'bg-green-50 border-green-200' : ''
+                                  }`}
+                                  onClick={() => handleCopyText(message.content, message.uuid)}
+                                  title="Copy message"
+                                >
+                                  {copiedMessageId === message.uuid ? (
+                                    <Check size={13} className="text-green-600" />
+                                  ) : (
+                                    <Copy size={13} color="gray" />
+                                  )}
                                 </button>
-                                <button className="rounded cursor-pointer p-1 border">
-                                  <Copy size={13} color="gray" />
-                                </button>
-                              </div>
-                              <button className="rounded cursor-pointer p-1 border">
-                                <Repeat size={13} color="gray" />
+                                <button 
+                                className={`rounded cursor-pointer p-1 border transition-colors duration-200 ${
+                                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                                onClick={() => {
+                                  // Find the user message that triggered this response
+                                  const userMessageIndex = messages.findIndex(msg => msg.uuid === message.uuid) - 1;
+                                  if (userMessageIndex >= 0) {
+                                    handleRegenerateResponse(messages[userMessageIndex].content, message.uuid);
+                                  }
+                                }}
+                                disabled={isLoading}
+                                title="Regenerate response"
+                              >
+                                <Repeat 
+                                  size={13} 
+                                  color="gray" 
+                                  className={isLoading ? 'animate-spin' : ''}
+                                />
                               </button>
+                              </div>
+                                {/* Version navigation - only show if there are multiple versions */}
+                                {messageVersions[message.uuid]?.length > 1 && (
+                                  <div className="flex items-center justify-end space-x-2 text-xs text-gray-500">
+                                    <button
+                                      className={`p-1 rounded hover:bg-gray-100 ${
+                                        (currentVersionIndex[message.uuid] || 0) === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                      }`}
+                                      onClick={() => handlePreviousVersion(message.uuid)}
+                                      disabled={(currentVersionIndex[message.uuid] || 0) === 0}
+                                    >
+                                      <ArrowLeft size={13} />
+                                    </button>
+                                    <span>
+                                      Version {((currentVersionIndex[message.uuid] || 0) + 1)} of {messageVersions[message.uuid].length}
+                                    </span>
+                                    <button
+                                      className={`p-1 rounded hover:bg-gray-100 ${
+                                        (currentVersionIndex[message.uuid] || 0) === messageVersions[message.uuid].length - 1 
+                                          ? 'opacity-50 cursor-not-allowed' 
+                                          : ''
+                                      }`}
+                                      onClick={() => handleNextVersion(message.uuid)}
+                                      disabled={(currentVersionIndex[message.uuid] || 0) === messageVersions[message.uuid].length - 1}
+                                    >
+                                      <ArrowRight size={13} />
+                                    </button>
+                                  </div>
+                                )}
                             </div>
                           )}
                         </div>
