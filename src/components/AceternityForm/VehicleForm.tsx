@@ -6,7 +6,7 @@
 // import { Input } from "@components/ui/input";
 // import { Label } from "@radix-ui/react-label";
 // import { BeatLoader } from "react-spinners";
-// import api from "../../lib/protectedapi";
+import api from "../../lib/protectedapi";
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 // import { BiChevronLeft } from "react-icons/bi";
@@ -224,30 +224,51 @@
 //     </div>
 //   );
 // };
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { BeatLoader } from "react-spinners";
-import { BiChevronLeft, BiChevronDown } from "react-icons/bi";
+import { BiChevronLeft } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
 
+interface Make {
+  Make_ID: number;
+  Make_Name: string;
+}
+
+interface Model {
+  Make_ID: number;
+  Make_Name: string;
+  Model_ID: number;
+  Model_Name: string;
+}
+
+interface FormData {
+  make: string;
+  makeId: string | number;
+  model: string;
+  year: string;
+  registrationNumber: string;
+  vin: string;
+}
+
+interface APIResponse<T> {
+  Count: number;
+  Message: string;
+  SearchCriteria: string | null;
+  Results: T[];
+}
+
 export default function VehicleForm() {
   const router = useRouter();
-  const [makes, setMakes] = useState([]);
-  const [models, setModels] = useState([]);
+  const [makes, setMakes] = useState<Make[]>([]);
+  const [models, setModels] = useState<Model[]>([]);
   const [isLoadingMakes, setIsLoadingMakes] = useState(true);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
-  const [openMake, setOpenMake] = useState(false);
-  const [openModel, setOpenModel] = useState(false);
-  const [selectedMake, setSelectedMake] = useState(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     make: "",
     makeId: "",
     model: "",
@@ -256,13 +277,17 @@ export default function VehicleForm() {
     vin: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchMake, setSearchMake] = useState("");
+  const [searchModel, setSearchModel] = useState("");
+  const [yearError, setYearError] = useState("");
+  const [noModelsFound, setNoModelsFound] = useState(false);
 
   useEffect(() => {
     fetchMakes();
   }, []);
 
   useEffect(() => {
-    if (formData.makeId && formData.year) {
+    if (formData.makeId && formData.year && !yearError) {
       fetchModels(formData.makeId, formData.year);
     }
   }, [formData.makeId, formData.year]);
@@ -270,7 +295,7 @@ export default function VehicleForm() {
   const fetchMakes = async () => {
     try {
       const response = await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json');
-      const data = await response.json();
+      const data: APIResponse<Make> = await response.json();
       setMakes(data.Results);
     } catch (error) {
       console.error('Error fetching makes:', error);
@@ -280,42 +305,98 @@ export default function VehicleForm() {
     }
   };
 
-  const fetchModels = async (makeId, year) => {
+  const validateYear = (year: string) => {
+    const yearNum = parseInt(year);
+    const currentYear = new Date().getFullYear();
+    if (isNaN(yearNum)) {
+      return "Please enter a valid year";
+    }
+    if (yearNum < 1886) { // First automobile year
+      return "Year must be 1886 or later";
+    }
+    if (yearNum > currentYear + 1) {
+      return `Year cannot be more than ${currentYear + 1}`;
+    }
+    return "";
+  };
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const year = e.target.value;
+    const error = validateYear(year);
+    setYearError(error);
+    setFormData(prev => ({ ...prev, year }));
+    if (error) {
+      setModels([]);
+      setNoModelsFound(false);
+    }
+  };
+
+  const fetchModels = async (makeId: string | number, year: string) => {
     setIsLoadingModels(true);
+    setModels([]);
+    setNoModelsFound(false);
     try {
       const response = await fetch(
         `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/${makeId}/modelyear/${year}?format=json`
       );
-      const data = await response.json();
-      setModels(data.Results || []);
+      const data: APIResponse<Model> = await response.json();
+      
+      const validModels = (data.Results || []).filter(model => 
+        model && typeof model.Model_Name === 'string' && model.Model_Name.length > 0
+      );
+      
+      setModels(validModels);
+      setNoModelsFound(validModels.length === 0);
+      
+      if (validModels.length === 0) {
+        toast.info(`No models found for ${formData.make} in year ${year}`);
+      }
     } catch (error) {
       console.error('Error fetching models:', error);
       toast.error('Failed to load vehicle models');
+      setModels([]);
     } finally {
       setIsLoadingModels(false);
     }
   };
 
-  const handleMakeSelect = (make) => {
-    setFormData(prev => ({
-      ...prev,
-      make: make.Make_Name,
-      makeId: make.Make_ID,
-      model: '' // Reset model when make changes
-    }));
-    setSelectedMake(make);
-    setOpenMake(false);
+  const handleMakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedMake = makes.find(make => 
+      make.Make_Name.toLowerCase() === e.target.value.toLowerCase()
+    );
+    
+    if (selectedMake) {
+      setFormData(prev => ({
+        ...prev,
+        make: selectedMake.Make_Name,
+        makeId: selectedMake.Make_ID,
+        model: '' // Reset model when make changes
+      }));
+      setSearchMake(selectedMake.Make_Name);
+      setSearchModel('');
+      setNoModelsFound(false);
+    } else {
+      setSearchMake(e.target.value);
+    }
   };
 
-  const handleModelSelect = (model) => {
-    setFormData(prev => ({
-      ...prev,
-      model: model.Model_Name
-    }));
-    setOpenModel(false);
+  const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchModel(value);
+    
+    const selectedModel = models.find(model => 
+      model?.Model_Name?.toLowerCase() === value.toLowerCase()
+    );
+    
+    if (selectedModel) {
+      setFormData(prev => ({
+        ...prev,
+        model: selectedModel.Model_Name
+      }));
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -325,7 +406,7 @@ export default function VehicleForm() {
         make: formData.make,
         model: formData.model,
         vin: formData.vin || "NA",
-        year: new Date(formData.year).getFullYear(),
+        year: parseInt(formData.year),
       };
 
       const response = await api.post("/vehicle/api/v1/vehicles/create", vehicleData);
@@ -334,12 +415,20 @@ export default function VehicleForm() {
         toast.success("Vehicle profile created successfully!");
         setTimeout(() => router.push("/chat"), 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.response?.data?.message || "An unexpected error occurred");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const filteredMakes = makes.filter(make =>
+    make.Make_Name.toLowerCase().includes(searchMake.toLowerCase())
+  );
+
+  const filteredModels = models.filter(model =>
+    model?.Model_Name?.toLowerCase().includes(searchModel.toLowerCase())
+  );
 
   return (
     <div className="max-w-xl w-full flex flex-col h-screen mx-auto rounded-none md:rounded-2xl py-24 shadow-input bg-white dark:bg-black">
@@ -362,38 +451,23 @@ export default function VehicleForm() {
       </div>
 
       <form className="space-y-4 py-6 pl-5 pr-4" onSubmit={handleSubmit}>
-        {/* Make Dropdown */}
+        {/* Make Input */}
         <div className="flex flex-col space-y-2">
           <Label>Vehicle Make</Label>
-          <Popover open={openMake} onOpenChange={setOpenMake}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openMake}
-                className="justify-between"
-              >
-                {formData.make || "Select make..."}
-                <BiChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput placeholder="Search make..." className="h-9" />
-                <CommandEmpty>No make found.</CommandEmpty>
-                <CommandGroup className="max-h-64 overflow-auto">
-                  {makes.map((make) => (
-                    <CommandItem
-                      key={make.Make_ID}
-                      onSelect={() => handleMakeSelect(make)}
-                    >
-                      {make.Make_Name}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
+          <div className="relative">
+            <input
+              list="makes"
+              value={searchMake}
+              onChange={handleMakeChange}
+              className="w-full px-3 py-2 border rounded-md"
+              placeholder="Search make..."
+            />
+            <datalist id="makes">
+              {filteredMakes.map((make) => (
+                <option key={make.Make_ID} value={make.Make_Name} />
+              ))}
+            </datalist>
+          </div>
         </div>
 
         {/* Year Input */}
@@ -401,45 +475,41 @@ export default function VehicleForm() {
           <Label htmlFor="year">Year</Label>
           <Input
             id="year"
-            type="date"
+            type="text"
+            placeholder="Enter year (e.g., 2020)"
             value={formData.year}
-            onChange={(e) => setFormData(prev => ({ ...prev, year: e.target.value }))}
+            onChange={handleYearChange}
+            className={yearError ? "border-red-500" : ""}
           />
+          {yearError && (
+            <p className="text-red-500 text-sm">{yearError}</p>
+          )}
         </div>
 
-        {/* Model Dropdown */}
+        {/* Model Input */}
         <div className="flex flex-col space-y-2">
           <Label>Model</Label>
-          <Popover open={openModel} onOpenChange={setOpenModel}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={openModel}
-                className="justify-between"
-                disabled={!formData.makeId || !formData.year}
-              >
-                {formData.model || "Select model..."}
-                <BiChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput placeholder="Search model..." className="h-9" />
-                <CommandEmpty>No model found.</CommandEmpty>
-                <CommandGroup className="max-h-64 overflow-auto">
-                  {models.map((model) => (
-                    <CommandItem
-                      key={model.Model_ID}
-                      onSelect={() => handleModelSelect(model)}
-                    >
-                      {model.Model_Name}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-          </Popover>
+          <div className="relative">
+            <input
+              list="models"
+              value={searchModel}
+              onChange={handleModelChange}
+              className="w-full px-3 py-2 border rounded-md"
+              placeholder={isLoadingModels ? "Loading models..." : "Search model..."}
+              disabled={!formData.makeId || !formData.year || isLoadingModels || !!yearError}
+            />
+            <datalist id="models">
+              {filteredModels.map((model) => (
+                <option key={model.Model_ID} value={model.Model_Name} />
+              ))}
+            </datalist>
+          </div>
+          {isLoadingModels && (
+            <div className="text-sm text-gray-500">Loading models...</div>
+          )}
+          {noModelsFound && !isLoadingModels && (
+            <div className="text-sm text-amber-600">No models found for this make and year</div>
+          )}
         </div>
 
         {/* VIN Input */}
@@ -469,7 +539,7 @@ export default function VehicleForm() {
         <button
           type="submit"
           className="w-7/12 mx-auto py-2 px-4 bg-[#1e3a8a] text-white rounded hover:bg-[#1E3A8A]/90 disabled:opacity-50 flex justify-center items-center"
-          disabled={isSubmitting || !formData.make || !formData.model || !formData.year}
+          disabled={isSubmitting || !formData.make || !formData.model || !formData.year || !!yearError}
         >
           {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Continue"}
         </button>
