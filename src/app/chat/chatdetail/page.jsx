@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import Input from "../_components/Input";
 import ChatHead from "../_components/ChatHead";
+import Voice from "../_components/Voice"; 
 
 // const formatMessage = (content) => {
 //   if (!content) return "";
@@ -158,7 +159,15 @@ export default function Chatdetail() {
   const [messageVersions, setMessageVersions] = useState({}); // Store versions for each message
   const [currentVersionIndex, setCurrentVersionIndex] = useState({}); // Track current version for each message
   const isVersionSwitching = useRef(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
 
+  const handleVoiceModalOpen = () => {
+    setShowVoiceModal(true);
+  };
+
+  const handleVoiceModalClose = () => {
+    setShowVoiceModal(false);
+  };
 
   // Modify the text-to-speech handler
   const handleTextToSpeech = (messageContent, messageId) => {  // Add messageId parameter
@@ -596,11 +605,21 @@ const handleNextVersion = (messageId) => {
               </div>
             </div>
           </div>
-
+          {/* Add Voice Modal */}
+          {showVoiceModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+              <div className="bg-white rounded-lg w-full max-w-md mx-4">
+                <Voice 
+                  onMessageSubmit={handleMessageSubmit}
+                  onClose={handleVoiceModalClose}
+                />
+              </div>
+            </div>
+          )}
           <div className="absolute bottom-0 left-0 right-0 bg-white border-t shadow-lg">
             <div className="max-w-[1200px] mx-auto">
             <Input 
-              onClick={() => {}} 
+              onClick={handleVoiceModalOpen} 
               onSubmit={handleMessageSubmit}
             />
             </div>
