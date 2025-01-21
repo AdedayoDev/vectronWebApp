@@ -124,21 +124,7 @@ export default function Voice({ onMessageSubmit, onClose }) {
 
   return (
     <div className="flex flex-col w-full p-5 lg:min-h-[35rem]">
-      <div className="flex w-dvw lg:max-w-screen-lg xl:max-w-[900px] gap-2 items-center">
-        <Image
-          src="/assets/icons/vechtron.png"
-          alt="icon"
-          width={20}
-          height={20}
-        />
-        <p>Vechtron</p>
-        <Image
-          src="/assets/icons/selector.png"
-          alt="icon"
-          width={15}
-          height={15}
-        />
-      </div>
+
       <div className="my-10 w-36 md:w-64 h-48 sm:h-64 mx-auto flex flex-col items-center justify-between">
         <div className="relative rounded-full h-20 sm:h-32 w-20 sm:w-32">
           <PulsatingImage isRecording={isRecording} />
