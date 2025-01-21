@@ -52,7 +52,7 @@ const EmailVerification = () => {
           <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
             Verify your email
           </h2>
-          <p className="text-center mt-2">
+          <p className="text-center mt-2 w-[360px]">
             Click below to send a verification link to&nbsp;
             <span className="font-medium text-[#7f56d9]">
               {user?.email || "your email"}

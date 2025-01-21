@@ -99,10 +99,10 @@ const SignUpForm = () => {
       label="Start Driving with AI"
       backButtonHref="/auth/log-in"
       backButtonLabel="Already have an account? Log in"
-      smallScreenPadding="pt-72"
+      smallScreenPadding="pt-60"
       largeScreenPadding="lg:pt-60"
     >
-      <div className="space-y-2 mb-2">
+      <div className="space-y-2 mb-2 pt-">
         <GoogleLogIn userData={userData} mode="login">
           Continue with Google
         </GoogleLogIn>
