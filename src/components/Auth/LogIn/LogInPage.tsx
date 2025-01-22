@@ -60,10 +60,10 @@ const LogInPage = () => {
   const year = new Date();
   const getYear = year.getFullYear();
   return (
-    <main className="w-full flex items-center  justify-center h-screen">
+    <main className="w-11/12 mx-auto flex items-center  justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
        <section
-              className="hidden lg:block w-[600px] rounded-xl mx-auto h-[800px] py-10 my-auto relative"
+              className="hidden lg:block w-[600px] rounded-xl mx-auto h-[730px] py-10 my-auto relative"
               style={{
                 backgroundImage: `url('/assets/images/vectron-car.png')`,
                 backgroundSize: "cover",

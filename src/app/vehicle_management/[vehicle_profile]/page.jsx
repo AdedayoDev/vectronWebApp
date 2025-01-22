@@ -14,6 +14,7 @@ export default function Vehicle_Profile() {
   const searchParams = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [formData, setFormData] = useState({
     vehicleId: "",
@@ -64,24 +65,10 @@ export default function Vehicle_Profile() {
     return validationErrors;
   };
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    const validationErrors = validateInputs();
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      router.push("/vehicle_management/vehicle_profile/edit_vehicle_profile");
-    } else {
-      setTimeout(() => setErrors({}), 3000);
-    }
-    setFormData({
-      type: "",
-      trim: "",
-      nickname: "",
-      license_plate: "",
-      mileage: "",
-    });
-  };
+  function handleEdit() {
+    const id = searchParams.get("id");
+    router.push(`/vehicle_management/vehicle_profile?id=${id}`);
+  }
 
   const handleDelete = async () => {
     const id = searchParams.get("id");
@@ -91,29 +78,27 @@ export default function Vehicle_Profile() {
           "Content-Type": "application/json",
         },
       });
-  
-      if (response.status === 200) {
+
+      if (response.status_code === 201 || response.status_code === 204) {
         setAlert("Vehicle deleted successfully!");
         setShowModal(false);
-  
-       
+
         setTimeout(() => {
-          setAlert(""); 
+          setAlert("");
           router.push("/vehicle_management/vehicle_profile_list");
         }, 3000);
       } else {
-        setError("Failed to delete vehicle. Please try again.");
-        setTimeout(() => setError(""), 3000);
+        throw new Error("Failed to delete vehicle. Please try again.");
       }
     } catch (error) {
-      console.error("Error deleting vehicle:", error);
+      console.error("Error deleting vehicle:", error.message);
+
       setError(
         "An error occurred while deleting the vehicle. Please try again."
       );
       setTimeout(() => setError(""), 3000);
     }
   };
-  
 
   const handleCancelDelete = () => {
     setShowModal(false);
@@ -129,12 +114,11 @@ export default function Vehicle_Profile() {
     if (id) {
       const fetchVehicle = async () => {
         try {
-         
           const response = await api.get(`/vehicle/api/v1/vehicles/${id}`);
-       
+
           if (response.data) {
             const vehicle = response.data.vehicle;
-           
+
             // Update the form data with the vehicle details
             setBasicInfo({
               vehicleId: vehicle.id || "",
@@ -241,8 +225,8 @@ export default function Vehicle_Profile() {
                               type="text"
                               name={field}
                               value={value || ""}
-                              disabled
-                              className="w-full lg:w-[361px] mb-3 px-4 py-2 border rounded-md bg-gray-100"
+                              disabled={!isEditing}
+                              className="w-full lg:w-[361px] mb-3 px-4 text-black outline-none py-2 border rounded-md bg-gray-100"
                             />
                           </div>
                         );

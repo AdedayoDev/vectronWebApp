@@ -6,7 +6,7 @@ import Link from "next/link";
 const WelcomeToVechtron = () => {
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center">
-      <div className="w-[528px] mx-auto space-y-6">
+      <div className="w-10/12 mx-auto space-y-6">
         <div>
           <Image
             src="/assets/icons/Media.jpeg (1).png"
