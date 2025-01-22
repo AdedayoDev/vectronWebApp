@@ -12,6 +12,99 @@ export default function Voice({ onMessageSubmit, onClose }) {
   const [recordingTime, setRecordingTime] = useState(0);
   const [isTranscribing, setIsTranscribing] = useState(false);
 
+  const getPlatformSpecificYouTubeLink = (query) => {
+    const encodedQuery = encodeURIComponent(query);
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isAndroid = /android/.test(userAgent);
+    const isIOS = /iphone|ipad|ipod/.test(userAgent);
+    
+    const links = {
+      web: `https://www.youtube.com/results?search_query=${encodedQuery}`,
+      android: {
+        app: `youtube://results?search_query=${encodedQuery}`,
+        store: `https://play.google.com/store/apps/details?id=com.google.android.youtube`
+      },
+      ios: {
+        app: `youtube://results?search_query=${encodedQuery}`,
+        store: `https://apps.apple.com/app/youtube/id544007664`
+      }
+    };
+
+    return {
+      appLink: isAndroid ? links.android.app : 
+              isIOS ? links.ios.app : 
+              links.web,
+      storeLink: isAndroid ? links.android.store : 
+                isIOS ? links.ios.store : 
+                null,
+      webLink: links.web,
+      platform: isAndroid ? 'android' : 
+               isIOS ? 'ios' : 
+               'web'
+    };
+  };
+
+  const openYouTube = (query) => {
+    const { appLink, storeLink, webLink, platform } = getPlatformSpecificYouTubeLink(query);
+    
+    if (platform === 'web') {
+      window.open(webLink, '_blank');
+      return;
+    }
+
+    const tryApp = () => {
+      return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Timeout'));
+        }, 2500);
+
+        window.location.href = appLink;
+
+        document.addEventListener('visibilitychange', function handler() {
+          if (document.hidden) {
+            clearTimeout(timeout);
+            document.removeEventListener('visibilitychange', handler);
+            resolve();
+          }
+        });
+      });
+    };
+
+    tryApp().catch(() => {
+      const goToStore = window.confirm(
+        'YouTube app is not installed. Would you like to install it?\n\n' +
+        'Click OK to go to the app store\n' +
+        'Click Cancel to open in browser'
+      );
+      
+      if (goToStore && storeLink) {
+        window.location.href = storeLink;
+      } else {
+        window.open(webLink, '_blank');
+      }
+    });
+  };
+
+  const handleTranscribedCommand = (text) => {
+    const command = text.toLowerCase();
+    if (command.startsWith('vechtron play')) {
+      let songQuery;
+      if (command.includes('play me')) {
+        songQuery = text.slice(text.indexOf('play me') + 8).trim();
+      } else {
+        songQuery = text.slice(text.indexOf('play') + 5).trim();
+      }
+      
+      if (songQuery) {
+        openYouTube(songQuery);
+        onMessageSubmit(`Looking up "${songQuery}" on YouTube`);
+        onClose();
+        return true;
+      }
+    }
+    return false;
+  };
+
   useEffect(() => {
     // Initialize speech recognition
     if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
@@ -30,8 +123,13 @@ export default function Voice({ onMessageSubmit, onClose }) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
             finalTranscript += transcript;
+            // Check for YouTube command when we have final transcript
+            if (!handleTranscribedCommand(finalTranscript)) {
+              setTranscribedText(finalTranscript);
+            }
           } else {
             interimTranscript += transcript;
+            setTranscribedText(interimTranscript);
           }
         }
 
@@ -121,6 +219,7 @@ export default function Voice({ onMessageSubmit, onClose }) {
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
+  
 
   return (
     <div className="flex flex-col w-full p-5 lg:min-h-[35rem]">
