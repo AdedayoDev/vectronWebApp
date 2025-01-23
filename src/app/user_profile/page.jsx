@@ -22,6 +22,7 @@ export default function Profile() {
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
+
   const [userProfilePic, setUserProfilePic] = useState(
     "/assets/icons/avatar.png"
   );
@@ -97,6 +98,9 @@ export default function Profile() {
     }
   };
 
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertType, setAlertType] = useState("success");
+
   // Handle form submission
   const handleEdit = async (e) => {
     e.preventDefault();
@@ -123,27 +127,19 @@ export default function Profile() {
       "profile_picture",
       userProfilePic instanceof File ? userProfilePic : null
     );
-    console.log("Payload sent:", updatedProfileData);
 
     try {
       const response = await api.post(
         "/auth/api/v1/users/update-profile/",
         updatedProfileData
       );
-      console.log("Server response:", response);
-      alert("Profile updated successfully!");
 
       if (response.status === 200 || response.status === 201) {
-        alert("Profile updated successfully!");
-
-        // Update form data with the latest changes
-        setFormData((prevState) => ({
-          ...prevState,
-          fullName: `${response.data.first_name} ${response.data.last_name}`,
-        }));
       }
     } catch (error) {
-      console.error("Error updating profile:", error.message);
+      setAlertMessage("Failed to update profile. Please try again.");
+      setAlertType("error");
+      console.log("Setting error alert:", "Failed to update profile.");
     }
   };
 
@@ -174,18 +170,19 @@ export default function Profile() {
 
             <div className="flex gap-4 mt-5 items-center">
               {userProfilePic && (
-                    <Image
-                      src={
-                        userProfilePic instanceof File
-                          ? URL.createObjectURL(userProfilePic)
-                          : userProfilePic
-                      }
-                      width={40}
-                      height={40}
-                      alt="Profile Preview"
-                      className="mt-4 object-cover rounded-full"
-                    />
-                  )}
+                <Image
+                  src={
+                    userProfilePic instanceof File
+                      ? URL.createObjectURL(userProfilePic)
+                      : userProfilePic
+                  }
+                  width={40}
+                  height={40}
+                  alt="Profile Preview"
+                  className="mt-4 object-cover rounded-full"
+                />
+              )}
+
               <div>
                 <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
                   <p className="text-gray-400">Upload a new image</p>
@@ -277,6 +274,11 @@ export default function Profile() {
 
               <div className="flex items-center gap-7 my-7">
                 <button
+                  onClick={() => {
+                    setAlertMessage("Profile updated successfully!");
+                    setAlertType("success");
+                    setTimeout(() => setAlertMessage(null), 3000);
+                  }}
                   type="submit"
                   className="px-4 py-2 w-36 bg-blue-800 text-white font-medium rounded-full"
                 >
@@ -296,6 +298,17 @@ export default function Profile() {
               <div className="mt-4 p-3 bg-green-100 flex gap-3 items-center rounded-md">
                 <Check color="green" />
                 <p>{alert}</p>
+              </div>
+            )}
+
+            {/* Alert */}
+            {alertMessage && (
+              <div
+                className={`fixed top-4 right-4 transition duration-300 ease-in z-50 px-4 py-2 rounded-md shadow-md text-white ${
+                  alertType === "success" ? "bg-green-500" : "bg-red-500"
+                }`}
+              >
+                {alertMessage}
               </div>
             )}
           </div>
