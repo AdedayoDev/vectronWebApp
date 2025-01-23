@@ -17,6 +17,8 @@ export default function Profile() {
     email: "",
     profilePic: null,
     is_vehicle_owner: true,
+    phone: "",
+    location: "",
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
@@ -36,6 +38,16 @@ export default function Profile() {
     } else if (!emailRegex.test(formData.email)) {
       validationErrors.email = "Invalid email format.";
     }
+    const phoneRegex = /^[0-9]{10,15}$/;
+    if (!formData.phone.trim()) {
+      validationErrors.phone = "Phone number is required.";
+    } else if (!phoneRegex.test(formData.phone)) {
+      validationErrors.phone = "Invalid phone number. Enter 10-15 digits only.";
+    }
+
+    if (!formData.location.trim()) {
+      validationErrors.location = "Location is required.";
+    }
     return validationErrors;
   };
 
@@ -45,12 +57,21 @@ export default function Profile() {
         const response = await api.get("/auth/api/v1/users/get-profile/");
 
         if (response) {
-          const { first_name, last_name, email, profile_picture } = response;
+          const {
+            first_name,
+            last_name,
+            email,
+            profile_picture,
+            phone,
+            location,
+          } = response;
 
           const updatedData = {
             fullName: `${first_name} ${last_name}`,
             email: email,
             profilePic: null,
+            phone: phone || "",
+            location: location || "",
           };
 
           setFormData(updatedData);
@@ -80,51 +101,55 @@ export default function Profile() {
   const handleEdit = async (e) => {
     e.preventDefault();
 
-    // Validate inputs
-    const validationErrors = validateInputs();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    // Split fullName into first_name and last_name
+    const [first_name, ...lastNameArr] = formData.fullName.split(" ");
+    const last_name = lastNameArr.join(" ");
 
-    // Prepare form data
-    const updatedFormData = new FormData();
-    const [firstName, ...lastNameParts] = formData.fullName.split(" ");
-    const lastName = lastNameParts.join(" ");
-    updatedFormData.append("first_name", firstName || "");
-    updatedFormData.append("last_name", lastName || "");
-    updatedFormData.append("email", formData.email);
-    if (formData.profilePic) {
-      updatedFormData.append("profile_picture", formData.profilePic);
-    }
+    const updatedProfileData = {
+      first_name,
+      last_name,
+      email: formData.email,
+      phone: formData.phone,
+      location: formData.location,
+    };
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("first_name", first_name);
+    formDataToSend.append("last_name", last_name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("location", formData.location);
+    formDataToSend.append(
+      "profile_picture",
+      userProfilePic instanceof File ? userProfilePic : null
+    );
+    console.log("Payload sent:", updatedProfileData);
 
     try {
-      // Make the POST request
       const response = await api.post(
         "/auth/api/v1/users/update-profile/",
-        updatedFormData,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        updatedProfileData
       );
+      console.log("Server response:", response);
+      alert("Profile updated successfully!");
 
-      if (response?.status === 200) {
-        const { first_name, last_name, email, profile_picture } = response;
-        setFormData({
-          fullName: `${first_name} ${last_name}`,
-          email,
-          profilePic: null,
-        });
+      if (response.status === 200 || response.status === 201) {
+        alert("Profile updated successfully!");
 
-        setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
-        setAlert("Profile updated successfully!");
-        setTimeout(() => setAlert(""), 3000);
-      } else {
-        console.warn("Failed to update profile:", response);
+        // Update form data with the latest changes
+        setFormData((prevState) => ({
+          ...prevState,
+          fullName: `${response.data.first_name} ${response.data.last_name}`,
+        }));
       }
     } catch (error) {
       console.error("Error updating profile:", error.message);
     }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setUserProfilePic(file);
   };
 
   const handleGoHome = () => {
@@ -148,20 +173,26 @@ export default function Profile() {
             <h1 className="font-semibold text-lg">Personal Information</h1>
 
             <div className="flex gap-4 mt-5 items-center">
-              <Image
-                src={userProfilePic}
-                alt="user"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
+              {userProfilePic && (
+                    <Image
+                      src={
+                        userProfilePic instanceof File
+                          ? URL.createObjectURL(userProfilePic)
+                          : userProfilePic
+                      }
+                      width={40}
+                      height={40}
+                      alt="Profile Preview"
+                      className="mt-4 object-cover rounded-full"
+                    />
+                  )}
               <div>
                 <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
                   <p className="text-gray-400">Upload a new image</p>
                   <CloudUpload size={15} color="gray" />
                   <input
                     type="file"
-                    onChange={handleProfilePicChange}
+                    onChange={handleFileChange}
                     accept="image/*"
                     className="absolute inset-0 opacity-0 cursor-pointer"
                   />
@@ -172,9 +203,12 @@ export default function Profile() {
               </div>
             </div>
 
-            <form onSubmit={handleEdit} className="lg:w-[33%]">
-              <div className="my-6 lg:mr-11">
-                <label className="block text-gray-700 font-medium mb-2">
+            <form
+              onSubmit={handleEdit}
+              className="w-full my-7 lg:grid grid-cols-2"
+            >
+              <div className=" lg:mr-11">
+                <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
                   Full Name:
                 </label>
                 <input
@@ -191,7 +225,7 @@ export default function Profile() {
               </div>
 
               <div className="mb-4 lg:mr-11">
-                <label className="block text-gray-700 font-medium mb-2">
+                <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
                   Email:
                 </label>
                 <input
@@ -204,6 +238,40 @@ export default function Profile() {
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
+              </div>
+
+              <div className=" lg:mr-11">
+                <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
+                  Phone:
+                </label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                )}
+              </div>
+
+              <div className=" lg:mr-11">
+                <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
+                  Location:
+                </label>
+                <input
+                  type="text"
+                  value={formData.location}
+                  onChange={(e) =>
+                    setFormData({ ...formData, location: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {errors.location && (
+                  <p className="text-red-500 text-sm mt-1">{errors.location}</p>
                 )}
               </div>
 
