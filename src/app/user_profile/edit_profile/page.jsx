@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "@components/navbar/chatNav";
 import api from "../../../lib/protectedapi";
+import { useS3Upload } from '../../../lib/hooks/useS3Upload';
+import { S3Image } from '@components/shared/S3Image';
+import { useAuthStore } from '@store/useStore';
 
 export const dynamic = "force-dynamic";
 
@@ -16,46 +19,71 @@ export default function Profile() {
     first_name: "",
     last_name: "",
     email: "",
-    profilePic: null,
+    profile_picture: null,
     is_vehicle_owner: true,
     username: "",
   });
   const [errors, setErrors] = useState({});
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState("success");
+  const { user, updateProfilePics } = useAuthStore();
   const [userProfilePic, setUserProfilePic] = useState(
-    "/assets/icons/avatar.png"
+    user?.profile_picture ?? "/assets/icons/avatar.png"
   );
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.get("/auth/api/v1/users/get-profile/");
-        if (response) {
-          const { first_name, last_name, email, profile_picture, username, is_vehicle_owner } = response;
-  
-          setFormData({
-            first_name: first_name || "",
-            last_name: last_name || "",
-            email: email || "",
-            profilePic: null, // File input is not prefilled.
-            username: username || "",
-            is_vehicle_owner: is_vehicle_owner ?? true, // Use `true` as the default.
-          });
-  
-          setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
-        } else {
-          console.warn("Response is null or undefined.");
+    const fetchUserProfile = async (retries = 3, delay = 1000) => {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const response = await api.get("/auth/api/v1/users/get-profile/");
+          if (response) {
+            const { first_name, last_name, email, profile_picture, username, is_vehicle_owner } = response;
+            setFormData({
+              first_name: first_name || "",
+              last_name: last_name || "",
+              email: email || "",
+              username: username || "",
+              profile_picture: null,
+              is_vehicle_owner: is_vehicle_owner ?? true,
+            });
+            setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
+          }
+        } catch (error) {
+          if (error.response?.status === 429 && i < retries - 1) {
+            await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+            continue;
+          }
+          console.error("Error fetching user profile:", error);
         }
-      } catch (error) {
-        console.error("Error fetching user profile:", error.message);
       }
     };
   
     fetchUserProfile();
   }, []);
   
-
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+  
+    const formData = new FormData();
+    formData.append('file', file);
+  
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) throw new Error('Upload failed');
+      
+      const { url } = await response.json();
+      // console.log("here " , url);
+      setFormData(prev => ({ ...prev, profile_picture: url }));
+    } catch (error) {
+      setAlertMessage("Failed to upload image");
+      setAlertType("error");
+    }
+  };
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -70,26 +98,65 @@ export default function Profile() {
     try {
       // Prepare form data for the API request
       const formDataToSend = new FormData();
-      formDataToSend.append("first_name", formData.first_name);
-      formDataToSend.append("last_name", formData.last_name);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("username", formData.username);
-      formDataToSend.append("is_vehicle_owner", formData.is_vehicle_owner);
-      if (formData.profilePic) {
-        formDataToSend.append("profile_picture", formData.profilePic);
-      }
+      // Object.keys(formData).forEach(key => {
+      //   if (formData[key] !== null) {
+      //     formDataToSend.append(key, formData[key]);
+      //   }
+      // });
+      // formDataToSend.append("first_name", formData.first_name);
+      // formDataToSend.append("last_name", formData.last_name);
+      // formDataToSend.append("email", formData.email);
+      // formDataToSend.append("username", formData.username);
+      // formDataToSend.append("is_vehicle_owner", formData.is_vehicle_owner);
+      // if (formData.profile_picture) {
+      //   formDataToSend.append("profile_picture", {
+      //     "first_name": formData.first_name,
+      //     "last_name": formData.last_name,
+      //     "email": formData.email,
+      //     "is_vehicle_owner": formData.is_vehicle_owner,
+      //     "profile_picture": formData.profile_picture
+      //   });
+      // }
+      // console.log(formData);
   
       // Make the API call
-      const response = await api.post("/auth/api/v1/users/update-profile/", formDataToSend);
+      const response = await api.post("/auth/api/v1/users/update-profile/", {
+        "first_name": formData.first_name,
+        "last_name": formData.last_name,
+        "email": formData.email,
+        "profile_picture": formData.profile_picture
+      });
       console.log("API Response:", response);
 
       if (response) {
+       console.log("pic", response.data.profile_picture);
+       await updateProfilePics(response.data.profile_picture);
         setAlertMessage("Profile updated successfully!");
         setAlertType("success");
-  
-        setTimeout(() => setAlertMessage(null), 3000);
-  
-        router.push("/user_profile");
+        
+     // Wait for storage update and alert
+     await new Promise(resolve => setTimeout(resolve, 3000));
+
+     // Redirect with retry logic for profile fetch
+     const MAX_RETRIES = 3;
+     let retryCount = 0;
+     
+     const redirectWithRetry = async () => {
+       try {
+        router.push("/settings");
+       } catch (error) {
+         if (error.response?.status === 429 && retryCount < MAX_RETRIES) {
+           retryCount++;
+           await new Promise(resolve => 
+             setTimeout(resolve, 1000 * Math.pow(2, retryCount))
+           );
+           return redirectWithRetry();
+         }
+         throw error;
+       }
+     };
+
+     await redirectWithRetry();
       } 
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -99,7 +166,7 @@ export default function Profile() {
       setAlertType("error");
   
       // Auto-hide the alert
-      setTimeout(() => setAlertMessage(null), 3000);
+      await new Promise(resolve => setTimeout(resolve, 2000));
     }
   };
   
@@ -125,34 +192,41 @@ export default function Profile() {
             <h1 className="font-semibold text-lg">Personal Information</h1>
 
             <div className="flex gap-4 mt-5 items-center">
-              {userProfilePic && (
-                <Image
-                  src={
-                    formData.profilePic
-                      ? URL.createObjectURL(formData.profilePic)
-                      : userProfilePic
-                  }
-                  width={40}
-                  height={40}
-                  alt="Profile Preview"
-                  className="mt-4 object-cover rounded-full"
-                />
-              )}
+            {formData.profile_picture ? (
+            <S3Image
+              s3Key={formData.profile_picture}
+              width={40}
+              height={40}
+              alt="Profile"
+              className="mt-4 object-cover rounded-full"
+            />
+          ) : (
+            <Image
+              src="/assets/icons/avatar.png"
+              width={40}
+              height={40}
+              alt="Default Profile"
+              className="mt-4 object-cover rounded-full"
+            />
+          )}
 
               <div>
-                <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
-                  <p className="text-gray-400">Upload a new image</p>
-                  <CloudUpload size={15} color="gray" />
-                  <input
-                    type="file"
-                    onChange={handleProfilePicChange}
-                    accept="image/*"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                </div>
+              <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
+              <p className="text-gray-400">Upload a new image</p>
+              <CloudUpload size={15} color="gray" />
+              <input
+                type="file"
+                onChange={handleImageUpload}
+                accept="image/*"
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                // disabled={isUploading}
+              />
+              </div>
+              {/* {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>} */}
                 <p className="text-sm text-gray-400">
                   800x800 PNG, JPG recommended. Max file size: 2MB.
                 </p>
+                
               </div>
             </div>
 

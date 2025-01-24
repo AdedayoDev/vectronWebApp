@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "@components/navbar/chatNav";
 import api from "../../lib/protectedapi";
+import { useAuthStore } from '@store/useStore';
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +23,9 @@ export default function Profile() {
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
+  const { user } = useAuthStore();
   const [userProfilePic, setUserProfilePic] = useState(
-    "/assets/icons/avatar.png"
+   "/assets/icons/avatar.png"
   );
 
   // Validate inputs
@@ -45,16 +47,14 @@ export default function Profile() {
     const fetchUserProfile = async () => {
       try {
         const response = await api.get("/auth/api/v1/users/get-profile/");
-
+        console.log(response);
         if (response) {
 
           const {
             first_name,
             last_name,
             email,
-            profile_picture,
-            // phone,
-            // location,
+            profile_pic,
           } = response;
 
 
@@ -62,11 +62,10 @@ export default function Profile() {
             fullName: `${first_name} ${last_name}`,
             email: email,
             profilePic: null,
-
-            // phone: phone || "",
-            // location: location || "",
-
           };
+          setUserProfilePic(profile_pic || "/assets/icons/avatar.png");
+          console.log(updatedData.fullName)
+          console.log(profile_pic)
 
           setFormData(updatedData);
           // setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
@@ -100,49 +99,6 @@ export default function Profile() {
   // const handleEdit = async (e) => {
   //   e.preventDefault();
 
-
-  //   // Split fullName into first_name and last_name
-  //   const [first_name, ...lastNameArr] = formData.fullName.split(" ");
-  //   const last_name = lastNameArr.join(" ");
-
-  //   const updatedProfileData = {
-  //     first_name,
-  //     last_name,
-  //     email: formData.email,
-  //     phone: formData.phone,
-  //     location: formData.location,
-  //   };
-
-  //   const formDataToSend = new FormData();
-  //   formDataToSend.append("first_name", first_name);
-  //   formDataToSend.append("last_name", last_name);
-  //   formDataToSend.append("email", formData.email);
-  //   formDataToSend.append("phone", formData.phone);
-  //   formDataToSend.append("location", formData.location);
-  //   formDataToSend.append(
-  //     "profile_picture",
-  //     userProfilePic instanceof File ? userProfilePic : null
-  //   );
-
-  //   try {
-  //     const response = await api.post(
-  //       "/auth/api/v1/users/update-profile/",
-  //       updatedProfileData
-  //     );
-
-  //     if (response.status === 200 || response.status === 201) {
-  //     }
-  //   } catch (error) {
-  //     setAlertMessage("Failed to update profile. Please try again.");
-  //     setAlertType("error");
-  //     console.log("Setting error alert:", "Failed to update profile.");
-  //   }
-  // };
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setUserProfilePic(file);
-  // };
 
   const handleEdit = () => {
     router.push("/user_profile/edit_profile");
