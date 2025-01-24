@@ -16,9 +16,6 @@ export default function Profile() {
     fullName: "",
     email: "",
     profilePic: null,
-    // is_vehicle_owner: true,
-    // phone: "",
-    // location: "",
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
@@ -56,97 +53,26 @@ export default function Profile() {
     const fetchUserProfile = async () => {
       try {
         const response = await api.get("/auth/api/v1/users/get-profile/");
-
         if (response) {
-          const {
-            first_name,
-            last_name,
-            email,
-            profile_picture,
-            // phone,
-            // location,
-          } = response;
+          const { first_name, last_name, email, profile_picture } = response;
 
-          const updatedData = {
-            fullName: `${first_name} ${last_name}`,
-            email: email,
-            profilePic: null,
-            // phone: phone || "",
-            // location: location || "",
-          };
+          setFormData({
+            fullName: `${first_name || ""} ${last_name || ""}`.trim(),
+            last_name: last_name || "",
+            email: email || "",
+          });
 
-          setFormData(updatedData);
-          // setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
+          setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
         } else {
           console.warn("Response is null or undefined.");
         }
       } catch (error) {
         console.error("Error fetching user profile:", error.message);
-        console.log("Error details:", error);
       }
     };
 
     fetchUserProfile();
   }, []);
-
-  // Handle profile picture change
-  // const handleProfilePicChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     setFormData({ ...formData, profilePic: file });
-  //     setUserProfilePic(URL.createObjectURL(file));
-  //   }
-  // };
-
-  // const [alertMessage, setAlertMessage] = useState(null);
-  // const [alertType, setAlertType] = useState("success");
-
-  // Handle form submission
-  // const handleEdit = async (e) => {
-  //   e.preventDefault();
-
-  //   // Split fullName into first_name and last_name
-  //   const [first_name, ...lastNameArr] = formData.fullName.split(" ");
-  //   const last_name = lastNameArr.join(" ");
-
-  //   const updatedProfileData = {
-  //     first_name,
-  //     last_name,
-  //     email: formData.email,
-  //     phone: formData.phone,
-  //     location: formData.location,
-  //   };
-
-  //   const formDataToSend = new FormData();
-  //   formDataToSend.append("first_name", first_name);
-  //   formDataToSend.append("last_name", last_name);
-  //   formDataToSend.append("email", formData.email);
-  //   formDataToSend.append("phone", formData.phone);
-  //   formDataToSend.append("location", formData.location);
-  //   formDataToSend.append(
-  //     "profile_picture",
-  //     userProfilePic instanceof File ? userProfilePic : null
-  //   );
-
-  //   try {
-  //     const response = await api.post(
-  //       "/auth/api/v1/users/update-profile/",
-  //       updatedProfileData
-  //     );
-
-  //     if (response.status === 200 || response.status === 201) {
-  //     }
-  //   } catch (error) {
-  //     setAlertMessage("Failed to update profile. Please try again.");
-  //     setAlertType("error");
-  //     console.log("Setting error alert:", "Failed to update profile.");
-  //   }
-  // };
-
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setUserProfilePic(file);
-  // };
 
   const handleEdit = () => {
     router.push("/user_profile/edit_profile");
@@ -180,16 +106,6 @@ export default function Profile() {
                 alt="Profile Preview"
                 className="mt-4 object-cover rounded-full"
               />
-
-              {/* <div>
-                <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
-                  <p className="text-gray-400">Upload a new image</p>
-                  <CloudUpload size={15} color="gray" />
-                </div>
-                <p className="text-sm text-gray-400">
-                  800x800 PNG, JPG recommended. Max file size: 2MB.
-                </p>
-              </div> */}
             </div>
 
             <form className="w-full my-7 grid">
@@ -253,17 +169,6 @@ export default function Profile() {
                 <p>{alert}</p>
               </div>
             )}
-
-            {/* Alert */}
-            {/* {alertMessage && (
-              <div
-                className={`fixed top-4 right-4 transition duration-300 ease-in z-50 px-4 py-2 rounded-md shadow-md text-white ${
-                  alertType === "success" ? "bg-green-500" : "bg-red-500"
-                }`}
-              >
-                {alertMessage}
-              </div>
-            )} */}
           </div>
         </div>
       </section>

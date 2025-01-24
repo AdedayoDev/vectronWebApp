@@ -10,7 +10,7 @@ import api from "../../../lib/protectedapi";
 
 export const dynamic = "force-dynamic";
 
-export default function Profile() {
+export default function ediProfile() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     first_name: "",
@@ -40,7 +40,7 @@ export default function Profile() {
             email: email || "",
             profilePic: null, // File input is not prefilled.
             username: username || "",
-            is_vehicle_owner: is_vehicle_owner ?? true, // Use `true` as the default.
+            is_vehicle_owner: is_vehicle_owner ?? true,
           });
   
           setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
@@ -67,27 +67,34 @@ export default function Profile() {
   const handleEdit = async (e) => {
     e.preventDefault();
   
+    const updatedProfileData = {
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            email: formData.email,
+            username: formData.username,
+     }
+     // Prepare form data for the API request
+     const formDataToSend = new FormData();
+     formDataToSend.append("first_name", formData.first_name);
+     formDataToSend.append("last_name", formData.last_name);
+     formDataToSend.append("email", formData.email);
+     formDataToSend.append("username", formData.username);
+     formDataToSend.append("is_vehicle_owner", formData.is_vehicle_owner);
+     if (formData.profilePic) {
+       formDataToSend.append("profile_picture", formData.profilePic);
+     }
     try {
-      // Prepare form data for the API request
-      const formDataToSend = new FormData();
-      formDataToSend.append("first_name", formData.first_name);
-      formDataToSend.append("last_name", formData.last_name);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("username", formData.username);
-      formDataToSend.append("is_vehicle_owner", formData.is_vehicle_owner);
-      if (formData.profilePic) {
-        formDataToSend.append("profile_picture", formData.profilePic);
-      }
   
       // Make the API call
       const response = await api.post("/auth/api/v1/users/update-profile/", formDataToSend);
+
       console.log("API Response:", response);
 
       if (response) {
         setAlertMessage("Profile updated successfully!");
         setAlertType("success");
   
-        setTimeout(() => setAlertMessage(null), 3000);
+        setTimeout(() => setAlertMessage(null), 5000);
   
         router.push("/user_profile");
       } 
@@ -156,7 +163,7 @@ export default function Profile() {
               </div>
             </div>
 
-            <form onSubmit={handleEdit} className="w-full my-7 lg:grid grid-cols-2">
+            <form onSubmit={handleEdit} className="w-full my-7 lg:grid grid-cols-2 lg:gap-3">
   <div className="lg:mr-11">
     <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
       First Name:
@@ -192,6 +199,7 @@ export default function Profile() {
     <input
       type="email"
       value={formData.email}
+      disabled
       onChange={(e) =>
         setFormData({ ...formData, email: e.target.value || "" })
       }
@@ -213,7 +221,7 @@ export default function Profile() {
     />
   </div>
 
-  <div className="mb-4 lg:mr-11 flex items-center gap-2">
+  <div className="mb-4 mt-4 lg:mt-0 lg:mr-11 flex items-center gap-2">
     <input
       type="checkbox"
       checked={formData.is_vehicle_owner}
