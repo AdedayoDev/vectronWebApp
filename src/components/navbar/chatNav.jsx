@@ -6,7 +6,7 @@ import Link from "next/link";
 import PortalSwitcher from './PortalSwitcher';
 import { useAuthStore } from '@store/useStore';
 
-export default function chatNav() {
+export default function ChatNav() {
   const { user } = useAuthStore();
   return (
     <>
