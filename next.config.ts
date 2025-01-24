@@ -58,6 +58,11 @@ const config: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**", // Allow all paths from this domain
       },
+      {
+        protocol: "https",
+        hostname: "vechtron-app-profile-pictures.s3.us-east-2.amazonaws.com",
+        pathname: "/**",
+      }
     ],
   },
   experimental: {

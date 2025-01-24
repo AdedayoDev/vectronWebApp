@@ -36,6 +36,7 @@ interface AuthState {
   logout: () => void;
   updateUserVerification: () => void;
   updateVehicleOwnerStatus: (status: boolean) => void;
+  updateProfilePics:  (profile_picture: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -118,6 +119,17 @@ export const useAuthStore = create<AuthState>()(
           });
         }
       },
+      updateProfilePics: (profile: string) => {
+        const currentUser = get().user;
+        if (currentUser) {
+          set({
+            user: {
+              ...currentUser,
+              profile_picture: profile
+            }
+          });
+        }
+      }
     }),
     {
       name: "auth-storage", // Key for localStorage
