@@ -119,7 +119,7 @@ jobs:
       run: | 
         TAG_COMMIT=$ECR_REGISTRY/$IMAGE_REPO_NAME:$IMAGE_TAG
         TAG_LATEST=$ECR_REGISTRY/$IMAGE_REPO_NAME:latest
-        docker build --cache-from $TAG_LATEST -t $TAG_COMMIT -t $TAG_LATEST .
+        docker build --cache-from $TAG_LATEST -t $TAG_COMMIT -t $TAG_LATEST --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} .
         echo "Docker image built successfully."
         echo "Pushing Docker image to AWS ECR...."
         docker push $TAG_COMMIT
@@ -135,7 +135,10 @@ jobs:
         chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
         ls -l
         sed -i 's/<version>/'${{ github.sha }}'/g' k8s/staging/deployment.yaml 
+        sed -i 's/<NEXT_PUBLIC_GOOGLE_MAPS_API_KEY>/'${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}'/g' k8s/staging/secrets.yaml
+
         kubectl apply -f k8s/staging/namespace.yaml
+        kubectl apply -f k8s/staging/secrets.yaml
         kubectl apply -f k8s/staging/deployment.yaml  
         kubectl apply -f k8s/staging/svc.yaml 
         kubectl apply -f k8s/staging/ingress.yaml 
@@ -198,7 +201,9 @@ jobs:
         ls -l
         sed -i 's/<version>/'${{ github.sha }}'/g' k8s/prod/deployment.yaml 
         kubectl apply -f k8s/namespace.yaml
+
         kubectl apply -f k8s/prod/deployment.yaml  
         kubectl apply -f k8s/prod/svc.yaml 
         kubectl apply -f k8s/prod/pod-autoscale.yaml
+
         kubectl rollout status deployment/card-service -n card-service

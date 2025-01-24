@@ -22,7 +22,6 @@ export default function Profile() {
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
-
   const [userProfilePic, setUserProfilePic] = useState(
     "/assets/icons/avatar.png"
   );
@@ -39,16 +38,6 @@ export default function Profile() {
     } else if (!emailRegex.test(formData.email)) {
       validationErrors.email = "Invalid email format.";
     }
-    const phoneRegex = /^[0-9]{10,15}$/;
-    if (!formData.phone.trim()) {
-      validationErrors.phone = "Phone number is required.";
-    } else if (!phoneRegex.test(formData.phone)) {
-      validationErrors.phone = "Invalid phone number. Enter 10-15 digits only.";
-    }
-
-    if (!formData.location.trim()) {
-      validationErrors.location = "Location is required.";
-    }
     return validationErrors;
   };
 
@@ -58,6 +47,7 @@ export default function Profile() {
         const response = await api.get("/auth/api/v1/users/get-profile/");
 
         if (response) {
+
           const {
             first_name,
             last_name,
@@ -67,12 +57,15 @@ export default function Profile() {
             // location,
           } = response;
 
+
           const updatedData = {
             fullName: `${first_name} ${last_name}`,
             email: email,
             profilePic: null,
+
             // phone: phone || "",
             // location: location || "",
+
           };
 
           setFormData(updatedData);
@@ -98,12 +91,15 @@ export default function Profile() {
   //   }
   // };
 
+
   // const [alertMessage, setAlertMessage] = useState(null);
   // const [alertType, setAlertType] = useState("success");
+
 
   // Handle form submission
   // const handleEdit = async (e) => {
   //   e.preventDefault();
+
 
   //   // Split fullName into first_name and last_name
   //   const [first_name, ...lastNameArr] = formData.fullName.split(" ");
@@ -152,6 +148,7 @@ export default function Profile() {
     router.push("/user_profile/edit_profile");
   };
 
+
   const handleGoHome = () => {
     router.push("/settings");
   };
@@ -175,6 +172,7 @@ export default function Profile() {
             <div className="flex gap-4 mt-5 items-center">
               <Image
                 src={userProfilePic}
+
                 width={40}
                 height={40}
                 alt="Profile Preview"
@@ -185,6 +183,7 @@ export default function Profile() {
                 <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
                   <p className="text-gray-400">Upload a new image</p>
                   <CloudUpload size={15} color="gray" />
+
                 </div>
                 <p className="text-sm text-gray-400">
                   800x800 PNG, JPG recommended. Max file size: 2MB.
@@ -192,9 +191,11 @@ export default function Profile() {
               </div> */}
             </div>
 
+
             <form className="w-full my-7 grid">
               <div className=" lg:mr-11">
                 <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
+
                   Full Name:
                 </label>
                 <input
@@ -212,7 +213,7 @@ export default function Profile() {
               </div>
 
               <div className="mb-4 lg:mr-11">
-                <label className="block text-gray-700 font-medium mb-2 lg:mb-0">
+                <label className="block text-gray-700 font-medium mb-2">
                   Email:
                 </label>
                 <input
@@ -231,8 +232,10 @@ export default function Profile() {
 
               <div className="flex items-center gap-7 my-7">
                 <button
+
                   onClick={handleEdit}
                   type="button"
+
                   className="px-4 py-2 w-36 bg-blue-800 text-white font-medium rounded-full"
                 >
                   Edit
@@ -254,6 +257,7 @@ export default function Profile() {
               </div>
             )}
 
+
             {/* Alert */}
             {/* {alertMessage && (
               <div
@@ -264,6 +268,7 @@ export default function Profile() {
                 {alertMessage}
               </div>
             )} */}
+
           </div>
         </div>
       </section>

@@ -36,7 +36,7 @@ const SignUpPages = () => {
     );
     setIsAnimating(false);
   }, 500);
-}, [textArray.length]); // Add textArray.length as dependency
+}, [textArray.length]); 
 
 useEffect(() => {
   const interval = setInterval(() => {
@@ -44,7 +44,7 @@ useEffect(() => {
   }, 5000);
 
   return () => clearInterval(interval);
-}, [handleNext, currentIndex]); // Add handleNext to dependency array
+}, [handleNext, currentIndex]); 
 
 
   const handleDotClick = (index: number) => {
@@ -58,11 +58,9 @@ useEffect(() => {
   };
 
   return (
-    <main className="w-full flex items-center justify-center h-screen">
-      {/* Left Section with Background Image and Overlay */}
-      {/* Left Section with Background Image and Overlay */}
+    <main className="w-11/12 mx-auto flex items-center justify-center h-screen">
       <section
-        className="hidden lg:block w-[600px] rounded-xl mx-auto h-[980px] py-10 my-auto relative"
+        className="hidden lg:block w-[600px] rounded-xl mx-auto  h-[940px]  mt-6 py-10 my-auto relative"
         style={{
           backgroundImage: `url('/assets/images/vectron-car.png')`,
           backgroundSize: "cover",

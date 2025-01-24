@@ -87,8 +87,8 @@ const LogInForm = () => {
       label="Welcome back! Please enter your details."
       backButtonHref="/auth/sign-up"
       backButtonLabel="Don't have an account? Sign Up"
-      smallScreenPadding="pt-8"
-      largeScreenPadding="lg:pt-"
+      smallScreenPadding="pt-0"
+      largeScreenPadding="lg:pt-0"
     >
       <div className="space-y-4 mb-4">
         {/* Social Login Buttons */}

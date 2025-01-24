@@ -6,9 +6,11 @@ import React from "react";
 
 const LogIn = () => {
   return (
-        <main>
-          <LogInPage />
-        </main>
+    <AuthProvider>
+      <main>
+        <LogInPage />
+      </main>
+    </AuthProvider>
   );
 };
 

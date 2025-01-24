@@ -1,6 +1,6 @@
 import { Image  } from "next/image";
 
-
+// @next/next/no-img-element
 function ChatHead() {
   return (
     <div className="flex justify-center  p-2 md:p-3 rounded-2xl">
