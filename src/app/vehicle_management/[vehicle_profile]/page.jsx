@@ -79,7 +79,7 @@ export default function Vehicle_Profile() {
         },
       });
 
-      if (response.status === 200 || response.status === 204) {
+      if (response.status_code === 201 || response.status_code === 204) {
         setAlert("Vehicle deleted successfully!");
         setShowModal(false);
 

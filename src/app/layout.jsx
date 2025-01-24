@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import '@splidejs/react-splide/css';
 
 export const metadata = {
-  title: "Vectron webapp",
+  title: "Vechtron",
   description: "Your intelligent automotive companion",
 };
 
@@ -25,13 +25,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         />
 
-      
 
-        
-
-        {/* Metadata */}
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
       </head>
       <body
         style={{ fontFamily: "'Inter', sans-serif" }}

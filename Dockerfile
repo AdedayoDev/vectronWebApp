@@ -2,6 +2,8 @@
 FROM node:18-alpine AS builder
 
 WORKDIR /app
+ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=$NEXT_PUBLIC_GOOGLE_MAPS_API_KEY 
 
 # Copy package files
 COPY package*.json ./

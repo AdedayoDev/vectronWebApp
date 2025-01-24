@@ -135,7 +135,9 @@ function EntertainmentFeed() {
 
 function NavigationFeed() {
     return (
+        <Link href="/route" className="w-full">
         <div className="flex flex-col bg-[#FFFFFF] p-3  space-y-2 lg:space-y-3 text-black rounded-xl">
+           
           <div className="relative w-7 h-7">
           <svg width="21" height="30" viewBox="0 0 21 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_3269_30125)">
@@ -159,22 +161,25 @@ function NavigationFeed() {
               Get your directions faster
             </p>
             <div className="relative w-3 h-2">
-            <Link href="/route" className="w-full">
+            
               <Image
                 src="/assets/icons/arrow.png"
                 alt="arrow"
                 fill
                 className="object-cover"
               />
-              </Link>
+              
             </div>
           </div>
+
         </div>
+        </Link>
       );
 }
 
 function HealthFeed() {
     return (
+        <Link href="/vehicle_management/portal" className="w-full">
         <div className="flex flex-col bg-[#E94E43] p-3  space-y-2 lg:space-y-3 text-black rounded-xl">
           <div className="relative w-7 h-7">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -196,6 +201,7 @@ function HealthFeed() {
             </div>
           </div>
         </div>
+        </Link>
       );
 }
 
