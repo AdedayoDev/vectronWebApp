@@ -67,12 +67,6 @@ export default function ediProfile() {
   const handleEdit = async (e) => {
     e.preventDefault();
   
-    const updatedProfileData = {
-            first_name: formData.first_name,
-            last_name: formData.last_name,
-            email: formData.email,
-            username: formData.username,
-     }
      // Prepare form data for the API request
      const formDataToSend = new FormData();
      formDataToSend.append("first_name", formData.first_name);
@@ -88,7 +82,6 @@ export default function ediProfile() {
       // Make the API call
       const response = await api.post("/auth/api/v1/users/update-profile/", formDataToSend);
 
-      console.log("API Response:", response);
 
       if (response) {
         setAlertMessage("Profile updated successfully!");

@@ -47,7 +47,6 @@ export default function Profile() {
 
           setFormData({
             fullName: `${first_name || ""} ${last_name || ""}`.trim(),
-            last_name: last_name || "",
             email: email || "",
           });
 
