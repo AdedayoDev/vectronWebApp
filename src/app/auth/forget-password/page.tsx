@@ -6,7 +6,7 @@ import { AuthProvider } from "@components/guards/AuthProvider";
 const ForgetPasswords = () => {
   return (
     <main>
-          <ForgetPassword />
+      <ForgetPassword />
     </main>
   );
 };
