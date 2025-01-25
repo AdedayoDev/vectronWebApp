@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import api from '../../../lib/chatapi';
 import { RefreshCw } from 'lucide-react';
 import { useAuthStore } from '@store/useStore';
-
+export const dynamic = "force-dynamic";
 const ONBOARDING_QUESTIONS = [
   {
     id: 'welcome',
@@ -115,27 +115,45 @@ const OnboardingChat = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const messagesEndRef = useRef(null);
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user, updateProfilePics } = useAuthStore();
+  const [userProfilePic, setUserProfilePic] = useState("/assets/icons/avatar.png");
 
-  const [hasPreviousSession, setHasPreviousSession] = useState(false);
   useEffect(() => {
-    checkPreviousSession();
-  }, []);
-  const checkPreviousSession = () => {
-    const savedProgress = localStorage.getItem('onboardingProgress');
-    if (savedProgress) {
-      const { responses: savedResponses, currentIndex } = JSON.parse(savedProgress);
-      setHasPreviousSession(true);
-      setResponses(savedResponses);
-      setCurrentQuestionIndex(currentIndex);
-      rebuildMessages(savedResponses, currentIndex);
-    } else {
-      setMessages([{
-        content: ONBOARDING_QUESTIONS[0].message,
-        role: 'assistant'
-      }]);
+    const storedAuth = localStorage.getItem('auth-storage');
+    if (storedAuth) {
+      try {
+        const parsedAuth = JSON.parse(storedAuth);
+        const profilePic = parsedAuth?.state?.user?.profile_picture;
+        if (profilePic) {
+          setUserProfilePic(profilePic);
+          updateProfilePics(profilePic); // Update the store
+        }
+      } catch (error) {
+        console.error('Error parsing auth storage:', error);
+      }
     }
-  };
+  }, [updateProfilePics]);
+  const [hasPreviousSession, setHasPreviousSession] = useState(false);
+//   useEffect(() => {
+//     checkPreviousSession();
+//   }, []);
+  
+//   const checkPreviousSession = () => {
+//     const savedProgress = localStorage.getItem('onboardingProgress');
+//     if (savedProgress) {
+//       const { responses: savedResponses, currentIndex } = JSON.parse(savedProgress);
+//       setHasPreviousSession(true);
+//       setResponses(savedResponses);
+//       setCurrentQuestionIndex(currentIndex);
+//       rebuildMessages(savedResponses, currentIndex);
+//       console.log(user?.profile_picture);
+//     } else {
+//       setMessages([{
+//         content: ONBOARDING_QUESTIONS[0].message,
+//         role: 'assistant'
+//       }]);
+//     }
+//   };
   useEffect(() => {
     const savedProgress = localStorage.getItem('onboardingProgress');
     if (savedProgress) {
@@ -144,10 +162,13 @@ const OnboardingChat = () => {
       setResponses(savedResponses);
       setCurrentQuestionIndex(currentIndex);
       rebuildMessages(savedResponses, currentIndex);
+
     } else {
       initializeChat();
     }
   }, []);
+
+// 
 
   const initializeChat = () => {
     setMessages([{
@@ -312,14 +333,14 @@ const OnboardingChat = () => {
                     </div>
                   </div>
                   {message.role === "user" && (
-                    <div className="w-8 h-8 rounded-full bg-gray-200 ml-3 flex-shrink-0">
-                      <Image
-                        src={user?.profile_picture ||"/assets/icons/avatar-2.png"}
-                        alt="User"
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                      />
+                    <div className="w-12 h-12 rounded-full ml-3 flex-shrink-0">
+                    <Image
+                    src={ userProfilePic }
+                    alt="Avatar"
+                    width={50}
+                    height={50}
+                    className="p-1 ml-1 rounded-full object-cover"
+                    />
                     </div>
                   )}
                 </div>
