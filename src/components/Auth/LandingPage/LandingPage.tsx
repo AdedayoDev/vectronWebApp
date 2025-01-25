@@ -59,7 +59,7 @@ const LandingPage = () => {
 
   return (
     <AuthGuard>
-    <main className="w-11/12 mx-auto flex items-center justify-center h-screen">
+    <main className="w-11/12  mx-auto flex items-center justify-center h-screen">
       {/* Left Section with Background Image and Overlay */}
       <section
         className="hidden lg:block w-[600px] rounded-xl mx-auto h-[730px] relative"
@@ -138,7 +138,7 @@ const LandingPage = () => {
       </section>
 
       {/* Right Section with SignUpForm */}
-      <section className="w-10/12 mx-auto lg:w-1/2  h-full flex items-center justify-center">
+      <section className=" mx-auto lg:w-1/2  h-full flex items-center justify-center">
         <WelcomeToVechtron />
       </section>
     </main>
