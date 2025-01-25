@@ -5,12 +5,20 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Input } from "@components/ui/input";
 import { Label } from "@radix-ui/react-label";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import api from "../../lib/protectedapi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BiChevronLeft } from "react-icons/bi";
 import Link from "next/link";
+
+// Define the form data type
+interface VehicleFormInputs {
+  make: string;
+  model: string;
+  year: string; // Year as a string to handle date input
+  registrationNumber: string;
+}
 
 export default function VehicleForm() {
   const router = useRouter();
@@ -20,8 +28,8 @@ export default function VehicleForm() {
     formState: { errors },
     setError,
     clearErrors,
-  } = useForm();
-  const [isLoading, setIsLoading] = useState(false);
+  } = useForm<VehicleFormInputs>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -31,21 +39,18 @@ export default function VehicleForm() {
     return () => clearTimeout(timeout);
   }, [errors, clearErrors]);
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<VehicleFormInputs> = async (data) => {
     setIsLoading(true);
     try {
       const vehicleData = {
         license_plate: data.registrationNumber,
         make: data.make,
         model: data.model,
-        vin: data.registrationNumber, // Removed the invalid `VIN` keyword
-        year: parseInt(new Date(data.year).getFullYear()),
+        vin: data.registrationNumber,
+        year: parseInt(new Date(data.year).getFullYear().toString()), // Convert to integer year
       };
 
-      const response = await api.post(
-        "/vehicle/api/v1/vehicles/create",
-        vehicleData
-      );
+      const response = await api.post("/vehicle/api/v1/vehicles/create", vehicleData);
 
       if (response) {
         toast.success("Vehicle added successfully!", {
@@ -58,7 +63,7 @@ export default function VehicleForm() {
           router.push("/chat");
         }, 2000);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating vehicle:", error);
       toast.error(error.message || "Failed to add vehicle", {
         position: "top-right",
@@ -78,13 +83,9 @@ export default function VehicleForm() {
           <p className="text-[#5377DC]">Back</p>
         </div>
       </Link>
-      <h2 className="font-600 font-inter text-base text-[#c3cad7]">
-        Step 2 of 2
-      </h2>
+      <h2 className="font-600 font-inter text-base text-[#c3cad7]">Step 2 of 2</h2>
       <div className="space-y-2 mb-4">
-        <h2 className="font-semibold text-3xl font-inter text-[#181b1f]">
-          Create Vehicle Profile
-        </h2>
+        <h2 className="font-semibold text-3xl font-inter text-[#181b1f]">Create Vehicle Profile</h2>
         <p className="font-inter font-normal text-xl text-[#9c9aa5]">
           Setup your Vehicle Profile for easy accessibility.
         </p>
@@ -104,9 +105,7 @@ export default function VehicleForm() {
               required: "Vehicle Make is required",
             })}
           />
-          {errors.make && (
-            <p className="error-message">{errors.make.message}</p>
-          )}
+          {errors.make && <p className="error-message">{errors.make.message}</p>}
         </LabelInputContainer>
 
         {/* Vehicle Model */}
@@ -120,9 +119,7 @@ export default function VehicleForm() {
               required: "Vehicle Model is required",
             })}
           />
-          {errors.model && (
-            <p className="error-message">{errors.model.message}</p>
-          )}
+          {errors.model && <p className="error-message">{errors.model.message}</p>}
         </LabelInputContainer>
 
         {/* Vehicle Year */}
@@ -135,16 +132,12 @@ export default function VehicleForm() {
               required: "Vehicle Year is required",
             })}
           />
-          {errors.year && (
-            <p className="error-message">{errors.year.message}</p>
-          )}
+          {errors.year && <p className="error-message">{errors.year.message}</p>}
         </LabelInputContainer>
 
         {/* Vehicle Registration Number */}
         <LabelInputContainer>
-          <Label htmlFor="registrationNumber">
-            Vehicle Registration Number
-          </Label>
+          <Label htmlFor="registrationNumber">Vehicle Registration Number</Label>
           <Input
             id="registrationNumber"
             type="text"
@@ -175,12 +168,14 @@ export default function VehicleForm() {
   );
 }
 
-const LabelInputContainer = ({
-  children,
-  className,
-}: {
+interface LabelInputContainerProps {
   children: React.ReactNode;
   className?: string;
+}
+
+const LabelInputContainer: React.FC<LabelInputContainerProps> = ({
+  children,
+  className,
 }) => {
   return (
     <div className={`flex flex-col space-y-2 w-full ${className}`}>

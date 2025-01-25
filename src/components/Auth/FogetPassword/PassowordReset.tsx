@@ -19,17 +19,17 @@ const PassowordReset: FC = () => {
           className="w-14 h-14"
         />
       </div>
-      <div>
+      <div className="space-y-4">
         <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
           Password reset
         </h2>
-        <p className="font-inter text-base text-[#667085] text-center w-96">
+        <p className="font-inter text-base text-[#667085] text-center w-80">
           Your password has been successfully reset. Click below to log in
           magically.
         </p>
       </div>
       <Link href="/auth/password-reset">
-        <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
+        <Button className="bg-[#7f56d9] w-full mx-auto h-11 text-base font-inter font-medium text-white">
           Continue
         </Button>
       </Link>

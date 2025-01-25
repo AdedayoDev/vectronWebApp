@@ -6,7 +6,7 @@ import React from "react";
 const NewPassword = () => {
   return (
     <main>
-          <SetNewPassword />
+      <SetNewPassword />
     </main>
   );
 };
