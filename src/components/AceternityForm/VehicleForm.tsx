@@ -1,185 +1,277 @@
 "use client";
 
-import "../../app/vehicleprofile/vehicleprofile.css";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { Input } from "@components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import { useForm, SubmitHandler, FieldErrors } from "react-hook-form";
 import api from "../../lib/protectedapi";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { BeatLoader } from "react-spinners";
 import { BiChevronLeft } from "react-icons/bi";
+import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
+import "react-toastify/dist/ReactToastify.css";
 
-// Define the form data type
-interface VehicleFormInputs {
-  make: string;
-  model: string;
-  year: string; // Year as a string to handle date input
-  registrationNumber: string;
+interface Make {
+  Make_ID: number;
+  Make_Name: string;
+}
+
+interface Model {
+  Model_ID: number;
+  Model_Name: string;
+}
+
+interface APIResponse<T> {
+  Results: T[];
 }
 
 export default function VehicleForm() {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-    clearErrors,
-  } = useForm<VehicleFormInputs>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [formData, setFormData] = useState({
+    make: "",
+    makeId: "",
+    model: "",
+    year: "",
+    registrationNumber: "",
+    vin: "",
+  });
+  const [makes, setMakes] = useState<Make[]>([]);
+  const [models, setModels] = useState<Model[]>([]);
+  const [searchMake, setSearchMake] = useState("");
+  const [searchModel, setSearchModel] = useState("");
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingModels, setIsLoadingModels] = useState(false);
+  const [yearError, setYearError] = useState("");
+  const [noModelsFound, setNoModelsFound] = useState(false);
+
+ 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      clearErrors();
-    }, 3000);
+    const fetchMakes = async () => {
+      try {
+        const response = await fetch(
+          "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
+        );
+        const data: APIResponse<Make> = await response.json();
+        setMakes(data.Results);
+      } catch (error) {
+        console.error("Error fetching makes:", error);
+        toast.error("Failed to load makes");
+      }
+    };
 
-    return () => clearTimeout(timeout);
-  }, [errors, clearErrors]);
+    fetchMakes();
+  }, []);
 
-  const onSubmit: SubmitHandler<VehicleFormInputs> = async (data) => {
-    setIsLoading(true);
+  
+  useEffect(() => {
+    if (formData.makeId && formData.year && !yearError) {
+      fetchModels(formData.makeId, formData.year);
+    }
+  }, [formData.makeId, formData.year]);
+
+  const validateYear = (year: string) => {
+    const currentYear = new Date().getFullYear();
+    const yearNum = parseInt(year, 10);
+
+    if (isNaN(yearNum) || yearNum < 1886) {
+      return "Year must be 1886 or later";
+    }
+    if (yearNum > currentYear + 1) {
+      return `Year cannot be more than ${currentYear + 1}`;
+    }
+    return "";
+  };
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const year = e.target.value;
+    const error = validateYear(year);
+    setYearError(error);
+    setFormData((prev) => ({ ...prev, year }));
+    if (error) {
+      setModels([]);
+      setNoModelsFound(false);
+    }
+  };
+
+  const fetchModels = async (makeId: string, year: string) => {
+    setIsLoadingModels(true);
+    setModels([]);
+    setNoModelsFound(false);
+
+    try {
+      const response = await fetch(
+        `https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/makeId/${makeId}/modelyear/${year}?format=json`
+      );
+      const data: APIResponse<Model> = await response.json();
+      const validModels = data.Results.filter((model) => model.Model_Name);
+      setModels(validModels);
+      setNoModelsFound(validModels.length === 0);
+    } catch (error) {
+      console.error("Error fetching models:", error);
+      toast.error("Failed to load models");
+    } finally {
+      setIsLoadingModels(false);
+    }
+  };
+
+  const handleMakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedMake = makes.find(
+      (make) => make.Make_Name.toLowerCase() === e.target.value.toLowerCase()
+    );
+
+    if (selectedMake) {
+      setFormData((prev) => ({
+        ...prev,
+        make: selectedMake.Make_Name,
+        makeId: selectedMake.Make_ID.toString(),
+        model: "",
+      }));
+      setSearchMake(selectedMake.Make_Name);
+    } else {
+      setSearchMake(e.target.value);
+    }
+  };
+
+  const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedModel = models.find(
+      (model) => model.Model_Name.toLowerCase() === e.target.value.toLowerCase()
+    );
+
+    setSearchModel(e.target.value);
+
+    if (selectedModel) {
+      setFormData((prev) => ({
+        ...prev,
+        model: selectedModel.Model_Name,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
     try {
       const vehicleData = {
-        license_plate: data.registrationNumber,
-        make: data.make,
-        model: data.model,
-        vin: data.registrationNumber,
-        year: parseInt(new Date(data.year).getFullYear().toString()), // Convert to integer year
+        license_plate: formData.registrationNumber || "NA",
+        make: formData.make,
+        model: formData.model,
+        vin: formData.vin || "NA",
+        year: parseInt(formData.year),
       };
 
       const response = await api.post("/vehicle/api/v1/vehicles/create", vehicleData);
 
-      if (response) {
-        toast.success("Vehicle added successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-          pauseOnHover: false,
-        });
-
-        setTimeout(() => {
-          router.push("/chat");
-        }, 2000);
+      if (response.status_code === 201) {
+        toast.success("Vehicle profile created successfully!");
+        setTimeout(() => router.push("/chat"), 2000);
       }
     } catch (error: any) {
-      console.error("Error creating vehicle:", error);
-      toast.error(error.message || "Failed to add vehicle", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error(error.response?.data?.message || "An unexpected error occurred");
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-xl w-full flex flex-col h-screen mx-auto rounded-none md:rounded-2xl py-24 shadow-input bg-white dark:bg-black">
+    <div className="max-w-xl w-full flex flex-col h-screen mx-auto rounded-md py-8 shadow-md bg-white">
       <ToastContainer />
       <Link href="/onboarding">
-        <div className="flex items-center mb-14">
-          <BiChevronLeft className="text-[#5377DC] text-xl" />
-          <p className="text-[#5377DC]">Back</p>
+        <div className="flex items-center mb-8">
+          <BiChevronLeft className="text-blue-600 text-xl" />
+          <p className="text-blue-600">Back</p>
         </div>
       </Link>
-      <h2 className="font-600 font-inter text-base text-[#c3cad7]">Step 2 of 2</h2>
-      <div className="space-y-2 mb-4">
-        <h2 className="font-semibold text-3xl font-inter text-[#181b1f]">Create Vehicle Profile</h2>
-        <p className="font-inter font-normal text-xl text-[#9c9aa5]">
-          Setup your Vehicle Profile for easy accessibility.
-        </p>
-      </div>
-      <form
-        className="space-y-4 py-6 pl-5 pr-4 vehicle-form-content"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {/* Vehicle Make */}
-        <LabelInputContainer>
-          <Label htmlFor="make">Vehicle Make</Label>
-          <Input
-            id="make"
-            type="text"
-            placeholder="Make of vehicle"
-            {...register("make", {
-              required: "Vehicle Make is required",
-            })}
-          />
-          {errors.make && <p className="error-message">{errors.make.message}</p>}
-        </LabelInputContainer>
 
-        {/* Vehicle Model */}
-        <LabelInputContainer>
-          <Label htmlFor="model">Model</Label>
-          <Input
-            id="model"
-            type="text"
-            placeholder="What model is your car"
-            {...register("model", {
-              required: "Vehicle Model is required",
-            })}
+      <h2 className="text-xl font-semibold mb-4">Create Vehicle Profile</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Make Input */}
+        <div>
+          <Label>Vehicle Make</Label>
+          <input
+            list="makes"
+            value={searchMake}
+            onChange={handleMakeChange}
+            className="w-full px-3 py-2 border rounded-md"
+            placeholder="Search make..."
           />
-          {errors.model && <p className="error-message">{errors.model.message}</p>}
-        </LabelInputContainer>
+          <datalist id="makes">
+            {makes.map((make) => (
+              <option key={make.Make_ID} value={make.Make_Name} />
+            ))}
+          </datalist>
+        </div>
 
-        {/* Vehicle Year */}
-        <LabelInputContainer>
-          <Label htmlFor="year">Year</Label>
+        {/* Year Input */}
+        <div>
+          <Label>Year</Label>
           <Input
-            id="year"
-            type="date"
-            {...register("year", {
-              required: "Vehicle Year is required",
-            })}
-          />
-          {errors.year && <p className="error-message">{errors.year.message}</p>}
-        </LabelInputContainer>
-
-        {/* Vehicle Registration Number */}
-        <LabelInputContainer>
-          <Label htmlFor="registrationNumber">Vehicle Registration Number</Label>
-          <Input
-            id="registrationNumber"
             type="text"
-            placeholder="Enter Number"
-            {...register("registrationNumber", {
-              required: "Registration Number is required",
-              minLength: {
-                value: 12,
-                message: "Registration Number must be at least 12 characters",
-              },
-            })}
+            placeholder="Enter year (e.g., 2020)"
+            value={formData.year}
+            onChange={handleYearChange}
+            className={yearError ? "border-red-500" : ""}
           />
-          {errors.registrationNumber && (
-            <p className="error-message">{errors.registrationNumber.message}</p>
-          )}
-        </LabelInputContainer>
+          {yearError && <p className="text-red-500 text-sm">{yearError}</p>}
+        </div>
+
+        {/* Model Input */}
+        <div>
+          <Label>Vehicle Model</Label>
+          <input
+            list="models"
+            value={searchModel}
+            onChange={handleModelChange}
+            placeholder="Search model..."
+            className="w-full px-3 py-2 border rounded-md"
+            disabled={!formData.makeId || !formData.year || !!yearError}
+          />
+          <datalist id="models">
+            {models.map((model) => (
+              <option key={model.Model_ID} value={model.Model_Name} />
+            ))}
+          </datalist>
+        </div>
+
+        {/* VIN Input */}
+        <div>
+          <Label>VIN (Optional)</Label>
+          <Input
+            type="text"
+            placeholder="Enter VIN"
+            value={formData.vin}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, vin: e.target.value }))
+            }
+          />
+        </div>
+
+        {/* Registration Number Input */}
+        <div>
+          <Label>License Plate (Optional)</Label>
+          <Input
+            type="text"
+            placeholder="Enter License Plate"
+            value={formData.registrationNumber}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, registrationNumber: e.target.value }))
+            }
+          />
+        </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-7/12 mx-auto py-2 px-4 bg-[#1e3a8a] text-white rounded hover:bg-[#1E3A8A]/90 disabled:opacity-50 flex justify-center items-center"
-          disabled={isLoading}
+          className="w-full py-2 bg-blue-600 text-white rounded-md"
+          disabled={
+            isSubmitting || !formData.make || !formData.model || !formData.year || !!yearError
+          }
         >
-          {isLoading ? "Adding Vehicle..." : "Add Vehicle"}
+          {isSubmitting ? <BeatLoader size={8} color="#fff" /> : "Continue"}
         </button>
       </form>
     </div>
   );
 }
-
-interface LabelInputContainerProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-const LabelInputContainer: React.FC<LabelInputContainerProps> = ({
-  children,
-  className,
-}) => {
-  return (
-    <div className={`flex flex-col space-y-2 w-full ${className}`}>
-      {children}
-    </div>
-  );
-};
