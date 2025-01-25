@@ -581,8 +581,8 @@ const handleNextVersion = (messageId) => {
                           <Image
                             src={user?.profile_picture ||"/assets/icons/avatar-2.png"}
                             alt="Avatar"
-                            width={40}
-                            height={40}
+                            width={50}
+                            height={50}
                             className="p-1 ml-1 rounded-full object-cover"
                           />
                         )}
