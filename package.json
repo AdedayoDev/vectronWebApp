@@ -19,6 +19,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.734.0",
     "@aws-sdk/s3-request-presigner": "^3.734.0",
+    "@bubblewrap/cli": "^1.22.3",
     "@chatscope/chat-ui-kit-react": "^2.0.3",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@hookform/resolvers": "^3.9.1",
