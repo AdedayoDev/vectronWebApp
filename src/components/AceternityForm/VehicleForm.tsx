@@ -51,9 +51,10 @@ export default function VehicleForm() {
     const fetchMakes = async () => {
       try {
         const response = await fetch(
-          "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json"
+          "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json"
         );
         const data: APIResponse<Make> = await response.json();
+        console.log('Makes loaded:', data.Results);
         setMakes(data.Results);
       } catch (error) {
         console.error("Error fetching makes:", error);
@@ -117,20 +118,20 @@ export default function VehicleForm() {
   };
 
   const handleMakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedMake = makes.find(
-      (make) => make.Make_Name.toLowerCase() === e.target.value.toLowerCase()
+    const value = e.target.value || '';
+    setSearchMake(value);
+    
+    const selectedMake = makes.find(make => 
+      make?.Make_Name?.toLowerCase() === value.toLowerCase()
     );
-
+    
     if (selectedMake) {
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         make: selectedMake.Make_Name,
         makeId: selectedMake.Make_ID.toString(),
-        model: "",
+        model: ''
       }));
-      setSearchMake(selectedMake.Make_Name);
-    } else {
-      setSearchMake(e.target.value);
     }
   };
 
@@ -190,18 +191,20 @@ export default function VehicleForm() {
         {/* Make Input */}
         <div>
           <Label>Vehicle Make</Label>
-          <input
-            list="makes"
-            value={searchMake}
-            onChange={handleMakeChange}
-            className="w-full px-3 py-2 border rounded-md"
-            placeholder="Search make..."
-          />
-          <datalist id="makes">
-            {makes.map((make) => (
-              <option key={make.Make_ID} value={make.Make_Name} />
-            ))}
-          </datalist>
+          <div className="relative">
+    <Input
+      list="makes"
+      value={searchMake}
+      onChange={handleMakeChange}
+      className="w-full"
+      placeholder="Search make..."
+    />
+    <datalist id="makes">
+      {makes.map((make, index) => (
+        <option key={`${make.Make_ID}-${index}`} value={make.Make_Name} />
+      ))}
+    </datalist>
+  </div>
         </div>
 
         {/* Year Input */}
