@@ -192,19 +192,19 @@ export default function VehicleForm() {
         <div>
           <Label>Vehicle Make</Label>
           <div className="relative">
-    <Input
-      list="makes"
-      value={searchMake}
-      onChange={handleMakeChange}
-      className="w-full"
-      placeholder="Search make..."
-    />
-    <datalist id="makes">
-      {makes.map((make, index) => (
-        <option key={`${make.Make_ID}-${index}`} value={make.Make_Name} />
-      ))}
-    </datalist>
-  </div>
+          <Input
+            list="makes"
+            value={searchMake}
+            onChange={handleMakeChange}
+            className="w-full"
+            placeholder="Search make..."
+          />
+          <datalist id="makes">
+            {makes.map((make, index) => (
+              <option key={`${make.Make_ID}-${index}`} value={make.Make_Name} />
+            ))}
+          </datalist>
+        </div>
         </div>
 
         {/* Year Input */}
