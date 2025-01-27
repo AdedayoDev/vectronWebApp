@@ -53,7 +53,7 @@ const UserOnboarding = () => {
   };
 
   return (
-    <main className="w-11/12 mx-auto h-screen flex items-center justify-center">
+    <main className="w-10/12 mx-auto h-screen flex items-center justify-center">
       {/* Left Section for Desktop */}
       <section
         className="hidden lg:block w-[600px] rounded-xl mx-auto h-[730px] relative"
@@ -92,7 +92,7 @@ const UserOnboarding = () => {
       </section>
 
       {/* Right Section */}
-      <section className="w-full  lg:w-1/2 h-full">
+      <section className="w-full md:w-1/2 h-full">
         <div className="flex flex-col items-center justify-center h-screen ">
           <div className="flex flex-col w-auto space-y-8">
             <h2 className="font-600 font-inter text-base text-[#c3cad7] ">

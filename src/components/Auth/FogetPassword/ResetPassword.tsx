@@ -33,12 +33,12 @@ const ResetPassword = () => {
       }
     };
 
-    fetchEmail(); 
+    fetchEmail();
   }, []);
 
   return (
-    <main className="w-full h-screen flex items-center justify-center">
-      <div className="w-full h-screen flex flex-col space-y-5 items-center justify-center">
+    <main className="w-full h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md h-screen flex flex-col space-y-5 items-center justify-center px-4">
         <div>
           <Image
             src="https://res.cloudinary.com/dpmy3egg2/image/upload/v1734714374/Featured_icon_mcn2x0.png"
@@ -48,33 +48,38 @@ const ResetPassword = () => {
             className="w-14 h-14"
           />
         </div>
-        <div>
-          <h2 className="font-inter font-semibold text-3xl text-center text-[#101828]">
+        <div className="text-center">
+          <h2 className="font-inter font-semibold text-3xl text-[#101828]">
             Check your email
           </h2>
-          <p>
+          <p className="mt-2 text-[#667085]">
             We sent a password reset link to{" "}
             <span className="font-medium text-[#7f56d9]">
               {email || "loading..."}
             </span>
           </p>
         </div>
-        <a
-          href={`mailto:${email}`}
-          className="w-96 h-11"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button className="bg-[#7f56d9] w-96 h-11 text-base font-inter font-medium text-white">
-            Open email app
-          </Button>
-        </a>
-        <p className="font-inter font-normal text-sm text-[#667085]">
-          Didn&apos;t receive the email?
+        <div className="w-full flex justify-center">
+          <a
+            href={`mailto:${email}`}
+            className="block w-full max-w-sm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button className="bg-[#7f56d9] w-full mx-auto h-11 text-base font-inter font-medium text-white">
+              Open email app
+            </Button>
+          </a>
+        </div>
+        <p className="font-inter font-normal text-sm text-[#667085] text-center">
+          Didn&apos;t receive the email?{" "}
           <span className="text-[#6941c6] cursor-pointer">Click to resend</span>
         </p>
         <Link href="/auth/log-in">
-          <Button size="lg" className="bg-transparent hover:bg-transparent">
+          <Button
+            size="lg"
+            className="bg-transparent hover:bg-transparent mt-4 flex items-center space-x-2"
+          >
             <FaArrowLeft className="text-lg lg:text-xl text-[#667085]" />
             <span className="font-urbanist font-medium text-sm text-[#667085]">
               Back to log in

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavBar from "@components/navbar/chatNav";
 import api from "../../lib/protectedapi";
+import { useAuthStore } from '@store/useStore';
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +20,9 @@ export default function Profile() {
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
+  const { user } = useAuthStore();
   const [userProfilePic, setUserProfilePic] = useState(
-    "/assets/icons/avatar.png"
+   "/assets/icons/avatar.png"
   );
 
   // Validate inputs
@@ -42,15 +44,28 @@ export default function Profile() {
     const fetchUserProfile = async () => {
       try {
         const response = await api.get("/auth/api/v1/users/get-profile/");
+        console.log(response);
         if (response) {
-          const { first_name, last_name, email, profile_picture } = response;
 
-          setFormData({
-            fullName: `${first_name || ""} ${last_name || ""}`.trim(),
-            email: email || "",
-          });
+          const {
+            first_name,
+            last_name,
+            email,
+            profile_pic,
+          } = response;
 
-          setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
+
+          const updatedData = {
+            fullName: `${first_name} ${last_name}`,
+            email: email,
+            profilePic: null,
+          };
+          setUserProfilePic(profile_pic || "/assets/icons/avatar.png");
+          console.log(updatedData.fullName)
+          console.log(profile_pic)
+
+          setFormData(updatedData);
+          // setUserProfilePic(profile_picture || "/assets/icons/avatar.png");
         } else {
           console.warn("Response is null or undefined.");
         }
@@ -61,6 +76,25 @@ export default function Profile() {
 
     fetchUserProfile();
   }, []);
+
+  // Handle profile picture change
+  // const handleProfilePicChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     setFormData({ ...formData, profilePic: file });
+  //     setUserProfilePic(URL.createObjectURL(file));
+  //   }
+  // };
+
+
+  // const [alertMessage, setAlertMessage] = useState(null);
+  // const [alertType, setAlertType] = useState("success");
+
+
+  // Handle form submission
+  // const handleEdit = async (e) => {
+  //   e.preventDefault();
+
 
   const handleEdit = () => {
     router.push("/user_profile/edit_profile");

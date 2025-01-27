@@ -25,6 +25,7 @@ import {
 import Input from "../_components/Input";
 import ChatHead from "../_components/ChatHead";
 import Voice from "../_components/Voice"; 
+import { useAuthStore } from '@store/useStore';
 
 // const formatMessage = (content) => {
 //   if (!content) return "";
@@ -160,6 +161,7 @@ export default function Chatdetail() {
   const [currentVersionIndex, setCurrentVersionIndex] = useState({}); // Track current version for each message
   const isVersionSwitching = useRef(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const { user } = useAuthStore();
 
   const handleVoiceModalOpen = () => {
     setShowVoiceModal(true);
@@ -577,11 +579,11 @@ const handleNextVersion = (messageId) => {
                         </div>
                         {message.role === "user" && (
                           <Image
-                            src="/assets/icons/avatar-2.png"
+                            src={user?.profile_picture ||"/assets/icons/avatar-2.png"}
                             alt="Avatar"
-                            width={40}
-                            height={40}
-                            className="rounded-full ml-3"
+                            width={50}
+                            height={50}
+                            className="p-1 ml-1 rounded-full object-cover"
                           />
                         )}
                       </div>
