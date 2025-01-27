@@ -133,7 +133,7 @@ export default function SettingsSideBar() {
         <div className="flex rounded-full shadow-lg p-2 items-center justify-between mt-48 cursor-pointer">
           <div className="flex items-center gap-3">
             <Image
-              src="/assets/icons/avatar.png"
+              src={user?.profile_picture ||"/assets/icons/avatar.png"}
               alt="user"
               width={25}
               height={20}

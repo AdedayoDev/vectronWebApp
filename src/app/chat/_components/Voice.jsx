@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Mic, X, Send } from "lucide-react";
+import { Mic, X, Send,Pause, Square  } from "lucide-react";
 import Image from "next/image";
 import PulsatingImage from "./PulsatingImage";
 
@@ -247,12 +247,21 @@ export default function Voice({ onMessageSubmit, onClose }) {
               isRecording ? 'bg-red-200' : 'bg-slate-200'
             }`}
           >
-            <Mic 
-              size={30} 
-              color={isRecording ? 'red' : 'black'} 
-              className="cursor-pointer" 
-              onClick={toggleRecording}
-            />
+            {isRecording ? (
+              <Square 
+                size={30} 
+                color="red"
+                className="cursor-pointer" 
+                onClick={toggleRecording}
+              />
+            ) : (
+              <Mic 
+                size={30} 
+                color="black"
+                className="cursor-pointer" 
+                onClick={toggleRecording}
+              />
+            )}
           </div>
 
           {!isRecording && transcribedText && (

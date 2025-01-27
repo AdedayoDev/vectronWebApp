@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useAuthStore } from '@store/useStore';
 
 function Profile() {
+  const { user } = useAuthStore();
   return (
     <div className="flex items-center space-x-3">
       <Image
@@ -28,10 +30,10 @@ function Profile() {
       <div className="relative w-7 h-7">
       <Link href="/settings">
         <Image
-          src="/assets/images/Avatar.png"
+          src={user?.profile_picture || "/assets/images/Avatar.png"}
           alt="attachment image"
           fill
-          className="object-cover hover:cursor-pointer"
+          className="object-cover hover:cursor-pointer rounded-full"
         />
         </Link>
       </div>
