@@ -1,10 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import Link from "next/link";
 
 export default function Product_Page() {
   const [waitlist, setWaitlist] = useState("");
+  const [openManual, setOpenManual] = useState("");
+
   const handSubmit = (e) => {
     e.preventDefault();
     console.log(waitlist);
@@ -171,7 +174,7 @@ export default function Product_Page() {
         <section className="w-[90%] mx-auto mt-20">
           <div className="flex items-center gap-2 mb-4 justify-center">
             <Image
-              src="/assets/icons/personalize.svg"
+              src="/assets/icons/voice-assistant.png"
               alt="icon"
               width={20}
               height={20}
@@ -257,7 +260,7 @@ export default function Product_Page() {
         <section className="w-[90%] mx-auto mt-20">
           <div className="flex items-center gap-2 mb-4 justify-center">
             <Image
-              src="/assets/icons/personalize.svg"
+              src="/assets/icons/knowledge.png"
               alt="icon"
               width={20}
               height={20}
@@ -284,8 +287,38 @@ export default function Product_Page() {
             </div>
           </div>
 
-          <div className="lg:flex justify-between items-start">
-            <div className="text-white">Maontain</div>
+          <div className="flex justify-center items-start mt-7">
+            <div>
+              <div
+                onClick={() => setOpenManual((prev) => !prev)}
+                className="bg-[#161616]  text-white flex justify-between mt-[30px] w-[200px] py-2 px-4 items-center lg:mt-[120px]"
+              >
+                <h1 className="flex gap-2">
+                  <Image
+                    src="/assets/icons/manual.png"
+                    alt="icon"
+                    width={20}
+                    height={20}
+                  />
+                  <p>Manual</p>
+                </h1>
+                <ChevronDown size={20} />
+              </div>
+              {openManual && (
+                <ul className="list-none bg-[#222222] w-[200px] mt-3 py-3 px-4 text-gray-300">
+                  <li className="mb-2" onClick={() => setOpenManual(false)}>
+                    <Link href="#">Tutorials</Link>
+                  </li>
+                  <li className="mb-2" onClick={() => setOpenManual(false)}>
+                    <Link href="#">Maintenance</Link>
+                  </li>
+                  <li className="mb-2" onClick={() => setOpenManual(false)}>
+                    <Link href="#">FAQ</Link>
+                  </li>
+                </ul>
+              )}
+            </div>
+
             <div className="w-[80%]">
               <Image
                 src="/assets/images/desktop-phone.png"
@@ -293,6 +326,129 @@ export default function Product_Page() {
                 width={200}
                 height={200}
                 className="w-full"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="w-[90%] mx-auto mt-20">
+          <div className="flex items-center gap-2 mb-4 justify-center">
+            <Image
+              src="/assets/icons/protection.png"
+              alt="icon"
+              width={20}
+              height={20}
+            />
+            <p className="text-sm">PROTECTION</p>
+          </div>
+          <div className="text-2xl lg:text-4xl mt-6 text-center">
+            <h2>
+              <span className="text-blue-500">
+                Your data is safe, with secure
+              </span>
+            </h2>
+            <h2>storage and full privacy control.</h2>
+          </div>
+
+          <div className="lg:grid grid-cols-3 gap-4">
+            <div className="bg-gradient-to-b from-black/60 to-gray-800/60 mt-10 py-5 px-3">
+              <div className="items-center flex gap-2 mb-3">
+                <div>
+                  <Image
+                    src="/assets/icons/data.png"
+                    alt="icon"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+                <h2>Data Protection</h2>
+              </div>
+              <p className="text-gray-300 text-sm">
+                Your vehicle's data is securely encrypted and protected.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-b from-black/60 to-gray-800/60 mt-10 py-5 px-3">
+              <div className="items-center flex gap-2 mb-3">
+                <div>
+                  <Image
+                    src="/assets/icons/privacy.png"
+                    alt="icon"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+                <h2>Privacy Controls</h2>
+              </div>
+              <p className="text-gray-300 text-sm">
+                Easily manage your preferences for data sharing and usage.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-b from-black/60 to-gray-800/60 mt-10 py-5 px-3">
+              <div className="items-center flex gap-2 mb-3">
+                <div>
+                  <Image
+                    src="/assets/icons/trusted.png"
+                    alt="icon"
+                    width={25}
+                    height={25}
+                  />
+                </div>
+                <h2>Trusted Partnership</h2>
+              </div>
+              <p className="text-gray-300 text-sm">
+                We prioritize your trust and transparency in our services.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="w-[90%] mx-auto mt-20">
+          <div className="flex items-center gap-2 mb-4 justify-center">
+            <Image
+              src="/assets/icons/blog-light.png"
+              alt="icon"
+              width={20}
+              height={20}
+            />
+            <p className="text-sm">BLOG</p>
+          </div>
+          <div className="lg:flex gap-[50px] mt-10">
+            <div >
+              <h2 className="text-2xl lg:text-4xl lg:w-[55%] mb-4">
+                Stay Updted with Our Latest Insights.
+              </h2>
+              <p className='mb-3 lg:text-lg lg:w-[55%] text-gray-300'>
+                Explore tips, guides, and news to make the most of your in-car
+                AI experience.
+              </p>
+              <Link href="#">
+                <div className="w-[180px] mb-5 rounded justify-center flex gap-2 py-2 px-4 items-center border-2 border-white">
+                  <button>Visit our blog</button>
+                  <Image
+                    src="/assets/icons/arrow-right-up.png"
+                    alt="icon"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+              </Link>
+            </div>
+            <div className="bg-black text-white p-3 rounded w-[418px]">
+              <Image
+                src="/assets/images/car-update.png"
+                alt="icon"
+                width={150}
+                height={150}
+                className="w-full"
+              />
+              <p className='text-lg my-5 w-[65%]'>Top 5 In-Car AI Features for a Smarter Drive.</p>
+              <Image
+                src="/assets/icons/plus-circle2.png"
+                alt="icon"
+                width={25}
+                height={25}
               />
             </div>
           </div>
