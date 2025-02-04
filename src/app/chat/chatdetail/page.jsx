@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import ChatBodyNew from "../_components/ChatBodyNew";
+import ChatBodyMobile from "../_components/ChatBodyMobile";
 import ChatBody from "../_components/ChatBody";
 import Loader from "../_components/Loader";
 import {
@@ -443,10 +444,17 @@ const handleNextVersion = (messageId) => {
                   {showWelcome && messages.length === 0 ? (
                     <>
                       <ChatHead />
-                      <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center">
+                      <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center hidden md:block">
                         Good day! How may I assist you today?
                       </div>
+                      {/* Web Layout - Hidden on mobile */}
+                      <div className="hidden md:block">
                         <ChatBodyNew />
+                      </div>
+                      {/* Mobile Layout - Hidden on web */}
+                      <div className="block md:hidden">
+                        <ChatBodyMobile />
+                      </div>
                     </>
                   ) : (
                     messages.map((message) => (
