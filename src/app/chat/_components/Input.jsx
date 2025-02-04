@@ -1,40 +1,41 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 function Input({ onClick, onSubmit }) {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const [isFileAnimating, setIsFileAnimating] = useState(false);
+  const [isSendAnimating, setIsSendAnimating] = useState(false);
+  const [isTyping, setTyping] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!message.trim()) return;
-    
+    if (!message.trim() && !selectedFile) return;
+
+    setIsSendAnimating(true);
+    setTimeout(() => setIsSendAnimating(false), 300);
+
+    const formData = new FormData();
+    if (message.trim()) formData.append("message", message);
+    if (selectedFile) formData.append("file", selectedFile);
+
     onSubmit(message);
-    setMessage('');
+    setMessage("");
+    setSelectedFile(null);
+
+    setIsTyping(true);
+    setTimeout(() => {
+      setMessage((prevMessages) => [
+        ...prevMessages,
+        { text: "This is a bot response.", sender: "bot" },
+      ]);
+    }, 1500);
   };
-  const [selectedFile, setSelectedFile] = useState(null);
-  const fileInputRef = useRef(null);
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (!message.trim() && !selectedFile) return;
-    
-  //   // Create FormData to handle both text and file
-  //   const formData = new FormData();
-  //   if (message.trim()) {
-  //     formData.append('message', message);
-  //   }
-  //   if (selectedFile) {
-  //     formData.append('file', selectedFile);
-  //   }
-    
-  //   onSubmit(formData);
-  //   setMessage('');
-  //   setSelectedFile(null);
-  // };
-
 
   const handleFileClick = () => {
     fileInputRef.current.click();
@@ -44,28 +45,34 @@ function Input({ onClick, onSubmit }) {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // Optionally add the filename to the message
-      setMessage(prev => prev + (prev ? '\n' : '') + `Attached: ${file.name}`);
+      
+      setMessage(
+        (prev) => prev + (prev ? "\n" : "") + `Attached: ${file.name}`
+      );
+      setIsFileAnimating(true);
+      setTimeout(() => setIsFileAnimating(false), 500);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
   };
   const handleVoiceClick = (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     if (onClick) {
-      onClick(); // This will trigger the modal open in the parent component
+      onClick();
     }
   };
 
   return (
+    
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col w-[250px] xs:w-[275px] sm:w-[305px] md:w-[540px] xl:w-[900px] bg-white p-5 md:p-7 lg:p-10 mx-auto mb-5">
-        <div className="flex flex-col bg-[#C8D6FF] rounded-2xl p-5 md:p-8 space-y-2">
+      
+      <div className="flex flex-col w-[250px] xs:w-[275px] sm:w-[305px] md:w-[540px] xl:w-[900px] bg-white p-5 md:p-7 lg:p-10 mx-auto mb-5 ">
+        <div className="flex flex-col bg-white shadow-md rounded-2xl p-5 md:p-8 space-y-2 outline outline-gray-200">
           <div className="h-10 md:h-8">
             <textarea
               placeholder="Ask me Anything"
@@ -74,56 +81,69 @@ function Input({ onClick, onSubmit }) {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="w-full bg-[#C8D6FF] text-sm md:text-sm  placeholder:text-blue-500 focus:outline-none resize-none"
+              className="w-full bg-white text-base md:text-sm  placeholder:text-[#333] placeholder:text-base focus:outline-none resize-none "
+              style={{
+                minHeight: "40px",
+                maxHeight: "100px",
+                overflowY: "auto",
+              }}
             />
           </div>
           <div className="flex items-center justify-between">
-            <div className="relative w-5 h-5 ">
-            <input
+            <motion.div
+              animate={{ rotate: isFileAnimating ? 360 : 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 className="hidden"
                 accept="image/*,.pdf,.doc,.docx,.txt,.csv"
               />
-              <Image
-                src="/assets/icons/attach.png"
-                alt="attachment image"
-                fill
-                className="object-cover hover:cursor-pointer"
+              <button
+                type="button"
                 onClick={handleFileClick}
-              />
-              {selectedFile && (
-                <div className="absolute -top-2 -right-2 w-2 h-2 bg-blue-500 rounded-full" />
-              )}
-            </div>
-            <div className="flex items-center justify-center space-x-3">
-              <div className="relative w-5 h-5">
-              <button
-                  type="button" // Important: type="button" to prevent form submission
-                  onClick={handleVoiceClick}
-                  className="w-full h-full p-0 border-0 bg-transparent"
-                >
-                  <Image
-                    src="/assets/icons/voiceRecord.png"
-                    alt="voiceRecord image"
-                    fill
-                    className="object-cover hover:cursor-pointer"
-                  />
-                </button>
-              </div>
-              <button
+                className="p-2 text-gray-500 hover:scale-110 transition-transform rounded-full"
+              >
+                <Image
+                  src="/assets/icons/attach.png"
+                  alt="Attach"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </motion.div>
+
+            <div className="flex items-center justify-center space-x-3 ">
+              <motion.button
+                type="button"
+                onClick={handleVoiceClick}
+                whileHover={{ scale: 1.2 }}
+                className="p-2 text-gray-500 hover:scale-110 transition-transform rounded-full"
+              >
+                <Image
+                  src="/assets/icons/voiceRecord.png"
+                  alt="Voice Record"
+                  width={34}
+                  height={34}
+                />
+              </motion.button>
+
+              <motion.button
                 type="submit"
-                className="relative w-5 h-5 disabled:opacity-50"
+                animate={{ scale: isSendAnimating ? 1.2 : 1 }}
+                transition={{ duration: 0.2 }}
+                className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
                 disabled={!message.trim()}
               >
                 <Image
                   src="/assets/icons/send.png"
-                  alt="send image"
-                  fill
-                  className="object-cover hover:cursor-pointer"
+                  alt="Send"
+                  width={30}
+                  height={30}
                 />
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>

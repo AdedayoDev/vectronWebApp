@@ -440,7 +440,7 @@ const handleNextVersion = (messageId) => {
           <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)]">
             <div className="bg-white rounded-2xl shadow-xl h-full flex flex-col">
               <div className="flex-1 overflow-y-auto"  ref={messagesEndRef}>
-                <div className="p-6 pb-[200px]">
+                <div className="p-6 pb-[220px]">
                   {showWelcome && messages.length === 0 ? (
                     <>
                       <ChatHead />
