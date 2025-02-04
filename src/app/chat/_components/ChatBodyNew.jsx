@@ -180,7 +180,7 @@ function NavigationFeed() {
 function HealthFeed() {
     return (
         <Link href="/vehicle_management/portal" className="w-full">
-        <div className="flex flex-col bg-[#E94E43] p-3  space-y-2 lg:space-y-3 text-black rounded-xl">
+        <div className="flex flex-col bg-[#fc8077] p-3  space-y-2 lg:space-y-3 text-black rounded-xl">
           <div className="relative w-7 h-7">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 8.99959V14.9996M8.99998 11.9996H15M19.463 3.99359C16.781 2.34859 14.44 3.01059 13.034 4.06659C12.458 4.49959 12.17 4.71659 12 4.71659C11.83 4.71659 11.542 4.49959 10.966 4.06659C9.55998 3.01059 7.21898 2.34959 4.53698 3.99359C1.01798 6.15159 0.221981 13.2736 8.33998 19.2826C9.88598 20.4266 10.659 20.9986 12 20.9986C13.341 20.9986 14.114 20.4266 15.66 19.2826C23.778 13.2736 22.982 6.15359 19.463 3.99359Z" stroke="#FBFDFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
