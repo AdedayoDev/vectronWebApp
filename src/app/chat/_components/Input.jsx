@@ -71,8 +71,8 @@ function Input({ onClick, onSubmit }) {
     
     <form onSubmit={handleSubmit}>
       
-      <div className="flex flex-col w-[250px] xs:w-[275px] sm:w-[305px] md:w-[540px] xl:w-[900px] bg-white p-5 md:p-7 lg:p-10 mx-auto mb-5 ">
-        <div className="flex flex-col bg-white shadow-md rounded-2xl p-5 md:p-8 space-y-2 outline outline-gray-200">
+      <div className="flex flex-col w-11/12  md:w-[540px] xl:w-[900px] bg-white p-5 md:p-7 lg:p-10 mx-auto mb-5 ">
+        <div className="w-full flex flex-col bg-white shadow-md rounded-2xl p-5 md:p-8 space-y-2 border border-gray-200">
           <div className="h-10 md:h-8">
             <textarea
               placeholder="Ask me Anything"
