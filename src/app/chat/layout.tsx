@@ -27,6 +27,8 @@ function Layout({ children }: Props) {
   }, [showMobileSidebar]);
 
   return (
+    <AuthProvider>
+      <ProtectedRoute>
     <>
       <div className="h-screen flex flex-col">
         <div className="flex justify-end p-2 flex-shrink-0">
@@ -57,6 +59,8 @@ function Layout({ children }: Props) {
         </div>
       </div>
     </>
+    </ProtectedRoute>
+    </AuthProvider>
   );
 }
 
