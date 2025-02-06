@@ -20,6 +20,7 @@ import {
   Map,
   BookOpen,
 } from "lucide-react";
+import FinancialInsights from "../_component/FinancialInsights";
 
 // Sample data structures
 const vehicleInventory = [
@@ -32,6 +33,10 @@ const vehicleInventory = [
     nextMaintenance: "2024-04-15",
     mileage: 45230,
     condition: "Good",
+    plateNumber: "MUS856KL",
+    make: "Toyota",
+    year: "2021",
+    colour: "Black",
   },
   {
     id: "VEH-002",
@@ -42,6 +47,24 @@ const vehicleInventory = [
     nextMaintenance: "2024-05-10",
     mileage: 32450,
     condition: "Excellent",
+    plateNumber: "IKD769FI",
+    make: "Toyota",
+    year: "2021",
+    colour: "Blue",
+  },
+  {
+    id: "VEH-003",
+    model: "Tesla",
+    type: "Truck",
+    status: "Available",
+    lastMaintenance: "2024-01-10",
+    nextMaintenance: "2024-05-10",
+    mileage: 32450,
+    condition: "Excellent",
+    plateNumber: "EKY5670P",
+    make: "Toyota",
+    year: "2021",
+    colour: "Wine",
   },
 ];
 
@@ -72,8 +95,8 @@ const aiTroubleshootingCases = [
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isOpen, setIsOpen] = useState(false);
-  
 
+  //  Render Dashboard
   const renderDashboardSection = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-6 ">
       {/* Vehicle Fleet Overview */}
@@ -178,6 +201,62 @@ const VehiclePortal = () => {
     </div>
   );
 
+  // Render Vehicle Inventory
+  const renderVehicleInventorySection = () => (
+    <div className="bg-white shadow-lg rounded-lg p-6">
+      
+
+      {/* Table layout */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white  border-gray-300">
+          {/* Table Header */}
+          <thead className="bg-gray-300 text-gray-800 ">
+            <tr>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                VehicleID
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Make
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Plate Number
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Model
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Year
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Colour
+              </th>
+            </tr>
+          </thead>
+
+          {/* Table Body */}
+          <tbody className="text-gray-700">
+            {vehicleInventory.map((vehicle) => (
+              <tr
+                key={vehicle.id}
+                className="hover:bg-gray-100 border-b border-gray-300"
+              >
+                <td className="py-3 px-4 flex flex-col items-center justify-center">
+                  <span>{vehicle.id}</span>
+                  <span>({vehicle.model})</span>
+                </td>
+                <td className="py-3 px-4">{vehicle.make}</td>
+                <td className="py-3 px-4">{vehicle.plateNumber}</td>
+                <td className="py-3 px-4">{vehicle.model}</td>
+                <td className="py-3 px-4">{vehicle.year}</td>
+                <td className="py-3 px-4">{vehicle.colour}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex min-h-screen  bg-gray-100  mt-20">
       {/* Sidebar Navigation */}
@@ -203,7 +282,8 @@ const VehiclePortal = () => {
           />
           <h1 className="text-xl font-bold text-gray-800">Vehicle Portal</h1>
         </div>
-        <nav className="p-4">
+
+        <nav className="p-4 ">
           <ul className="space-y-2">
             {[
               {
@@ -261,7 +341,7 @@ const VehiclePortal = () => {
           className={`fixed top-0 left-0 w-64 h-full bg-white shadow-lg border-r border-green-600 p-6 transform transition-transform duration-500 ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
-          onClick={(e) => e.stopPropagation()} 
+          onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
           <div className="flex justify-end">
@@ -322,7 +402,7 @@ const VehiclePortal = () => {
                   }`}
                   onClick={() => {
                     setActiveSection(item.section);
-                    setIsOpen(false); 
+                    setIsOpen(false);
                   }}
                 >
                   {item.icon}
@@ -340,6 +420,8 @@ const VehiclePortal = () => {
         <div className="mb-6 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800">
             {activeSection === "dashboard" && "Dashboard Overview"}
+            {activeSection === "inventory" && "Vehicle Inventory"}
+            {activeSection === "financials" && "Financial Insights"}
           </h1>
           <div className="flex items-center space-x-4">
             <MessageCircle className="text-gray-500 cursor-pointer" />
@@ -349,6 +431,8 @@ const VehiclePortal = () => {
 
         {/* Dynamic Content Rendering */}
         {activeSection === "dashboard" && renderDashboardSection()}
+        {activeSection === "inventory" && renderVehicleInventorySection()}
+        {activeSection === "financials" && <FinancialInsights activeSection={activeSection} setActiveSection={setActiveSection}/>}
       </div>
     </div>
   );
