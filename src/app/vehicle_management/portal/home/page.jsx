@@ -20,10 +20,25 @@ import {
   Map,
   BookOpen,
 } from "lucide-react";
+
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import FinancialInsights from "../_component/FinancialInsights";
 
 // Sample data structures
-const vehicleInventory = [
+export const vehicleInventory = [
   {
     id: "VEH-001",
     model: "Toyota Camry",
@@ -202,7 +217,7 @@ const VehiclePortal = () => {
   );
 
   // Render Vehicle Inventory
-  const renderVehicleInventorySection = () => (
+   const renderVehicleInventorySection = () => (
     <div className="bg-white shadow-lg rounded-lg p-6">
       
 
