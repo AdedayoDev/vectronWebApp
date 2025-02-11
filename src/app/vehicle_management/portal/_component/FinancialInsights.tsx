@@ -13,6 +13,8 @@ import {
   Legend,
 } from "chart.js";
 
+import GraphCard from "./GraphCard";
+
 // Register Chart.js components
 ChartJS.register(
   CategoryScale,
@@ -107,42 +109,8 @@ const FinancialInsights: React.FC<FinancialInsightsProps> = () => {
     <div className="p-6 bg-white shadow-lg rounded-lg">
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {graphs.map((graph) => (
-          <div
-            key={graph.id}
-            className="w-96 h-72 border rounded-lg p-4 shadow flex flex-col justify-between"
-          >
-            {/* Top Section */}
-            <div className="flex justify-between items-center">
-              <button className="bg-[#DBB4FF] text-[#333] px-4 py-2 rounded">
-                {graph.buttonText}
-              </button>
-              <select
-                value={selectedRanges[graph.id]}
-                onChange={(e) => handleRangeChange(graph.id, e.target.value)}
-                className="border p-2 rounded bg-gray-100 text-gray-800"
-              >
-                <option>Last 6 Months</option>
-                <option>Last 5 Months</option>
-                <option>Last 4 Months</option>
-                <option>Last 3 Months</option>
-                <option>Last 2 Months</option>
-                <option>Last 1 Month</option>
-              </select>
-            </div>
-
-            {/* Graph (Does NOT Stretch) */}
-            <div className="h-full flex items-center justify-center">
-              <Line
-                data={getChartData(graph.data)}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                }}
-                height={100}
-              />
-            </div>
-          </div>
+      {graphs.map((graph) => (
+          <GraphCard key={graph.id} graph={graph} />
         ))}
       </div>
     </div>
