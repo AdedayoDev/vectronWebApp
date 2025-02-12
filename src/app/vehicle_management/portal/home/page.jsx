@@ -20,10 +20,12 @@ import {
   Map,
   BookOpen,
 } from "lucide-react";
+
 import FinancialInsights from "../_component/FinancialInsights";
+import VechtronDashboard from "../../../../app/test/page"
 
 // Sample data structures
-const vehicleInventory = [
+ const vehicleInventory = [
   {
     id: "VEH-001",
     model: "Toyota Camry",
@@ -93,7 +95,7 @@ const aiTroubleshootingCases = [
 ];
 
 const VehiclePortal = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isOpen, setIsOpen] = useState(false);
 
   //  Render Dashboard
@@ -202,7 +204,7 @@ const VehiclePortal = () => {
   );
 
   // Render Vehicle Inventory
-  const renderVehicleInventorySection = () => (
+   const renderVehicleInventorySection = () => (
     <div className="bg-white shadow-lg rounded-lg p-6">
       
 
@@ -290,6 +292,11 @@ const VehiclePortal = () => {
                 name: "Dashboard",
                 icon: <Car className="mr-2" />,
                 section: "dashboard",
+              },
+              {
+                name: "vehicleDashboard",
+                icon: <Car className="mr-2" />,
+                section: "vehicleDashboard",
               },
               {
                 name: "Vehicle Inventory",
@@ -433,6 +440,8 @@ const VehiclePortal = () => {
         {activeSection === "dashboard" && renderDashboardSection()}
         {activeSection === "inventory" && renderVehicleInventorySection()}
         {activeSection === "financials" && <FinancialInsights activeSection={activeSection} setActiveSection={setActiveSection}/>}
+        {activeSection === "vehicleDashboard" && <VechtronDashboard  activeSection={activeSection} setActiveSection={setActiveSection}/>}
+
       </div>
     </div>
   );
