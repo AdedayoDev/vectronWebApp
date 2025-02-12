@@ -21,24 +21,11 @@ import {
   BookOpen,
 } from "lucide-react";
 
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 import FinancialInsights from "../_component/FinancialInsights";
+import VechtronDashboard from "../../../../app/test/page"
 
 // Sample data structures
-export const vehicleInventory = [
+ const vehicleInventory = [
   {
     id: "VEH-001",
     model: "Toyota Camry",
@@ -108,7 +95,7 @@ const aiTroubleshootingCases = [
 ];
 
 const VehiclePortal = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isOpen, setIsOpen] = useState(false);
 
   //  Render Dashboard
@@ -307,6 +294,11 @@ const VehiclePortal = () => {
                 section: "dashboard",
               },
               {
+                name: "vehicleDashboard",
+                icon: <Car className="mr-2" />,
+                section: "vehicleDashboard",
+              },
+              {
                 name: "Vehicle Inventory",
                 icon: <Truck className="mr-2" />,
                 section: "inventory",
@@ -448,6 +440,8 @@ const VehiclePortal = () => {
         {activeSection === "dashboard" && renderDashboardSection()}
         {activeSection === "inventory" && renderVehicleInventorySection()}
         {activeSection === "financials" && <FinancialInsights activeSection={activeSection} setActiveSection={setActiveSection}/>}
+        {activeSection === "vehicleDashboard" && <VechtronDashboard  activeSection={activeSection} setActiveSection={setActiveSection}/>}
+
       </div>
     </div>
   );

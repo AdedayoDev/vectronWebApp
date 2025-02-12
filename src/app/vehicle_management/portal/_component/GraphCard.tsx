@@ -1,5 +1,29 @@
+"use client";
 import React from "react";
 import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 
 interface GraphData {
   id: number;
@@ -13,43 +37,46 @@ interface GraphCardProps {
 }
 
 const GraphCard: React.FC<GraphCardProps> = ({ graph }) => {
-  const labels: string[] = ["July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+  const labels = ["July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
   const getChartData = (data: number[]) => ({
     labels,
     datasets: [
       {
-        label: "Cost ($)",
+        label: graph.title,
         data,
-        borderColor: "green",
-        backgroundColor: "rgba(0, 128, 0, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
         tension: 0.4,
-        pointRadius: 0,
+        pointRadius: 4,
         borderWidth: 2,
       },
     ],
   });
 
   return (
-    <div className="w-96 h-72 border rounded-lg p-4 shadow flex flex-col justify-between">
-      <div className="flex justify-between items-center">
-        <button className="bg-[#DBB4FF] text-[#333] px-4 py-2 rounded">
-          {graph.buttonText}
-        </button>
-      </div>
-
-      {/* Graph */}
-      <div className="h-full flex items-center justify-center">
-        <Line
-          data={getChartData(graph.data)}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-          }}
-          height={100}
-        />
-      </div>
-    </div>
+    <Card className="w-full h-[500px] shadow-lg relative overflow-hidden"> 
+      <CardHeader>
+        <CardTitle>{graph.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="h-full flex items-center justify-center">
+        <div className="w-full h-[400px] relative py-4"> 
+          <Line
+            data={getChartData(graph.data)}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: true,
+                  position: "top", 
+                },
+              },
+            }}
+          />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
