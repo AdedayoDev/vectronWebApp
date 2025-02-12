@@ -25,7 +25,7 @@ import FinancialInsights from "../_component/FinancialInsights";
 import VechtronDashboard from "../../../../app/test/page"
 
 // Sample data structures
-export const vehicleInventory = [
+ const vehicleInventory = [
   {
     id: "VEH-001",
     model: "Toyota Camry",
