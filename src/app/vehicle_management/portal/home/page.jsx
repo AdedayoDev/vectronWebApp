@@ -1,31 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
-import Image from "next/image";
 import {
   Truck,
   Car,
   Wrench,
-  ChevronRight,
-  ShieldCheck,
-  FileText,
   Settings,
-  TrendingUp,
-  Users,
-  Clock,
   DollarSign,
   MessageCircle,
-  Zap,
   Cpu,
-  Map,
-  BookOpen,
 } from "lucide-react";
 
 import FinancialInsights from "../_component/FinancialInsights";
-import VechtronDashboard from "../../../../app/test/page"
+import VechtronDashboard from "../../../../app/test/page";
+import Image from "next/image";
 
 // Sample data structures
- const vehicleInventory = [
+const vehicleInventory = [
   {
     id: "VEH-001",
     model: "Toyota Camry",
@@ -96,7 +86,7 @@ const aiTroubleshootingCases = [
 
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   //  Render Dashboard
   const renderDashboardSection = () => (
@@ -204,10 +194,8 @@ const VehiclePortal = () => {
   );
 
   // Render Vehicle Inventory
-   const renderVehicleInventorySection = () => (
+  const renderVehicleInventorySection = () => (
     <div className="bg-white shadow-lg rounded-lg p-6">
-      
-
       {/* Table layout */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white  border-gray-300">
@@ -261,63 +249,81 @@ const VehiclePortal = () => {
 
   return (
     <div className="flex min-h-screen  bg-gray-100  mt-20">
-      {/* Sidebar Navigation */}
-      {/* Hamburger Menu (Mobile & Tablet) */}
-      <div className="md:hidden fixed top-4 left-16 z-50">
-        <FaBars
-          className={`text-2xl text-black  shadow-lg cursor-pointer transition-transform duration-500 ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`}
-          onClick={() => setIsOpen(true)}
-        />
-      </div>
-
+      
       {/* Sidebar (Large Screens - Always Visible) */}
-      <div className="hidden md:block w-64 bg-white shadow-lg">
-        <div className="p-6 border-b flex items-center">
-          <Image
-            src="/assets/icons/Media.jpeg (1).png"
-            alt="Vehicle Portal Logo"
-            width={50}
-            height={50}
-            className="object-cover rounded-full mr-3"
-          />
-          <h1 className="text-xl font-bold text-gray-800">Vehicle Portal</h1>
+      <div
+        className={`bg-white shadow-lg transition-all duration-300 ${
+          isCollapsed ? "w-20" : "w-64"
+        }`}
+      >
+        {/* Sidebar Header */}
+        <div className="p-6 border-b flex justify-between items-center">
+          {/* Vehicle Portal Text */}
+          {!isCollapsed && (
+            <h1 className="text-xl font-bold text-gray-800">Vehicle Portal</h1>
+          )}
+
+          {/* Collapsible Icon */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="w-10 h-10 flex justify-center items-center rounded-lg bg-transparent hover:bg-gray-300 transition"
+          >
+            {/* Custom Collapsible Icon (Rounded Square with Partition) */}
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="3"
+                y="5"
+                width="18"
+                height="14"
+                rx="4"
+                fill="white"
+                stroke="black"
+                strokeWidth="2"
+              />
+              <line
+                x1="15"
+                y1="5"
+                x2="15"
+                y2="19"
+                stroke="black"
+                strokeWidth="2"
+              />
+            </svg>
+          </button>
         </div>
 
-        <nav className="p-4 ">
+        {/* Sidebar Navigation Items */}
+        <nav className="p-4">
           <ul className="space-y-2">
             {[
-              {
-                name: "Dashboard",
-                icon: <Car className="mr-2" />,
-                section: "dashboard",
-              },
-              {
-                name: "vehicleDashboard",
-                icon: <Car className="mr-2" />,
-                section: "vehicleDashboard",
-              },
+              { name: "Vehicle Dashboard", icon: <Car />, section: "vehicleDashboard" },
               {
                 name: "Vehicle Inventory",
-                icon: <Truck className="mr-2" />,
+                icon: <Truck />,
                 section: "inventory",
               },
-              {
-                name: "Maintenance",
-                icon: <Wrench className="mr-2" />,
-                section: "maintenance",
-              },
+              { name: "Maintenance", icon: <Wrench />, section: "maintenance" },
               {
                 name: "AI Troubleshooting",
-                icon: <Cpu className="mr-2" />,
+                icon: <Cpu />,
                 section: "ai-support",
               },
               {
                 name: "Financial Insights",
-                icon: <DollarSign className="mr-2" />,
+                icon: <DollarSign />,
                 section: "financials",
               },
+              // {
+              //   name: "Chat With Vechtron",
+              //   icon: <Image src="/Media.jpeg (1).png" width={22} height={22}/>,
+              //   section: "financials",
+              // },
             ].map((item) => (
               <li
                 key={item.section}
@@ -329,99 +335,12 @@ const VehiclePortal = () => {
                 onClick={() => setActiveSection(item.section)}
               >
                 {item.icon}
-                {item.name}
-                <ChevronRight className="ml-auto opacity-50" size={20} />
+                {!isCollapsed && <span className="ml-3">{item.name}</span>}
               </li>
             ))}
           </ul>
         </nav>
-      </div>
-
-      {/* Mobile Sidebar (Sliding in from Left) */}
-      <div
-        className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 transition-all duration-500 ${
-          isOpen ? "block" : "hidden"
-        }`}
-        onClick={() => setIsOpen(false)}
-      >
-        <div
-          className={`fixed top-0 left-0 w-64 h-full bg-white shadow-lg border-r border-green-600 p-6 transform transition-transform duration-500 ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Close Button */}
-          <div className="flex justify-end">
-            <FaTimes
-              className={`text-3xl text-red-600 cursor-pointer transition-transform duration-500 ${
-                isOpen ? "rotate-180" : "rotate-0"
-              }`}
-              onClick={() => setIsOpen(false)}
-            />
-          </div>
-
-          {/* Sidebar Content */}
-          <div className="p-6 border-b flex items-center">
-            <Image
-              src="/assets/icons/Media.jpeg (1).png"
-              alt="Vehicle Portal Logo"
-              width={50}
-              height={50}
-              className="object-cover rounded-full mr-3"
-            />
-            <h1 className="text-xl font-bold text-gray-800">Vehicle Portal</h1>
-          </div>
-          <nav className="p-4">
-            <ul className="space-y-2">
-              {[
-                {
-                  name: "Dashboard",
-                  icon: <Car className="mr-2" />,
-                  section: "dashboard",
-                },
-                {
-                  name: "Vehicle Inventory",
-                  icon: <Truck className="mr-2" />,
-                  section: "inventory",
-                },
-                {
-                  name: "Maintenance",
-                  icon: <Wrench className="mr-2" />,
-                  section: "maintenance",
-                },
-                {
-                  name: "AI Troubleshooting",
-                  icon: <Cpu className="mr-2" />,
-                  section: "ai-support",
-                },
-                {
-                  name: "Financial Insights",
-                  icon: <DollarSign className="mr-2" />,
-                  section: "financials",
-                },
-              ].map((item) => (
-                <li
-                  key={item.section}
-                  className={`flex items-center p-2 rounded-lg cursor-pointer transition ${
-                    activeSection === item.section
-                      ? "bg-blue-100 text-blue-800"
-                      : "hover:bg-gray-100 text-gray-700"
-                  }`}
-                  onClick={() => {
-                    setActiveSection(item.section);
-                    setIsOpen(false);
-                  }}
-                >
-                  {item.icon}
-                  {item.name}
-                  <ChevronRight className="ml-auto opacity-50" size={20} />
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </div>
-
+      </div>{" "}
       {/* Main Content Area */}
       <div className="flex-1 p-8">
         <div className="mb-6 flex justify-between items-center">
@@ -429,6 +348,7 @@ const VehiclePortal = () => {
             {activeSection === "dashboard" && "Dashboard Overview"}
             {activeSection === "inventory" && "Vehicle Inventory"}
             {activeSection === "financials" && "Financial Insights"}
+            {activeSection === "ai-support" && "AI Troubleshooting"}
           </h1>
           <div className="flex items-center space-x-4">
             <MessageCircle className="text-gray-500 cursor-pointer" />
@@ -439,9 +359,19 @@ const VehiclePortal = () => {
         {/* Dynamic Content Rendering */}
         {activeSection === "dashboard" && renderDashboardSection()}
         {activeSection === "inventory" && renderVehicleInventorySection()}
-        {activeSection === "financials" && <FinancialInsights activeSection={activeSection} setActiveSection={setActiveSection}/>}
-        {activeSection === "vehicleDashboard" && <VechtronDashboard  activeSection={activeSection} setActiveSection={setActiveSection}/>}
-
+        {activeSection === "ai-support" && renderDashboardSection()}
+        {activeSection === "financials" && (
+          <FinancialInsights
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+          />
+        )}
+        {activeSection === "vehicleDashboard" && (
+          <VechtronDashboard
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+          />
+        )}
       </div>
     </div>
   );
