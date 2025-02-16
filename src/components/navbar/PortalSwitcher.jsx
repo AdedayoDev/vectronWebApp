@@ -29,11 +29,11 @@ export default function PortalSwitcher() {
       description: "Vehicle diagnostics and alerts"
     },
     {
-      name: "Route Navigation",
-      icon: "/assets/icons/map.svg",
-      path: "/route",
-      description: "Vehicle Route Navigation"
-    }
+        name: "Route Navigation",
+        icon: "/assets/icons/map.svg",
+        path: "/route",
+        description: "Vehicle Route Navigation"
+      }
   ];
 
   const handlePortalClick = (portal) => {

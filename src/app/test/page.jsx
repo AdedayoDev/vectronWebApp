@@ -21,24 +21,16 @@ import {
 
 import {
   AlertTriangle,
-  Check,
-  Settings,
-  AlertCircle,
   Activity,
   Gauge,
   Bell,
   Calendar,
   Car,
-  Heart,
-  HeartCrack,
-  HeartIcon,
   HeartPulseIcon,
-  GaugeIcon,
   GaugeCircle,
 } from "lucide-react";
 
 const VechtronDashboard = () => {
-  // Sample data - replace with real data from your backend
   const performanceData = [
     { name: "Jan", efficiency: 85, health: 90, mileage: 2500 },
     { name: "Feb", efficiency: 82, health: 88, mileage: 2300 },
@@ -82,9 +74,9 @@ const VechtronDashboard = () => {
   ];
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="md:p-6 bg-gray-100 min-h-screen">
       {/* Header */}
-      <div className="w-11/12 mx-auto">
+      <div className="w-full md:w-11/12 mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
             Vechtron AI Vehicle Dashboard
@@ -95,110 +87,72 @@ const VechtronDashboard = () => {
         </div>
 
         <div className="w-full mx-auto p-0">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 ">
-            {/* Quick Stats */}
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            {[
+              {
+                label: "Overall Health",
+                value: "85%",
+                color: "text-green-600",
+                icon: Activity,
+                iconColor: "text-green-500",
+              },
+              {
+                label: "Fuel Efficiency",
+                value: "28 MPG",
+                color: "text-blue-600",
+                icon: Gauge,
+                iconColor: "text-blue-500",
+              },
+              {
+                label: "Active Alerts",
+                value: "3",
+                color: "text-red-600",
+                icon: Bell,
+                iconColor: "text-red-500",
+              },
+              {
+                label: "Next Service",
+                value: "15 days",
+                color: "text-purple-600",
+                icon: Calendar,
+                iconColor: "text-purple-500",
+              },
+              {
+                label: "Engine Performance",
+                value: "90%",
+                color: "text-[#708090]",
+                icon: Car,
+                iconColor: "text-green-500",
+              },
+              {
+                label: "Battery Health",
+                value: "88%",
+                color: "text-green-600",
+                icon: HeartPulseIcon,
+                iconColor: "text-green-500",
+              },
+              {
+                label: "Average Speed",
+                value: "45mph",
+                color: "text-[#1E3A8A]",
+                icon: GaugeCircle,
+                iconColor: "text-[#1E3A8A]",
+              },
+            ].map((item, index) => (
+              <Card key={index} className="w-full lg:w-[280px] xl:w-[320px]">
+                <CardContent className="py-4 flex flex-col justify-between h-32">
                   <div>
                     <p className="text-sm font-medium text-gray-500">
-                      Overall Health
+                      {item.label}
                     </p>
-                    <p className="text-2xl font-bold text-green-600">85%</p>
-                  </div>
-                  <Activity className="h-8 w-8 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Fuel Efficiency
-                    </p>
-                    <p className="text-2xl font-bold text-blue-600">28 MPG</p>
-                  </div>
-                  <Gauge className="h-8 w-8 text-blue-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Active Alerts
-                    </p>
-                    <p className="text-2xl font-bold text-red-600">3</p>
-                  </div>
-                  <Bell className="h-8 w-8 text-red-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Next Service
-                    </p>
-                    <p className="text-2xl font-bold text-purple-600">
-                      15 days
+                    <p className={`text-2xl font-bold ${item.color}`}>
+                      {item.value}
                     </p>
                   </div>
-                  <Calendar className="h-8 w-8 text-purple-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Engine Performance
-                    </p>
-                    <p className="text-2xl font-bold text-[#708090]">90%</p>
-                    <p className="text-xl font-bold text-[#708090] leading-8">
-                      In the last 6 Months
-                    </p>
-                  </div>
-                  <Car className="h-8 w-8 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Battery Health
-                    </p>
-                    <p className="text-2xl font-bold text-green-600">88%</p>
-                  </div>
-                  <HeartPulseIcon className="h-8 w-8 text-green-500" />
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="w-full">
-              <CardContent className="py-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      Averege Speed
-                    </p>
-                    <p className="text-2xl font-bold text-[#1E3A8A]">45mph</p>
-                  </div>
-                  <GaugeCircle className="h-8 w-8 text-[#1E3A8A]" />
-                </div>
-              </CardContent>
-            </Card>
+                  <item.icon className={`h-8 w-8 ${item.iconColor} self-end`} />
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </div>
