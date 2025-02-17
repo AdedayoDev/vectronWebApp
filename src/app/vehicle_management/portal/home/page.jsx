@@ -1,4 +1,6 @@
 "use client";
+
+
 import React, { useState } from "react";
 import {
   Truck,
@@ -13,6 +15,8 @@ import {
 import FinancialInsights from "../_component/FinancialInsights";
 import VechtronDashboard from "../../../../app/test/page";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+// import Chat from "@app/chat/page";
 
 // Sample data structures
 const vehicleInventory = [
@@ -87,6 +91,7 @@ const aiTroubleshootingCases = [
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const router = useRouter();
 
   //  Render Dashboard
   const renderDashboardSection = () => (
@@ -319,11 +324,7 @@ const VehiclePortal = () => {
                 icon: <DollarSign />,
                 section: "financials",
               },
-              // {
-              //   name: "Chat With Vechtron",
-              //   icon: <Image src="/Media.jpeg (1).png" width={22} height={22}/>,
-              //   section: "financials",
-              // },
+              
             ].map((item) => (
               <li
                 key={item.section}
@@ -338,6 +339,14 @@ const VehiclePortal = () => {
                 {!isCollapsed && <span className="ml-3">{item.name}</span>}
               </li>
             ))}
+            {/* 🔥 Chat With Vechtron - Redirect to /chat */}
+            <li
+              className="flex items-center p-2 rounded-lg cursor-pointer transition hover:bg-gray-100 text-gray-700"
+              onClick={() => router.push("/chat")} // ✅ Redirect user to Chat Page
+            >
+              <Image src="/assets/icons/Media.jpeg (1).png" width={22} height={22} alt="Chat Icon" />
+              {!isCollapsed && <span className="ml-3">Chat With Vechtron</span>}
+            </li>
           </ul>
         </nav>
       </div>{" "}
@@ -349,6 +358,7 @@ const VehiclePortal = () => {
             {activeSection === "inventory" && "Vehicle Inventory"}
             {activeSection === "financials" && "Financial Insights"}
             {activeSection === "ai-support" && "AI Troubleshooting"}
+            {/* {activeSection === "chatWithVechtron" && "Chat With Vechtron"} */}
           </h1>
           <div className="flex items-center space-x-4">
             <MessageCircle className="text-gray-500 cursor-pointer" />
@@ -366,12 +376,20 @@ const VehiclePortal = () => {
             setActiveSection={setActiveSection}
           />
         )}
+
         {activeSection === "vehicleDashboard" && (
           <VechtronDashboard
             activeSection={activeSection}
             setActiveSection={setActiveSection}
           />
         )}
+
+        {/* {activeSection === "chatWithVechtron" && (
+          <Chat
+            activeSection={activeSection}
+            setActiveSection={setActiveSection}
+          />
+        )} */}
       </div>
     </div>
   );
