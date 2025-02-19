@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useState } from "react";
+import { ChevronRight } from "lucide-react";
 import {
   Truck,
   Car,
@@ -13,6 +15,7 @@ import {
 import FinancialInsights from "../_component/FinancialInsights";
 import VechtronDashboard from "../../../../app/test/page";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // Sample data structures
 const vehicleInventory = [
@@ -87,6 +90,7 @@ const aiTroubleshootingCases = [
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const router = useRouter();
 
   //  Render Dashboard
   const renderDashboardSection = () => (
@@ -198,9 +202,9 @@ const VehiclePortal = () => {
     <div className="bg-white shadow-lg rounded-lg p-6">
       {/* Table layout */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white  border-gray-300">
+        <table className="min-w-full bg-white border-gray-300">
           {/* Table Header */}
-          <thead className="bg-gray-300 text-gray-800 ">
+          <thead className="bg-gray-300 text-gray-800">
             <tr>
               <th className="py-3 px-4 text-left border-b border-gray-400">
                 VehicleID
@@ -228,7 +232,10 @@ const VehiclePortal = () => {
             {vehicleInventory.map((vehicle) => (
               <tr
                 key={vehicle.id}
-                className="hover:bg-gray-100 border-b border-gray-300"
+                className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
+                onClick={() =>
+                  router.push("/vehicle_management/add_vehicle_profile")
+                } 
               >
                 <td className="py-3 px-4 flex flex-col items-center justify-center">
                   <span>{vehicle.id}</span>
@@ -249,7 +256,6 @@ const VehiclePortal = () => {
 
   return (
     <div className="flex min-h-screen  bg-gray-100  mt-20">
-      
       {/* Sidebar (Large Screens - Always Visible) */}
       <div
         className={`bg-white shadow-lg transition-all duration-300 ${
@@ -302,7 +308,11 @@ const VehiclePortal = () => {
         <nav className="p-4">
           <ul className="space-y-2">
             {[
-              { name: "Vehicle Dashboard", icon: <Car />, section: "vehicleDashboard" },
+              {
+                name: "Vehicle Dashboard",
+                icon: <Car />,
+                section: "vehicleDashboard",
+              },
               {
                 name: "Vehicle Inventory",
                 icon: <Truck />,
@@ -319,25 +329,52 @@ const VehiclePortal = () => {
                 icon: <DollarSign />,
                 section: "financials",
               },
-              // {
-              //   name: "Chat With Vechtron",
-              //   icon: <Image src="/Media.jpeg (1).png" width={22} height={22}/>,
-              //   section: "financials",
-              // },
             ].map((item) => (
               <li
                 key={item.section}
-                className={`flex items-center p-2 rounded-lg cursor-pointer transition ${
+                className={`flex items-center p-2 rounded-lg cursor-pointer justify-between transition ${
                   activeSection === item.section
-                    ? "bg-blue-100 text-blue-800"
+                    ? "bg-[#1E3A8A] text-white"
                     : "hover:bg-gray-100 text-gray-700"
                 }`}
                 onClick={() => setActiveSection(item.section)}
               >
-                {item.icon}
-                {!isCollapsed && <span className="ml-3">{item.name}</span>}
+                <div className="flex items-center space-x-3">
+                  <span
+                    className="transition-all duration-200 ease-in-out  group-hover:translate-x-1" // Icon hover animation
+                  >
+                    {item.icon}
+                  </span>
+                  {!isCollapsed && <span>{item.name}</span>}
+                </div>
+
+                {!isCollapsed && (
+                  <ChevronRight className="text-gray-400 group-hover:translate-x-1 transition-all duration-200" />
+                )}
               </li>
             ))}
+
+            <li
+              className="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 text-gray-700 group"
+              onClick={() => router.push("/chat")}
+            >
+              {/* Icon + Text */}
+              <div className="flex items-center space-x-3">
+                <span className="transition-all duration-200 ease-in-out  group-hover:translate-x-1">
+                  <Image
+                    src="/assets/icons/Media.jpeg (1).png"
+                    width={22}
+                    height={22}
+                    alt="Chat Icon"
+                  />
+                </span>
+                {!isCollapsed && <span>Chat With Vechtron</span>}
+              </div>
+
+              {!isCollapsed && (
+                <ChevronRight className="text-gray-400 group-hover:translate-x-1 transition-all duration-200" />
+              )}
+            </li>
           </ul>
         </nav>
       </div>{" "}
@@ -366,6 +403,7 @@ const VehiclePortal = () => {
             setActiveSection={setActiveSection}
           />
         )}
+
         {activeSection === "vehicleDashboard" && (
           <VechtronDashboard
             activeSection={activeSection}
