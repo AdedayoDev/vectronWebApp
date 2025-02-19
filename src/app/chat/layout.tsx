@@ -30,13 +30,13 @@ function Layout({ children }: Props) {
     <AuthProvider>
       <ProtectedRoute>
     <>
-      <div className="h-screen flex flex-col">
+      <div className="h-screen flex flex-col ">
         <div className="flex justify-end p-2 flex-shrink-0">
           <PortalSwitcher />
           <Profile />
         </div>
 
-        <div className="flex-1 flex lg:flex-row h-[calc(100vh-48px)] overflow-hidden">
+        <div className="flex-1 flex lg:flex-row h-[calc(100vh-48px)] overflow-hidden ">
           <div className="flex-1 overflow-hidden">{children}</div>
 
           {/* Desktop Sidebar */}

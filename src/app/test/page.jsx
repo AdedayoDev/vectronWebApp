@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import GraphCard from "@app/vehicle_management/portal/_component/GraphCard";
 import { graphs } from "@app/vehicle_management/portal/_component/Graph";
+import CalendarPopUp from "../vehicle_management/portal/_component/CalendarPopup";
+import ReminderForm from "../vehicle_management/portal/_component/ReminderForm";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   LineChart,
@@ -31,6 +35,24 @@ import {
 } from "lucide-react";
 
 const VechtronDashboard = () => {
+  const [showCalendar, setShowCalendar] = useState(null);
+  const [showReminderForm, setShowReminderForm] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [reminders, setReminders] = useState([]);
+
+  const handleSelectDate = (date, reminderType) => {
+    setSelectedDate(date);
+    setShowCalendar(null);
+    setShowReminderForm(reminderType);
+  };
+
+  const handleSetReminder = (reminder) => {
+    setReminders([...reminders, reminder]);
+    toast.success(
+      `Reminder set for ${reminder.title} on ${reminder.date} at ${reminder.time} (${reminder.timeZone})`
+    );
+  };
+
   const performanceData = [
     { name: "Jan", efficiency: 85, health: 90, mileage: 2500 },
     { name: "Feb", efficiency: 82, health: 88, mileage: 2300 },
@@ -74,9 +96,10 @@ const VechtronDashboard = () => {
   ];
 
   return (
-    <div className="md:p-6 bg-gray-100 min-h-screen">
+    <div className="md:p-6 bg-gray-100 min-h-screen ">
+      <ToastContainer position="top-right" autoClose={3000} />
       {/* Header */}
-      <div className="w-full md:w-11/12 mx-auto">
+      <div className="w-full md:w-11/12 mx-auto ">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
             Vechtron AI Vehicle Dashboard
@@ -139,7 +162,7 @@ const VechtronDashboard = () => {
                 iconColor: "text-[#1E3A8A]",
               },
             ].map((item, index) => (
-              <Card key={index} className="w-full lg:w-[280px] xl:w-[320px]">
+              <Card key={index} className="w-full lg:w-[280px] xl:w-[320px] ">
                 <CardContent className="py-4 flex flex-col justify-between h-32">
                   <div>
                     <p className="text-sm font-medium text-gray-500">
@@ -267,27 +290,24 @@ const VechtronDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900">Oil Change</p>
-                  <p className="text-sm text-gray-500">Due in 15 days</p>
-                </div>
-                <Calendar className="h-5 w-5 text-[#000000]" />
-              </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900">Tire Rotation</p>
-                  <p className="text-sm text-gray-500">Due in 30 days</p>
-                </div>
-                <Calendar className="h-5 w-5 text-[#000000]" />
-              </div>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900">Break Inspection</p>
-                  <p className="text-sm text-gray-500">Due in 45 days</p>
-                </div>
-                <Calendar className="h-5 w-5 text-[#000000]" />
-              </div>
+              {["Oil Change", "Tire Rotation", "Brake Inspection"].map(
+                (title) => (
+                  <div
+                    key={title}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900">{title}</p>
+                      <p className="text-sm text-gray-500">
+                        Click the calendar to set a reminder
+                      </p>
+                    </div>
+                    <button onClick={() => setShowCalendar(title)}>
+                      <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
+                    </button>
+                  </div>
+                )
+              )}
             </div>
 
             <div className=" px-6 py-4 shadow-lg rounded-xl my-6">
@@ -314,6 +334,21 @@ const VechtronDashboard = () => {
               </div>
             </div>
           </CardContent>
+          {showCalendar && (
+            <CalendarPopUp
+              onClose={() => setShowCalendar(null)}
+              onSelectDate={(date) => handleSelectDate(date, showCalendar)}
+            />
+          )}
+
+          {showReminderForm && (
+            <ReminderForm
+              onClose={() => setShowReminderForm(null)}
+              selectedDate={selectedDate}
+              onSetReminder={handleSetReminder}
+              title={showReminderForm}
+            />
+          )}
         </Card>
 
         {/* Performance Metrics */}
