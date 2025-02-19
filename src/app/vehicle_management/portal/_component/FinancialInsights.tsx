@@ -29,7 +29,7 @@ const FinancialInsights: React.FC = () => {
     beginAtZero: true,
     max: 100000,
     stepSize: 25000,
-    callback: (value: number) => value.toLocaleString(), // Format numbers with commas
+    callback: (value: number) => value.toLocaleString(),
   };
 
   // Graph Categories
@@ -51,7 +51,7 @@ const FinancialInsights: React.FC = () => {
   // State for selected months & graph data
   const [selectedMonths, setSelectedMonths] = useState<{ [key: number]: string }>(
     graphs.reduce((acc, graph) => {
-      acc[graph.id] = "Last 6 Months"; // Default month selection
+      acc[graph.id] = "Last 6 Months";
       return acc;
     }, {} as { [key: number]: string })
   );
@@ -102,8 +102,10 @@ const FinancialInsights: React.FC = () => {
         {graphs.map((graph) => (
           <div key={graph.id} className="bg-gray-50 shadow-md rounded-lg p-4">
             {/* Graph Title & Month Selector */}
-            <div className="flex justify-between items-center mb-4 p-2 rounded-md" >
-              <h3 className="text-lg font-bold text-gray-800 px-6 py-2 rounded-lg bg-[#DBB4FF] truncate">{graph.title}</h3>
+            <div className="flex justify-between items-center mb-4 p-2 rounded-md">
+              <h3 className="text-lg font-bold text-gray-800 px-6 py-2 rounded-lg bg-[#DBB4FF] truncate">
+                {graph.title}
+              </h3>
 
               <div className="flex items-center gap-2">
                 <select
@@ -125,7 +127,7 @@ const FinancialInsights: React.FC = () => {
             </div>
 
             {/* Line Chart */}
-            <div className="h-72"> {/* Increased height for better readability */}
+            <div className="h-72">
               <Line
                 data={{
                   labels: labels.slice(-graphData[graph.id].length), // Dynamically slice X-axis labels
@@ -149,12 +151,21 @@ const FinancialInsights: React.FC = () => {
                       max: 100000,
                       ticks: {
                         stepSize: 25000,
-                        callback: (value: number | string) => value.toLocaleString(), 
-                      } as any, 
+                        callback: (value: number | string) => value.toLocaleString(),
+                      } as any,
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false, // ✅ Remove green box (legend)
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: () => "", // ✅ Remove "undefined" text from tooltips
+                      },
                     },
                   },
                 }}
-                
               />
             </div>
           </div>
