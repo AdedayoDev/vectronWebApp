@@ -11,7 +11,8 @@ export default function GoogleCallbackPage() {
     const code = searchParams.get('code');
     const error = searchParams.get('error');
     const { googlelogin } = useAuthStore();
-
+    const fragment = window.location.hash.substring(1);
+    const params = new URLSearchParams(fragment);
   
 
   
@@ -20,8 +21,7 @@ export default function GoogleCallbackPage() {
     const handleGoogleCallback = async () => {
       
 
-    const fragment = window.location.hash.substring(1);
-    const params = new URLSearchParams(fragment);
+
     const accessToken = params.get('access_token');
     const idToken = params.get('id_token');
 
