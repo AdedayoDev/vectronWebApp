@@ -143,7 +143,7 @@ jobs:
         sed -i 's/<NEXT_PUBLIC_S3_BUCKET_NAME>/'${{ secrets.NEXT_PUBLIC_S3_BUCKET_NAME }}'/g' k8s/staging/secrets.yaml
         sed -i 's/<NEXT_PUBLIC_GOOGLE_CLIENT_ID>/'${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}'/g' k8s/staging/secrets.yaml
         sed -i 's/<GOOGLE_CLIENT_SECRET>/'${{ secrets.GOOGLE_CLIENT_SECRET }}'/g' k8s/staging/secrets.yaml
-        sed -i 's/<NEXT_PUBLIC_BASE_URL>/'${{ secrets.STAGING_NEXT_PUBLIC_BASE_URL }}'/g' k8s/staging/secrets.yaml
+        sed -i 's|<NEXT_PUBLIC_BASE_URL>|'${{ secrets.STAGING_NEXT_PUBLIC_BASE_URL }}'|g' k8s/staging/secrets.yaml
 
         kubectl apply -f k8s/staging/namespace.yaml
         kubectl apply -f k8s/staging/secrets.yaml
