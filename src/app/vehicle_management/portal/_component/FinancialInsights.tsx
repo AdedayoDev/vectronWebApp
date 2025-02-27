@@ -157,11 +157,11 @@ const FinancialInsights: React.FC = () => {
                   },
                   plugins: {
                     legend: {
-                      display: false, // ✅ Remove green box (legend)
+                      display: false, 
                     },
                     tooltip: {
                       callbacks: {
-                        label: () => "", // ✅ Remove "undefined" text from tooltips
+                        label: () => "",
                       },
                     },
                   },
