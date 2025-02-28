@@ -50,7 +50,7 @@ export default function PortalSwitcher() {
       {/* Floating Portal Switcher Button */}
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed top-2 left-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 z-50"
+        className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 z-50"
       >
         <LayoutGrid className="w-5 h-5 text-gray-700" />
       </button>

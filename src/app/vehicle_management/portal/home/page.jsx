@@ -16,6 +16,8 @@ import FinancialInsights from "../_component/FinancialInsights";
 import VechtronDashboard from "../../../../app/test/page";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@store/useStore";
+import Vehicle_Profile from "@app/vehicle_management/add_vehicle_profile/page";
 
 // Sample data structures
 const vehicleInventory = [
@@ -90,7 +92,18 @@ const aiTroubleshootingCases = [
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { user } = useAuthStore();
   const router = useRouter();
+
+  const isVehicleOwner = user?.is_vehicle_owner ?? false;
+
+  const renderVehicleSection = () => {
+    if (isVehicleOwner) {
+      return renderVehicleInventorySection();
+    } else {
+      return <Vehicle_Profile />;
+    }
+  };
 
   //  Render Dashboard
   const renderDashboardSection = () => (
@@ -196,220 +209,205 @@ const VehiclePortal = () => {
       </div>
     </div>
   );
-
-  // Render Vehicle Inventory
-  const renderVehicleInventorySection = () => (
-    <div className="bg-white shadow-lg rounded-lg p-6">
-      {/* Table layout */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border-gray-300">
-          {/* Table Header */}
-          <thead className="bg-gray-300 text-gray-800">
-            <tr>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                VehicleID
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Make
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Plate Number
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Model
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Year
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Colour
-              </th>
+ // Vehicle Inventory Section
+ const renderVehicleInventorySection = () => (
+  <div className="bg-white shadow-lg rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-gray-800 mb-4">Vehicle Inventory</h2>
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border-gray-300">
+        <thead className="bg-gray-300 text-gray-800">
+          <tr>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Vehicle ID</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Make</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Plate Number</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Model</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Year</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Colour</th>
+          </tr>
+        </thead>
+        <tbody className="text-gray-700">
+          {vehicleInventory.map((vehicle) => (
+            <tr key={vehicle.id} className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer">
+              <td className="py-3 px-4">{vehicle.id}</td>
+              <td className="py-3 px-4">{vehicle.make}</td>
+              <td className="py-3 px-4">{vehicle.plateNumber}</td>
+              <td className="py-3 px-4">{vehicle.model}</td>
+              <td className="py-3 px-4">{vehicle.year}</td>
+              <td className="py-3 px-4">{vehicle.colour}</td>
             </tr>
-          </thead>
-
-          {/* Table Body */}
-          <tbody className="text-gray-700">
-            {vehicleInventory.map((vehicle) => (
-              <tr
-                key={vehicle.id}
-                className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
-                onClick={() =>
-                  router.push("/vehicle_management/add_vehicle_profile")
-                } 
-              >
-                <td className="py-3 px-4 flex flex-col items-center justify-center">
-                  <span>{vehicle.id}</span>
-                  <span>({vehicle.model})</span>
-                </td>
-                <td className="py-3 px-4">{vehicle.make}</td>
-                <td className="py-3 px-4">{vehicle.plateNumber}</td>
-                <td className="py-3 px-4">{vehicle.model}</td>
-                <td className="py-3 px-4">{vehicle.year}</td>
-                <td className="py-3 px-4">{vehicle.colour}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
-  );
+  </div>
+);
+
 
   return (
-    <div className="flex min-h-screen  bg-gray-100  mt-20">
-      {/* Sidebar (Large Screens - Always Visible) */}
-      <div
-        className={`bg-white shadow-lg transition-all duration-300 ${
-          isCollapsed ? "w-20" : "w-64"
-        }`}
-      >
-        {/* Sidebar Header */}
-        <div className="p-6 border-b flex justify-between items-center">
-          {/* Vehicle Portal Text */}
-          {!isCollapsed && (
-            <h1 className="text-xl font-bold text-gray-800">Vehicle Portal</h1>
-          )}
+    <div className=" w-full bg-white">
+      <div className="w-11/12 mx-auto flex min-h-screen ">
+        {/* Sidebar (Large Screens - Always Visible) */}
+        <div
+          className={`bg-white shadow-lg transition-all duration-300 ${
+            isCollapsed ? "w-20" : "w-64"
+          }`}
+        >
+          {/* Sidebar Header */}
+          <div className="p-6 border-b flex justify-between items-center">
+            {/* Vehicle Portal Text */}
+            {!isCollapsed && (
+              <h1 className="text-xl font-bold text-gray-800">
+                Vehicle Portal
+              </h1>
+            )}
 
-          {/* Collapsible Icon */}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="w-10 h-10 flex justify-center items-center rounded-lg bg-transparent hover:bg-gray-300 transition"
-          >
-            {/* Custom Collapsible Icon (Rounded Square with Partition) */}
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            {/* Collapsible Icon */}
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="w-10 h-10 flex justify-center items-center rounded-lg bg-transparent hover:bg-gray-300 transition"
             >
-              <rect
-                x="3"
-                y="5"
-                width="18"
-                height="14"
-                rx="4"
-                fill="white"
-                stroke="black"
-                strokeWidth="2"
-              />
-              <line
-                x1="15"
-                y1="5"
-                x2="15"
-                y2="19"
-                stroke="black"
-                strokeWidth="2"
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Sidebar Navigation Items */}
-        <nav className="p-4">
-          <ul className="space-y-2">
-            {[
-              {
-                name: "Vehicle Dashboard",
-                icon: <Car />,
-                section: "vehicleDashboard",
-              },
-              {
-                name: "Vehicle Inventory",
-                icon: <Truck />,
-                section: "inventory",
-              },
-              { name: "Maintenance", icon: <Wrench />, section: "maintenance" },
-              {
-                name: "AI Troubleshooting",
-                icon: <Cpu />,
-                section: "ai-support",
-              },
-              {
-                name: "Financial Insights",
-                icon: <DollarSign />,
-                section: "financials",
-              },
-            ].map((item) => (
-              <li
-                key={item.section}
-                className={`flex items-center p-2 rounded-lg cursor-pointer justify-between transition ${
-                  activeSection === item.section
-                    ? "bg-[#1E3A8A] text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`}
-                onClick={() => setActiveSection(item.section)}
+              {/* Custom Collapsible Icon (Rounded Square with Partition) */}
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="4"
+                  fill="white"
+                  stroke="black"
+                  strokeWidth="2"
+                />
+                <line
+                  x1="15"
+                  y1="5"
+                  x2="15"
+                  y2="19"
+                  stroke="black"
+                  strokeWidth="2"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Sidebar Navigation Items */}
+          <nav className="p-4">
+            <ul className="space-y-2">
+              {[
+                {
+                  name: "Vehicle Dashboard",
+                  icon: <Car />,
+                  section: "vehicleDashboard",
+                },
+                {
+                  name: "Vehicle Inventory",
+                  icon: <Truck />,
+                  section: "inventory",
+                },
+                {
+                  name: "Maintenance",
+                  icon: <Wrench />,
+                  section: "maintenance",
+                },
+                {
+                  name: "AI Troubleshooting",
+                  icon: <Cpu />,
+                  section: "ai-support",
+                },
+                {
+                  name: "Financial Insights",
+                  icon: <DollarSign />,
+                  section: "financials",
+                },
+              ].map((item) => (
+                <li
+                  key={item.section}
+                  className={`flex items-center p-2 rounded-lg cursor-pointer justify-between transition ${
+                    activeSection === item.section
+                      ? "bg-[#1E3A8A] text-white"
+                      : "hover:bg-gray-100 text-gray-700"
+                  }`}
+                  onClick={() => setActiveSection(item.section)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <span
+                      className="transition-all duration-200 ease-in-out  group-hover:translate-x-1" // Icon hover animation
+                    >
+                      {item.icon}
+                    </span>
+                    {!isCollapsed && <span>{item.name}</span>}
+                  </div>
+
+                  {!isCollapsed && (
+                    <ChevronRight className="text-gray-400 group-hover:translate-x-1 transition-all duration-200" />
+                  )}
+                </li>
+              ))}
+
+              <li
+                className="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 text-gray-700 group"
+                onClick={() => router.push("/chat")}
+              >
+                {/* Icon + Text */}
                 <div className="flex items-center space-x-3">
-                  <span
-                    className="transition-all duration-200 ease-in-out  group-hover:translate-x-1" // Icon hover animation
-                  >
-                    {item.icon}
+                  <span className="transition-all duration-200 ease-in-out  group-hover:translate-x-1">
+                    <Image
+                      src="/assets/icons/Media.jpeg (1).png"
+                      width={22}
+                      height={22}
+                      alt="Chat Icon"
+                    />
                   </span>
-                  {!isCollapsed && <span>{item.name}</span>}
+                  {!isCollapsed && <span>Chat With Vechtron</span>}
                 </div>
 
                 {!isCollapsed && (
                   <ChevronRight className="text-gray-400 group-hover:translate-x-1 transition-all duration-200" />
                 )}
               </li>
-            ))}
-
-            <li
-              className="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 text-gray-700 group"
-              onClick={() => router.push("/chat")}
-            >
-              {/* Icon + Text */}
-              <div className="flex items-center space-x-3">
-                <span className="transition-all duration-200 ease-in-out  group-hover:translate-x-1">
-                  <Image
-                    src="/assets/icons/Media.jpeg (1).png"
-                    width={22}
-                    height={22}
-                    alt="Chat Icon"
-                  />
-                </span>
-                {!isCollapsed && <span>Chat With Vechtron</span>}
-              </div>
-
-              {!isCollapsed && (
-                <ChevronRight className="text-gray-400 group-hover:translate-x-1 transition-all duration-200" />
-              )}
-            </li>
-          </ul>
-        </nav>
-      </div>{" "}
-      {/* Main Content Area */}
-      <div className="flex-1 p-8">
-        <div className="mb-6 flex justify-between items-center">
+            </ul>
+          </nav>
+        </div>{" "}
+        {/* Main Content Area */}
+        <div className="flex-1 p-8">
+          <div className="mb-6 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800">
-            {activeSection === "dashboard" && "Dashboard Overview"}
-            {activeSection === "inventory" && "Vehicle Inventory"}
-            {activeSection === "financials" && "Financial Insights"}
-            {activeSection === "ai-support" && "AI Troubleshooting"}
-          </h1>
-          <div className="flex items-center space-x-4">
-            <MessageCircle className="text-gray-500 cursor-pointer" />
-            <Settings className="text-gray-500 cursor-pointer" />
+              {activeSection === "dashboard" && "Dashboard Overview"}
+              {activeSection === "inventory" && "Vehicle Inventory"}
+              {activeSection === "financials" && "Financial Insights"}
+              {activeSection === "ai-support" && "AI Troubleshooting"}
+            </h1>
+            <div className="flex items-center space-x-4">
+              <MessageCircle className="text-gray-500 cursor-pointer" />
+              <Settings className="text-gray-500 cursor-pointer" />
+            </div>
           </div>
+
+          {/* Dynamic Content Rendering */}
+          {activeSection === "dashboard" && renderDashboardSection()}
+          {activeSection === "inventory" ? renderVehicleSection() : null}
+          {activeSection === "ai-support" && renderDashboardSection()}
+          
+          {activeSection === "financials" && (
+            <FinancialInsights
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
+
+          {activeSection === "vehicleDashboard" && (
+            <VechtronDashboard
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
         </div>
-
-        {/* Dynamic Content Rendering */}
-        {activeSection === "dashboard" && renderDashboardSection()}
-        {activeSection === "inventory" && renderVehicleInventorySection()}
-        {activeSection === "ai-support" && renderDashboardSection()}
-        {activeSection === "financials" && (
-          <FinancialInsights
-            activeSection={activeSection}
-            setActiveSection={setActiveSection}
-          />
-        )}
-
-        {activeSection === "vehicleDashboard" && (
-          <VechtronDashboard
-            activeSection={activeSection}
-            setActiveSection={setActiveSection}
-          />
-        )}
       </div>
     </div>
   );

@@ -96,18 +96,18 @@ const VechtronDashboard = () => {
   ];
 
   return (
-    <div className="md:p-6 bg-gray-100 min-h-screen ">
+    <div className="md:p-6 bg-white min-h-screen ">
       <ToastContainer position="top-right" autoClose={3000} />
       {/* Header */}
       <div className="w-full md:w-11/12 mx-auto ">
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
             Vechtron AI Vehicle Dashboard
           </h1>
           <p className="text-gray-600">
             Vehicle ID: VEH-2024-001 | Toyota Camry 2020
           </p>
-        </div>
+        </div> */}
 
         <div className="w-full mx-auto p-0">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
@@ -142,7 +142,7 @@ const VechtronDashboard = () => {
               },
               {
                 label: "Engine Performance",
-                value: "90%",
+                value: "92% In the last 6 months",
                 color: "text-[#708090]",
                 icon: Car,
                 iconColor: "text-green-500",
@@ -162,17 +162,30 @@ const VechtronDashboard = () => {
                 iconColor: "text-[#1E3A8A]",
               },
             ].map((item, index) => (
-              <Card key={index} className="w-full lg:w-[280px] xl:w-[320px] ">
-                <CardContent className="py-4 flex flex-col justify-between h-32">
+              <Card key={index} className="min-w-[270px] w-full">
+                <CardContent className="py-4 flex shadow-lg items-center rounded-xl justify-between h-auto">
                   <div>
                     <p className="text-sm font-medium text-gray-500">
                       {item.label}
                     </p>
-                    <p className={`text-2xl font-bold ${item.color}`}>
-                      {item.value}
-                    </p>
+                    {item.value === "92% In the last 6 months" ? (
+                      <p className={`text-xl font-bold ${item.color}`}>
+                        <span className="block text-sm">92%</span>
+                        <span className="block text-xs text-gray-500">
+                          In the last 6 months
+                        </span>
+                      </p>
+                    ) : (
+                      <p className={`text-xl font-bold ${item.color}`}>
+                        {item.value}
+                      </p>
+                    )}
                   </div>
-                  <item.icon className={`h-8 w-8 ${item.iconColor} self-end`} />
+                  <div>
+                    <item.icon
+                      className={`h-8 w-8 ${item.iconColor} self-end`}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             ))}
