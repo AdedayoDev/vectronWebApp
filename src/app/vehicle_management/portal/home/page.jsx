@@ -16,6 +16,8 @@ import FinancialInsights from "../_component/FinancialInsights";
 import VechtronDashboard from "../../../../app/test/page";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@store/useStore";
+import Vehicle_Profile from "@app/vehicle_management/add_vehicle_profile/page";
 
 // Sample data structures
 const vehicleInventory = [
@@ -90,7 +92,18 @@ const aiTroubleshootingCases = [
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { user } = useAuthStore();
   const router = useRouter();
+
+  const isVehicleOwner = user?.is_vehicle_owner ?? false;
+
+  const renderVehicleSection = () => {
+    if (isVehicleOwner) {
+      return renderVehicleInventorySection();
+    } else {
+      return <Vehicle_Profile />;
+    }
+  };
 
   //  Render Dashboard
   const renderDashboardSection = () => (
@@ -196,63 +209,39 @@ const VehiclePortal = () => {
       </div>
     </div>
   );
-
-  // Render Vehicle Inventory
-  const renderVehicleInventorySection = () => (
-    <div className="bg-white shadow-lg rounded-lg p-6">
-      {/* Table layout */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border-gray-300">
-          {/* Table Header */}
-          <thead className="bg-gray-300 text-gray-800">
-            <tr>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                VehicleID
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Make
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Plate Number
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Model
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Year
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Colour
-              </th>
+ // Vehicle Inventory Section
+ const renderVehicleInventorySection = () => (
+  <div className="bg-white shadow-lg rounded-lg p-6">
+    <h2 className="text-xl font-semibold text-gray-800 mb-4">Vehicle Inventory</h2>
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border-gray-300">
+        <thead className="bg-gray-300 text-gray-800">
+          <tr>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Vehicle ID</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Make</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Plate Number</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Model</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Year</th>
+            <th className="py-3 px-4 text-left border-b border-gray-400">Colour</th>
+          </tr>
+        </thead>
+        <tbody className="text-gray-700">
+          {vehicleInventory.map((vehicle) => (
+            <tr key={vehicle.id} className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer">
+              <td className="py-3 px-4">{vehicle.id}</td>
+              <td className="py-3 px-4">{vehicle.make}</td>
+              <td className="py-3 px-4">{vehicle.plateNumber}</td>
+              <td className="py-3 px-4">{vehicle.model}</td>
+              <td className="py-3 px-4">{vehicle.year}</td>
+              <td className="py-3 px-4">{vehicle.colour}</td>
             </tr>
-          </thead>
-
-          {/* Table Body */}
-          <tbody className="text-gray-700">
-            {vehicleInventory.map((vehicle) => (
-              <tr
-                key={vehicle.id}
-                className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
-                onClick={() =>
-                  router.push("/vehicle_management/add_vehicle_profile")
-                }
-              >
-                <td className="py-3 px-4 flex flex-col items-center justify-center">
-                  <span>{vehicle.id}</span>
-                  <span>({vehicle.model})</span>
-                </td>
-                <td className="py-3 px-4">{vehicle.make}</td>
-                <td className="py-3 px-4">{vehicle.plateNumber}</td>
-                <td className="py-3 px-4">{vehicle.model}</td>
-                <td className="py-3 px-4">{vehicle.year}</td>
-                <td className="py-3 px-4">{vehicle.colour}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
-  );
+  </div>
+);
+
 
   return (
     <div className=" w-full bg-white">
@@ -388,7 +377,7 @@ const VehiclePortal = () => {
         {/* Main Content Area */}
         <div className="flex-1 p-8">
           <div className="mb-6 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-gray-800">
               {activeSection === "dashboard" && "Dashboard Overview"}
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
@@ -402,8 +391,9 @@ const VehiclePortal = () => {
 
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
-          {activeSection === "inventory" && renderVehicleInventorySection()}
+          {activeSection === "inventory" ? renderVehicleSection() : null}
           {activeSection === "ai-support" && renderDashboardSection()}
+          
           {activeSection === "financials" && (
             <FinancialInsights
               activeSection={activeSection}

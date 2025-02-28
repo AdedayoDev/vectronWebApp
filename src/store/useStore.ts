@@ -119,6 +119,7 @@ export const useAuthStore = create<AuthState>()(
           });
         }
       },
+      
       updateProfilePics: (profile: string) => {
         const currentUser = get().user;
         if (currentUser) {
