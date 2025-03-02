@@ -18,6 +18,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
 import Vehicle_Profile from "@app/vehicle_management/add_vehicle_profile/page";
+import DiagnosisInsights from "@app/vehicle_management/portal/_component/DiagnosisInsights";
 
 // Sample data structures
 const vehicleInventory = [
@@ -228,6 +229,8 @@ const VehiclePortal = () => {
       </div>
     </div>
   );
+
+
   // Vehicle Inventory Section
   const renderVehicleInventorySection = () => (
     <div className="bg-white shadow-lg rounded-lg p-6">
@@ -417,6 +420,7 @@ const VehiclePortal = () => {
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
+             
             </h1>
             <div className="flex items-center space-x-4">
               <select
@@ -436,10 +440,16 @@ const VehiclePortal = () => {
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
           {activeSection === "inventory" ? renderVehicleSection() : null}
-          {activeSection === "ai-support" && renderDashboardSection()}
+          {/* {activeSection === "ai-support" && renderDashboardSection()} */}
 
           {activeSection === "financials" && (
             <FinancialInsights
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
+          {activeSection === "ai-support" && (
+            <DiagnosisInsights
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
