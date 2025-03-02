@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
 import Vehicle_Profile from "@app/vehicle_management/add_vehicle_profile/page";
 
+
 // Sample data structures
 const vehicleInventory = [
   {
@@ -65,6 +66,26 @@ const vehicleInventory = [
   },
 ];
 
+const fetchVehicleList = async () => {
+    try {
+      const response = await api.get("/vehicle/api/v1/vehicles", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data);
+      if (response.status_code != 200 ) {
+        throw new Error('Failed to fetch vehicle list');
+      }
+      const data = await response.data.vehicles;
+      setVehicleList(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching vehicle list:', error);
+      toast.error('Failed to load vehicle list');
+      return [];
+    }
+  };
 const maintenanceSchedule = [
   {
     id: "MAINT-001",
@@ -94,7 +115,7 @@ const VehiclePortal = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { user } = useAuthStore();
   const router = useRouter();
-
+  const [vehicleList, setVehicleList] = useState([]);
   const isVehicleOwner = user?.is_vehicle_owner ?? false;
 
   const renderVehicleSection = () => {
@@ -119,7 +140,7 @@ const VehiclePortal = () => {
           </span>
         </div>
         <div className="space-y-3">
-          {vehicleInventory.map((vehicle) => (
+          {vehicleList.map((vehicle) => (
             <div
               key={vehicle.id}
               className="flex justify-between items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
