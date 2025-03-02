@@ -433,45 +433,17 @@ const VehiclePortal = () => {
             </div>
           </div>
 
-          {selectedVehicleData ? (
-            <div className="p-6 bg-white shadow-md rounded-lg">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                Vehicle Details
-              </h2>
-              <p className="text-gray-600 mt-2">
-                Model: {selectedVehicleData.model}
-              </p>
-              <p className="text-gray-600">
-                Status: {selectedVehicleData.status}
-              </p>
-              <p className="text-gray-600">
-                Mileage: {selectedVehicleData.mileage} km
-              </p>
-              <p className="text-gray-600">
-                Condition: {selectedVehicleData.condition}
-              </p>
-            </div>
-          ) : "No vehicle selected"
-          //  (
-          //   <>
-          //     {activeSection === "dashboard" && renderDashboardSection()}
-          //     {activeSection === "inventory" ? renderVehicleSection() : null}
-          //     {activeSection === "ai-support" && renderDashboardSection()}
-          //     {activeSection === "financials" && (
-          //       <FinancialInsights
-          //         activeSection={activeSection}
-          //         setActiveSection={setActiveSection}
-          //       />
-          //     )}
-          //     {activeSection === "vehicleDashboard" && (
-          //       <VechtronDashboard
-          //         activeSection={activeSection}
-          //         setActiveSection={setActiveSection}
-          //       />
-          //     )}
-          //   </>
-          // )
-          }
+          {/* Dynamic Content Rendering */}
+          {activeSection === "dashboard" && renderDashboardSection()}
+          {activeSection === "inventory" ? renderVehicleSection() : null}
+          {activeSection === "ai-support" && renderDashboardSection()}
+
+          {activeSection === "financials" && (
+            <FinancialInsights
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
 
           {activeSection === "vehicleDashboard" && (
             <VechtronDashboard

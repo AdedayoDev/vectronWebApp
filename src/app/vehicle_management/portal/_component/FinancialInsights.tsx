@@ -12,8 +12,17 @@ import {
   Legend,
 } from "chart.js";
 import { MessageCircle } from "lucide-react";
+import CustomChatPopup from "./ChatPopup";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface Graph {
   id: number;
@@ -23,6 +32,9 @@ interface Graph {
 const FinancialInsights: React.FC = () => {
   // Labels for X-Axis
   const labels: string[] = ["July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const toggleChat = () => setIsChatOpen((prev) => !prev);
 
   // Ensure the Y-Axis labels always display these values
   const yAxisTicks = {
@@ -49,14 +61,18 @@ const FinancialInsights: React.FC = () => {
   };
 
   // State for selected months & graph data
-  const [selectedMonths, setSelectedMonths] = useState<{ [key: number]: string }>(
+  const [selectedMonths, setSelectedMonths] = useState<{
+    [key: number]: string;
+  }>(
     graphs.reduce((acc, graph) => {
       acc[graph.id] = "Last 6 Months";
       return acc;
     }, {} as { [key: number]: string })
   );
 
-  const [graphData, setGraphData] = useState<{ [key: number]: number[] }>(defaultGraphData);
+  const [graphData, setGraphData] = useState<{ [key: number]: number[] }>(
+    defaultGraphData
+  );
 
   // Function to adjust graph dynamically based on the selected range
   const adjustGraphData = (data: number[], months: string) => {
@@ -80,10 +96,22 @@ const FinancialInsights: React.FC = () => {
 
       setTimeout(() => {
         setGraphData({
-          1: adjustGraphData([10000, 18000, 25000, 19000, 30000, 22000], selectedMonths[1]),
-          2: adjustGraphData([22000, 25000, 20000, 27000, 24000, 28000], selectedMonths[2]),
-          3: adjustGraphData([15000, 20000, 18000, 21000, 23000, 19000], selectedMonths[3]),
-          4: adjustGraphData([10000, 17000, 13000, 18000, 16000, 20000], selectedMonths[4]),
+          1: adjustGraphData(
+            [10000, 18000, 25000, 19000, 30000, 22000],
+            selectedMonths[1]
+          ),
+          2: adjustGraphData(
+            [22000, 25000, 20000, 27000, 24000, 28000],
+            selectedMonths[2]
+          ),
+          3: adjustGraphData(
+            [15000, 20000, 18000, 21000, 23000, 19000],
+            selectedMonths[3]
+          ),
+          4: adjustGraphData(
+            [10000, 17000, 13000, 18000, 16000, 20000],
+            selectedMonths[4]
+          ),
         });
       }, 500); // Simulated quick API response
     };
@@ -122,7 +150,11 @@ const FinancialInsights: React.FC = () => {
                 </select>
 
                 {/* Message Icon */}
-                <MessageCircle className="h-5 w-5 text-gray-500 cursor-pointer hover:text-gray-700" />
+                <MessageCircle
+                  className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-700"
+                  onClick={toggleChat}
+                />
+                {isChatOpen && <CustomChatPopup onClose={toggleChat} />}
               </div>
             </div>
 
@@ -151,13 +183,14 @@ const FinancialInsights: React.FC = () => {
                       max: 100000,
                       ticks: {
                         stepSize: 25000,
-                        callback: (value: number | string) => value.toLocaleString(),
+                        callback: (value: number | string) =>
+                          value.toLocaleString(),
                       } as any,
                     },
                   },
                   plugins: {
                     legend: {
-                      display: false, 
+                      display: false,
                     },
                     tooltip: {
                       callbacks: {
