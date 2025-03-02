@@ -35,6 +35,8 @@ export default function VehicleForm() {
     year: "",
     registrationNumber: "",
     vin: "",
+    name: "",
+    vehicleType: "",
   });
   const [makes, setMakes] = useState<Make[]>([]);
   const [models, setModels] = useState<Model[]>([]);
@@ -54,10 +56,10 @@ export default function VehicleForm() {
           "https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json"
         );
         const data: APIResponse<Make> = await response.json();
-        console.log('Makes loaded:', data.Results);
+        // console.log('Makes loaded:', data.Results);
         setMakes(data.Results);
       } catch (error) {
-        console.error("Error fetching makes:", error);
+        // console.error("Error fetching makes:", error);
         toast.error("Failed to load makes");
       }
     };
@@ -110,7 +112,7 @@ export default function VehicleForm() {
       setModels(validModels);
       setNoModelsFound(validModels.length === 0);
     } catch (error) {
-      console.error("Error fetching models:", error);
+      // console.error("Error fetching models:", error);
       toast.error("Failed to load models");
     } finally {
       setIsLoadingModels(false);
@@ -156,16 +158,19 @@ export default function VehicleForm() {
 
     try {
       const vehicleData = {
-        license_plate: formData.registrationNumber || "NA",
         make: formData.make,
         model: formData.model,
-        vin: formData.vin || "NA",
         year: parseInt(formData.year),
+        name: formData.name,
+        type: formData.vehicleType,
+        ...(formData.registrationNumber ? { license_plate: formData.registrationNumber } : {}),
+        ...(formData.vin ? { vin: formData.vin } : {})
       };
+      console.log(vehicleData);
 
       const response = await api.post("/vehicle/api/v1/vehicles/create", vehicleData);
-
-      if (response.status_code === 201) {
+      console.log(response);
+      if (response.status_code === 200) {
         toast.success("Vehicle profile created successfully!");
         setTimeout(() => router.push("/chat"), 2000);
       }
@@ -260,6 +265,36 @@ export default function VehicleForm() {
             value={formData.registrationNumber}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, registrationNumber: e.target.value }))
+            }
+          />
+        </div>
+
+        <div>
+        <Label>Vehicle Type</Label>
+        <select
+          value={formData.vehicleType}
+          onChange={(e) => setFormData({...formData, vehicleType: e.target.value})}
+          className="w-full px-3 py-2 border rounded-md"
+        >
+          <option value="" disabled>Select vehicle type...</option>
+          <option value="internal_combustion">Internal Combustion Engine</option>
+          <option value="electric_vehicle">EV</option>
+          <option value="hybrid">HYBRID</option>
+          <option value="plug_in_hybrid">Plug in Hybrid</option>
+          <option value="fuel_cell">Fuel Cell Ellectric</option>
+          <option value="other">OTHER</option>
+        </select>
+      </div>
+
+        {/* Registration Number Input */}
+        <div>
+          <Label>Nick Name (Required)</Label>
+          <Input
+            type="text"
+            placeholder="Enter License Plate"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
             }
           />
         </div>
