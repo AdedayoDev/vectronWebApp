@@ -26,9 +26,11 @@ export default function Vehicle_Profile() {
     year: "",
     model: "",
     plate: "",
-    mileage: "",
+    odometer_unit: "",
+    odometer: "",
   });
   const [basicInfo, setBasicInfo] = useState({});
+  const [editInfo, setEditInfo] = useState({});
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
 
@@ -38,7 +40,6 @@ export default function Vehicle_Profile() {
       vehicleId,
       type,
       make,
-      trim,
       vin,
       nickname,
       year,
@@ -65,9 +66,43 @@ export default function Vehicle_Profile() {
     return validationErrors;
   };
 
-  function handleEdit() {
+  async function handleEdit() {
     const id = searchParams.get("id");
-    router.push(`/vehicle_management/vehicle_profile?id=${id}`);
+
+    try {
+      const editInfo = {
+        name: formData.nickname,
+        vin: formData.vin,
+        license_plate: formData.license_plate,
+        odometer_unit: formData.odometer_unit,
+        odometer: formData.odometer,
+        year: basicInfo.year,
+        make: basicInfo.make,
+        model: basicInfo.model,
+        type: basicInfo.type,
+      };
+      console.log(editInfo)
+      const response = await api.put(`/vehicle/api/v1/vehicles/${id}`, editInfo);
+
+      if (response.status_code === 201 || response.status_code === 204) {
+        setAlert("Vehicle updated successfully!");
+        setShowModal(false);
+
+        setTimeout(() => {
+          setAlert("");
+          router.push("/vehicle_management/vehicle_profile_list");
+        }, 3000);
+      } else {
+        throw new Error("Failed to update vehicle. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating vehicle:", error.message);
+
+      setError(
+        "An error occurred while updating the vehicle. Please try again."
+      );
+      setTimeout(() => setError(""), 3000);
+    }
   }
 
   const handleDelete = async () => {
@@ -125,15 +160,16 @@ export default function Vehicle_Profile() {
               year: vehicle.year || "",
               make: vehicle.make || "",
               model: vehicle.model || "",
-              vin: vehicle.vin || "",
+              type: vehicle.type?.toString() || "",
+              
             });
 
             setFormData({
-              nickname: vehicle.nickname || "",
-              type: vehicle.type?.toString() || "",
-              trim: vehicle.trim || "",
+              nickname: vehicle.name || "",
+              vin: vehicle.vin || "",
               license_plate: vehicle.license_plate || "",
-              mileage: vehicle.mileage?.toString() || "",
+              odometer_unit: vehicle.odometer_unit?.toString() || "",
+              odometer: vehicle.odometer?.toString() || "",
             });
           }
         } catch (error) {
@@ -225,7 +261,7 @@ export default function Vehicle_Profile() {
                               type="text"
                               name={field}
                               value={value || ""}
-                              disabled={!isEditing}
+                              onChange={handleChange}
                               className="w-full lg:w-[361px] mb-3 px-4 text-black outline-none py-2 border rounded-md bg-gray-100"
                             />
                           </div>
@@ -243,7 +279,7 @@ export default function Vehicle_Profile() {
                   onClick={handleEdit}
                   className="px-6 py-2 w-36 bg-blue-800 text-white font-medium rounded-full focus:bg-blue-600 focus:outline-none"
                 >
-                  Edit
+                  Update
                 </button>
                 <button
                   onClick={openConfirmModal}

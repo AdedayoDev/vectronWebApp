@@ -2,7 +2,7 @@ import axios from "axios";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-const BASE_URL = "https://api-staging.vechtron.com/auth/api/v1/auth/account";
+const BASE_URL = "https://api-staging.vechtron.com/auth/api/v1/auth";
 
 // Create axios instance with base configuration
 const axiosInstance = axios.create({
@@ -33,6 +33,7 @@ interface AuthState {
   setToken: (token: string | null) => void;
   setRefreshToken: (token: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
+  googlelogin: (token: string) => Promise<void>;
   logout: () => void;
   updateUserVerification: () => void;
   updateVehicleOwnerStatus: (status: boolean) => void;
@@ -68,9 +69,32 @@ export const useAuthStore = create<AuthState>()(
       login: async (email, password) => {
         set({ isLoading: true });
         try {
-          const response = await axiosInstance.post("/login", { email, password });
+          const response = await axiosInstance.post( "/account/login", { email, password });
           const { user, access_token, refresh_token } = response.data.data;
 
+          // Update state and set Authorization header
+          set({
+            user,
+            token: access_token,
+            refreshToken: refresh_token,
+          });
+          axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+          console.log("Bearer token for Postman:", access_token);
+        } catch (error) {
+          console.error("Error during login:", error);
+          throw error;
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      googlelogin: async (token) => {
+        set({ isLoading: true });
+        try {
+          console.log( "token",token)
+          const response = await axiosInstance.post("/google/oauth2callback", { token });
+          const { user, access_token, refresh_token } = response.data.data;
+           console.log( "token",token)
           // Update state and set Authorization header
           set({
             user,

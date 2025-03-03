@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import GraphCard from "@app/vehicle_management/portal/_component/GraphCard";
 import { graphs } from "@app/vehicle_management/portal/_component/Graph";
@@ -33,6 +33,11 @@ import {
   HeartPulseIcon,
   GaugeCircle,
 } from "lucide-react";
+import api from "../../lib/protectedapi";
+
+
+
+
 
 const VechtronDashboard = () => {
   const [showCalendar, setShowCalendar] = useState(null);
@@ -52,6 +57,52 @@ const VechtronDashboard = () => {
       `Reminder set for ${reminder.title} on ${reminder.date} at ${reminder.time} (${reminder.timeZone})`
     );
   };
+
+//   const vehiclesData = {
+//     'VEH-2024-001': {
+//       model: 'Toyota Camry 2020',
+//       performanceData: [
+//         { name: 'Jan', efficiency: 85, health: 90, mileage: 2500 },
+//         { name: 'Feb', efficiency: 82, health: 88, mileage: 2300 },
+//         { name: 'Mar', efficiency: 88, health: 85, mileage: 2800 },
+//         { name: 'Apr', efficiency: 86, health: 82, mileage: 2400 },
+//       ],
+//       alerts: [
+//         { id: 1, type: 'critical', message: 'Engine temperature high', component: 'Engine', time: '10 min ago' },
+//         { id: 2, type: 'warning', message: 'Oil change due', component: 'Maintenance', time: '1 hour ago' },
+//         { id: 3, type: 'info', message: 'Tire pressure optimal', component: 'Tires', time: '2 hours ago' },
+//       ],
+//        fuelEfficiency: 28,
+//       activeAlerts: 3,
+//       nextService: 15,
+//       enginePerformance: 92,
+//       batteryHealth: 88,
+//       avgSpeed: 45,
+//       fuelEconomy: 28
+//     },
+//     'VEH-2024-002': {
+//       model: 'Honda Civic 2021',
+//       performanceData: [
+//         { name: 'Jan', efficiency: 87, health: 92, mileage: 2200 },
+//         { name: 'Feb', efficiency: 85, health: 90, mileage: 2100 },
+//         { name: 'Mar', efficiency: 90, health: 88, mileage: 2400 },
+//         { name: 'Apr', efficiency: 88, health: 86, mileage: 2300 },
+//       ],
+//       alerts: [
+//         { id: 1, type: 'warning', message: 'Low tire pressure', component: 'Tires', time: '30 min ago' },
+//         { id: 2, type: 'info', message: 'Routine check completed', component: 'Maintenance', time: '2 hours ago' },
+//       ],
+//       overallHealth: 88,
+//       fuelEfficiency: 32,
+//       activeAlerts: 2,
+//       nextService: 20,
+//       enginePerformance: 95,
+//       batteryHealth: 90,
+//       avgSpeed: 48,
+//       fuelEconomy: 32
+//     }
+//   };
+
 
   const performanceData = [
     { name: "Jan", efficiency: 85, health: 90, mileage: 2500 },
@@ -94,10 +145,199 @@ const VechtronDashboard = () => {
       done: "Done",
     },
   ];
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+// const currentVehicleData = vehiclesData[selectedVehicle];
+const [vehicleData, setVehicleData] = useState(null);
+const [loading, setLoading] = useState(true);
+const [vehicleList, setVehicleList] = useState([]);
 
+
+  // Function to fetch vehicle list
+  const fetchVehicleList = async () => {
+    try {
+      const response = await api.get("/vehicle/api/v1/vehicles", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data);
+      if (response.status_code != 200 ) {
+        throw new Error('Failed to fetch vehicle list');
+      }
+      const data = await response.data.vehicles;
+      setVehicleList(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching vehicle list:', error);
+      toast.error('Failed to load vehicle list');
+      return [];
+    }
+  };
+const fetchVehicleData = async (vehicleId) => {
+    setLoading(true);
+    try {
+      // Initialize vehicle data structure with default values
+      const vehicleDataStructure = {
+        model: "Unknown Model",
+        performanceData: [
+          { name: "Jan", efficiency: 85, health: 90, mileage: 2500 },
+          { name: "Feb", efficiency: 82, health: 88, mileage: 2300 },
+          { name: "Mar", efficiency: 88, health: 85, mileage: 2800 },
+          { name: "Apr", efficiency: 86, health: 82, mileage: 2400 },
+        ],
+        alerts: [
+          { id: 1, type: "info", message: "No alerts available", component: "System", time: "now" }
+        ],
+        overallHealth: 85,
+        fuelEfficiency: 28,
+        activeAlerts: 0,
+        nextService: 30,
+        enginePerformance: 90,
+        batteryHealth: 85,
+        avgSpeed: 45,
+        fuelEconomy: 28
+      };
+      
+      // Fetch maintenance data - currently the only available endpoint
+      const maintenanceResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/due-maintenance`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      
+      if (maintenanceResponse.status === "success" ) {
+        const maintenanceData = await maintenanceResponse;
+        console.log(maintenanceData.data)
+        if (maintenanceData.status === "success" && maintenanceData.data.due_maintenance) {
+          // Generate alerts based on maintenance data
+          console.log(maintenanceData.data.due_maintenance)
+          const maintenanceAlerts = maintenanceData.data.due_maintenance.map((item, index) => {
+            // Convert snake_case to readable format and capitalize first letter
+            const formattedItem = item.split('_')
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+            
+            return {
+              id: index + 1,
+              type: index < 3 ? "warning" : "info", // First 3 items as warnings
+              message: `${formattedItem} needed`,
+              component: "Maintenance",
+              time: "Recently detected"
+            };
+          });
+          
+          // Update the data structure with maintenance information
+          vehicleDataStructure.alerts = maintenanceAlerts;
+          vehicleDataStructure.activeAlerts = maintenanceAlerts.length;
+          
+          // Calculate next service date (random value between 1-30 days based on maintenance items)
+          vehicleDataStructure.nextService = Math.max(1, Math.min(30, 30 - maintenanceAlerts.length));
+        }
+      }
+      
+      // Try to fetch vehicle details (for when this endpoint becomes available)
+      try {
+        const maintenancescheduleResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/maintenance-requirements`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        if (maintenancescheduleResponse.status === "success") {
+          const detailsData = await maintenancescheduleResponse;
+          if (detailsData.status === "success" && detailsData.data) {
+            // Update vehicle details if available
+            vehicleDataStructure.maintenanceschedule = detailsData.data.requirements || vehicleDataStructure.model;
+            // Add any other fields that become available
+          }
+        }
+      } catch (error) {
+        console.log("Vehicle details endpoint not yet available");
+      }
+      
+      // Try to fetch performance data (for when this endpoint becomes available)
+      try {
+        const performanceResponse = await fetch(`/api/v1/vehicles/${vehicleId}/performance`);
+        if (performanceResponse.ok) {
+          const performanceData = await performanceResponse.json();
+          if (performanceData.status === "success" && performanceData.data) {
+            // Update performance data if available
+            if (performanceData.data.metrics) {
+              vehicleDataStructure.performanceData = performanceData.data.metrics;
+            }
+            if (performanceData.data.overall_health) {
+              vehicleDataStructure.overallHealth = performanceData.data.overall_health;
+            }
+            if (performanceData.data.engine_performance) {
+              vehicleDataStructure.enginePerformance = performanceData.data.engine_performance;
+            }
+            // Add any other fields that become available
+          }
+        }
+      } catch (error) {
+        console.log("Performance endpoint not yet available");
+      }
+      
+      // Set the constructed data
+      setVehicleData(vehicleDataStructure);
+    } catch (error) {
+      console.error('Error fetching vehicle data:', error);
+      toast.error(`Failed to load data for vehicle ${vehicleId}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const initializeDashboard = async () => {
+      const vehicles = await fetchVehicleList();
+      if (vehicles.length > 0) {
+        setSelectedVehicle(vehicles[0].id);
+        await fetchVehicleData(vehicles[0].id);
+      }
+    };
+    
+    initializeDashboard();
+  }, []);
+
+  useEffect(() => {
+    if (selectedVehicle) {
+      fetchVehicleData(selectedVehicle);
+    }
+  }, [selectedVehicle]);
+
+
+  const handleVehicleChange = (e) => {
+    setSelectedVehicle(e.target.value);
+  };
+
+  if (loading || !vehicleData) {
+    return (
+      <div className="md:p-6 bg-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-xl font-semibold">Loading vehicle data...</p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="md:p-6 bg-white min-h-screen ">
       <ToastContainer position="top-right" autoClose={3000} />
+      <div className="w-full flex justify-end mb-8">
+      <div className=" w-64 flex items-center space-x-4" position="top-right">
+      <select 
+            value={selectedVehicle} 
+            onChange={handleVehicleChange}
+            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            {vehicleList.map((vehicle) => (
+              <option key={vehicle.id} value={vehicle.id}>
+                {vehicle.id} - {vehicle.model}
+              </option>
+            ))}
+          </select>
+        </div>
+        </div>
       {/* Header */}
       <div className="w-full md:w-11/12 mx-auto ">
         {/* <div className="mb-6">
@@ -110,6 +350,7 @@ const VechtronDashboard = () => {
         </div> */}
 
         <div className="w-full mx-auto p-0">
+
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {[
               {
@@ -247,7 +488,7 @@ const VechtronDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {alerts.map((alert) => (
+              {vehicleData.alerts.map((alert) => (
                 <div
                   key={alert.id}
                   className={`p-4 rounded-lg flex items-center justify-between ${
@@ -303,7 +544,7 @@ const VechtronDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {["Oil Change", "Tire Rotation", "Brake Inspection"].map(
+              {vehicleData.maintenanceschedule.map(
                 (title) => (
                   <div
                     key={title}
