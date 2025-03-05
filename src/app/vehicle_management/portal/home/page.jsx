@@ -18,6 +18,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
 import Vehicle_Profile from "@app/vehicle_management/add_vehicle_profile/page";
+import DiagnosisInsights from "@app/vehicle_management/portal/_component/DiagnosisInsights";
 
 
 // Sample data structures
@@ -113,6 +114,8 @@ const aiTroubleshootingCases = [
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
+  const [selectedVehicleData, setSelectedVehicleData] = useState(null);
   const { user } = useAuthStore();
   const router = useRouter();
   const [vehicleList, setVehicleList] = useState([]);
@@ -124,6 +127,23 @@ const VehiclePortal = () => {
     } else {
       return <Vehicle_Profile />;
     }
+  };
+
+  // Function to fetch vehicle data from backend
+  const fetchVehicleData = async (vehicleId) => {
+    try {
+      const response = await fetch(`/api/vehicles/${vehicleId}`);
+      const data = await response.json();
+      setSelectedVehicleData(data);
+    } catch (error) {
+      console.error("Error fetching vehicle data:", error);
+    }
+  };
+
+  // Handle vehicle selection from dropdown
+  const handleVehicleSelect = (vehicleId) => {
+    setSelectedVehicleId(vehicleId);
+    fetchVehicleData(vehicleId);
   };
 
   //  Render Dashboard
@@ -230,39 +250,57 @@ const VehiclePortal = () => {
       </div>
     </div>
   );
- // Vehicle Inventory Section
- const renderVehicleInventorySection = () => (
-  <div className="bg-white shadow-lg rounded-lg p-6">
-    <h2 className="text-xl font-semibold text-gray-800 mb-4">Vehicle Inventory</h2>
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border-gray-300">
-        <thead className="bg-gray-300 text-gray-800">
-          <tr>
-            <th className="py-3 px-4 text-left border-b border-gray-400">Vehicle ID</th>
-            <th className="py-3 px-4 text-left border-b border-gray-400">Make</th>
-            <th className="py-3 px-4 text-left border-b border-gray-400">Plate Number</th>
-            <th className="py-3 px-4 text-left border-b border-gray-400">Model</th>
-            <th className="py-3 px-4 text-left border-b border-gray-400">Year</th>
-            <th className="py-3 px-4 text-left border-b border-gray-400">Colour</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-700">
-          {vehicleInventory.map((vehicle) => (
-            <tr key={vehicle.id} className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer">
-              <td className="py-3 px-4">{vehicle.id}</td>
-              <td className="py-3 px-4">{vehicle.make}</td>
-              <td className="py-3 px-4">{vehicle.plateNumber}</td>
-              <td className="py-3 px-4">{vehicle.model}</td>
-              <td className="py-3 px-4">{vehicle.year}</td>
-              <td className="py-3 px-4">{vehicle.colour}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
 
+
+  // Vehicle Inventory Section
+  const renderVehicleInventorySection = () => (
+    <div className="bg-white shadow-lg rounded-lg p-6">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        Vehicle Inventory
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border-gray-300">
+          <thead className="bg-gray-300 text-gray-800">
+            <tr>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Vehicle ID
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Make
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Plate Number
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Model
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Year
+              </th>
+              <th className="py-3 px-4 text-left border-b border-gray-400">
+                Colour
+              </th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-700">
+            {vehicleInventory.map((vehicle) => (
+              <tr
+                key={vehicle.id}
+                className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
+              >
+                <td className="py-3 px-4">{vehicle.id}</td>
+                <td className="py-3 px-4">{vehicle.make}</td>
+                <td className="py-3 px-4">{vehicle.plateNumber}</td>
+                <td className="py-3 px-4">{vehicle.model}</td>
+                <td className="py-3 px-4">{vehicle.year}</td>
+                <td className="py-3 px-4">{vehicle.colour}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 
   return (
     <div className=" w-full bg-white">
@@ -398,25 +436,41 @@ const VehiclePortal = () => {
         {/* Main Content Area */}
         <div className="flex-1 p-8">
           <div className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-2xl font-bold text-gray-800">
               {activeSection === "dashboard" && "Dashboard Overview"}
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
+             
             </h1>
             <div className="flex items-center space-x-4">
-              <MessageCircle className="text-gray-500 cursor-pointer" />
-              <Settings className="text-gray-500 cursor-pointer" />
+              <select
+                className="bg-white border px-4 py-2 rounded-lg shadow-md cursor-pointer text-gray-700"
+                onChange={(e) => handleVehicleSelect(e.target.value)}
+                value={selectedVehicleId || ""}
+              >
+                {vehicleInventory.map((vehicle) => (
+                  <option key={vehicle.id} value={vehicle.id}>
+                    {vehicle.id} - {vehicle.model}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
           {activeSection === "inventory" ? renderVehicleSection() : null}
-          {activeSection === "ai-support" && renderDashboardSection()}
-          
+          {/* {activeSection === "ai-support" && renderDashboardSection()} */}
+
           {activeSection === "financials" && (
             <FinancialInsights
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
+          {activeSection === "ai-support" && (
+            <DiagnosisInsights
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />

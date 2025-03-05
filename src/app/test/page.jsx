@@ -324,7 +324,7 @@ const fetchVehicleData = async (vehicleId) => {
     <div className="md:p-6 bg-white min-h-screen ">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="w-full flex justify-end mb-8">
-      <div className=" w-64 flex items-center space-x-4" position="top-right">
+      <div className=" w-64 flex items-center space-x-4" >
       <select 
             value={selectedVehicle} 
             onChange={handleVehicleChange}
