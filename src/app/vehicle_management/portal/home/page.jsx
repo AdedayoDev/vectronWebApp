@@ -17,9 +17,8 @@ import VechtronDashboard from "../../../../app/test/page";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
-import Vehicle_Profile from "@app/vehicle_management/add_vehicle_profile/page";
 import DiagnosisInsights from "@app/vehicle_management/portal/_component/DiagnosisInsights";
-
+import AddVehicleOnly from "../_component/AddVehicleOnly";
 
 // Sample data structures
 const vehicleInventory = [
@@ -68,25 +67,25 @@ const vehicleInventory = [
 ];
 
 const fetchVehicleList = async () => {
-    try {
-      const response = await api.get("/vehicle/api/v1/vehicles", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response.data);
-      if (response.status_code != 200 ) {
-        throw new Error('Failed to fetch vehicle list');
-      }
-      const data = await response.data.vehicles;
-      setVehicleList(data);
-      return data;
-    } catch (error) {
-      console.error('Error fetching vehicle list:', error);
-      toast.error('Failed to load vehicle list');
-      return [];
+  try {
+    const response = await api.get("/vehicle/api/v1/vehicles", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.data);
+    if (response.status_code != 200) {
+      throw new Error("Failed to fetch vehicle list");
     }
-  };
+    const data = await response.data.vehicles;
+    setVehicleList(data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicle list:", error);
+    toast.error("Failed to load vehicle list");
+    return [];
+  }
+};
 const maintenanceSchedule = [
   {
     id: "MAINT-001",
@@ -125,7 +124,7 @@ const VehiclePortal = () => {
     if (isVehicleOwner) {
       return renderVehicleInventorySection();
     } else {
-      return <Vehicle_Profile />;
+      return <AddVehicleOnly />;
     }
   };
 
@@ -250,7 +249,6 @@ const VehiclePortal = () => {
       </div>
     </div>
   );
-
 
   // Vehicle Inventory Section
   const renderVehicleInventorySection = () => (
@@ -441,7 +439,6 @@ const VehiclePortal = () => {
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
-             
             </h1>
             <div className="flex items-center space-x-4">
               <select
@@ -461,7 +458,6 @@ const VehiclePortal = () => {
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
           {activeSection === "inventory" ? renderVehicleSection() : null}
-          {/* {activeSection === "ai-support" && renderDashboardSection()} */}
 
           {activeSection === "financials" && (
             <FinancialInsights
@@ -469,12 +465,16 @@ const VehiclePortal = () => {
               setActiveSection={setActiveSection}
             />
           )}
-          {activeSection === "ai-support" && (
-            <DiagnosisInsights
-              activeSection={activeSection}
-              setActiveSection={setActiveSection}
-            />
-          )}
+          {activeSection === "ai-support" &&
+            (vehicleList.length > 0 ? (
+              <DiagnosisInsights
+                activeSection={activeSection}
+                setActiveSection={setActiveSection}
+                vehicleList={vehicleList} 
+              />
+            ) : (
+              <AddVehicleOnly /> 
+            ))}
 
           {activeSection === "vehicleDashboard" && (
             <VechtronDashboard
