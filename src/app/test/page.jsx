@@ -199,31 +199,47 @@ const fetchVehicleData = async (vehicleId) => {
       };
       
       // Fetch maintenance data - currently the only available endpoint
-      const maintenanceResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/due-maintenance`, {
+      const maintenanceResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/maintenance-requirements`, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
-      
-      if (maintenanceResponse.status === "success" ) {
+      if (maintenanceResponse.status === "success") {
         const maintenanceData = await maintenanceResponse;
-        console.log(maintenanceData.data)
-        if (maintenanceData.status === "success" && maintenanceData.data.due_maintenance) {
+        console.log(maintenanceData.data);
+        
+        if (maintenanceData.status === "success" && maintenanceData.data.requirements) {
           // Generate alerts based on maintenance data
-          console.log(maintenanceData.data.due_maintenance)
-          const maintenanceAlerts = maintenanceData.data.due_maintenance.map((item, index) => {
-            // Convert snake_case to readable format and capitalize first letter
-            const formattedItem = item.split('_')
+          console.log(maintenanceData.data.requirements);
+          
+          const maintenanceAlerts = maintenanceData.data.requirements.map((item, index) => {
+            // Map risk level to alert type
+            let alertType;
+            switch (item.risk_level) {
+              case "high":
+                alertType = "critical";
+                break;
+              case "moderate":
+                alertType = "warning";
+                break;
+              case "low":
+              default:
+                alertType = "info";
+                break;
+            }
+            
+            // Format the type field to be more readable
+            const formattedType = item.type.split('_')
               .map(word => word.charAt(0).toUpperCase() + word.slice(1))
               .join(' ');
             
             return {
               id: index + 1,
-              type: index < 3 ? "warning" : "info", // First 3 items as warnings
-              message: `${formattedItem} needed`,
-              component: "Maintenance",
-              time: "Recently detected"
+              type: alertType,
+              message: `${formattedType} needed`,
+              component: `${item.description}`,
+              time: `${item.schedule_type}`
             };
           });
           
@@ -236,18 +252,20 @@ const fetchVehicleData = async (vehicleId) => {
         }
       }
       
-      // Try to fetch vehicle details (for when this endpoint becomes available)
+  
       try {
-        const maintenancescheduleResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/maintenance-requirements`, {
+        const maintenancescheduleResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/due-maintenance`, {
             headers: {
               "Content-Type": "application/json",
             },
           });
         if (maintenancescheduleResponse.status === "success") {
+            console.log("Got here");
+            console.log(maintenancescheduleResponse);
           const detailsData = await maintenancescheduleResponse;
-          if (detailsData.status === "success" && detailsData.data) {
+          if (detailsData.status === "success" && detailsData.data.due_maintenance) {
             // Update vehicle details if available
-            vehicleDataStructure.maintenanceschedule = detailsData.data.requirements || vehicleDataStructure.model;
+            vehicleDataStructure.maintenanceschedule = detailsData.data.due_maintenance || vehicleDataStructure.model;
             // Add any other fields that become available
           }
         }
@@ -257,7 +275,7 @@ const fetchVehicleData = async (vehicleId) => {
       
       // Try to fetch performance data (for when this endpoint becomes available)
       try {
-        const performanceResponse = await fetch(`/api/v1/vehicles/${vehicleId}/performance`);
+        const performanceResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/performance`);
         if (performanceResponse.ok) {
           const performanceData = await performanceResponse.json();
           if (performanceData.status === "success" && performanceData.data) {
@@ -504,7 +522,7 @@ const fetchVehicleData = async (vehicleId) => {
                       className={`h-5 w-5 ${
                         alert.type === "critical"
                           ? "text-red-500"
-                          : alert.type === "warning"
+                          : alert.type === "moderate"
                           ? "text-yellow-500"
                           : "text-blue-500"
                       }`}
@@ -544,24 +562,25 @@ const fetchVehicleData = async (vehicleId) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {vehicleData.maintenanceschedule.map(
-                (title) => (
-                  <div
-                    key={title}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium text-gray-900">{title}</p>
-                      <p className="text-sm text-gray-500">
-                        Click the calendar to set a reminder
-                      </p>
-                    </div>
-                    <button onClick={() => setShowCalendar(title)}>
-                      <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
-                    </button>
-                  </div>
-                )
-              )}
+   
+                {vehicleData.maintenanceschedule.map(
+                    (title) => (
+                      <div
+                        key={title}
+                        className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                      >
+                        <div>
+                          <p className="font-medium text-gray-900">{title}</p>
+                          <p className="text-sm text-gray-500">
+                            Click the calendar to set a reminder
+                          </p>
+                        </div>
+                        <button onClick={() => setShowCalendar(title)}>
+                          <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
+                        </button>
+                      </div>
+                    )
+                  )}
             </div>
 
             <div className=" px-6 py-4 shadow-lg rounded-xl my-6">
