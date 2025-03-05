@@ -6,6 +6,12 @@
     "react/no-unescaped-entities": "off",
     "react-hooks/exhaustive-deps": "off",
     "@next/next/no-img-element": "off",
-    "react/no-unknown-property": ["error", { "ignore": ["placeholder"] }]
+    "react/no-unknown-property": ["error", { "ignore": [
+        "clip-path", 
+        "stroke-width", 
+        "stroke-linecap", 
+        "stroke-linejoin",
+        "position"
+      ]  }]
   }
 }
