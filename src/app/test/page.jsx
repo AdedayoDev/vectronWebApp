@@ -7,6 +7,7 @@ import CalendarPopUp from "../vehicle_management/portal/_component/CalendarPopup
 import ReminderForm from "../vehicle_management/portal/_component/ReminderForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ServiceHistoryChat from '../vehicle_management/portal/_component/ServiceHistoryChat';
 
 import {
   LineChart,
@@ -214,6 +215,16 @@ const fetchVehicleData = async (vehicleId) => {
           console.log(maintenanceData.data.requirements);
           
           const maintenanceAlerts = maintenanceData.data.requirements.map((item, index) => {
+            if (!item || typeof item !== 'object' || !item.type || typeof item.type !== 'string') {
+                console.error("Invalid maintenance item:", item);
+                return {
+                  id: index + 1,
+                  type: "info",
+                  message: "Maintenance needed",
+                  component: "Maintenance",
+                  time: "Recently detected"
+                };
+              }
             // Map risk level to alert type
             let alertType;
             switch (item.risk_level) {
@@ -251,7 +262,7 @@ const fetchVehicleData = async (vehicleId) => {
           vehicleDataStructure.nextService = Math.max(1, Math.min(30, 30 - maintenanceAlerts.length));
         }
       }
-      
+      let activealertcount = 0;
   
       try {
         const maintenancescheduleResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/due-maintenance`, {
@@ -266,6 +277,7 @@ const fetchVehicleData = async (vehicleId) => {
           if (detailsData.status === "success" && detailsData.data.due_maintenance) {
             // Update vehicle details if available
             vehicleDataStructure.maintenanceschedule = detailsData.data.due_maintenance || vehicleDataStructure.model;
+            activealertcount = detailsData.data.due_maintenance.length;
             // Add any other fields that become available
           }
         }
@@ -275,24 +287,74 @@ const fetchVehicleData = async (vehicleId) => {
       
       // Try to fetch performance data (for when this endpoint becomes available)
       try {
-        const performanceResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/performance`);
-        if (performanceResponse.ok) {
-          const performanceData = await performanceResponse.json();
+        const performanceResponse = await api.get(`/vehicle/api/v1/vehicles/${vehicleId}/metrics`);
+        console.log("Got here to set the data");
+        if (performanceResponse.status === "success") {
+          const performanceData = await performanceResponse;
+          console.log("Got here to set the data 0");
           if (performanceData.status === "success" && performanceData.data) {
             // Update performance data if available
-            if (performanceData.data.metrics) {
-              vehicleDataStructure.performanceData = performanceData.data.metrics;
-            }
-            if (performanceData.data.overall_health) {
-              vehicleDataStructure.overallHealth = performanceData.data.overall_health;
-            }
-            if (performanceData.data.engine_performance) {
-              vehicleDataStructure.enginePerformance = performanceData.data.engine_performance;
-            }
+            console.log("Got here to set the data 1");
+                console.log(performanceData.data);
+              vehicleDataStructure.performanceData = performanceData.data;
+
+                  
+    // Create metrics array
+    const metricsArray = [
+        {
+          label: "Overall Health",
+          value: performanceData.overall_health ? `${performanceData.overall_health}` : "- %",
+          color: "text-green-600",
+          icon: Activity,
+          iconColor: "text-green-500",
+        },
+        {
+          label: "Fuel Efficiency",
+          value: performanceData.fuel_efficiency ? `${performanceData.fuel_efficiency} MPG` : "- MPG",
+          color: "text-blue-600",
+          icon: Gauge,
+          iconColor: "text-blue-500",
+        },
+        {
+          label: "Active Alerts",
+          value: activealertcount,
+          color: activealertcount > 0 ? "text-red-600" : "text-green-600",
+          icon: activealertcount > 0 ? AlertTriangle : CheckCircle,
+          iconColor: activealertcount > 0 ? "text-red-500" : "text-green-500",
+        },
+        {
+          label: "Engine Performance",
+          value: performanceData.engine_performance ? `${performanceData.engine_performance}%` : "- %",
+          color: "text-[#708090]",
+          icon: Car,
+          iconColor: "text-green-500",
+          subText: "In the last 6 months",
+        },
+        {
+          label: "Battery Health",
+          value: performanceData.battery_health ? `${performanceData.battery_health}%` : "- %",
+          color: "text-green-600",
+          icon: HeartPulseIcon,
+          iconColor: "text-green-500",
+        },
+        {
+          label: "Engine Temperature",
+          value: performanceData.engine_temp ? `${performanceData.engine_temp}°F` : "- °F",
+          color: "text-[#1E3A8A]",
+          icon: GaugeCircle,
+          iconColor: "text-[#1E3A8A]",
+        },
+      ];
+      
+      // Store the raw performance data in case it's needed elsewhere
+      vehicleDataStructure.rawPerformanceData = metricsArray;
+      
+        
             // Add any other fields that become available
           }
         }
       } catch (error) {
+        console.log(error);
         console.log("Performance endpoint not yet available");
       }
       
@@ -370,57 +432,7 @@ const fetchVehicleData = async (vehicleId) => {
         <div className="w-full mx-auto p-0">
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            {[
-              {
-                label: "Overall Health",
-                value: "85%",
-                color: "text-green-600",
-                icon: Activity,
-                iconColor: "text-green-500",
-              },
-              {
-                label: "Fuel Efficiency",
-                value: "28 MPG",
-                color: "text-blue-600",
-                icon: Gauge,
-                iconColor: "text-blue-500",
-              },
-              {
-                label: "Active Alerts",
-                value: "3",
-                color: "text-red-600",
-                icon: Bell,
-                iconColor: "text-red-500",
-              },
-              {
-                label: "Next Service",
-                value: "15 days",
-                color: "text-purple-600",
-                icon: Calendar,
-                iconColor: "text-purple-500",
-              },
-              {
-                label: "Engine Performance",
-                value: "92% In the last 6 months",
-                color: "text-[#708090]",
-                icon: Car,
-                iconColor: "text-green-500",
-              },
-              {
-                label: "Battery Health",
-                value: "88%",
-                color: "text-green-600",
-                icon: HeartPulseIcon,
-                iconColor: "text-green-500",
-              },
-              {
-                label: "Average Speed",
-                value: "45mph",
-                color: "text-[#1E3A8A]",
-                icon: GaugeCircle,
-                iconColor: "text-[#1E3A8A]",
-              },
-            ].map((item, index) => (
+            {vehicleData.rawPerformanceData.map((item, index) => (
               <Card key={index} className="min-w-[270px] w-full">
                 <CardContent className="py-4 flex shadow-lg items-center rounded-xl justify-between h-auto">
                   <div>
@@ -487,13 +499,17 @@ const fetchVehicleData = async (vehicleId) => {
                 <p className="text-sm font-medium text-gray-500">
                   Engine Performance
                 </p>
-                <p className="text-lg font-bold text-gray-900">92%</p>
+                <p className="text-lg font-bold text-gray-900">  {(!vehicleData.performanceData.engine_performance || vehicleData.performanceData.engine_performance === "No Data") 
+    ? "-" 
+    : `${vehicleData.performanceData.engine_performance}%`}</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm font-medium text-gray-500">
                   Battery Health
                 </p>
-                <p className="text-lg font-bold text-gray-900">88%</p>
+                <p className="text-lg font-bold text-gray-900">  {(!vehicleData.performanceData.battery_health || vehicleData.performanceData.battery_health === "No Data") 
+    ? "-" 
+    : `${vehicleData.performanceData.battery_health}%`}</p>
               </div>
             </div>
           </CardContent>
@@ -563,24 +579,28 @@ const fetchVehicleData = async (vehicleId) => {
           <CardContent>
             <div className="space-y-4">
    
-                {vehicleData.maintenanceschedule.map(
-                    (title) => (
-                      <div
-                        key={title}
-                        className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                      >
-                        <div>
-                          <p className="font-medium text-gray-900">{title}</p>
-                          <p className="text-sm text-gray-500">
-                            Click the calendar to set a reminder
-                          </p>
-                        </div>
-                        <button onClick={() => setShowCalendar(title)}>
-                          <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
-                        </button>
-                      </div>
-                    )
-                  )}
+            {vehicleData.maintenanceschedule.map((item) => (
+                <div
+                key={item.type}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                >
+                <div>
+                    <p className="font-medium text-gray-900">{item.description}</p>
+                    <p className="text-sm text-gray-500">
+                    {item.risk_level === "high" || item.risk_level === "critical" ? (
+                        <span className="text-red-500 font-medium">
+                        Priority: {item.risk_level.charAt(0).toUpperCase() + item.risk_level.slice(1)} risk
+                        </span>
+                    ) : (
+                        <>Interval: Every {item.interval_months} months or {item.interval_kilometers.toLocaleString()} km</>
+                    )}
+                    </p>
+                </div>
+                <button onClick={() => setShowCalendar(item.type)}>
+                    <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
+                </button>
+                </div>
+            ))}
             </div>
 
             <div className=" px-6 py-4 shadow-lg rounded-xl my-6">
@@ -596,22 +616,41 @@ const fetchVehicleData = async (vehicleId) => {
 
               {/* Bullets */}
               <div className="mt-8">
-                <ul className="list-disc pl-5 space-y-4 text-[#1c1c1c] text-sm">
-                  <li>Schedule a visit to change your coolant</li>
-                  <li>Consider changing your vehicle oil</li>
-                  <li>
-                    Your vehicle brake fluid is low, refill it as soon as
-                    possible
-                  </li>
-                </ul>
+  <ul className="list-disc pl-5 space-y-4 text-[#1c1c1c] text-sm">
+    {vehicleData.maintenanceschedule
+      .filter(item => item.risk_level === "high" || item.risk_level === "critical")
+      .map(item => (
+        <li key={item.type}>
+          {item.risk_level === "critical" ? (
+            <span className="font-medium">URGENT: {item.description}</span>
+          ) : (
+            <span>Schedule a visit to {item.description.toLowerCase()}</span>
+          )}
+        </li>
+      ))}
+    {vehicleData.maintenanceschedule.filter(item => 
+      item.risk_level === "high" || item.risk_level === "critical"
+    ).length === 0 && (
+      <li>No high-priority maintenance items at this time</li>
+    )}
+  </ul>
+
               </div>
             </div>
           </CardContent>
           {showCalendar && (
-            <CalendarPopUp
-              onClose={() => setShowCalendar(null)}
-              onSelectDate={(date) => handleSelectDate(date, showCalendar)}
-            />
+  <ServiceHistoryChat
+  onClose={() => setShowCalendar(null)}
+  maintenanceItem={vehicleData.maintenanceschedule.find(item => item.type === showCalendar)}
+  vehicleId={selectedVehicle}
+  onSuccess={(data) => {
+    // Handle successful submission
+    setShowCalendar(null);
+    
+    // Optionally refresh your data
+    // fetchMaintenanceData(vehicleId);
+  }}
+/>
           )}
 
           {showReminderForm && (
