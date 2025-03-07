@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -32,9 +33,15 @@ interface Graph {
 const FinancialInsights: React.FC = () => {
   // Labels for X-Axis
   const labels: string[] = ["July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+  const cardRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const [openPopups, setOpenPopups] = useState<{ [key: number]: boolean }>({});
 
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const toggleChat = () => setIsChatOpen((prev) => !prev);
+  const toggleChat = (id: number) => {
+    setOpenPopups((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   // Ensure the Y-Axis labels always display these values
   const yAxisTicks = {
@@ -128,7 +135,13 @@ const FinancialInsights: React.FC = () => {
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {graphs.map((graph) => (
-          <div key={graph.id} className="bg-gray-50 shadow-md rounded-lg p-4">
+          <div
+            key={graph.id}
+            ref={(el) => {
+              cardRefs.current[graph.id] = el;
+            }}
+            className="bg-gray-50 shadow-md rounded-lg p-4 relative"
+          >
             {/* Graph Title & Month Selector */}
             <div className="flex justify-between items-center mb-4 p-2 rounded-md">
               <h3 className="text-lg font-bold text-gray-800 px-6 py-2 rounded-lg bg-[#DBB4FF] truncate">
@@ -151,10 +164,23 @@ const FinancialInsights: React.FC = () => {
 
                 {/* Message Icon */}
                 <MessageCircle
-                  className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-700"
-                  onClick={toggleChat}
+                  className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-700 relative"
+                  onClick={() => toggleChat(graph.id)}
                 />
-                {isChatOpen && <CustomChatPopup onClose={toggleChat} />}
+
+               {/* Conditional Chat Popup */}
+            {openPopups[graph.id] && (
+              <div
+                className="absolute top-0 left-0 border border-red-600 w-full h-full  bg-black bg-opacity-10"
+                style={{ zIndex: 100, width: "90%" }}
+              >
+                <CustomChatPopup
+                  onClose={() => toggleChat(graph.id)}
+                  parentWidth={`${cardRefs.current[graph.id]?.clientWidth}px`}  
+                />
+              </div>
+            )}
+
               </div>
             </div>
 
@@ -162,14 +188,14 @@ const FinancialInsights: React.FC = () => {
             <div className="h-72">
               <Line
                 data={{
-                  labels: labels.slice(-graphData[graph.id].length), // Dynamically slice X-axis labels
+                  labels: labels.slice(-graphData[graph.id].length),
                   datasets: [
                     {
                       data: graphData[graph.id],
                       borderColor: "green",
                       backgroundColor: "rgba(0, 128, 0, 0.2)",
                       tension: 0.4,
-                      pointRadius: 0, // Remove dots at intersection points
+                      pointRadius: 0,
                       borderWidth: 3,
                     },
                   ],
@@ -201,6 +227,8 @@ const FinancialInsights: React.FC = () => {
                 }}
               />
             </div>
+
+           
           </div>
         ))}
       </div>

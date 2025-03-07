@@ -440,7 +440,7 @@ const VehiclePortal = () => {
 
               <li
                 className="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 text-gray-700 group"
-                onClick={() => router.push("/chat")}
+                onClick={() => router.push("/chat/chatdetail")}
               >
                 {/* Icon + Text */}
                 <div className="flex items-center space-x-3">
