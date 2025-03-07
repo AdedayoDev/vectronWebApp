@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface AddVehicleOnlyProps {}
 
 const AddVehicleOnly: React.FC<AddVehicleOnlyProps> = () => {
