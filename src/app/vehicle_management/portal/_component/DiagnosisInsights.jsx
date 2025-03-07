@@ -1,12 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaCog } from "react-icons/fa"; // Settings icon
-import { BadgeCheck, Exclamation, CheckCircle } from "lucide-react"; // Icons for status
-import { Wrench, Cpu } from "lucide-react"; // Icons for headers
+import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react"; // Icons for status and headers
+import Link from "next/link";
+import  AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
 
 const DiagnosisInsights = () => {
-  // Static data as per your instructions
+  
+  const [vehicleList, setVehicleList] = useState([
+    
+    { id: "VEH-001", model: "Toyota Camry", make: "Toyota" },
+    { id: "VEH-002", model: "Ford F-150", make: "Ford" },
+  ]);
+
+  // Static data for diagnosis insights
   const diagnosisData = [
     {
       title: "Coolant Level",
@@ -42,14 +50,14 @@ const DiagnosisInsights = () => {
     },
   ];
 
-  // Top Half: Diagnosis Insights Table
+  // Render diagnosis insights if vehicles are registered
   const renderDiagnosisTable = () => (
     <div className="w-full bg-white rounded-lg mb-6">
       <h2 className="text-xl font-semibold text-black bg-blue-200 w-4/12 mb-12 py-2 px-4 rounded-lg flex items-center">
         <Cpu className="mr-2" />
         Diagnosis Insights
       </h2>
-      <table className="min-w-full bg-white border-t border-gray-200 shadow-lg ">
+      <table className="min-w-full bg-white border-t border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-gray-200 text-gray-700">
             <th className="py-2 px-4 border-b">Title</th>
@@ -61,18 +69,12 @@ const DiagnosisInsights = () => {
           </tr>
         </thead>
         <tbody>
-          {diagnosisData.map((item, index) => (
+          {diagnosisData.map((item) => (
             <tr
               key={item.issueId}
               className="text-gray-800 hover:bg-gray-50 transition"
             >
-              <td
-                className={`py-2 px-4 border-b ${
-                  index === 0 ? "border-b-2 border-gray-400" : ""
-                }`}
-              >
-                {item.title}
-              </td>
+              <td className="py-2 px-4 border-b">{item.title}</td>
               <td className="py-2 px-4 border-b">{item.diagnosis}</td>
               <td className="py-2 px-4 border-b">
                 <span
@@ -97,7 +99,7 @@ const DiagnosisInsights = () => {
     </div>
   );
 
-  // Bottom Half: Maintenance Insights and AI Diagnosis
+  // Render Maintenance Insights
   const renderMaintenanceInsights = () => (
     <div className="w-full bg-white shadow-lg rounded-lg">
       <h2 className="text-xl font-semibold text-black  py-2 px-4 rounded-t-lg flex items-center">
@@ -105,13 +107,10 @@ const DiagnosisInsights = () => {
         Maintenance Insights
       </h2>
       <div className="p-6 flex flex-col items-center">
-        {/* AI Diagnosis Header */}
         <div className="flex items-center text-gray-700 mb-4">
           <FaCog className="text-xl mr-2" />
           <h3 className="text-lg font-semibold ">AI Diagnosis</h3>
         </div>
-
-        {/* Diagnosis Card */}
         <div className="bg-gray-50 p-4 rounded-lg shadow-md w-full max-w-xl">
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-md font-semibold text-gray-800">
@@ -133,10 +132,17 @@ const DiagnosisInsights = () => {
     </div>
   );
 
+  // Conditional rendering based on whether vehicles are registered
   return (
-    <div className="min-h-screen grid grid-rows-2 gap-6">
-      {renderDiagnosisTable()}
-      {renderMaintenanceInsights()}
+    <div className="min-h-screen p-6">
+      {vehicleList.length > 0 ? (
+        <>
+          {renderDiagnosisTable()}
+          {renderMaintenanceInsights()}
+        </>
+      ) : (
+        <AddVehiclePrompt /> 
+      )}
     </div>
   );
 };
