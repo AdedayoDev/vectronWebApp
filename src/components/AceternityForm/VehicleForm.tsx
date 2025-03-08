@@ -182,7 +182,7 @@ export default function VehicleForm() {
   };
 
   return (
-    <div className="max-w-xl border md:border-none px-6 w-full flex flex-col h-screen mx-auto rounded-md py-8 my-4 bg-white">
+    <div className="max-w-xl border md:border-none px-6 w-full flex flex-col h-auto mt-10 md: mb-0 mx-auto rounded-md  bg-white">
       <ToastContainer />
       <Link href="/onboarding">
         <div className="flex items-center mb-8">
