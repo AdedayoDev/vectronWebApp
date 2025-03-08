@@ -8,12 +8,12 @@ import UserOnboarding from "@components/Onboarding/UserOnboarding";
 
 export default function Onboarding() {
   return (
-    // <AuthProvider>
+    <AuthProvider>
       
-      // <ProtectedRoute>
+      <ProtectedRoute>
       
         <UserOnboarding />
-    //   </ProtectedRoute>
-    // </AuthProvider>
+      </ProtectedRoute>
+     </AuthProvider>
   );
 }

@@ -6,6 +6,7 @@ import Image from "next/image";
 
 interface ChatPopupProps {
   onClose: () => void;
+  parentWidth?: string;
 }
 
 interface Message {
@@ -13,10 +14,16 @@ interface Message {
   isUser: boolean;
 }
 
-const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const placeholderMessages: Message[] = [
+  { text: "Hi there! How can I assist you today?", isUser: false },
+  { text: "Can you tell me about your services?", isUser: true },
+  { text: "Sure! We offer a range of AI solutions.", isUser: false },
+];
+
+const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose, parentWidth }) => {
+  const [messages, setMessages] = useState<Message[]>(placeholderMessages); 
   const [inputValue, setInputValue] = useState("");
-  const messageEndRef = useRef<HTMLDivElement>(null);  // For auto-scroll
+  const messageEndRef = useRef<HTMLDivElement>(null);  
 
   // Scroll to bottom on new message
   useEffect(() => {
@@ -38,8 +45,16 @@ const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose }) => {
     }
   };
 
+  // Remove placeholders when user starts typing
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (messages === placeholderMessages) {
+      setMessages([]); 
+    }
+    setInputValue(e.target.value);
+  };
+
   return (
-    <div className="fixed bottom-20 right-4 bg-white shadow-lg rounded-2xl w-7/12 mx-auto p-4 z-50 animate-slide-up">
+    <div className="fixed bottom-20 right-4 bg-white shadow-lg rounded-2xl w-7/12 mx-auto p-4 z-50 animate-slide-up" style={{ width: parentWidth || "100%"}}>
       {/* Header with close and expand options */}
       <div className="flex justify-between items-center mb-2 border-b pb-2">
         <div className="flex items-center gap-2">
@@ -51,10 +66,14 @@ const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose }) => {
               className="object-cover"
             />
           </div>
-          
         </div>
         <div className="flex gap-2">
-          <Link href="/chat">
+          <Link 
+            href={{
+              pathname: "/chat/chatdetail",
+              query: { messages: JSON.stringify(messages) }  
+            }}
+          >
             <button className="text-blue-500 hover:text-blue-700 text-sm">
               Expand
             </button>
@@ -75,33 +94,32 @@ const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose }) => {
               key={index}
               className={`flex mb-2 ${msg.isUser ? "justify-end" : "justify-start"}`}
             >
-              {/* AI Message with Logo */}
               {!msg.isUser && (
                 <div className="flex items-center gap-2">
                   <div className="relative w-6 h-6 flex-shrink-0">
                     <Image
-                      src="/assets/icons/Media.jpeg (1).png"  
+                      src="/assets/icons/Media.jpeg (1).png"
                       alt="AI Logo"
                       fill
                       className="object-cover rounded-full"
                     />
                   </div>
-                  <div className="bg-white text-gray-800 shadow-sm p-2 rounded-md w-full ">
+                  <div className="bg-white text-gray-800 shadow-sm p-2 rounded-md w-full">
                     {msg.text}
                   </div>
                 </div>
               )}
-
-              {/* User Message */}
               {msg.isUser && (
-                <div className="bg-purple-100 text-[#333]  rounded-ss-xl shadow-sm p-2 rounded-md max-w-[70%] text-right">
+                <div  className={`${
+                  msg.isUser ? "bg-purple-100 text-right" : "bg-white"
+                } text-[#333] rounded-md shadow-sm p-2 max-w-[70%]`}>
                   {msg.text}
                 </div>
               )}
             </div>
           ))
         )}
-        <div ref={messageEndRef} /> 
+        <div ref={messageEndRef} />
       </div>
 
       {/* Message input */}
@@ -110,9 +128,9 @@ const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose }) => {
           type="text"
           placeholder="Type a message..."
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           className="border rounded-full p-2 w-full text-sm focus:outline-none focus:border-purple-500"
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}  
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button
           onClick={sendMessage}

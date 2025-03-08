@@ -20,7 +20,9 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
 import DiagnosisInsights from "@app/vehicle_management/portal/_component/DiagnosisInsights";
 import AddVehicleOnly from "../_component/AddVehicleOnly";
-import { Card } from "@components/ui/card";
+import { toast } from "react-toastify";
+import VehicleInventory from "../_component/VehicleInventory";
+
 // Sample data structures
 const vehicleInventory = [
   {
@@ -67,7 +69,26 @@ const vehicleInventory = [
   },
 ];
 
-
+const fetchVehicleList = async () => {
+  try {
+    const response = await api.get("/vehicle/api/v1/vehicles", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.data);
+    if (response.status_code != 200) {
+      throw new Error("Failed to fetch vehicle list");
+    }
+    const data = await response.data.vehicles;
+    setVehicleList(data);
+    return data;
+  } catch (error) {
+    console.error("Error fetching vehicle list:", error);
+    toast.error("Failed to load vehicle list");
+    return [];
+  }
+};
 const maintenanceSchedule = [
   {
     id: "MAINT-001",
@@ -100,11 +121,12 @@ const VehiclePortal = () => {
   const { user } = useAuthStore();
   const router = useRouter();
   const [vehicleList, setVehicleList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const isVehicleOwner = user?.is_vehicle_owner ?? false;
 
   const renderVehicleSection = () => {
     if (isVehicleOwner) {
-      return renderVehicleInventorySection();
+      return renderVehicleSection();
     } else {
       return <AddVehicleOnly />;
     }
@@ -115,6 +137,7 @@ const VehiclePortal = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        
       });
       console.log(response.data);
       if (response.status_code != 200) {
@@ -451,7 +474,7 @@ const VehiclePortal = () => {
 
               <li
                 className="flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all duration-300 hover:bg-gray-100 text-gray-700 group"
-                onClick={() => router.push("/chat")}
+                onClick={() => router.push("/chat/chatdetail")}
               >
                 {/* Icon + Text */}
                 <div className="flex items-center space-x-3">
@@ -499,7 +522,7 @@ const VehiclePortal = () => {
 
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
-          {activeSection === "inventory" ? renderVehicleSection() : null}
+          {activeSection === "inventory" && <VehicleInventory />}
 
           {activeSection === "financials" && (
             <FinancialInsights
@@ -520,6 +543,12 @@ const VehiclePortal = () => {
 
           {activeSection === "vehicleDashboard" && (
             <VechtronDashboard
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
+          {activeSection === "Vehicle Inventory" && (
+            <VehicleInventory
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
