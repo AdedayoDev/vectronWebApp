@@ -302,7 +302,7 @@ export default function VehicleForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-2 bg-blue-600 text-white rounded-md"
+          className="w-full py-2 bg-blue-600 text-white rounded-md cursor-pointer"
           disabled={
             isSubmitting || !formData.make || !formData.model || !formData.year || !!yearError
           }

@@ -19,7 +19,10 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
 import DiagnosisInsights from "@app/vehicle_management/portal/_component/DiagnosisInsights";
 import AddVehicleOnly from "../_component/AddVehicleOnly";
-import { Card } from "@components/ui/card";
+import api from "../../../../../src/lib/Api";
+import { toast } from "react-toastify";
+import VehicleInventory from "../_component/VehicleInventory";
+
 // Sample data structures
 const vehicleInventory = [
   {
@@ -78,7 +81,7 @@ const fetchVehicleList = async () => {
       throw new Error("Failed to fetch vehicle list");
     }
     const data = await response.data.vehicles;
-    setVehicleList(data);
+    fetchVehicleList(data);
     return data;
   } catch (error) {
     console.error("Error fetching vehicle list:", error);
@@ -118,11 +121,12 @@ const VehiclePortal = () => {
   const { user } = useAuthStore();
   const router = useRouter();
   const [vehicleList, setVehicleList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const isVehicleOwner = user?.is_vehicle_owner ?? false;
 
   const renderVehicleSection = () => {
     if (isVehicleOwner) {
-      return renderVehicleInventorySection();
+      return renderVehicleSection();
     } else {
       return <AddVehicleOnly />;
     }
@@ -144,192 +148,6 @@ const VehiclePortal = () => {
     setSelectedVehicleId(vehicleId);
     fetchVehicleData(vehicleId);
   };
-
-  //  Render Dashboard
-  // const renderDashboardSection = () => (
-  //   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 border border-red-500">
-  //     {/* Alerts and Maintenance Schedule Side by Side */}
-  //     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 col-span-2">
-  //       {/* Alerts */}
-  //       <Card>
-  //         <CardHeader>
-  //           <CardTitle>Alerts</CardTitle>
-  //         </CardHeader>
-  //         <CardContent>
-  //           <div className="space-y-4">
-  //             {vehicleData.alerts.map((alert) => (
-  //               <div
-  //                 key={alert.id}
-  //                 className={`p-4 rounded-lg flex items-center justify-between ${
-  //                   alert.type === "critical"
-  //                     ? "bg-red-100 border border-red-300"
-  //                     : alert.type === "warning"
-  //                     ? "bg-yellow-50 border border-yellow-300"
-  //                     : "bg-blue-100 border border-blue-300"
-  //                 }`}
-  //               >
-  //                 <div className="flex items-center space-x-3">
-  //                   <AlertTriangle
-  //                     className={`h-5 w-5 ${
-  //                       alert.type === "critical"
-  //                         ? "text-red-500"
-  //                         : alert.type === "moderate"
-  //                         ? "text-yellow-500"
-  //                         : "text-blue-500"
-  //                     }`}
-  //                   />
-  //                   <div>
-  //                     <p className="font-medium text-gray-900">
-  //                       {alert.message}
-  //                     </p>
-  //                     <p className="text-sm text-gray-500">
-  //                       {alert.component} | {alert.time}
-  //                     </p>
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </CardContent>
-  //       </Card>
-
-  //       {/* Maintenance Schedule */}
-  //       <Card>
-  //         <CardHeader>
-  //           <CardTitle>Maintenance Schedule</CardTitle>
-  //         </CardHeader>
-  //         <CardContent>
-  //           <div className="space-y-4">
-  //             {vehicleData.maintenanceschedule.map((title, index) => (
-  //               <div
-  //                 key={index}
-  //                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-  //               >
-  //                 <div>
-  //                   <p className="font-medium text-gray-900">{title}</p>
-  //                   <p className="text-sm text-gray-500">
-  //                     Click the calendar to set a reminder
-  //                   </p>
-  //                 </div>
-  //                 <button onClick={() => setShowCalendar(title)}>
-  //                   <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
-  //                 </button>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </CardContent>
-  //       </Card>
-  //     </div>
-
-  //     {/* Charts Section Directly Below Alerts and Maintenance */}
-  //     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 col-span-2">
-  //       <Card>
-  //         <CardHeader>
-  //           <CardTitle>Performance Metrics</CardTitle>
-  //         </CardHeader>
-  //         <CardContent>
-  //           <div className="h-80">
-  //             <ResponsiveContainer width="100%" height="100%">
-  //               <BarChart data={performanceData}>
-  //                 <CartesianGrid strokeDasharray="3 3" />
-  //                 <XAxis dataKey="name" />
-  //                 <YAxis />
-  //                 <Tooltip />
-  //                 <Legend />
-  //                 <Bar
-  //                   dataKey="mileage"
-  //                   fill="#8884d8"
-  //                   name="Monthly Mileage"
-  //                 />
-  //               </BarChart>
-  //             </ResponsiveContainer>
-  //           </div>
-  //         </CardContent>
-  //       </Card>
-
-  //       <Card>
-  //         <CardHeader>
-  //           <CardTitle>Vehicle Health Monitoring</CardTitle>
-  //         </CardHeader>
-  //         <CardContent>
-  //           <div className="h-80">
-  //             <ResponsiveContainer width="100%" height="100%">
-  //               <LineChart data={performanceData}>
-  //                 <CartesianGrid strokeDasharray="3 3" />
-  //                 <XAxis dataKey="name" />
-  //                 <YAxis />
-  //                 <Tooltip />
-  //                 <Legend />
-  //                 <Line
-  //                   type="monotone"
-  //                   dataKey="health"
-  //                   stroke="#10B981"
-  //                   name="Health Score"
-  //                 />
-  //                 <Line
-  //                   type="monotone"
-  //                   dataKey="efficiency"
-  //                   stroke="#3B82F6"
-  //                   name="Efficiency"
-  //                 />
-  //               </LineChart>
-  //             </ResponsiveContainer>
-  //           </div>
-  //         </CardContent>
-  //       </Card>
-  //     </div>
-  //   </div>
-  // );
-
-  // // Vehicle Inventory Section
-  // const renderVehicleInventorySection = () => (
-  //   <div className="bg-white shadow-lg rounded-lg p-6">
-  //     <h2 className="text-xl font-semibold text-gray-800 mb-4">
-  //       Vehicle Inventory
-  //     </h2>
-  //     <div className="overflow-x-auto">
-  //       <table className="min-w-full bg-white border-gray-300">
-  //         <thead className="bg-gray-300 text-gray-800">
-  //           <tr>
-  //             <th className="py-3 px-4 text-left border-b border-gray-400">
-  //               Vehicle ID
-  //             </th>
-  //             <th className="py-3 px-4 text-left border-b border-gray-400">
-  //               Make
-  //             </th>
-  //             <th className="py-3 px-4 text-left border-b border-gray-400">
-  //               Plate Number
-  //             </th>
-  //             <th className="py-3 px-4 text-left border-b border-gray-400">
-  //               Model
-  //             </th>
-  //             <th className="py-3 px-4 text-left border-b border-gray-400">
-  //               Year
-  //             </th>
-  //             <th className="py-3 px-4 text-left border-b border-gray-400">
-  //               Colour
-  //             </th>
-  //           </tr>
-  //         </thead>
-  //         <tbody className="text-gray-700">
-  //           {vehicleInventory.map((vehicle) => (
-  //             <tr
-  //               key={vehicle.id}
-  //               className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
-  //             >
-  //               <td className="py-3 px-4">{vehicle.id}</td>
-  //               <td className="py-3 px-4">{vehicle.make}</td>
-  //               <td className="py-3 px-4">{vehicle.plateNumber}</td>
-  //               <td className="py-3 px-4">{vehicle.model}</td>
-  //               <td className="py-3 px-4">{vehicle.year}</td>
-  //               <td className="py-3 px-4">{vehicle.colour}</td>
-  //             </tr>
-  //           ))}
-  //         </tbody>
-  //       </table>
-  //     </div>
-  //   </div>
-  // );
 
   return (
     <div className=" w-full bg-white">
@@ -488,7 +306,7 @@ const VehiclePortal = () => {
 
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
-          {activeSection === "inventory" ? renderVehicleSection() : null}
+          {activeSection === "inventory" && <VehicleInventory />}
 
           {activeSection === "financials" && (
             <FinancialInsights
@@ -507,6 +325,12 @@ const VehiclePortal = () => {
               <AddVehicleOnly />
             ))}
 
+          {activeSection === "vehicleDashboard" && (
+            <VechtronDashboard
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
           {activeSection === "vehicleDashboard" && (
             <VechtronDashboard
               activeSection={activeSection}
