@@ -4,14 +4,29 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@components/ui/card";
 import { toast } from "react-toastify";
-import api from "@lib/Api"
+import api from "@lib/Api";  // Ensure the import path is correct
 import AddVehicleOnly from "../_component/AddVehicleOnly";
+
+// Function to check if a vehicle has a complete profile
+const hasCompleteProfile = (vehicle) => {
+  // Check if essential fields are filled out
+  return (
+    vehicle.model &&
+    vehicle.type &&
+    vehicle.plateNumber &&
+    vehicle.status &&
+    vehicle.make &&
+    vehicle.year &&
+    vehicle.colour
+  );
+};
 
 const VehicleInventory = () => {
   const [vehicleList, setVehicleList] = useState([]);
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const [selectedVehicleData, setSelectedVehicleData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasRegisteredVehicle, setHasRegisteredVehicle] = useState(false);
 
   // Fetch vehicle list from the server
   const fetchVehicleList = async () => {
@@ -23,9 +38,13 @@ const VehicleInventory = () => {
         throw new Error("Failed to fetch vehicle list");
       }
       const data = response.data.vehicles;
-      setVehicleList(data);
+
       if (data.length > 0) {
-        setSelectedVehicleId(data[0].id);  // Select first vehicle by default
+        setVehicleList(data);
+        setHasRegisteredVehicle(true);
+        setSelectedVehicleId(data[0].id); // Select first vehicle by default
+      } else {
+        setHasRegisteredVehicle(false);
       }
     } catch (error) {
       console.error("Error fetching vehicle list:", error);
@@ -42,7 +61,13 @@ const VehicleInventory = () => {
         headers: { "Content-Type": "application/json" },
       });
       const data = response.data;
-      setSelectedVehicleData(data);
+
+      if (hasCompleteProfile(data)) {
+        setSelectedVehicleData(data);
+      } else {
+        toast.warn("Incomplete vehicle profile. Please update your vehicle information.");
+        setSelectedVehicleData(null);
+      }
     } catch (error) {
       console.error("Error fetching vehicle data:", error);
       toast.error(`Failed to load data for vehicle ${vehicleId}`);
@@ -65,10 +90,17 @@ const VehicleInventory = () => {
     setSelectedVehicleId(vehicleId);
   };
 
+  // Render loading state
   if (loading) {
     return <div>Loading vehicle inventory...</div>;
   }
 
+  // Render if no registered vehicles
+  if (!hasRegisteredVehicle) {
+    return <AddVehicleOnly />;
+  }
+
+  // Render if registered but no valid data
   if (vehicleList.length === 0) {
     return <AddVehicleOnly />;
   }
