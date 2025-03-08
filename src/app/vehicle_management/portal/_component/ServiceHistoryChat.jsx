@@ -34,7 +34,6 @@ const ServiceHistoryChat = ({
     risk_level: maintenanceItem.risk_level || "negligible",
     next_service_date: "",
     next_service_odometer: 0,
-    custom_next_service_date: "",
     custom_next_service_odometer: 0
   });
   

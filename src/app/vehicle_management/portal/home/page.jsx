@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Cpu,
 } from "lucide-react";
+import api from "../../../../lib/protectedapi";
 
 import FinancialInsights from "../_component/FinancialInsights";
 import VechtronDashboard from "../../../../app/test/page";
@@ -19,7 +20,6 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@store/useStore";
 import DiagnosisInsights from "@app/vehicle_management/portal/_component/DiagnosisInsights";
 import AddVehicleOnly from "../_component/AddVehicleOnly";
-import api from "../../../../../src/lib/Api";
 import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
 
@@ -81,7 +81,7 @@ const fetchVehicleList = async () => {
       throw new Error("Failed to fetch vehicle list");
     }
     const data = await response.data.vehicles;
-    fetchVehicleList(data);
+    setVehicleList(data);
     return data;
   } catch (error) {
     console.error("Error fetching vehicle list:", error);
@@ -89,7 +89,6 @@ const fetchVehicleList = async () => {
     return [];
   }
 };
-
 const maintenanceSchedule = [
   {
     id: "MAINT-001",
@@ -138,6 +137,7 @@ const VehiclePortal = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        
       });
       console.log(response.data);
       if (response.status_code != 200) {
