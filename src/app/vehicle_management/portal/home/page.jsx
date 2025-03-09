@@ -24,50 +24,50 @@ import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
 
 // Sample data structures
-const vehicleInventory = [
-  {
-    id: "VEH-001",
-    model: "Toyota Camry",
-    type: "Sedan",
-    status: "In Service",
-    lastMaintenance: "2024-01-15",
-    nextMaintenance: "2024-04-15",
-    mileage: 45230,
-    condition: "Good",
-    plateNumber: "MUS856KL",
-    make: "Toyota",
-    year: "2021",
-    colour: "Black",
-  },
-  {
-    id: "VEH-002",
-    model: "Ford F-150",
-    type: "Truck",
-    status: "Available",
-    lastMaintenance: "2024-01-10",
-    nextMaintenance: "2024-05-10",
-    mileage: 32450,
-    condition: "Excellent",
-    plateNumber: "IKD769FI",
-    make: "Toyota",
-    year: "2021",
-    colour: "Blue",
-  },
-  {
-    id: "VEH-003",
-    model: "Tesla",
-    type: "Truck",
-    status: "Available",
-    lastMaintenance: "2024-01-10",
-    nextMaintenance: "2024-05-10",
-    mileage: 32450,
-    condition: "Excellent",
-    plateNumber: "EKY5670P",
-    make: "Toyota",
-    year: "2021",
-    colour: "Wine",
-  },
-];
+// const vehicleInventory = [
+//   {
+//     id: "VEH-001",
+//     model: "Toyota Camry",
+//     type: "Sedan",
+//     status: "In Service",
+//     lastMaintenance: "2024-01-15",
+//     nextMaintenance: "2024-04-15",
+//     mileage: 45230,
+//     condition: "Good",
+//     plateNumber: "MUS856KL",
+//     make: "Toyota",
+//     year: "2021",
+//     colour: "Black",
+//   },
+//   {
+//     id: "VEH-002",
+//     model: "Ford F-150",
+//     type: "Truck",
+//     status: "Available",
+//     lastMaintenance: "2024-01-10",
+//     nextMaintenance: "2024-05-10",
+//     mileage: 32450,
+//     condition: "Excellent",
+//     plateNumber: "IKD769FI",
+//     make: "Toyota",
+//     year: "2021",
+//     colour: "Blue",
+//   },
+//   {
+//     id: "VEH-003",
+//     model: "Tesla",
+//     type: "Truck",
+//     status: "Available",
+//     lastMaintenance: "2024-01-10",
+//     nextMaintenance: "2024-05-10",
+//     mileage: 32450,
+//     condition: "Excellent",
+//     plateNumber: "EKY5670P",
+//     make: "Toyota",
+//     year: "2021",
+//     colour: "Wine",
+//   },
+// ];
 
 
 const maintenanceSchedule = [
@@ -486,7 +486,7 @@ const VehiclePortal = () => {
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
             </h1>
-            <div className="flex items-center space-x-4">
+            {/* <div className="flex items-center space-x-4">
               <select
                 className="bg-white border px-4 py-2 rounded-lg shadow-md cursor-pointer text-gray-700"
                 onChange={(e) => handleVehicleSelect(e.target.value)}
@@ -498,7 +498,7 @@ const VehiclePortal = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
 
           {/* Dynamic Content Rendering */}
