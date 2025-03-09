@@ -7,27 +7,28 @@ import { toast } from "react-toastify";
 import AddVehicleOnly from "../_component/AddVehicleOnly";
 
 // 🟢 Sample hardcoded vehicle data for testing (remove this later)
-const sampleVehicleData = [
-  {
-    id: "VEH-001",
-    make: "Toyota",
-    plateNumber: "ABC123",
-    model: "Corolla",
-    year: "2021",
-    colour: "Black",
-  },
-  {
-    id: "VEH-002",
-    make: "Honda",
-    plateNumber: "XYZ789",
-    model: "Civic",
-    year: "2020",
-    colour: "White",
-  },
-];
+// const sampleVehicleData = [
+//   {
+//     id: "VEH-001",
+//     make: "Toyota",
+//     plateNumber: "ABC123",
+//     model: "Corolla",
+//     year: "2021",
+//     colour: "Black",
+//   },
+//   {
+//     id: "VEH-002",
+//     make: "Honda",
+//     plateNumber: "XYZ789",
+//     model: "Civic",
+//     year: "2020",
+//     colour: "White",
+//   },
+// ];
 
-const VehicleInventory = () => {
-  const [vehicleList, setVehicleList] = useState([]);
+const VehicleInventory = ({vehicleList}) => {
+  const [vehicleLists, setVehicleLists] = useState([]);
+  console.log(vehicleList);
   const [loading, setLoading] = useState(true);
   const [hasRegisteredVehicle, setHasRegisteredVehicle] = useState(false);
 
@@ -38,8 +39,8 @@ const VehicleInventory = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Use sample data for now
-      if (sampleVehicleData.length > 0) {
-        setVehicleList(sampleVehicleData);
+      if (vehicleList.length > 0) {
+        setVehicleLists(vehicleList);
         setHasRegisteredVehicle(true);
       } else {
         setHasRegisteredVehicle(false);
@@ -103,7 +104,7 @@ const VehicleInventory = () => {
             </tr>
           </thead>
           <tbody className="text-gray-700">
-            {vehicleList.map((vehicle) => (
+            {vehicleLists.map((vehicle) => (
               <tr
                 key={vehicle.id}
                 className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"

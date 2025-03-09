@@ -69,26 +69,7 @@ const vehicleInventory = [
   },
 ];
 
-const fetchVehicleList = async () => {
-  try {
-    const response = await api.get("/vehicle/api/v1/vehicles", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(response.data);
-    if (response.status_code != 200) {
-      throw new Error("Failed to fetch vehicle list");
-    }
-    const data = await response.data.vehicles;
-    setVehicleList(data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching vehicle list:", error);
-    toast.error("Failed to load vehicle list");
-    return [];
-  }
-};
+
 const maintenanceSchedule = [
   {
     id: "MAINT-001",
@@ -522,7 +503,7 @@ const VehiclePortal = () => {
 
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
-          {activeSection === "inventory" && <VehicleInventory />}
+          {activeSection === "inventory" && <VehicleInventory vehicleList={vehicleList} />}
 
           {activeSection === "financials" && (
             <FinancialInsights
