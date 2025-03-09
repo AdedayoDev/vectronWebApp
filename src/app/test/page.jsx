@@ -465,7 +465,7 @@ const VechtronDashboard = () => {
           <select
             value={selectedVehicle}
             onChange={handleVehicleChange}
-            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
           >
             {vehicleList.map((vehicle) => (
               <option key={vehicle.id} value={vehicle.id}>

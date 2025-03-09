@@ -16,21 +16,18 @@ export default function PortalSwitcher() {
       path: "/chat",
       description: "AI chat assistance for vehicle support"
     },
-    
     {
-      name: "Vehicle Dashboard",
+      name: "Vehicle Portal",
       icon: "/assets/icons/dashboard_16597209.png",
-      path: "/vehicle_management/portal",
-      description: "Monitor vehicle health and performance"
+      path:"/vehicle_management/portal/home",
+      description: "Vehicle Portal for health and performance monitoring"
     },
-
-    {
-      name: "Diagnostics",
-      icon: "/assets/icons/car_repair.png",
-      path: "/vehicle_management/portal/home",
-      description: "Vehicle diagnostics and alerts"
-    },
-
+    // {
+    //   name: "Diagnostics",
+    //   icon: "/assets/icons/car_repair.png",
+    //   path: "/vehicle_management/portal/home",
+    //   description: "Vehicle diagnostics and alerts"
+    // },
     {
         name: "Route Navigation",
         icon: "/assets/icons/map.svg",
@@ -38,6 +35,7 @@ export default function PortalSwitcher() {
         description: "Vehicle Route Navigation"
       }
   ];
+
   const handlePortalClick = (portal) => {
     setSelectedPortal(portal);
     // Close modal after 500ms (0.5 seconds)
@@ -46,12 +44,13 @@ export default function PortalSwitcher() {
       setSelectedPortal(null);
     }, 500);
   };
+
   return (
     <>
       {/* Floating Portal Switcher Button */}
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed top-2 left-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 z-50 "
+        className="fixed top-2 left-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 z-50"
       >
         <LayoutGrid className="w-5 h-5 text-gray-700" />
       </button>
