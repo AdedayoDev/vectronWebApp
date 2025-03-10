@@ -719,6 +719,7 @@ const VechtronDashboard = () => {
           <GraphCard key={graph.id} graph={graph} />
         ))}
       </div>
+      
       <div className="flex items-center justify-center">
         <Card>
           <CardHeader>
