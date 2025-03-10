@@ -19,15 +19,15 @@ export default function PortalSwitcher() {
     {
       name: "Vehicle Dashboard",
       icon: "/assets/icons/dashboard_16597209.png",
-      path: "/vehicle_management/portal",
-      description: "Monitor vehicle health and performance"
+      path:"/vehicle_management/portal/home",
+      description: "Vehicle Portal for health and performance monitoring"
     },
-    {
-      name: "Diagnostics",
-      icon: "/assets/icons/car_repair.png",
-      path: "/vehicle_management/portal/home",
-      description: "Vehicle diagnostics and alerts"
-    },
+    // {
+    //   name: "Diagnostics",
+    //   icon: "/assets/icons/car_repair.png",
+    //   path: "/vehicle_management/portal/home",
+    //   description: "Vehicle diagnostics and alerts"
+    // },
     {
         name: "Route Navigation",
         icon: "/assets/icons/map.svg",

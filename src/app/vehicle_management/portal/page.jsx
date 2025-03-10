@@ -71,7 +71,7 @@ const VechtronDashboard = () => {
             <p className="text-gray-600">Dashboard for your fleet</p>
           </div>
         </div>
-        <div className="relative w-64">
+        {/* <div className="relative w-64">
           <select 
             value={selectedVehicle} 
             onChange={(e) => setSelectedVehicle(e.target.value)}
@@ -83,7 +83,7 @@ const VechtronDashboard = () => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
       </div>
  
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
