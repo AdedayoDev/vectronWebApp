@@ -6,30 +6,38 @@ import { Card } from "@components/ui/card";
 import { toast } from "react-toastify";
 import AddVehicleOnly from "../_component/AddVehicleOnly";
 
-// 🟢 Sample hardcoded vehicle data for testing (remove this later)
-const sampleVehicleData = [
-  {
-    id: "VEH-001",
-    make: "Toyota",
-    plateNumber: "ABC123",
-    model: "Corolla",
-    year: "2021",
-    colour: "Black",
-  },
-  {
-    id: "VEH-002",
-    make: "Honda",
-    plateNumber: "XYZ789",
-    model: "Civic",
-    year: "2020",
-    colour: "White",
-  },
-];
+
 
 const VehicleInventory = () => {
   const [vehicleList, setVehicleList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasRegisteredVehicle, setHasRegisteredVehicle] = useState(false);
+
+  const fetchVehicledata = async () => {
+    try {
+      const response = await api.get("/vehicle/api/v1/vehicles", {
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+  
+      const dataList = await response.data;
+  
+     if (dataList > 0 ){
+      setVehicleList(dataList)
+      setHasRegisteredVehicle(true)
+     }
+    } catch (error) {
+      console.error("Error fetching vehicle data:", error);
+      toast.error("Failed to load vehicle data");
+    } finally {
+      setLoading(false)
+    }
+  };
+  
+  useEffect(() => {
+   fetchVehicleList()
+  }, []);
 
   // 🟢 Simulate API call with hardcoded data
   const fetchVehicleList = async () => {

@@ -155,7 +155,7 @@ const VechtronDashboard = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data);
+
       if (response.status_code != 200) {
         throw new Error("Failed to fetch vehicle list");
       }
@@ -328,20 +328,23 @@ const VechtronDashboard = () => {
             const metricsArray = [
               {
                 label: "Overall Health",
-                value: performanceData.data.metrics.overall_health === "No Data" || 
-                performanceData.data.metrics.overall_health === undefined || 
-                performanceData.data.metrics.overall_health === null
-                ? "- %"
-                : `${performanceData.data.metrics.overall_health} %`,
+                value:
+                  performanceData.data.metrics.overall_health === "No Data" ||
+                  performanceData.data.metrics.overall_health === undefined ||
+                  performanceData.data.metrics.overall_health === null
+                    ? "- %"
+                    : `${performanceData.data.metrics.overall_health} %`,
                 color: "text-green-600",
                 icon: Activity,
                 iconColor: "text-green-500",
               },
               {
                 label: "Fuel Efficiency",
-                value: performanceData.data.metrics.fuel_efficiency === "No Data" || !performanceData.data.metrics.fuel_efficiency
-                ? "- MPG"
-                : `${performanceData.data.metrics.fuel_efficiency} MPG`,
+                value:
+                  performanceData.data.metrics.fuel_efficiency === "No Data" ||
+                  !performanceData.data.metrics.fuel_efficiency
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.fuel_efficiency} MPG`,
                 color: "text-blue-600",
                 icon: Gauge,
                 iconColor: "text-blue-500",
@@ -356,8 +359,12 @@ const VechtronDashboard = () => {
               },
               {
                 label: "Engine Performance",
-                value: performanceData.data.metrics.engine_performance === "No Data" || !performanceData.data.metrics.engine_performance
-                ? "- MPG" : `${performanceData.data.metrics.engine_performance} MPG`,
+                value:
+                  performanceData.data.metrics.engine_performance ===
+                    "No Data" ||
+                  !performanceData.data.metrics.engine_performance
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.engine_performance} MPG`,
                 color: "text-[#708090]",
                 icon: Car,
                 iconColor: "text-green-500",
@@ -365,40 +372,56 @@ const VechtronDashboard = () => {
               },
               {
                 label: "Battery Health",
-                value: performanceData.data.metrics.battery_health === "No Data" || !performanceData.data.metrics.battery_health
-                ? "- MPG" : `${performanceData.data.metrics.battery_health} MPG`,
+                value:
+                  performanceData.data.metrics.battery_health === "No Data" ||
+                  !performanceData.data.metrics.battery_health
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.battery_health} MPG`,
                 color: "text-green-600",
                 icon: HeartPulseIcon,
                 iconColor: "text-green-500",
               },
               {
                 label: "Engine Health",
-                value:  performanceData.data.metrics.engine_health === "No Data" || !performanceData.data.metrics.engine_health
-                ? "- MPG" : `${performanceData.data.metrics.engine_health} MPG`,
+                value:
+                  performanceData.data.metrics.engine_health === "No Data" ||
+                  !performanceData.data.metrics.engine_health
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.engine_health} MPG`,
                 color: "text-green-600",
                 icon: HeartPulseIcon,
                 iconColor: "text-green-500",
               },
               {
                 label: "Engine Temperature",
-                value: performanceData.data.metrics.engine_temp === "No Data" || !performanceData.data.metrics.engine_temp
-                ? "- MPG" : `${performanceData.data.metrics.engine_temp} MPG`,
+                value:
+                  performanceData.data.metrics.engine_temp === "No Data" ||
+                  !performanceData.data.metrics.engine_temp
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.engine_temp} MPG`,
                 color: "text-[#1E3A8A]",
                 icon: GaugeCircle,
                 iconColor: "text-[#1E3A8A]",
               },
               {
                 label: "Tire Health",
-                value: performanceData.data.metrics.tire_health === "No Data" || !performanceData.data.metrics.tire_health
-                ? "- MPG" : `${performanceData.data.metrics.tire_health} MPG`,
+                value:
+                  performanceData.data.metrics.tire_health === "No Data" ||
+                  !performanceData.data.metrics.tire_health
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.tire_health} MPG`,
                 color: "text-green-600",
                 icon: HeartPulseIcon,
                 iconColor: "text-green-500",
               },
               {
                 label: "Transmission Health",
-                value: performanceData.data.metrics.transmission_health === "No Data" || !performanceData.data.metrics.transmission_health
-                ? "- MPG" : `${performanceData.data.metrics.transmission_health} MPG`,
+                value:
+                  performanceData.data.metrics.transmission_health ===
+                    "No Data" ||
+                  !performanceData.data.metrics.transmission_health
+                    ? "- MPG"
+                    : `${performanceData.data.metrics.transmission_health} MPG`,
                 color: "text-green-600",
                 icon: HeartPulseIcon,
                 iconColor: "text-green-500",
@@ -780,10 +803,10 @@ const VechtronDashboard = () => {
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm font-medium text-gray-500">Avg Speed</p>
                 <p className="text-lg font-bold text-gray-900">
-                {" "}
+                  {" "}
                   {!vehicleData.performanceData.average_speed ||
                   vehicleData.performanceData.average_speed === "No Data"
-                    ? "- mph" 
+                    ? "- mph"
                     : `${vehicleData.performanceData.average_speed} mph`}
                 </p>
               </div>
@@ -792,7 +815,7 @@ const VechtronDashboard = () => {
                   Fuel Economy
                 </p>
                 <p className="text-lg font-bold text-gray-900">
-                {" "}
+                  {" "}
                   {!vehicleData.performanceData.fuel_economy ||
                   vehicleData.performanceData.fuel_economy === "No Data"
                     ? "- mpg"
