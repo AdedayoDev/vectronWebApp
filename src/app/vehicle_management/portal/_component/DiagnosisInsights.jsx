@@ -1,54 +1,50 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FaCog } from "react-icons/fa"; // Settings icon
-import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react"; // Icons for status and headers
-import Link from "next/link";
-import  AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
+import { FaCog } from "react-icons/fa";
+import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react";
+import AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
+import api from "../../../../lib/protectedapi";
 
 const DiagnosisInsights = () => {
-  
-  const [vehicleList, setVehicleList] = useState([
-    
-    { id: "VEH-001", model: "Toyota Camry", make: "Toyota" },
-    { id: "VEH-002", model: "Ford F-150", make: "Ford" },
-  ]);
+  const [vehicleList, setVehicleList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Static data for diagnosis insights
-  const diagnosisData = [
-    {
-      title: "Coolant Level",
-      diagnosis: "Low coolant level detected, please check your reservoir",
-      priority: "Warning",
-      issueId: "F110",
-      confidence: "85%",
-      status: "Due for service",
-    },
-    {
-      title: "Oil Change",
-      diagnosis: "Low oil level detected, please check your reservoir",
-      priority: "Caution",
-      issueId: "F111",
-      confidence: "70%",
-      status: "Due for service",
-    },
-    {
-      title: "Brake Fluid",
-      diagnosis: "Low brake fluid level detected, please check your reservoir",
-      priority: "Caution",
-      issueId: "F112",
-      confidence: "80%",
-      status: "Pending",
-    },
-    {
-      title: "Engine Performance",
-      diagnosis: "Low oil level detected, please check your reservoir",
-      priority: "Good",
-      issueId: "F113",
-      confidence: "80%",
-      status: "Done",
-    },
-  ];
+  // Fetch vehicle data from API
+  const fetchVehicleData = async () => {
+    try {
+      const response = await api.get("/vehicle/api/v1/vehicles", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const dataList = response.data.vehicles;
+      console.log(dataList);
+
+      if (dataList.length > 0) {
+        setVehicleList(dataList);
+      }
+    } catch (error) {
+      console.error("Error fetching vehicle data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchVehicleData();
+  }, []);
+
+  // Render loading state
+  if (loading) {
+    return <div>Loading vehicle data...</div>;
+  }
+
+  // Render if no registered vehicles
+  if (vehicleList.length === 0) {
+    return <AddVehiclePrompt />;
+  }
 
   // Render diagnosis insights if vehicles are registered
   const renderDiagnosisTable = () => (
@@ -60,38 +56,30 @@ const DiagnosisInsights = () => {
       <table className="min-w-full bg-white border-t border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-gray-200 text-gray-700">
-            <th className="py-2 px-4 border-b">Title</th>
-            <th className="py-2 px-4 border-b">Diagnosis Report</th>
-            <th className="py-2 px-4 border-b">Priority</th>
-            <th className="py-2 px-4 border-b">Issue ID</th>
-            <th className="py-2 px-4 border-b">Confidence Level</th>
+            <th className="py-2 px-4 border-b">Vehicle ID</th>
+            <th className="py-2 px-4 border-b">Make</th>
+            <th className="py-2 px-4 border-b">Model</th>
+            <th className="py-2 px-4 border-b">Year</th>
+            <th className="py-2 px-4 border-b">Color</th>
             <th className="py-2 px-4 border-b">Status</th>
           </tr>
         </thead>
         <tbody>
-          {diagnosisData.map((item) => (
+          {vehicleList.map((vehicle) => (
             <tr
-              key={item.issueId}
+              key={vehicle.id}
               className="text-gray-800 hover:bg-gray-50 transition"
             >
-              <td className="py-2 px-4 border-b">{item.title}</td>
-              <td className="py-2 px-4 border-b">{item.diagnosis}</td>
+              <td className="py-2 px-4 border-b">{vehicle.id}</td>
+              <td className="py-2 px-4 border-b">{vehicle.make}</td>
+              <td className="py-2 px-4 border-b">{vehicle.model}</td>
+              <td className="py-2 px-4 border-b">{vehicle.year}</td>
+              <td className="py-2 px-4 border-b">{vehicle.colour}</td>
               <td className="py-2 px-4 border-b">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    item.priority === "Warning"
-                      ? "bg-red-100 text-red-800"
-                      : item.priority === "Caution"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-blue-100 text-blue-800"
-                  }`}
-                >
-                  {item.priority}
+                <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                  Active
                 </span>
               </td>
-              <td className="py-2 px-4 border-b">{item.issueId}</td>
-              <td className="py-2 px-4 border-b">{item.confidence}</td>
-              <td className="py-2 px-4 border-b">{item.status}</td>
             </tr>
           ))}
         </tbody>
@@ -102,14 +90,14 @@ const DiagnosisInsights = () => {
   // Render Maintenance Insights
   const renderMaintenanceInsights = () => (
     <div className="w-full bg-white shadow-lg rounded-lg">
-      <h2 className="text-xl font-semibold text-black  py-2 px-4 rounded-t-lg flex items-center">
+      <h2 className="text-xl font-semibold text-black py-2 px-4 rounded-t-lg flex items-center">
         <Wrench className="mr-2" />
         Maintenance Insights
       </h2>
       <div className="p-6 flex flex-col items-center">
         <div className="flex items-center text-gray-700 mb-4">
           <FaCog className="text-xl mr-2" />
-          <h3 className="text-lg font-semibold ">AI Diagnosis</h3>
+          <h3 className="text-lg font-semibold">AI Diagnosis</h3>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg shadow-md w-full max-w-xl">
           <div className="flex justify-between items-center mb-2">
@@ -121,7 +109,9 @@ const DiagnosisInsights = () => {
             </span>
           </div>
           <div className="text-sm text-gray-600">
-            <span className="block mb-1">Vehicle: Toyota Camry</span>
+            <span className="block mb-1">
+              Vehicle: {vehicleList[0]?.make} {vehicleList[0]?.model}
+            </span>
             <p className="text-gray-800 mb-1">
               AI Diagnosis: Potential fuel injection system malfunction
             </p>
@@ -132,17 +122,10 @@ const DiagnosisInsights = () => {
     </div>
   );
 
-  // Conditional rendering based on whether vehicles are registered
   return (
     <div className="min-h-screen p-6">
-      {vehicleList.length > 0 ? (
-        <>
-          {renderDiagnosisTable()}
-          {renderMaintenanceInsights()}
-        </>
-      ) : (
-        <AddVehiclePrompt /> 
-      )}
+      {renderDiagnosisTable()}
+      {renderMaintenanceInsights()}
     </div>
   );
 };
