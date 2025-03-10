@@ -24,71 +24,52 @@ import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
 
 // Sample data structures
-const vehicleInventory = [
-  {
-    id: "VEH-001",
-    model: "Toyota Camry",
-    type: "Sedan",
-    status: "In Service",
-    lastMaintenance: "2024-01-15",
-    nextMaintenance: "2024-04-15",
-    mileage: 45230,
-    condition: "Good",
-    plateNumber: "MUS856KL",
-    make: "Toyota",
-    year: "2021",
-    colour: "Black",
-  },
-  {
-    id: "VEH-002",
-    model: "Ford F-150",
-    type: "Truck",
-    status: "Available",
-    lastMaintenance: "2024-01-10",
-    nextMaintenance: "2024-05-10",
-    mileage: 32450,
-    condition: "Excellent",
-    plateNumber: "IKD769FI",
-    make: "Toyota",
-    year: "2021",
-    colour: "Blue",
-  },
-  {
-    id: "VEH-003",
-    model: "Tesla",
-    type: "Truck",
-    status: "Available",
-    lastMaintenance: "2024-01-10",
-    nextMaintenance: "2024-05-10",
-    mileage: 32450,
-    condition: "Excellent",
-    plateNumber: "EKY5670P",
-    make: "Toyota",
-    year: "2021",
-    colour: "Wine",
-  },
-];
+// const vehicleInventory = [
+//   {
+//     id: "VEH-001",
+//     model: "Toyota Camry",
+//     type: "Sedan",
+//     status: "In Service",
+//     lastMaintenance: "2024-01-15",
+//     nextMaintenance: "2024-04-15",
+//     mileage: 45230,
+//     condition: "Good",
+//     plateNumber: "MUS856KL",
+//     make: "Toyota",
+//     year: "2021",
+//     colour: "Black",
+//   },
+//   {
+//     id: "VEH-002",
+//     model: "Ford F-150",
+//     type: "Truck",
+//     status: "Available",
+//     lastMaintenance: "2024-01-10",
+//     nextMaintenance: "2024-05-10",
+//     mileage: 32450,
+//     condition: "Excellent",
+//     plateNumber: "IKD769FI",
+//     make: "Toyota",
+//     year: "2021",
+//     colour: "Blue",
+//   },
+//   {
+//     id: "VEH-003",
+//     model: "Tesla",
+//     type: "Truck",
+//     status: "Available",
+//     lastMaintenance: "2024-01-10",
+//     nextMaintenance: "2024-05-10",
+//     mileage: 32450,
+//     condition: "Excellent",
+//     plateNumber: "EKY5670P",
+//     make: "Toyota",
+//     year: "2021",
+//     colour: "Wine",
+//   },
+// ];
 
-const fetchVehicleList = async () => {
-  try {
-    const response = await api.get("/vehicle/api/v1/vehicles", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(response.data);
-    if (response.status_code != 200) {
-      throw new Error("Failed to fetch vehicle list");
-    }
-    const data = await response.data.vehicles;
-    setVehicleList(data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching vehicle list:", error);
-    toast.error("Failed to load vehicle list");
-    return [];
-  }
-};
+
 const maintenanceSchedule = [
   {
     id: "MAINT-001",
@@ -316,54 +297,54 @@ const VehiclePortal = () => {
   // );
 
   // // Vehicle Inventory Section
-  const renderVehicleInventorySection = () => (
-    <div className="bg-white shadow-lg rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Vehicle Inventory
-      </h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border-gray-300">
-          <thead className="bg-gray-300 text-gray-800">
-            <tr>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Vehicle ID
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Make
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Plate Number
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Model
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Year
-              </th>
-              <th className="py-3 px-4 text-left border-b border-gray-400">
-                Colour
-              </th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700">
-            {vehicleList.map((vehicle) => (
-              <tr
-                key={vehicle.id}
-                className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
-              >
-                <td className="py-3 px-4">{vehicle.id}</td>
-                <td className="py-3 px-4">{vehicle.make}</td>
-                <td className="py-3 px-4">{vehicle.plateNumber}</td>
-                <td className="py-3 px-4">{vehicle.model}</td>
-                <td className="py-3 px-4">{vehicle.year}</td>
-                <td className="py-3 px-4">{vehicle.colour}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+//   const renderVehicleInventorySection = () => (
+//     <div className="bg-white shadow-lg rounded-lg p-6">
+//       <h2 className="text-xl font-semibold text-gray-800 mb-4">
+//         Vehicle Inventory
+//       </h2>
+//       <div className="overflow-x-auto">
+//         <table className="min-w-full bg-white border-gray-300">
+//           <thead className="bg-gray-300 text-gray-800">
+//             <tr>
+//               <th className="py-3 px-4 text-left border-b border-gray-400">
+//                 Vehicle ID
+//               </th>
+//               <th className="py-3 px-4 text-left border-b border-gray-400">
+//                 Make
+//               </th>
+//               <th className="py-3 px-4 text-left border-b border-gray-400">
+//                 Plate Number
+//               </th>
+//               <th className="py-3 px-4 text-left border-b border-gray-400">
+//                 Model
+//               </th>
+//               <th className="py-3 px-4 text-left border-b border-gray-400">
+//                 Year
+//               </th>
+//               <th className="py-3 px-4 text-left border-b border-gray-400">
+//                 Colour
+//               </th>
+//             </tr>
+//           </thead>
+//           <tbody className="text-gray-700">
+//             {vehicleList.map((vehicle) => (
+//               <tr
+//                 key={vehicle.id}
+//                 className="hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
+//               >
+//                 <td className="py-3 px-4">{vehicle.id}</td>
+//                 <td className="py-3 px-4">{vehicle.make}</td>
+//                 <td className="py-3 px-4">{vehicle.plateNumber}</td>
+//                 <td className="py-3 px-4">{vehicle.model}</td>
+//                 <td className="py-3 px-4">{vehicle.year}</td>
+//                 <td className="py-3 px-4">{vehicle.colour}</td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
 
   return (
     <div className=" w-full bg-white">
@@ -505,7 +486,7 @@ const VehiclePortal = () => {
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
             </h1>
-            <div className="flex items-center space-x-4">
+            {/* <div className="flex items-center space-x-4">
               <select
                 className="bg-white border px-4 py-2 rounded-lg shadow-md cursor-pointer text-gray-700"
                 onChange={(e) => handleVehicleSelect(e.target.value)}
@@ -517,12 +498,12 @@ const VehiclePortal = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
 
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
-          {activeSection === "inventory" && <VehicleInventory />}
+          {activeSection === "inventory" && <VehicleInventory vehicleList={vehicleList} />}
 
           {activeSection === "financials" && (
             <FinancialInsights
@@ -549,6 +530,7 @@ const VehiclePortal = () => {
           )}
           {activeSection === "Vehicle Inventory" && (
             <VehicleInventory
+              vehicleList={vehicleList}
               activeSection={activeSection}
               setActiveSection={setActiveSection}
             />
