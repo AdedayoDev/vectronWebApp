@@ -37,10 +37,7 @@ const FinancialInsights: React.FC = () => {
   const [openPopups, setOpenPopups] = useState<{ [key: number]: boolean }>({});
 
   const toggleChat = (id: number) => {
-    setOpenPopups((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setOpenPopups((prev) => (prev[id] ? {} : { [id]: true }));
   };
 
   // Ensure the Y-Axis labels always display these values
@@ -168,19 +165,20 @@ const FinancialInsights: React.FC = () => {
                   onClick={() => toggleChat(graph.id)}
                 />
 
-               {/* Conditional Chat Popup */}
-            {openPopups[graph.id] && (
-              <div
-                className="absolute top-0 left-0 border border-red-600 w-full h-full  bg-black bg-opacity-10"
-                style={{ zIndex: 100, width: "90%" }}
-              >
-                <CustomChatPopup
-                  onClose={() => toggleChat(graph.id)}
-                  parentWidth={`${cardRefs.current[graph.id]?.clientWidth}px`}  
-                />
-              </div>
-            )}
-
+                {/* Conditional Chat Popup */}
+                {openPopups[graph.id] && (
+                  <div
+                    className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-10"
+                    style={{ zIndex: 100, width: "90%" }}
+                  >
+                    <CustomChatPopup
+                      onClose={() => setOpenPopups({})} 
+                      parentWidth={`${
+                        cardRefs.current[graph.id]?.clientWidth
+                      }px`}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -227,8 +225,6 @@ const FinancialInsights: React.FC = () => {
                 }}
               />
             </div>
-
-           
           </div>
         ))}
       </div>

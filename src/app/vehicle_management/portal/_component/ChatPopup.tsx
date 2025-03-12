@@ -54,7 +54,7 @@ const CustomChatPopup: React.FC<ChatPopupProps> = ({ onClose, parentWidth }) => 
   };
 
   return (
-    <div className="fixed bottom-20 right-4 bg-white shadow-lg rounded-2xl w-7/12 mx-auto p-4 z-50 animate-slide-up" style={{ width: parentWidth || "100%"}}>
+    <div className="  bg-white shadow-lg rounded-2xl w-7/12 mx-auto p-4 z-50 animate-slide-up" style={{ width: parentWidth || "90%"}}>
       {/* Header with close and expand options */}
       <div className="flex justify-between items-center mb-2 border-b pb-2">
         <div className="flex items-center gap-2">
