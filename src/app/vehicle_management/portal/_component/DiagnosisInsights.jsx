@@ -6,6 +6,7 @@ import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react"
 import Link from "next/link";
 import  AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
 import ComingSoonOverlay from './ComingSoon1';
+import api from "../../../../lib/protectedapi";
 
 const DiagnosisInsights = () => {
   const [vehicleList, setVehicleList] = useState([]);
