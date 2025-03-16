@@ -407,26 +407,31 @@ const VehiclePortal = () => {
                   name: "Vehicle Dashboard",
                   icon: <Car />,
                   section: "vehicleDashboard",
+                  comingSoon: false,
                 },
                 {
                   name: "Vehicle Inventory",
                   icon: <Truck />,
                   section: "inventory",
+                  comingSoon: false,
                 },
                 {
                   name: "Maintenance",
                   icon: <Wrench />,
                   section: "maintenance",
+                  comingSoon: true,
                 },
                 {
                   name: "AI Troubleshooting",
                   icon: <Cpu />,
                   section: "ai-support",
+                  comingSoon: true,
                 },
                 {
                   name: "Financial Insights",
                   icon: <DollarSign />,
                   section: "financials",
+                  comingSoon: true,
                 },
               ].map((item) => (
                 <li
@@ -446,10 +451,21 @@ const VehiclePortal = () => {
                     </span>
                     {!isCollapsed && <span>{item.name}</span>}
                   </div>
-
+                  {!isCollapsed && (
+                    <div className="flex flex-col">
+                      
+                      {item.comingSoon && (
+                        <span className="text-xs text-yellow-600 font-small">
+                          Coming Soon
+                        </span>
+                      )}
+                    </div>
+                  )}
                   {!isCollapsed && (
                     <ChevronRight className="text-gray-400 group-hover:translate-x-1 transition-all duration-200" />
                   )}
+
+
                 </li>
               ))}
 

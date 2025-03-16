@@ -5,6 +5,7 @@ import { FaCog } from "react-icons/fa"; // Settings icon
 import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react"; // Icons for status and headers
 import Link from "next/link";
 import  AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
+import ComingSoonOverlay from './ComingSoon1';
 
 const DiagnosisInsights = () => {
   
@@ -134,6 +135,7 @@ const DiagnosisInsights = () => {
 
   // Conditional rendering based on whether vehicles are registered
   return (
+    <ComingSoonOverlay title="Maintenance Dashboard">
     <div className="min-h-screen p-6">
       {vehicleList.length > 0 ? (
         <>
@@ -144,6 +146,7 @@ const DiagnosisInsights = () => {
         <AddVehiclePrompt /> 
       )}
     </div>
+    </ComingSoonOverlay>
   );
 };
 

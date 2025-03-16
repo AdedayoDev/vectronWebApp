@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import { MessageCircle } from "lucide-react";
 import CustomChatPopup from "./ChatPopup";
+import ComingSoonOverlay from './ComingSoon1';
 
 ChartJS.register(
   CategoryScale,
@@ -132,6 +133,7 @@ const FinancialInsights: React.FC = () => {
   };
 
   return (
+    <ComingSoonOverlay title="Maintenance Dashboard">
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {graphs.map((graph) => (
@@ -233,6 +235,7 @@ const FinancialInsights: React.FC = () => {
         ))}
       </div>
     </div>
+    </ComingSoonOverlay>
   );
 };
 
