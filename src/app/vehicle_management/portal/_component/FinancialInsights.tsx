@@ -130,7 +130,7 @@ const FinancialInsights: React.FC = () => {
   };
 
   return (
-    <ComingSoonOverlay title="Maintenance Dashboard">
+    <ComingSoonOverlay title="Financial Insights">
     <div className="p-6 bg-white shadow-lg rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {graphs.map((graph) => (

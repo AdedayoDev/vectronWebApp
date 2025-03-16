@@ -125,7 +125,7 @@ const DiagnosisInsights = () => {
   );
 
   return (
-    <ComingSoonOverlay title="Maintenance Dashboard">
+    <ComingSoonOverlay title="AI Troubleshooting">
     <div className="min-h-screen p-6">
       {renderDiagnosisTable()}
       {renderMaintenanceInsights()}

@@ -14,6 +14,7 @@ import {
 import api from "../../../../lib/protectedapi";
 
 import FinancialInsights from "../_component/FinancialInsights";
+import MaintenancePage from "../_component/Maintenace";
 import VechtronDashboard from "../../../../app/test/page";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -520,7 +521,12 @@ const VehiclePortal = () => {
           {/* Dynamic Content Rendering */}
           {activeSection === "dashboard" && renderDashboardSection()}
           {activeSection === "inventory" && <VehicleInventory vehicleList={vehicleList} />}
-
+          {activeSection === "maintenance" && (
+            <MaintenancePage
+              activeSection={activeSection}
+              setActiveSection={setActiveSection}
+            />
+          )}
           {activeSection === "financials" && (
             <FinancialInsights
               activeSection={activeSection}
