@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import GraphCard from "@app/vehicle_management/portal/_component/GraphCard";
 import { graphs } from "@app/vehicle_management/portal/_component/Graph";
+import VehicleMaintenanceDashboard from "@app/vehicle_management/portal/_component/DashboardChart";
 import CalendarPopUp from "../vehicle_management/portal/_component/CalendarPopup";
 import ReminderForm from "../vehicle_management/portal/_component/ReminderForm";
 import { ToastContainer, toast } from "react-toastify";
@@ -266,6 +267,33 @@ const VechtronDashboard = () => {
         }
       } catch (error) {
         console.log("Vehicle details endpoint not yet available");
+      }
+
+      try {
+        const chartResponse = await api.get(
+          `/vehicle/api/v1/vehicles/${vehicleId}/chart`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (chartResponse.status === "success") {
+          console.log("Got here Chart");
+          console.log(chartResponse);
+          const detailsData = await chartResponse;
+          if (
+            detailsData.status === "success" &&
+            detailsData.data.chart_data
+          ) {
+            // Update vehicle details if available
+            vehicleDataStructure.chartdata =
+              detailsData.data.chart_data || vehicleDataStructure.model;
+            // Add any other fields that become available
+          }
+        }
+      } catch (error) {
+        console.log("Vehicle Chart Data details endpoint not yet available");
       }
 
       // Try to fetch performance data (for when this endpoint becomes available)
@@ -843,13 +871,13 @@ const VechtronDashboard = () => {
         {/* Vehicle Health Monitoring */}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
         {graphs.map((graph) => (
           <GraphCard key={graph.id} graph={graph} />
         ))}
-      </div>
+      </div> */}
       
-      <div className="flex items-center justify-center">
+      {/* <div className="flex items-center justify-center">
         <Card>
           <CardHeader>
             <CardTitle>Vehicle Health Monitoring</CardTitle>
@@ -908,7 +936,7 @@ const VechtronDashboard = () => {
         </Card>
 
         {/* Performance Metrics */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Performance Metrics</CardTitle>
           </CardHeader>
@@ -955,7 +983,10 @@ const VechtronDashboard = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
+
+        
+      </div>  */}
+      <VehicleMaintenanceDashboard chart_data={vehicleData.chartdata} />
     </div>
   );
 };
