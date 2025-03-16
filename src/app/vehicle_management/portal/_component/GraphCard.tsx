@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import { useState, useRef } from "react";
 import { Line } from "react-chartjs-2";
-import { AlertTriangle } from "lucide-react"; // Alert icon
+import { AlertTriangle, MessageCircle } from "lucide-react"; // Alert icon
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,6 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import CustomChatPopup from "./ChatPopup";
 
 ChartJS.register(
   CategoryScale,
@@ -37,6 +38,12 @@ interface GraphCardProps {
 
 const GraphCard: React.FC<GraphCardProps> = ({ graph }) => {
   const [selectedMonth, setSelectedMonth] = useState<number>(6);
+  const cardRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+  const [openPopupId, setOpenPopupId] = useState<number | null>(null);
+
+  const toggleChat = (id: number) => {
+    setOpenPopupId((prev) => (prev === id ? null : id));
+  };
 
   const labels = ["July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
@@ -62,30 +69,56 @@ const GraphCard: React.FC<GraphCardProps> = ({ graph }) => {
 
   return (
     <Card
-      className={`w-full max-w-[600px] h-[500px] shadow-lg relative overflow-hidden `}
+      ref={(el) => {
+        cardRefs.current[graph.id] = el;
+      }}
     >
       {/* Title and Dropdown */}
-      <div className="flex pt-6 px-4 justify-between items-center">
+      <div className=" relative flex pt-6 px-4 justify-between items-center">
         <CardTitle className="bg-[#DBB4FF] rounded-md px-4 py-2 h-auto font-inter font-bold text-sm">
           {graph.title}
         </CardTitle>
 
         {/* Dropdown for month selection */}
-        <select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(Number(e.target.value))}
-          className="border p-2 rounded bg-gray-100 text-gray-800"
-        >
-          {[6, 5, 4, 3, 2, 1].map((month) => (
-            <option key={month} value={month}>
-              Last {month} Month{month > 1 ? "s" : ""}
-            </option>
-          ))}
-        </select>
+        <div className="flex item-center gap-2">
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(Number(e.target.value))}
+            className="border p-2 rounded bg-gray-100 text-gray-800"
+          >
+            {[6, 5, 4, 3, 2, 1].map((month) => (
+              <option key={month} value={month}>
+                Last {month} Month{month > 1 ? "s" : ""}
+              </option>
+            ))}
+          </select>
+
+          <MessageCircle
+            className="h-6 w-6 text-gray-500 cursor-pointer hover:text-gray-700"
+            onClick={() => toggleChat(graph.id)}
+          />
+
+{openPopupId === graph.id && (
+  <div className="absolute inset-0 bg-white shadow-lg rounded-lg z-10 p-4">
+    <CustomChatPopup
+      onClose={() => setOpenPopupId(null)}
+      parentWidth={`${cardRefs.current[graph.id]?.clientWidth}px`}
+    />
+  </div>
+)}
+        </div>
       </div>
 
       {/* Alert Section */}
-      <div className={`flex items-center w-80  ml-4 gap-3 px-4 py-2 rounded-md mt-3 ${status === "Good" ? "bg-green-100  border border-green-300" : status === "Critical" ? "bg-yellow-100 border border-yellow-300" : "bg-red-100"}`}>
+      <div
+        className={`flex items-center w-80  ml-4 gap-3 px-4 py-2 rounded-md mt-3 ${
+          status === "Good"
+            ? "bg-green-100  border border-green-300"
+            : status === "Critical"
+            ? "bg-yellow-100 border border-yellow-300"
+            : "bg-red-100"
+        }`}
+      >
         <AlertTriangle
           className={
             status === "Good"
@@ -96,7 +129,7 @@ const GraphCard: React.FC<GraphCardProps> = ({ graph }) => {
           }
           size={24}
         />
-        <div >
+        <div>
           <p className="text-sm font-semibold">{`Status: ${status}`}</p>
           <p className="text-xs text-gray-600">{message}</p>
         </div>
