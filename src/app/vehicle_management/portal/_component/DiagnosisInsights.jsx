@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FaCog } from "react-icons/fa";
-import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react";
-import AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
+import { FaCog } from "react-icons/fa"; // Settings icon
+import { BadgeCheck, Exclamation, CheckCircle, Wrench, Cpu } from "lucide-react"; // Icons for status and headers
+import Link from "next/link";
+import  AddVehiclePrompt from "@app/vehicle_management/portal/_component/AddVehiclePrompt";
+import ComingSoonOverlay from './ComingSoon1';
 import api from "../../../../lib/protectedapi";
 
 const DiagnosisInsights = () => {
@@ -123,10 +125,12 @@ const DiagnosisInsights = () => {
   );
 
   return (
+    <ComingSoonOverlay title="Maintenance Dashboard">
     <div className="min-h-screen p-6">
       {renderDiagnosisTable()}
       {renderMaintenanceInsights()}
     </div>
+    </ComingSoonOverlay>
   );
 };
 
