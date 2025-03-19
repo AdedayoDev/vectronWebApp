@@ -1,58 +1,66 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import PortalSwitcher from "./PortalSwitcher";
+import PortalSidebar from "../../app/vehicle_management/portal/_component/PortalSidebar";
+import Link from "next/link";
 import { useAuthStore } from "@store/useStore";
+import { FiBell, FiMoon, FiInfo } from "react-icons/fi";
+import { Menu } from "lucide-react"; // Importing the Menu icon
 
 export default function ChatNav() {
   const { user } = useAuthStore();
+  const [activeSection, setActiveSection] = useState("vehicleDashboard"); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Sidebar open/close state
+
   return (
-    <div className="w-full bg-white  px-4 py-4">
-      <div className="flex justify-between items-center w-11/12 mx-auto">
-        <div className="flex items-center space-x-4">
-          <div >
+    <div className="w-full bg-white px-4 py-4 shadow-md">
+      <div className="w-11/12 mx-auto">
+        {/* Navbar Main Content */}
+        <div className="flex w-full items-center justify-between space-x-4">
+          {/* Left Section: Logo & Portal Switcher */}
+          <div className="flex items-center space-x-4">
             <Image
               src="/assets/icons/Media.jpeg (1).png"
               width={50}
               height={50}
               alt="Chat Icon"
             />
+            <PortalSwitcher />
           </div>
-          <PortalSwitcher />
-        </div>
-        <div className="flex items-center space-x-4">
-          <Image
-            src="/assets/icons/notification.png"
-            alt="images"
-            width={15}
-            height={15}
-          />
-          <Image
-            src="/assets/icons/moon.png"
-            alt="images"
-            width={15}
-            height={15}
-          />
-          <Image
-            src="/assets/icons/info.svg"
-            alt="images"
-            width={15}
-            height={15}
-          />
-          <div className="relative w-7 h-7">
+
+          {/* Right Section: Icons (hidden on mobile) */}
+          <div className="hidden md:flex p-4 gap-4 justify-around">
+            <FiBell size={22} className="cursor-pointer hover:text-gray-900 transition" />
+            <FiMoon size={22} className="cursor-pointer hover:text-gray-900 transition" />
+            <FiInfo size={22} className="cursor-pointer hover:text-gray-900 transition" />
             <Link href="/settings">
               <Image
                 src={user?.profile_picture || "/assets/images/Avatar.png"}
-                // width={30}
-                // height={30}
-                fill
-                alt="images"
-                className="object-cover  rounded-full"
+                width={30}
+                height={30}
+                alt="User Avatar"
+                className="rounded-full"
               />
             </Link>
           </div>
+
+          {/* Hamburger Menu Button (visible only on mobile) */}
+          <button
+            className="flex md:hidden p-2 bg-gray-200 rounded-lg hover:bg-gray-300 ml-auto"
+            onClick={() => setIsMenuOpen(true)}
+          >
+            <Menu size={24} />
+          </button>
         </div>
+
+        {/* Sidebar Component (Mobile Only) */}
+        <PortalSidebar 
+          activeSection={activeSection} 
+          setActiveSection={setActiveSection} 
+          isMenuOpen={isMenuOpen} 
+          setIsMenuOpen={setIsMenuOpen} 
+        />
       </div>
     </div>
   );
