@@ -9,8 +9,8 @@ import ReminderForm from "../vehicle_management/portal/_component/ReminderForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ServiceHistoryChat from "../vehicle_management/portal/_component/ServiceHistoryChat";
-import { Button } from '@/components/ui/button';
-import {  ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 import {
   LineChart,
@@ -57,7 +57,6 @@ const VechtronDashboard = () => {
       `Reminder set for ${reminder.title} on ${reminder.date} at ${reminder.time} (${reminder.timeZone})`
     );
   };
-
 
   const performanceData = [
     { name: "Jan", efficiency: 85, health: 90, mileage: 2500 },
@@ -282,10 +281,7 @@ const VechtronDashboard = () => {
           console.log("Got here Chart");
           console.log(chartResponse);
           const detailsData = await chartResponse;
-          if (
-            detailsData.status === "success" &&
-            detailsData.data.chart_data
-          ) {
+          if (detailsData.status === "success" && detailsData.data.chart_data) {
             // Update vehicle details if available
             vehicleDataStructure.chartdata =
               detailsData.data.chart_data || vehicleDataStructure.model;
@@ -474,7 +470,7 @@ const VechtronDashboard = () => {
     );
   }
   return (
-    <div className="md:p-6 bg-white min-h-screen ">
+    <div className=" md:p-6 bg-white min-h-auto ">
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="w-full flex justify-end mb-8">
         <div className=" w-64 flex items-center space-x-4">
@@ -492,59 +488,60 @@ const VechtronDashboard = () => {
         </div>
       </div>
       {/* Header */}
-      <div className="w-full md:w-11/12 mx-auto ">
-        {/* <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Vechtron AI Vehicle Dashboard
-          </h1>
-          <p className="text-gray-600">
-            Vehicle ID: VEH-2024-001 | Toyota Camry 2020
-          </p>
-        </div> */}
-
-        <div className="w-full mx-auto p-0">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            {vehicleData.rawPerformanceData.map((item, index) => (
-              <Card key={index} className="min-w-[270px] w-full">
-                <CardContent className="py-4 flex shadow-lg items-center rounded-xl justify-between h-auto">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      {item.label}
+      <div className="w-full mx-auto p-0 ">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          {vehicleData.rawPerformanceData.map((item, index) => (
+            <Card
+              key={index}
+              className={`min-w-[162px] md:min-w-full w-full ${
+                index === vehicleData.rawPerformanceData.length - 1
+                  ? "col-span-2 md:col-span-1"
+                  : ""
+              }`}
+            >
+              <CardContent className="py-4 flex shadow-lg items-center rounded-xl justify-between h-auto">
+                <div>
+                  <p className="text-xs md:text-sm font-medium text-gray-500">
+                    {item.label}
+                  </p>
+                  {item.value === "92% In the last 6 months" ? (
+                    <p className={`text-xl font-bold ${item.color}`}>
+                      <span className="block text-sm">92%</span>
+                      <span className="block text-xs text-gray-500">
+                        In the last 6 months
+                      </span>
                     </p>
-                    {item.value === "92% In the last 6 months" ? (
-                      <p className={`text-xl font-bold ${item.color}`}>
-                        <span className="block text-sm">92%</span>
-                        <span className="block text-xs text-gray-500">
-                          In the last 6 months
-                        </span>
-                      </p>
-                    ) : (
-                      <p className={`text-xl font-bold ${item.color}`}>
-                        {item.value}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <item.icon
-                      className={`h-8 w-8 ${item.iconColor} self-end`}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  ) : (
+                    <p className={`text-sm md:text-xl font-bold ${item.color}`}>
+                      {item.value}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <item.icon
+                    className={`w-5 md:h-8 h-5 md:w-8 ${item.iconColor} self-end`}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="w-full min-w-full grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Diagnostics & Alerts */}
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Alerts</CardTitle>
           </CardHeader>
           <CardContent>
-            {/* <div className="space-y-4">
-              {vehicleData.alerts.map((alert) => (
+            <div
+              className={`space-y-4  ${
+                expanded ? "overflow-y-auto max-h-96 pr-2" : ""
+              }`}
+              style={{ scrollbarWidth: "thin" }}
+            >
+              {vehicleData.alerts.slice(0, 4).map((alert) => (
                 <div
                   key={alert.id}
                   className={`p-4 rounded-lg flex items-center justify-between ${
@@ -589,217 +586,177 @@ const VechtronDashboard = () => {
                   />
                 </div>
               ))}
-            </div> */}
-         <div 
-          className={`space-y-4 ${expanded ? "overflow-y-auto max-h-96 pr-2" : ""}`}
-          style={{ scrollbarWidth: 'thin' }}
-        >
-          {vehicleData.alerts.slice(0, 4).map((alert) => (
-            <div
-              key={alert.id}
-              className={`p-4 rounded-lg flex items-center justify-between ${
-                alert.type === "critical"
-                  ? "bg-red-100 border border-red-300"
-                  : alert.type === "warning"
-                  ? "bg-yellow-50 border border-yellow-300"
-                  : "bg-blue-100 border border-blue-300"
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <AlertTriangle
-                  className={`h-5 w-5 ${
-                    alert.type === "critical"
-                      ? "text-red-500"
-                      : alert.type === "moderate"
-                      ? "text-yellow-500"
-                      : "text-blue-500"
-                  }`}
-                />
-                <div>
-                  <p className="font-medium text-gray-900">
-                    {alert.message}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {alert.component} | {alert.time}
-                  </p>
-                </div>
-              </div>
-              <Bell
-                className={`h-5 w-5 ${
-                  alert.type === "critical"
-                    ? "text-red-500"
-                    : alert.message === "Oil change due"
-                    ? "text-[#1C1C1C]"
-                    : alert.message === "Break Fluid"
-                    ? "text-red-500"
-                    : alert.message === "Engine performance optimal"
-                    ? "text-blue-500"
-                    : "text-black"
-                }`}
-              />
+
+              {/* Only show remaining alerts when expanded */}
+              {expanded &&
+                vehicleData.alerts.slice(4).map((alert) => (
+                  <div
+                    key={alert.id}
+                    className={`p-4 rounded-lg flex items-center justify-between ${
+                      alert.type === "critical"
+                        ? "bg-red-100 border border-red-300"
+                        : alert.type === "warning"
+                        ? "bg-yellow-50 border border-yellow-300"
+                        : "bg-blue-100 border border-blue-300"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <AlertTriangle
+                        className={`h-5 w-5 ${
+                          alert.type === "critical"
+                            ? "text-red-500"
+                            : alert.type === "moderate"
+                            ? "text-yellow-500"
+                            : "text-blue-500"
+                        }`}
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {alert.message}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {alert.component} | {alert.time}
+                        </p>
+                      </div>
+                    </div>
+                    <Bell
+                      className={`h-5 w-5 ${
+                        alert.type === "critical"
+                          ? "text-red-500"
+                          : alert.message === "Oil change due"
+                          ? "text-[#1C1C1C]"
+                          : alert.message === "Break Fluid"
+                          ? "text-red-500"
+                          : alert.message === "Engine performance optimal"
+                          ? "text-blue-500"
+                          : "text-black"
+                      }`}
+                    />
+                  </div>
+                ))}
             </div>
-          ))}
-          
-          {/* Only show remaining alerts when expanded */}
-          {expanded && vehicleData.alerts.slice(4).map((alert) => (
-            <div
-              key={alert.id}
-              className={`p-4 rounded-lg flex items-center justify-between ${
-                alert.type === "critical"
-                  ? "bg-red-100 border border-red-300"
-                  : alert.type === "warning"
-                  ? "bg-yellow-50 border border-yellow-300"
-                  : "bg-blue-100 border border-blue-300"
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <AlertTriangle
-                  className={`h-5 w-5 ${
-                    alert.type === "critical"
-                      ? "text-red-500"
-                      : alert.type === "moderate"
-                      ? "text-yellow-500"
-                      : "text-blue-500"
-                  }`}
-                />
-                <div>
-                  <p className="font-medium text-gray-900">
-                    {alert.message}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {alert.component} | {alert.time}
-                  </p>
-                </div>
-              </div>
-              <Bell
-                className={`h-5 w-5 ${
-                  alert.type === "critical"
-                    ? "text-red-500"
-                    : alert.message === "Oil change due"
-                    ? "text-[#1C1C1C]"
-                    : alert.message === "Break Fluid"
-                    ? "text-red-500" 
-                    : alert.message === "Engine performance optimal"
-                    ? "text-blue-500"
-                    : "text-black"
-                }`}
-              />
-            </div>
-          ))}
-        </div>
-        
-        {/* Only show View More button if there are more than 5 alerts */}
-        {vehicleData.alerts.length > 5 && (
-          <Button 
-            variant="ghost" 
-            className="w-full mt-4 flex items-center justify-center text-gray-500"
-            onClick={toggleExpand}
-          >
-            {expanded ? (
-              <>View Less <ChevronUp className="ml-1 h-4 w-4" /></>
-            ) : (
-              <>View More <ChevronDown className="ml-1 h-4 w-4" /></>
+
+            {/* Only show View More button if there are more than 5 alerts */}
+            {vehicleData.alerts.length > 5 && (
+              <Button
+                variant="ghost"
+                className="w-full mt-4 flex items-center justify-center text-gray-500"
+                onClick={toggleExpand}
+              >
+                {expanded ? (
+                  <>
+                    View Less <ChevronUp className="ml-1 h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    View More <ChevronDown className="ml-1 h-4 w-4" />
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
-        )}
           </CardContent>
         </Card>
 
         {/* Maintenance Schedule */}
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Maintenance Schedule</CardTitle>
           </CardHeader>
           <CardContent>
-
             <div className="space-y-4">
-            <div 
-          className={`space-y-4 ${expandedms ? "overflow-y-auto max-h-96 pr-2" : ""}`}
-          style={{ scrollbarWidth: 'thin' }}
-        >
-
-{vehicleData.maintenanceschedule.slice(0, 4).map((item) => (
-                <div
-                  key={item.type}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {item.description}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {item.risk_level === "high" ||
-                      item.risk_level === "critical" ? (
-                        <span className="text-red-500 font-medium">
-                          Priority:{" "}
-                          {item.risk_level.charAt(0).toUpperCase() +
-                            item.risk_level.slice(1)}{" "}
-                          risk
-                        </span>
-                      ) : (
-                        <>
-                          Interval: Every {item.interval_months} months or{" "}
-                          {item.interval_kilometers.toLocaleString()} km
-                        </>
-                      )}
-                    </p>
+              <div
+                className={`space-y-4 ${
+                  expandedms ? "overflow-y-auto max-h-96 pr-2" : ""
+                }`}
+                style={{ scrollbarWidth: "thin" }}
+              >
+                {vehicleData.maintenanceschedule.slice(0, 4).map((item) => (
+                  <div
+                    key={item.type}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                  >
+                    <div>
+                      <p className="font-medium text-gray-900">
+                        {item.description}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {item.risk_level === "high" ||
+                        item.risk_level === "critical" ? (
+                          <span className="text-red-500 font-medium">
+                            Priority:{" "}
+                            {item.risk_level.charAt(0).toUpperCase() +
+                              item.risk_level.slice(1)}{" "}
+                            risk
+                          </span>
+                        ) : (
+                          <>
+                            Interval: Every {item.interval_months} months or{" "}
+                            {item.interval_kilometers.toLocaleString()} km
+                          </>
+                        )}
+                      </p>
+                    </div>
+                    <button onClick={() => setShowCalendar(item.type)}>
+                      <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
+                    </button>
                   </div>
-                  <button onClick={() => setShowCalendar(item.type)}>
-                    <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
-                  </button>
-                </div>
-              ))}
+                ))}
 
-              {expandedms && vehicleData.maintenanceschedule.slice(4).map((item) => (
-                <div
-                  key={item.type}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">
-                      {item.description}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {item.risk_level === "high" ||
-                      item.risk_level === "critical" ? (
-                        <span className="text-red-500 font-medium">
-                          Priority:{" "}
-                          {item.risk_level.charAt(0).toUpperCase() +
-                            item.risk_level.slice(1)}{" "}
-                          risk
-                        </span>
-                      ) : (
-                        <>
-                          Interval: Every {item.interval_months} months or{" "}
-                          {item.interval_kilometers.toLocaleString()} km
-                        </>
-                      )}
-                    </p>
-                  </div>
-                  <button onClick={() => setShowCalendar(item.type)}>
-                    <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
-                  </button>
-                </div>
-              ))}
+                {expandedms &&
+                  vehicleData.maintenanceschedule.slice(4).map((item) => (
+                    <div
+                      key={item.type}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                    >
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {item.description}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {item.risk_level === "high" ||
+                          item.risk_level === "critical" ? (
+                            <span className="text-red-500 font-medium">
+                              Priority:{" "}
+                              {item.risk_level.charAt(0).toUpperCase() +
+                                item.risk_level.slice(1)}{" "}
+                              risk
+                            </span>
+                          ) : (
+                            <>
+                              Interval: Every {item.interval_months} months or{" "}
+                              {item.interval_kilometers.toLocaleString()} km
+                            </>
+                          )}
+                        </p>
+                      </div>
+                      <button onClick={() => setShowCalendar(item.type)}>
+                        <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
+                      </button>
+                    </div>
+                  ))}
               </div>
               {vehicleData.alerts.length > 5 && (
-          <Button 
-            variant="ghost" 
-            className="w-full mt-4 flex items-center justify-center text-gray-500"
-            onClick={toggleExpandms}
-          >
-            {expandedms ? (
-              <>View Less <ChevronUp className="ml-1 h-4 w-4" /></>
-            ) : (
-              <>View More <ChevronDown className="ml-1 h-4 w-4" /></>
-            )}
-          </Button>
-        )}
+                <Button
+                  variant="ghost"
+                  className="w-full mt-4 flex items-center justify-center text-gray-500"
+                  onClick={toggleExpandms}
+                >
+                  {expandedms ? (
+                    <>
+                      View Less <ChevronUp className="ml-1 h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      View More <ChevronDown className="ml-1 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
 
-            <div className=" px-6 py-4 shadow-lg rounded-xl my-6">
+            <div className="w-full  md:w-auto px-6 py-4 shadow-lg rounded-xl my-6">
               {/* Heading */}
-              <div className="flex items-center gap-4 pt-6 mb-3">
+              <div className="flex  items-center gap-4 pt-6 mb-3">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-200 flex items-center justify-center">
                   <AlertTriangle className="text-black w-4 h-4 md:w-6 md:h-6" />
                 </div>
@@ -871,122 +828,7 @@ const VechtronDashboard = () => {
         {/* Vehicle Health Monitoring */}
       </div>
 
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-        {graphs.map((graph) => (
-          <GraphCard key={graph.id} graph={graph} />
-        ))}
-      </div> */}
-      
-      {/* <div className="flex items-center justify-center">
-        <Card>
-          <CardHeader>
-            <CardTitle>Vehicle Health Monitoring</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={performanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="health"
-                    stroke="#10B981"
-                    name="Health Score"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="efficiency"
-                    stroke="#3B82F6"
-                    name="Efficiency"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm font-medium text-gray-500">
-                  Engine Performance
-                </p>
-                <p className="text-lg font-bold text-gray-900">
-                  {" "}
-                  {!vehicleData.performanceData.engine_performance ||
-                  vehicleData.performanceData.engine_performance === "No Data"
-                    ? "-"
-                    : `${vehicleData.performanceData.engine_performance}%`}
-                </p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm font-medium text-gray-500">
-                  Battery Health
-                </p>
-                <p className="text-lg font-bold text-gray-900">
-                  {" "}
-                  {!vehicleData.performanceData.battery_health ||
-                  vehicleData.performanceData.battery_health === "No Data"
-                    ? "-"
-                    : `${vehicleData.performanceData.battery_health}%`}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Performance Metrics */}
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>Performance Metrics</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={performanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar
-                    dataKey="mileage"
-                    fill="#8884d8"
-                    name="Monthly Mileage"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm font-medium text-gray-500">Avg Speed</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {" "}
-                  {!vehicleData.performanceData.average_speed ||
-                  vehicleData.performanceData.average_speed === "No Data"
-                    ? "- mph"
-                    : `${vehicleData.performanceData.average_speed} mph`}
-                </p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm font-medium text-gray-500">
-                  Fuel Economy
-                </p>
-                <p className="text-lg font-bold text-gray-900">
-                  {" "}
-                  {!vehicleData.performanceData.fuel_economy ||
-                  vehicleData.performanceData.fuel_economy === "No Data"
-                    ? "- mpg"
-                    : `${vehicleData.performanceData.fuel_economy} mpg`}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        
-      </div>  */}
-      <VehicleMaintenanceDashboard chart_data={vehicleData.chartdata} />
+            <VehicleMaintenanceDashboard chart_data={vehicleData.chartdata} />
     </div>
   );
 };
