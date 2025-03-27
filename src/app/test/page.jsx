@@ -697,7 +697,7 @@ const VechtronDashboard = () => {
                       </p>
                     </div>
                     <button onClick={() => setShowCalendar(item.type)}>
-                      <Calendar className="h-5 w-5 text-[#000000] cursor-pointer" />
+                      <Calendar className="h-5 w-5 text-blue-500 cursor-pointer" />
                     </button>
                   </div>
                 ))}

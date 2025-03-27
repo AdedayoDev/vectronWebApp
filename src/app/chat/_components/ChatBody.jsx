@@ -16,7 +16,7 @@ function ChatBody() {
 
 function ChatTitle() {
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center space-y-3 lg:space-y-0 lg:space-x-3">
+    <div className="flex flex-col lg:flex-row items-center justify-center space-y-3 lg:space-y-0 lg:space-x-3 ">
       <div className="flex flex-col w-32 h-32 space-y-2 bg-blue-400 p-3 rounded-lg text-white">
         <div className="relative w-5 h-5">
           <Image

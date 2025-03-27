@@ -9,12 +9,12 @@ const ChatBodyMobile = () => {
       <div className="w-full p-4 flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <span className="text-2xl">👋</span>
-          <h1 className="text-xl md:text-2xl font-semibold">Good day! How may I assist you today?</h1>
+          <h1 className="text-xl md:text-2xl font-semibold ">Good day! How may I assist you today?</h1>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto p-6 space-y-4 mt-10">
+      <div className="max-wfull w-full  mx-auto p-6 space-y-4 mt-10">
         {/* Entertainment Card */}
         <Link href="#" className="block">
           <div className="bg-[#EBF3FF] rounded-xl p-4 hover:shadow-lg transition-shadow">
