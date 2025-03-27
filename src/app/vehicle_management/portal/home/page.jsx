@@ -3,14 +3,17 @@
 import React, { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import {
-  Truck,
   Car,
+  Truck,
   Wrench,
-  Settings,
+  Cpu,
   DollarSign,
   MessageCircle,
-  Cpu,
-} from "lucide-react";
+  Settings,
+  ClipboardList,
+} from "lucide-react"; // ClipboardList for vehicle profile icon
+
+import { FaIdCard } from "react-icons/fa";
 import api from "../../../../lib/protectedapi";
 
 import FinancialInsights from "../_component/FinancialInsights";
@@ -24,76 +27,6 @@ import AddVehicleOnly from "../_component/AddVehicleOnly";
 import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
 
-// Sample data structures
-// const vehicleInventory = [
-//   {
-//     id: "VEH-001",
-//     model: "Toyota Camry",
-//     type: "Sedan",
-//     status: "In Service",
-//     lastMaintenance: "2024-01-15",
-//     nextMaintenance: "2024-04-15",
-//     mileage: 45230,
-//     condition: "Good",
-//     plateNumber: "MUS856KL",
-//     make: "Toyota",
-//     year: "2021",
-//     colour: "Black",
-//   },
-//   {
-//     id: "VEH-002",
-//     model: "Ford F-150",
-//     type: "Truck",
-//     status: "Available",
-//     lastMaintenance: "2024-01-10",
-//     nextMaintenance: "2024-05-10",
-//     mileage: 32450,
-//     condition: "Excellent",
-//     plateNumber: "IKD769FI",
-//     make: "Toyota",
-//     year: "2021",
-//     colour: "Blue",
-//   },
-//   {
-//     id: "VEH-003",
-//     model: "Tesla",
-//     type: "Truck",
-//     status: "Available",
-//     lastMaintenance: "2024-01-10",
-//     nextMaintenance: "2024-05-10",
-//     mileage: 32450,
-//     condition: "Excellent",
-//     plateNumber: "EKY5670P",
-//     make: "Toyota",
-//     year: "2021",
-//     colour: "Wine",
-//   },
-// ];
-
-const maintenanceSchedule = [
-  {
-    id: "MAINT-001",
-    vehicleId: "VEH-001",
-    type: "Regular Service",
-    scheduledDate: "2024-04-15",
-    estimatedDuration: "4 hours",
-    estimatedCost: "$250",
-    status: "Upcoming",
-  },
-];
-
-const aiTroubleshootingCases = [
-  {
-    id: "CASE-001",
-    vehicleId: "VEH-001",
-    issue: "Engine Performance Drop",
-    aiDiagnosis: "Potential fuel injection system malfunction",
-    recommendedAction: "Detailed engine diagnostic test",
-    confidence: "85%",
-    status: "In Progress",
-  },
-];
-
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -105,10 +38,13 @@ const VehiclePortal = () => {
   const [loading, setLoading] = useState(true);
   const isVehicleOwner = user?.is_vehicle_owner ?? false;
 
- const renderVehicleSection = () => {
-  return isVehicleOwner ? <VehicleInventory vehicleList={vehicleList} /> : <AddVehicleOnly />;
-};
-;
+  const renderVehicleSection = () => {
+    return isVehicleOwner ? (
+      <VehicleInventory vehicleList={vehicleList} />
+    ) : (
+      <AddVehicleOnly />
+    );
+  };
   const fetchVehicleList = async () => {
     try {
       const response = await api.get("/vehicle/api/v1/vehicles", {
@@ -140,6 +76,16 @@ const VehiclePortal = () => {
     }
   };
 
+  useEffect(() => {
+    if (activeSection === "profile") {
+      if (vehicleList.length > 0) {
+        router.push("/vehicle_management/vehicle_profile_list");
+      } else {
+        router.push("/vehicle_management/add_vehicle_profile");
+      }
+    }
+  }, [activeSection, vehicleList]);
+  
   // Handle vehicle selection from dropdown
   const handleVehicleSelect = (vehicleId) => {
     setSelectedVehicleId(vehicleId);
@@ -232,6 +178,12 @@ const VehiclePortal = () => {
                   comingSoon: false,
                 },
                 {
+                  name: "Vehicle Profile",
+                  icon: <ClipboardList />, // changed icon here
+                  section: "profile",
+                  comingSoon: false,
+                },
+                {
                   name: "Maintenance",
                   icon: <Wrench />,
                   section: "maintenance",
@@ -311,6 +263,7 @@ const VehiclePortal = () => {
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-800">
               {activeSection === "dashboard" && "Dashboard Overview"}
+              {activeSection === "profile" && "Vehicle Profile"}
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
@@ -319,6 +272,13 @@ const VehiclePortal = () => {
 
           {/* Dynamic Content Rendering */}
           {/* {activeSection === "dashboard" && renderDashboardSection()} */}
+          {activeSection === "profile" &&
+            vehicleList.length > 0 &&
+            router.push("/vehicle_management/vehicle_profile_list")}
+          {activeSection === "profile" &&
+            vehicleList.length === 0 &&
+            router.push("/vehicle_management/add_vehicle_profile")}
+
           {activeSection === "inventory" && (
             <VehicleInventory vehicleList={vehicleList} />
           )}
