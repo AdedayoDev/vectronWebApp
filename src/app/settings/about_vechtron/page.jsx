@@ -20,22 +20,22 @@ export default function About_Vechtron() {
           <div className="w-full lg:mt-0 h-[570px] lg:h-[630px]">
             <h1 className="text-xl font-semibold mb-7">About Vechtron</h1>
             <div className="lg:w-[80%]">
-              <Link href="/settings/terms_conditions">
+              <Link href="https://vechtron.tech/">
                 <div className="flex justify-between my-3 items-center">
-                  <p>Terms and conditions</p>
+                  <p>Visit Vechtron Website</p>
 
                   <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
               </Link>
-              <Link href="/settings/privacy_policy">
+              {/* <Link href="/settings/privacy_policy">
                 <div className="flex justify-between my-3 items-center">
                   <p>Privacy policy</p>
 
                   <ChevronRight className="text-gray-400"/>
                 </div>
                 <div className="w-full h-[2px] bg-gray-300 mb-3" />
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
