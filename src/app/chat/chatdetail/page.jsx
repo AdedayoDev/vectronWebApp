@@ -444,7 +444,7 @@ const handleNextVersion = (messageId) => {
                   {showWelcome && messages.length === 0 ? (
                     <>
                       <ChatHead />
-                      <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center hidden md:block">
+                      <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center hidden md:block ">
                         Good day! How may I assist you today?
                       </div>
                       {/* Web Layout - Hidden on mobile */}
@@ -511,12 +511,12 @@ const handleNextVersion = (messageId) => {
                                   </button>
                                 </>
                               )}
-                                <button className="rounded cursor-pointer p-1 border">
+                                {/* <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsUp size={13} color="gray" />
                                 </button>
                                 <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsDown size={13} color="gray" />
-                                </button>
+                                </button> */}
                                 {/* <button className="rounded cursor-pointer p-1 border">
                                   <Share size={13} color="gray" />
                                 </button> */}
