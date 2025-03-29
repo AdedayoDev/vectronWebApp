@@ -34,7 +34,7 @@ export default function SignIn() {
       setTimeout(() => setError(""), 3000);
       return;
     }
-    const BASE_URL = `https://${process.env.NEXT_BACKEND_API}/auth/api/v1/auth/account/login`;
+    const BASE_URL = `https://${process.env.NEXT_PUBLIC_BACKEND_API}/auth/api/v1/auth/account/login`;
 
 
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = `https://${process.env.NEXT_BACKEND_API}/auth`;
+const BASE_URL = `https://${process.env.NEXT_PUBLIC_BACKEND_API}/auth`;
 // const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 // // Set the base URL based on environment
