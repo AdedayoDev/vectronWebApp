@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-configmap
+  namespace: vechtron-webapp
+data:
+  NEXT_PUBLIC_ENV: "production"
