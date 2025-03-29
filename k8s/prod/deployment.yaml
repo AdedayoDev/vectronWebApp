@@ -20,7 +20,7 @@ spec:
     spec: 
       containers:
         - name:  vechtron-ui
-          image: 381491932875.dkr.ecr.us-east-2.amazonaws.com/vechtronai-webapp-staging:<version>
+          image: 381491932875.dkr.ecr.us-east-2.amazonaws.com/vechtronai-webapp-prod:<version>
           ports:
           - containerPort: 3000
             name: vechtron

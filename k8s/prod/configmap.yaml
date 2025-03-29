@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-configmap
+  namespace: vechtron-webapp
+data:
+  FRONTEND_URL: "<FRONTEND_URL>"
+  FLASK_APP: "app.py"
+  FLASK_ENV: "development"
