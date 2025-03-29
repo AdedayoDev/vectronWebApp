@@ -5,5 +5,5 @@ metadata:
   namespace: vechtron-webapp
 data:
   NEXT_PUBLIC_ENV: "production"
-  NEXT_PUBLIC_BACKEND_API: "api-staging.vechtron.com"
-  NEXT_PUBLIC_CHAT_API: "ai-staging.vechtron.com"
+  NEXT_PUBLIC_BACKEND_API: "api.vechtron.com"
+  NEXT_PUBLIC_CHAT_API: "ai.vechtron.com"
