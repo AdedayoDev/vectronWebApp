@@ -4,12 +4,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 // const BASE_URL = "https://api-staging.vechtron.com/auth/api/v1/auth";
 
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
-
-// Set the base URL based on environment
-const BASE_URL = isProduction 
-  ? "https://api.vechtron.com/auth/api/v1/auth"
-  : "https://api-staging.vechtron.com/auth/api/v1/auth";
+const BASE_URL = `https://${process.env.NEXT_BACKEND_API}/auth/api/v1/auth`;
 
 // Create axios instance with base configuration
 const axiosInstance = axios.create({

@@ -34,12 +34,9 @@ export default function SignIn() {
       setTimeout(() => setError(""), 3000);
       return;
     }
-    const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+    const BASE_URL = `https://${process.env.NEXT_BACKEND_API}/auth/api/v1/auth/account/login`;
 
-// Set the base URL based on environment
-const BASE_URL = isProduction 
-  ? "https://api.vechtron.com/api/v1/auth/account/login"
-  : "https://api-staging.vechtron.com/api/v1/auth/account/login";
+
 
     try {
       const response = await fetch(BASE_URL, {

@@ -1,12 +1,12 @@
 import axios from "axios";
 
-// const BASE_URL = "https://api-staging.vechtron.com/auth";
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+const BASE_URL = `https://${process.env.NEXT_BACKEND_API}/auth`;
+// const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
-// Set the base URL based on environment
-const BASE_URL = isProduction 
-  ? "https://api.vechtron.com/auth"
-  : "https://api-staging.vechtron.com/auth";
+// // Set the base URL based on environment
+// const BASE_URL = isProduction 
+//   ? "https://api.vechtron.com/auth"
+//   : "https://api-staging.vechtron.com/auth";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
