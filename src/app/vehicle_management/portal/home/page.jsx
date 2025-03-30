@@ -26,6 +26,7 @@ import DiagnosisInsights from "@app/vehicle_management/portal/_component/Diagnos
 import AddVehicleOnly from "../_component/AddVehicleOnly";
 import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
+import VehicleProfileList from "../../vehicle_profile_list/page"
 
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
@@ -76,15 +77,15 @@ const VehiclePortal = () => {
     }
   };
 
-  useEffect(() => {
-    if (activeSection === "profile") {
-      if (vehicleList.length > 0) {
-        router.push("/vehicle_management/vehicle_profile_list");
-      } else {
-        router.push("/vehicle_management/add_vehicle_profile");
-      }
-    }
-  }, [activeSection, vehicleList]);
+  // useEffect(() => {
+  //   if (activeSection === "profile") {
+  //     if (vehicleList.length > 0) {
+  //       router.push("/vehicle_management/vehicle_profile_list");
+  //     } else {
+  //       router.push("/vehicle_management/add_vehicle_profile");
+  //     }
+  //   }
+  // }, [activeSection, vehicleList]);
   
   // Handle vehicle selection from dropdown
   const handleVehicleSelect = (vehicleId) => {
@@ -272,13 +273,21 @@ const VehiclePortal = () => {
 
           {/* Dynamic Content Rendering */}
           {/* {activeSection === "dashboard" && renderDashboardSection()} */}
-          {activeSection === "profile" &&
+          {/* {activeSection === "profile" &&
             vehicleList.length > 0 &&
             router.push("/vehicle_management/vehicle_profile_list")}
           {activeSection === "profile" &&
             vehicleList.length === 0 &&
-            router.push("/vehicle_management/add_vehicle_profile")}
-
+            router.push("/vehicle_management/add_vehicle_profile")} */}
+          {activeSection === "profile" && (
+            
+              vehicleList.length > 0 ? (
+                <VehicleProfileList vehicleList={vehicleList} />
+              ) : (
+                <AddVehicleOnly />
+              )
+            
+          )}
           {activeSection === "inventory" && (
             <VehicleInventory vehicleList={vehicleList} />
           )}
