@@ -264,7 +264,7 @@ const VehiclePortal = () => {
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-800">
               {activeSection === "dashboard" && "Dashboard Overview"}
-              {activeSection === "profile" && "Vehicle Profile"}
+              {activeSection === "profile" && "Vehicle Profiles"}
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}

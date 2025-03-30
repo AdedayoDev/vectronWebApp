@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import api from "../../../lib/protectedapi";
+import api from "@lib/protectedapi";
 import VehicleProfile from "./VehicleProfile"; // Import the VehicleProfile component
 
 export default function VehicleProfileList({ vehicleList = [] }) {

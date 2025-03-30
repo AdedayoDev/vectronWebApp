@@ -4,7 +4,7 @@ import Image from "next/image";
 import api from "@lib/protectedapi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import ConfirmationModal from "../components/ComfirmationModal";
+import ConfirmationModal from "../../components/ComfirmationModal";
 
 const VehicleProfile = ({ vehicleId, onBack, onDelete }) => {
   const router = useRouter();
