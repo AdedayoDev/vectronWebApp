@@ -26,7 +26,7 @@ import DiagnosisInsights from "@app/vehicle_management/portal/_component/Diagnos
 import AddVehicleOnly from "../_component/AddVehicleOnly";
 import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
-import VehicleProfileList from "../../vehicle_profile_list/page"
+import VehicleProfileList from "../_component/VehicleProfileList";
 
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
@@ -264,7 +264,7 @@ const VehiclePortal = () => {
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-800">
               {activeSection === "dashboard" && "Dashboard Overview"}
-              {activeSection === "profile" && "Vehicle Profile"}
+              {activeSection === "profile" && "Vehicle Profiles"}
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
