@@ -137,7 +137,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "../../../lib/protectedapi";
-import VehicleProfile from "../[vehicle_profile]/page"; // Import the VehicleProfile component
+import VehicleProfile from "../portal/_component/VehicleProfile"; // Import the VehicleProfile component
 
 export default function VehicleProfileList({ vehicleList = [] }) {
   const [vehicles, setVehicles] = useState(vehicleList || []);
