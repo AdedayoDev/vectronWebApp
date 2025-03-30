@@ -2,15 +2,16 @@ import Link from "next/link";
 import { useAuthStore } from "@store/useStore";
 import { FaBell, FaMoon, FaInfoCircle } from "react-icons/fa"; // Importing icons from react-icons
 import Image from "next/image";
+import NotificationBell from  "@components/navbar/notification";
 
 function Profile() {
   const { user } = useAuthStore();
 
   return (
     <div className="flex items-center space-x-3 text-gray-600"> {/* Ensure icons inherit text color */}
-      <FaBell size={18} className="hover:cursor-pointer hover:text-blue-500 transition duration-200" />
+      <NotificationBell />
       <FaMoon size={18} className="hover:cursor-pointer hover:text-blue-500 transition duration-200" />
-      <FaInfoCircle size={18} className="hover:cursor-pointer hover:text-blue-500 transition duration-200" />
+      {/* <FaInfoCircle size={18} className="hover:cursor-pointer hover:text-blue-500 transition duration-200" /> */}
 
       {/* Profile Picture */}
       <div className="relative w-7 h-7">

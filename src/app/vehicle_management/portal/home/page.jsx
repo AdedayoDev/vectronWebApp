@@ -223,10 +223,6 @@ const VehiclePortal = () => {
                   {!isCollapsed && (
                     <div className="flex flex-col">
                       {item.comingSoon && (
-                        // <span className="text-xs text-yellow-600 font-small">
-                        //   Coming Soon
-                        // </span>
-                        
                         <Image
                         src="/assets/icons/work-progress_8721365.png"
                         width={22}
