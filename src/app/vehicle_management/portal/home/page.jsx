@@ -179,7 +179,7 @@ const VehiclePortal = () => {
                   comingSoon: false,
                 },
                 {
-                  name: "Vehicle Profile",
+                  name: "Vehicle Profiles",
                   icon: <ClipboardList />, // changed icon here
                   section: "profile",
                   comingSoon: false,
@@ -223,9 +223,16 @@ const VehiclePortal = () => {
                   {!isCollapsed && (
                     <div className="flex flex-col">
                       {item.comingSoon && (
-                        <span className="text-xs text-yellow-600 font-small">
-                          Coming Soon
-                        </span>
+                        // <span className="text-xs text-yellow-600 font-small">
+                        //   Coming Soon
+                        // </span>
+                        
+                        <Image
+                        src="/assets/icons/work-progress_8721365.png"
+                        width={22}
+                        height={22}
+                        alt="Chat Icon"
+                      />
                       )}
                     </div>
                   )}
