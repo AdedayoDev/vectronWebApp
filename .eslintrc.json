@@ -7,10 +7,10 @@
     "react-hooks/exhaustive-deps": "off",
     "@next/next/no-img-element": "off",
     "react/no-unknown-property": ["error", { "ignore": [
-        "clip-path", 
-        "stroke-width", 
-        "stroke-linecap", 
-        "stroke-linejoin",
+        "clipPath", 
+        "strokeWidth", 
+        "strokeLinecap", 
+        "strokeLinejoin",
         "position"
       ]  }]
   }
