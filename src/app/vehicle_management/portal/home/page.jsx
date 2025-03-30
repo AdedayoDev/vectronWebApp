@@ -26,7 +26,7 @@ import DiagnosisInsights from "@app/vehicle_management/portal/_component/Diagnos
 import AddVehicleOnly from "../_component/AddVehicleOnly";
 import { toast } from "react-toastify";
 import VehicleInventory from "../_component/VehicleInventory";
-import VehicleProfileList from "../../vehicle_profile_list/page"
+import VehicleProfileList from "../_component/VehicleProfileList";
 
 const VehiclePortal = () => {
   const [activeSection, setActiveSection] = useState("vehicleDashboard");
