@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import PortalSwitcher from "./PortalSwitcher";
-import PortalSidebar from "../../app/vehicle_management/portal/_component/PortalSidebar";
+import PortalSwitcher from "@components/navbar/PortalSwitcher";
+import PortalSidebar from "../portal/_component/PortalSidebar";
 import Link from "next/link";
 import { useAuthStore } from "@store/useStore";
 import { FiBell, FiMoon, FiInfo } from "react-icons/fi";
@@ -47,21 +47,21 @@ export default function ChatNav() {
           </div>
 
           {/* Hamburger Menu Button (visible only on mobile) */}
-          {/* <button
+          <button
             className="flex md:hidden p-2 bg-gray-200 rounded-lg hover:bg-gray-300 ml-auto"
             onClick={() => setIsMenuOpen(true)}
           >
             <Menu size={24} />
-          </button> */}
+          </button>
         </div>
 
         {/* Sidebar Component (Mobile Only) */}
-        {/* <PortalSidebar 
+        <PortalSidebar 
           activeSection={activeSection} 
           setActiveSection={setActiveSection} 
           isMenuOpen={isMenuOpen} 
           setIsMenuOpen={setIsMenuOpen} 
-        /> */}
+        />
       </div>
     </div>
   );

@@ -56,9 +56,12 @@ export default function PortalSidebar({ activeSection, setActiveSection, isMenuO
 
                 {/* Coming Soon Tag */}
                 {item.comingSoon && (
-                  <span className="text-xs block text-yellow-600 font-semibold">
-                    Coming Soon
-                  </span>
+                  <Image
+                  src="/assets/icons/work-progress_8721365.png"
+                  width={22}
+                  height={22}
+                  alt="Chat Icon"
+                />
                 )}
               </li>
             ))}
@@ -71,7 +74,7 @@ export default function PortalSidebar({ activeSection, setActiveSection, isMenuO
           <div className="flex items-center justify-around">
             <FiBell size={22} className="cursor-pointer hover:text-gray-900 transition" />
             <FiMoon size={22} className="cursor-pointer hover:text-gray-900 transition" />
-            <FiInfo size={22} className="cursor-pointer hover:text-gray-900 transition" />
+            {/* <FiInfo size={22} className="cursor-pointer hover:text-gray-900 transition" /> */}
           </div>
 
           {/* User Profile */}
@@ -86,7 +89,7 @@ export default function PortalSidebar({ activeSection, setActiveSection, isMenuO
               />
             </Link>
             <div className="ml-3">
-              <p className="text-sm font-semibold">{user?.name || "Guest User"}</p>
+              <p className="text-sm font-semibold">{user?.username || "Guest User"}</p>
               <p className="text-xs text-gray-500">View Profile</p>
             </div>
           </div>
