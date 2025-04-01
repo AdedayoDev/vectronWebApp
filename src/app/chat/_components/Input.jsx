@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import Link from "next/link";
-
+import { useRef, useState } from "react";
+import { HiMiniArrowLongUp } from "react-icons/hi2";
+import { RiAttachment2, RiVoiceprintLine } from "react-icons/ri";
 function Input({ onClick, onSubmit }) {
   const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -45,7 +45,7 @@ function Input({ onClick, onSubmit }) {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      
+
       setMessage(
         (prev) => prev + (prev ? "\n" : "") + `Attached: ${file.name}`
       );
@@ -68,26 +68,23 @@ function Input({ onClick, onSubmit }) {
   };
 
   return (
-    
+
     <form onSubmit={handleSubmit}>
-      
-      <div className="flex flex-col w-11/12  md:w-[540px] xl:w-[900px] bg-white p-5 md:p-7 lg:p-10 mx-auto mb-5 ">
-        <div className="w-full flex flex-col bg-white shadow-md rounded-2xl p-5 md:p-8 space-y-2 border border-gray-200">
-          <div className="h-10 md:h-8">
+      <div className="flex flex-col w-full h-full max-w-3xl bg-white mb-8 py-4 md:py-8 lg:py-12 mx-auto">
+        <div className="w-full flex flex-col bg-white shadow-md rounded-2xl px-2 py-2 space-y-2 border border-gray-200">
+          <div className="w-full h-full flex">
             <textarea
-              placeholder="Ask me Anything"
+              placeholder="Ask me About your Vehicle..."
+              autoComplete="off"
+              autoFocus=""
               rows="3"
-              cols="40"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="w-full bg-white text-base md:text-sm  placeholder:text-[#333] placeholder:text-base focus:outline-none resize-none "
-              style={{
-                minHeight: "40px",
-                maxHeight: "100px",
-                overflowY: "auto",
-              }}
+              className={`flex w-full rounded-md bg-background px-3 py-2 text-base placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white h-12 placeholder:text-gray-300 focus:outline-none overflow-auto max-h-[45vh] lg:max-h-[40vh] sm:max-h-[25vh] outline-none font-sans resize-none placeholder:select-none scrollbar-thin scrollbar-track-transparent`}
+              style={{ height: "48px !important" }}
             />
+
           </div>
           <div className="flex items-center justify-between">
             <motion.div
@@ -101,54 +98,41 @@ function Input({ onClick, onSubmit }) {
                 className="hidden"
                 accept="image/*,.pdf,.doc,.docx,.txt,.csv"
               />
-              <button
-                type="button"
+              <Button
+                className="hidden"
+                variant="ghost"
+                size="icon"
                 onClick={handleFileClick}
-                className="p-2 text-gray-500 hover:scale-110 transition-transform rounded-full"
               >
-                <Image
-                  src="/assets/icons/attach.png"
-                  alt="Attach"
-                  width={24}
-                  height={24}
-                />
-              </button>
+                <RiAttachment2 className="w-6 h-6" />
+              </Button>
             </motion.div>
 
             <div className="flex items-center justify-center space-x-3 ">
-              <motion.button
-                type="button"
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleVoiceClick}
-                whileHover={{ scale: 1.2 }}
-                className="p-2 text-gray-500 hover:scale-110 transition-transform rounded-full"
+
               >
-                <Image
-                  src="/assets/icons/voiceRecord.png"
-                  alt="Voice Record"
-                  width={34}
-                  height={34}
-                />
-              </motion.button>
+                <RiVoiceprintLine className="w-6 h-6" />
+              </Button>
 
               <motion.button
                 type="submit"
                 animate={{ scale: isSendAnimating ? 1.2 : 1 }}
                 transition={{ duration: 0.2 }}
-                className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
+                className={`p-2 ${message.trim() ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300"} text-white rounded-full ${isSendAnimating ? "animate-pulse" : ""}`}
                 disabled={!message.trim()}
               >
-                <Image
-                  src="/assets/icons/send.png"
-                  alt="Send"
-                  width={30}
-                  height={30}
-                />
+                <HiMiniArrowLongUp className="w-6 h-6" />
+
               </motion.button>
             </div>
           </div>
         </div>
       </div>
-    </form>
+    </form >
   );
 }
 

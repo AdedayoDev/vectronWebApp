@@ -1,32 +1,26 @@
 "use client";
 
-import api from '../../../lib/chatapi';
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { useSearchParams, useRouter } from 'next/navigation';
-import ChatBodyNew from "../_components/ChatBodyNew";
-import ChatBodyMobile from "../_components/ChatBodyMobile";
-import ChatBody from "../_components/ChatBody";
-import Loader from "../_components/Loader";
-import {
-  CirclePlus,
-  Copy,
-  Mic,
-  Repeat,
-  Share,
-  ThumbsDown,
-  ThumbsUp,
-  Volume2, 
-  Pause, 
-  X,
-  Check,
-  ArrowLeft, 
-  ArrowRight
-} from "lucide-react";
-import Input from "../_components/Input";
-import ChatHead from "../_components/ChatHead";
-import Voice from "../_components/Voice"; 
 import { useAuthStore } from '@store/useStore';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Copy,
+  Pause,
+  Repeat,
+  Volume2,
+  X
+} from "lucide-react";
+import Image from "next/image";
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from "react";
+import api from '../../../lib/chatapi';
+import ChatBodyMobile from "../_components/ChatBodyMobile";
+import ChatBodyNew from "../_components/ChatBodyNew";
+import ChatHead from "../_components/ChatHead";
+import Input from "../_components/Input";
+import Loader from "../_components/Loader";
+import Voice from "../_components/Voice";
 
 // const formatMessage = (content) => {
 //   if (!content) return "";
@@ -57,7 +51,7 @@ const formatMessage = (content) => {
 
   // Handle markdown links first
   formatted = formatted.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" class="text-blue-600 hover:underline" target="_blank">$1</a>');
-   
+
 
 
   return formatted.trim();
@@ -78,7 +72,7 @@ const textToSpeech = (() => {
     const voices = speechSynthesis.getVoices();
     // Try to find a female voice - typically contains 'female' in the name
     // or has a female-associated name
-    return voices.find(voice => 
+    return voices.find(voice =>
       voice.name.toLowerCase().includes('female') ||
       voice.name.includes('Samantha') ||
       voice.name.includes('Victoria') ||
@@ -100,14 +94,14 @@ const textToSpeech = (() => {
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     // Set female voice
     utterance.voice = getFemaleVoice();
-    
+
     utterance.rate = options.rate || 1.0;
     utterance.pitch = options.pitch || 1.2; // Slightly higher pitch for female voice
     utterance.volume = options.volume || 1.0;
-    
+
     utterance.onstart = options.onStart || null;
     utterance.onend = options.onEnd || null;
     utterance.onpause = options.onPause || null;
@@ -176,7 +170,7 @@ export default function Chatdetail() {
   const handleTextToSpeech = (messageContent, messageId) => {  // Add messageId parameter
     // Strip HTML tags for plain text
     const plainText = messageContent.replace(/<[^>]*>/g, '');
-    
+
     // Speak the message
     const utterance = textToSpeech.speak(plainText, {
       rate: 1.0,
@@ -212,7 +206,7 @@ export default function Chatdetail() {
     setIsSpeaking(false);
     setSpeakingMessageId(null);  // Clear the speaking message ID
   };
-  
+
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       const chatContainer = messagesEndRef.current;
@@ -225,10 +219,10 @@ export default function Chatdetail() {
       // Strip HTML tags to get plain text
       const plainText = content.replace(/<[^>]*>/g, '');
       await navigator.clipboard.writeText(plainText);
-      
+
       // Show copied status for this message
       setCopiedMessageId(messageId);
-      
+
       // Reset copied status after 2 seconds
       setTimeout(() => {
         setCopiedMessageId(null);
@@ -239,100 +233,100 @@ export default function Chatdetail() {
   };
 
   // Also modify the handleRegenerateResponse function to handle HTML content correctly
-const handleRegenerateResponse = async (userMessage, messageId) => {
-  try {
-    setIsLoading(true);
-    
-    // Call API to get new response
-    const response = await api.post('/chat/api/v1/chat', {
-      conversation_id: conversationId,
-      message: userMessage,
-      regenerate: true
-    });
+  const handleRegenerateResponse = async (userMessage, messageId) => {
+    try {
+      setIsLoading(true);
 
-    if (response.status === "success") {
-      // Format the new response with HTML
-      const newResponse = formatMessage(response.data.message);
-      
-      // Update versions for this message
-      setMessageVersions(prev => {
-        const existingVersions = prev[messageId] || [messages.find(m => m.uuid === messageId)?.content];
-        return {
-          ...prev,
-          [messageId]: [...existingVersions, newResponse]
-        };
+      // Call API to get new response
+      const response = await api.post('/chat/api/v1/chat', {
+        conversation_id: conversationId,
+        message: userMessage,
+        regenerate: true
       });
-      
-      // Set current version to latest
+
+      if (response.status === "success") {
+        // Format the new response with HTML
+        const newResponse = formatMessage(response.data.message);
+
+        // Update versions for this message
+        setMessageVersions(prev => {
+          const existingVersions = prev[messageId] || [messages.find(m => m.uuid === messageId)?.content];
+          return {
+            ...prev,
+            [messageId]: [...existingVersions, newResponse]
+          };
+        });
+
+        // Set current version to latest
+        setCurrentVersionIndex(prev => ({
+          ...prev,
+          [messageId]: (prev[messageId] || 0) + 1
+        }));
+
+        // Update the message in the messages array
+        setMessages(prev => prev.map(msg => {
+          if (msg.uuid === messageId) {
+            return { ...msg, content: newResponse };
+          }
+          return msg;
+        }));
+      }
+    } catch (error) {
+      console.error('Error regenerating response:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Update version navigation functions to handle HTML content
+  const handlePreviousVersion = (messageId) => {
+    isVersionSwitching.current = true;
+    const currentIndex = currentVersionIndex[messageId] || 0;
+    if (currentIndex > 0) {
       setCurrentVersionIndex(prev => ({
         ...prev,
-        [messageId]: (prev[messageId] || 0) + 1
+        [messageId]: currentIndex - 1
       }));
-      
-      // Update the message in the messages array
+
+      // Get previous version with HTML formatting
+      const previousVersion = messageVersions[messageId][currentIndex - 1];
       setMessages(prev => prev.map(msg => {
         if (msg.uuid === messageId) {
-          return { ...msg, content: newResponse };
+          return { ...msg, content: previousVersion };
         }
         return msg;
       }));
     }
-  } catch (error) {
-    console.error('Error regenerating response:', error);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-// Update version navigation functions to handle HTML content
-const handlePreviousVersion = (messageId) => {
-  isVersionSwitching.current = true; 
-  const currentIndex = currentVersionIndex[messageId] || 0;
-  if (currentIndex > 0) {
-    setCurrentVersionIndex(prev => ({
-      ...prev,
-      [messageId]: currentIndex - 1
-    }));
-    
-    // Get previous version with HTML formatting
-    const previousVersion = messageVersions[messageId][currentIndex - 1];
-    setMessages(prev => prev.map(msg => {
-      if (msg.uuid === messageId) {
-        return { ...msg, content: previousVersion };
-      }
-      return msg;
-    }));
-  }
     // Reset flag after a short delay
     setTimeout(() => {
       isVersionSwitching.current = false;
     }, 100);
-};
+  };
 
-const handleNextVersion = (messageId) => {
-  isVersionSwitching.current = true; 
-  const currentIndex = currentVersionIndex[messageId] || 0;
-  const versions = messageVersions[messageId] || [];
-  if (currentIndex < versions.length - 1) {
-    setCurrentVersionIndex(prev => ({
-      ...prev,
-      [messageId]: currentIndex + 1
-    }));
-    
-    // Get next version with HTML formatting
-    const nextVersion = versions[currentIndex + 1];
-    setMessages(prev => prev.map(msg => {
-      if (msg.uuid === messageId) {
-        return { ...msg, content: nextVersion };
-      }
-      return msg;
-    }));
-  }
+  const handleNextVersion = (messageId) => {
+    isVersionSwitching.current = true;
+    const currentIndex = currentVersionIndex[messageId] || 0;
+    const versions = messageVersions[messageId] || [];
+    if (currentIndex < versions.length - 1) {
+      setCurrentVersionIndex(prev => ({
+        ...prev,
+        [messageId]: currentIndex + 1
+      }));
+
+      // Get next version with HTML formatting
+      const nextVersion = versions[currentIndex + 1];
+      setMessages(prev => prev.map(msg => {
+        if (msg.uuid === messageId) {
+          return { ...msg, content: nextVersion };
+        }
+        return msg;
+      }));
+    }
     // Reset flag after a short delay
     setTimeout(() => {
       isVersionSwitching.current = false;
     }, 100);
-};
+  };
 
   useEffect(() => {
     const id = searchParams.get('id');
@@ -353,7 +347,7 @@ const handleNextVersion = (messageId) => {
     try {
       setIsLoading(true);
       const response = await api.get(`/chat/api/v1/conversations/${id}`);
-      
+
       if (response.status === "success") {
         const formattedMessages = response.data.messages.map(msg => ({
           content: formatMessage(msg.content),
@@ -376,7 +370,7 @@ const handleNextVersion = (messageId) => {
 
     setIsLoading(true);
     setShowWelcome(false);
-    
+
     try {
       // Add user message immediately
       const userMessage = {
@@ -439,7 +433,7 @@ const handleNextVersion = (messageId) => {
         <div className="flex-1 flex flex-col -mt-24 px-4 relative">
           <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)]">
             <div className="bg-white rounded-2xl shadow-xl h-full flex flex-col">
-              <div className="flex-1 overflow-y-auto"  ref={messagesEndRef}>
+              <div className="flex-1 overflow-y-auto" ref={messagesEndRef}>
                 <div className="p-6 pb-[220px]">
                   {showWelcome && messages.length === 0 ? (
                     <>
@@ -458,7 +452,7 @@ const handleNextVersion = (messageId) => {
                     </>
                   ) : (
                     messages.map((message) => (
-                      <div 
+                      <div
                         key={message.uuid}
                         className={`flex items-start mb-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}
                       >
@@ -479,7 +473,7 @@ const handleNextVersion = (messageId) => {
                             {/* <p className="text-xs lg:text-sm whitespace-pre-line">
                               {message.content}
                             </p> */}
-                            <p 
+                            <p
                               className="text-xs lg:text-sm whitespace-pre-line"
                               dangerouslySetInnerHTML={{ __html: message.content }}
                             />
@@ -489,28 +483,28 @@ const handleNextVersion = (messageId) => {
                             <div className="flex items-center mt-2 space-x-2">
                               <div className="flex border border-gray-200 p-1 rounded-lg space-x-2">
                                 {(!isSpeaking || speakingMessageId !== message.uuid) ? (
-                                    <button 
+                                  <button
+                                    className="rounded cursor-pointer p-1"
+                                    onClick={() => handleTextToSpeech(message.content, message.uuid)}
+                                  >
+                                    <Volume2 size={13} color="gray" />
+                                  </button>
+                                ) : (
+                                  <>
+                                    <button
                                       className="rounded cursor-pointer p-1"
-                                      onClick={() => handleTextToSpeech(message.content, message.uuid)}
+                                      onClick={handlePauseSpeech}
                                     >
-                                      <Volume2 size={13} color="gray" />
+                                      <Pause size={13} color="gray" />
                                     </button>
-                                  ) : (
-                                <>
-                                  <button 
-                                    className="rounded cursor-pointer p-1"
-                                    onClick={handlePauseSpeech}
-                                  >
-                                    <Pause size={13} color="gray" />
-                                  </button>
-                                  <button 
-                                    className="rounded cursor-pointer p-1"
-                                    onClick={handleCancelSpeech}
-                                  >
-                                    <X size={13} color="gray" />
-                                  </button>
-                                </>
-                              )}
+                                    <button
+                                      className="rounded cursor-pointer p-1"
+                                      onClick={handleCancelSpeech}
+                                    >
+                                      <X size={13} color="gray" />
+                                    </button>
+                                  </>
+                                )}
                                 {/* <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsUp size={13} color="gray" />
                                 </button>
@@ -520,10 +514,9 @@ const handleNextVersion = (messageId) => {
                                 {/* <button className="rounded cursor-pointer p-1 border">
                                   <Share size={13} color="gray" />
                                 </button> */}
-                                <button 
-                                  className={`rounded cursor-pointer p-1 border transition-colors duration-200 ${
-                                    copiedMessageId === message.uuid ? 'bg-green-50 border-green-200' : ''
-                                  }`}
+                                <button
+                                  className={`rounded cursor-pointer p-1 border transition-colors duration-200 ${copiedMessageId === message.uuid ? 'bg-green-50 border-green-200' : ''
+                                    }`}
                                   onClick={() => handleCopyText(message.content, message.uuid)}
                                   title="Copy message"
                                 >
@@ -533,61 +526,58 @@ const handleNextVersion = (messageId) => {
                                     <Copy size={13} color="gray" />
                                   )}
                                 </button>
-                                <button 
-                                className={`rounded cursor-pointer p-1 border transition-colors duration-200 ${
-                                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                                }`}
-                                onClick={() => {
-                                  // Find the user message that triggered this response
-                                  const userMessageIndex = messages.findIndex(msg => msg.uuid === message.uuid) - 1;
-                                  if (userMessageIndex >= 0) {
-                                    handleRegenerateResponse(messages[userMessageIndex].content, message.uuid);
-                                  }
-                                }}
-                                disabled={isLoading}
-                                title="Regenerate response"
-                              >
-                                <Repeat 
-                                  size={13} 
-                                  color="gray" 
-                                  className={isLoading ? 'animate-spin' : ''}
-                                />
-                              </button>
+                                <button
+                                  className={`rounded cursor-pointer p-1 border transition-colors duration-200 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                    }`}
+                                  onClick={() => {
+                                    // Find the user message that triggered this response
+                                    const userMessageIndex = messages.findIndex(msg => msg.uuid === message.uuid) - 1;
+                                    if (userMessageIndex >= 0) {
+                                      handleRegenerateResponse(messages[userMessageIndex].content, message.uuid);
+                                    }
+                                  }}
+                                  disabled={isLoading}
+                                  title="Regenerate response"
+                                >
+                                  <Repeat
+                                    size={13}
+                                    color="gray"
+                                    className={isLoading ? 'animate-spin' : ''}
+                                  />
+                                </button>
                               </div>
-                                {/* Version navigation - only show if there are multiple versions */}
-                                {messageVersions[message.uuid]?.length > 1 && (
-                                  <div className="flex items-center justify-end space-x-2 text-xs text-gray-500">
-                                    <button
-                                      className={`p-1 rounded hover:bg-gray-100 ${
-                                        (currentVersionIndex[message.uuid] || 0) === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                              {/* Version navigation - only show if there are multiple versions */}
+                              {messageVersions[message.uuid]?.length > 1 && (
+                                <div className="flex items-center justify-end space-x-2 text-xs text-gray-500">
+                                  <button
+                                    className={`p-1 rounded hover:bg-gray-100 ${(currentVersionIndex[message.uuid] || 0) === 0 ? 'opacity-50 cursor-not-allowed' : ''
                                       }`}
-                                      onClick={() => handlePreviousVersion(message.uuid)}
-                                      disabled={(currentVersionIndex[message.uuid] || 0) === 0}
-                                    >
-                                      <ArrowLeft size={13} />
-                                    </button>
-                                    <span>
-                                      Version {((currentVersionIndex[message.uuid] || 0) + 1)} of {messageVersions[message.uuid].length}
-                                    </span>
-                                    <button
-                                      className={`p-1 rounded hover:bg-gray-100 ${
-                                        (currentVersionIndex[message.uuid] || 0) === messageVersions[message.uuid].length - 1 
-                                          ? 'opacity-50 cursor-not-allowed' 
-                                          : ''
+                                    onClick={() => handlePreviousVersion(message.uuid)}
+                                    disabled={(currentVersionIndex[message.uuid] || 0) === 0}
+                                  >
+                                    <ArrowLeft size={13} />
+                                  </button>
+                                  <span>
+                                    Version {((currentVersionIndex[message.uuid] || 0) + 1)} of {messageVersions[message.uuid].length}
+                                  </span>
+                                  <button
+                                    className={`p-1 rounded hover:bg-gray-100 ${(currentVersionIndex[message.uuid] || 0) === messageVersions[message.uuid].length - 1
+                                      ? 'opacity-50 cursor-not-allowed'
+                                      : ''
                                       }`}
-                                      onClick={() => handleNextVersion(message.uuid)}
-                                      disabled={(currentVersionIndex[message.uuid] || 0) === messageVersions[message.uuid].length - 1}
-                                    >
-                                      <ArrowRight size={13} />
-                                    </button>
-                                  </div>
-                                )}
+                                    onClick={() => handleNextVersion(message.uuid)}
+                                    disabled={(currentVersionIndex[message.uuid] || 0) === messageVersions[message.uuid].length - 1}
+                                  >
+                                    <ArrowRight size={13} />
+                                  </button>
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
                         {message.role === "user" && (
                           <Image
-                            src={user?.profile_picture ||"/assets/icons/avatar-2.png"}
+                            src={user?.profile_picture || "/assets/icons/avatar-2.png"}
                             alt="Avatar"
                             width={50}
                             height={50}
@@ -619,7 +609,7 @@ const handleNextVersion = (messageId) => {
           {showVoiceModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
               <div className="bg-white rounded-lg w-full max-w-md mx-4">
-                <Voice 
+                <Voice
                   onMessageSubmit={handleMessageSubmit}
                   onClose={handleVoiceModalClose}
                 />
@@ -627,11 +617,11 @@ const handleNextVersion = (messageId) => {
             </div>
           )}
           <div className="absolute bottom-0 left-0 right-0 bg-white border-t shadow-lg">
-            <div className="max-w-[1200px] mx-auto">
-            <Input 
-              onClick={handleVoiceModalOpen} 
-              onSubmit={handleMessageSubmit}
-            />
+            <div className="mx-auto">
+              <Input
+                onClick={handleVoiceModalOpen}
+                onSubmit={handleMessageSubmit}
+              />
             </div>
           </div>
         </div>
