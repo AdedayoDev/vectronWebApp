@@ -91,7 +91,7 @@ useEffect(() => {
             <div className="flex flex-col justify-between h-screen w-full mt-10">
               <div>
                 <p className="font-medium font-inter text-5xl text-white w-[525px] mb-4">
-                  Meet Your New Car-Savvy Friend
+                Revolutionizing Vehicle Care with AI
                 </p>
               </div>
               <div className="space-y-20">

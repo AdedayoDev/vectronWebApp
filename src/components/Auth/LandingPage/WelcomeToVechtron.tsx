@@ -1,33 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Button } from "@components/ui/button";
-import { useAnimate, stagger } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const WelcomeToVechtron = () => {
-  const [loginScope, loginAnimate] = useAnimate();
-  const [signupScope, signupAnimate] = useAnimate();
   const router = useRouter();
 
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const handleClick = (path: string, animateFunction: any) => {
-    animateFunction([
-      [".letter", { y: -32 }, { duration: 0.2, delay: stagger(0.05) }],
-      ["button", { scale: 0.8 }, { duration: 0.1, at: "<" }],
-      ["button", { scale: 1 }, { duration: 0.1 }],
-      [".letter", { y: 0 }, { duration: 0.00001, at: 0.5 }],
-    ]).then(() => {
-      setTimeout(() => {
-        router.push(path);
-      }, 500);
-    });
+  const handleClick = (path: string) => {
+    router.push(path);
   };
 
   return (
@@ -42,7 +24,7 @@ const WelcomeToVechtron = () => {
             priority
           />
         </div>
-        <div className="flex flex-col ">
+        <div className="flex flex-col">
           <h1 className="font-inter font-bold text-4xl md:text-5xl text-[#101828]">
             Welcome to Vechtron
           </h1>
@@ -51,96 +33,19 @@ const WelcomeToVechtron = () => {
           </p>
         </div>
         <div className="space-y-6 items-center justify-center">
-          <div ref={loginScope}>
-            <Button
-              onClick={() => handleClick("/auth/log-in", loginAnimate)}
-              className="bg-[#fbfdff] border border-[#3b82f6] w-full md:w-9/12 h-[44px] rounded-full text-inter font-bold text-[#1e3a8a] hover:bg-[#e7edf3] text-base transition-colors"
-            >
-              <span className="sr-only">Log in to your Vechtron Account</span>
+          <Button
+            onClick={() => handleClick("/auth/log-in")}
+            className="bg-[#fbfdff] border border-[#3b82f6] w-full md:w-9/12 h-[44px] rounded-full text-inter font-bold text-[#1e3a8a] hover:bg-[#e7edf3] text-base transition-colors"
+          >
+            Log in to your Vechtron Account
+          </Button>
 
-              {isMounted ? (
-                <span
-                  className="h-8 overflow-hidden flex items-center justify-center"
-                  aria-hidden
-                >
-                  {[
-                    "L",
-                    "o",
-                    "g" + " " + "i",
-                    "n" + " " + "t",
-                    "o" + " " + "y",
-                    "o",
-                    "u",
-                    "r" + " " + "V",
-                    "e",
-                    "c",
-                    "h",
-                    "t",
-                    "r",
-                    "o",
-                    "n" + " " + "A",
-                    "c",
-                    "c",
-                    "o",
-                    "u",
-                    "n",
-                    "t",
-                  ].map((letter, index) => (
-                    <span
-                      data-letter={letter}
-                      className="letter relative inline-block h-8 leading-8 after:absolute after:left-0 after:top-full after:h-0 after:content-[attr(data-letter)]"
-                      key={`${letter}-${index}`}
-                    >
-                      {letter}
-                    </span>
-                  ))}
-                </span>
-              ) : (
-                "Log in"
-              )}
-            </Button>
-          </div>
-
-          <div ref={signupScope}>
-            <Button
-              onClick={() => handleClick("/auth/sign-up", signupAnimate)}
-              className="bg-[#3556B3] w-full md:w-9/12 mx-auto h-[44px] rounded-full text-inter hover:bg-[#0d2770] font-medium text-white text-base transition-colors"
-            >
-              <span className="sr-only">Create Account</span>
-
-              {isMounted ? (
-                <span
-                  className="h-8 overflow-hidden flex items-center justify-center"
-                  aria-hidden
-                >
-                  {[
-                    "C",
-                    "r",
-                    "e",
-                    "a",
-                    "t",
-                    "e" + " " + "A",
-                    "c",
-                    "c",
-                    "o",
-                    "u",
-                    "n",
-                    "t",
-                  ].map((letter, index) => (
-                    <span
-                      data-letter={letter}
-                      className="letter relative inline-block h-8 leading-8 after:absolute after:left-0 after:top-full after:h-0 after:content-[attr(data-letter)]"
-                      key={`${letter}-${index}`}
-                    >
-                      {letter}
-                    </span>
-                  ))}
-                </span>
-              ) : (
-                "Create Account"
-              )}
-            </Button>
-          </div>
+          <Button
+            onClick={() => handleClick("/auth/sign-up")}
+            className="bg-[#3556B3] w-full md:w-9/12 mx-auto h-[44px] rounded-full text-inter hover:bg-[#0d2770] font-medium text-white text-base transition-colors"
+          >
+            Create Account
+          </Button>
         </div>
       </div>
     </main>

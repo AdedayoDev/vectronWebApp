@@ -172,16 +172,16 @@ const VehiclePortal = () => {
                   section: "vehicleDashboard",
                   comingSoon: false,
                 },
+                // {
+                //   name: "Vehicle Inventory",
+                //   icon: <Truck />,
+                //   section: "inventory",
+                //   comingSoon: false,
+                // },
                 {
                   name: "Vehicle Inventory",
-                  icon: <Truck />,
+                  icon: <Truck />, // changed icon here
                   section: "inventory",
-                  comingSoon: false,
-                },
-                {
-                  name: "Vehicle Profiles",
-                  icon: <ClipboardList />, // changed icon here
-                  section: "profile",
                   comingSoon: false,
                 },
                 {
@@ -267,7 +267,7 @@ const VehiclePortal = () => {
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-800">
               {activeSection === "dashboard" && "Dashboard Overview"}
-              {activeSection === "profile" && "Vehicle Profiles"}
+              {/* {activeSection === "profile" && "Vehicle Profiles"} */}
               {activeSection === "inventory" && "Vehicle Inventory"}
               {activeSection === "financials" && "Financial Insights"}
               {activeSection === "ai-support" && "AI Troubleshooting"}
@@ -282,7 +282,7 @@ const VehiclePortal = () => {
           {activeSection === "profile" &&
             vehicleList.length === 0 &&
             router.push("/vehicle_management/add_vehicle_profile")} */}
-          {activeSection === "profile" && (
+          {activeSection === "inventory" && (
             
               vehicleList.length > 0 ? (
                 <VehicleProfileList vehicleList={vehicleList} />
@@ -291,9 +291,9 @@ const VehiclePortal = () => {
               )
             
           )}
-          {activeSection === "inventory" && (
+          {/* {activeSection === "inventory" && (
             <VehicleInventory vehicleList={vehicleList} />
-          )}
+          )} */}
           {activeSection === "maintenance" && <MaintenancePage />}
           {activeSection === "financials" && <FinancialInsights />}
           {activeSection === "ai-support" &&
