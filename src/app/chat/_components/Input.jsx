@@ -1,40 +1,40 @@
 "use client";
 
-import Image from "next/image";
-import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { useRef, useState } from "react";
+import { HiMiniArrowLongUp } from "react-icons/hi2";
+import { IoClose } from "react-icons/io5";
+import { RiAttachment2, RiVoiceprintLine } from "react-icons/ri";
 
 function Input({ onClick, onSubmit }) {
   const [message, setMessage] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const textareaRef = useRef(null);
   const [isFileAnimating, setIsFileAnimating] = useState(false);
   const [isSendAnimating, setIsSendAnimating] = useState(false);
-  const [isTyping, setTyping] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!message.trim() && !selectedFile) return;
 
     setIsSendAnimating(true);
+    setIsLoading(true);
     setTimeout(() => setIsSendAnimating(false), 300);
 
     const formData = new FormData();
     if (message.trim()) formData.append("message", message);
     if (selectedFile) formData.append("file", selectedFile);
 
-    onSubmit(message);
+    // Pass the formData or message to the onSubmit handler
+    onSubmit(selectedFile ? formData : message);
+
+    // Reset states after submission
     setMessage("");
     setSelectedFile(null);
-
-    setIsTyping(true);
-    setTimeout(() => {
-      setMessage((prevMessages) => [
-        ...prevMessages,
-        { text: "This is a bot response.", sender: "bot" },
-      ]);
-    }, 1500);
+    setIsLoading(false);
   };
 
   const handleFileClick = () => {
@@ -45,12 +45,15 @@ function Input({ onClick, onSubmit }) {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      
-      setMessage(
-        (prev) => prev + (prev ? "\n" : "") + `Attached: ${file.name}`
-      );
       setIsFileAnimating(true);
       setTimeout(() => setIsFileAnimating(false), 500);
+    }
+  };
+
+  const removeFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -60,6 +63,7 @@ function Input({ onClick, onSubmit }) {
       handleSubmit(e);
     }
   };
+
   const handleVoiceClick = (e) => {
     e.preventDefault();
     if (onClick) {
@@ -67,84 +71,111 @@ function Input({ onClick, onSubmit }) {
     }
   };
 
+  // Auto-resize textarea
+  const adjustTextareaHeight = (e) => {
+    const textarea = e.target;
+    textarea.style.height = "48px";
+    const scrollHeight = textarea.scrollHeight;
+    textarea.style.height = scrollHeight > 48 ? `${scrollHeight}px` : "48px";
+  };
+
   return (
-    
-    <form onSubmit={handleSubmit}>
-      
-      <div className="flex flex-col w-11/12  md:w-[540px] xl:w-[900px] bg-white p-5 md:p-7 lg:p-10 mx-auto mb-5 ">
-        <div className="w-full flex flex-col bg-white shadow-md rounded-2xl p-5 md:p-8 space-y-2 border border-gray-200">
-          <div className="h-10 md:h-8">
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="flex flex-col w-full h-full max-w-3xl bg-white mb-8 py-4 md:py-6 lg:py-8 mx-auto">
+        <div className="w-full flex flex-col bg-white shadow-md rounded-2xl px-3 py-3 space-y-2 border border-gray-200">
+          {selectedFile && (
+            <div className="flex items-center px-3 py-2 bg-blue-50 rounded-lg mb-2">
+              <span className="text-sm text-blue-700 truncate flex-1">
+                {selectedFile.name}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 text-blue-700 hover:text-blue-900"
+                onClick={removeFile}
+                aria-label="Remove file"
+              >
+                <IoClose className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+
+          <div className="w-full h-full flex">
             <textarea
-              placeholder="Ask me Anything"
-              rows="3"
-              cols="40"
+              ref={textareaRef}
+              placeholder="Ask me about your vehicle..."
+              autoComplete="off"
+              autoFocus
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="w-full bg-white text-base md:text-sm  placeholder:text-[#333] placeholder:text-base focus:outline-none resize-none "
-              style={{
-                minHeight: "40px",
-                maxHeight: "100px",
-                overflowY: "auto",
+              onChange={(e) => {
+                setMessage(e.target.value);
+                adjustTextareaHeight(e);
               }}
+              onKeyPress={handleKeyPress}
+              className="flex w-full rounded-md bg-background px-3 py-2 text-base placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white min-h-[48px] placeholder:text-gray-300 focus:outline-none overflow-auto max-h-[45vh] lg:max-h-[40vh] sm:max-h-[25vh] outline-none font-sans resize-none placeholder:select-none scrollbar-thin scrollbar-track-transparent"
+              aria-label="Chat message input"
+              disabled={isLoading}
             />
           </div>
+
           <div className="flex items-center justify-between">
-            <motion.div
-              animate={{ rotate: isFileAnimating ? 360 : 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                className="hidden"
-                accept="image/*,.pdf,.doc,.docx,.txt,.csv"
-              />
-              <button
-                type="button"
-                onClick={handleFileClick}
-                className="p-2 text-gray-500 hover:scale-110 transition-transform rounded-full"
+            <div className="flex items-center gap-2">
+              <motion.div
+                animate={{ rotate: isFileAnimating ? 360 : 0 }}
+                transition={{ duration: 0.5 }}
               >
-                <Image
-                  src="/assets/icons/attach.png"
-                  alt="Attach"
-                  width={24}
-                  height={24}
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*,.pdf,.doc,.docx,.txt,.csv"
+                  aria-label="Attach file"
                 />
-              </button>
-            </motion.div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleFileClick}
+                  className="text-gray-500 hover:text-blue-500 transition-colors"
+                  aria-label="Attach file"
+                  disabled={isLoading}
+                >
+                  <RiAttachment2 className="w-5 h-5" />
+                </Button>
+              </motion.div>
 
-            <div className="flex items-center justify-center space-x-3 ">
-              <motion.button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={handleVoiceClick}
-                whileHover={{ scale: 1.2 }}
-                className="p-2 text-gray-500 hover:scale-110 transition-transform rounded-full"
+                className="text-gray-500 hover:text-blue-500 transition-colors"
+                aria-label="Voice input"
+                disabled={isLoading}
               >
-                <Image
-                  src="/assets/icons/voiceRecord.png"
-                  alt="Voice Record"
-                  width={34}
-                  height={34}
-                />
-              </motion.button>
-
-              <motion.button
-                type="submit"
-                animate={{ scale: isSendAnimating ? 1.2 : 1 }}
-                transition={{ duration: 0.2 }}
-                className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
-                disabled={!message.trim()}
-              >
-                <Image
-                  src="/assets/icons/send.png"
-                  alt="Send"
-                  width={30}
-                  height={30}
-                />
-              </motion.button>
+                <RiVoiceprintLine className="w-5 h-5" />
+              </Button>
             </div>
+
+            <motion.button
+              type="submit"
+              animate={{ scale: isSendAnimating ? 1.2 : 1 }}
+              transition={{ duration: 0.2 }}
+              className={`p-2 ${message.trim() || selectedFile
+                ? "bg-blue-500 hover:bg-blue-600"
+                : "bg-gray-300 cursor-not-allowed"
+                } text-white rounded-full transition-colors`}
+              disabled={!message.trim() && !selectedFile || isLoading}
+              aria-label="Send message"
+            >
+              {isLoading ? (
+                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <HiMiniArrowLongUp className="w-5 h-5" />
+              )}
+            </motion.button>
           </div>
         </div>
       </div>
