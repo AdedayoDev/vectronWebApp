@@ -1,7 +1,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import "@splidejs/react-splide/css";
-import GoogleAnalytics from '../components/shared/GoogleAnalytics'
+import GoogleAnalytics from "../components/shared/GoogleAnalytics";
+import { ThemeProvider } from "@components/Theme-provider/Theme-provider";
 
 export const metadata = {
   title: "Vechtron",
@@ -29,8 +30,15 @@ export default function RootLayout({ children }) {
         style={{ fontFamily: "'Inter', sans-serif" }}
         className="overflow-x-hidden"
       >
-        <GoogleAnalytics />
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <GoogleAnalytics />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
