@@ -21,7 +21,7 @@
     ],
     "paths": {
       "@*": ["./src/*"]
-    },
+    }
   },
   "include": [
     "next-env.d.ts",
@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "jest.setup.ts",
-    "src/app/(root)/layout.jsx"
-, "src/app/chat/layout.tsx"  ],
+    "src/app/(root)/layout.jsx",
+    "src/app/chat/layout.tsx"
+, "src/app/vehicle_management/portal/_component/DiagnosisInsights.jsx"  ],
   "exclude": ["node_modules"]
 }

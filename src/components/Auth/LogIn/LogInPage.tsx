@@ -76,8 +76,7 @@ const LogInPage = () => {
               <div
                 className="absolute inset-0 rounded-xl px-5"
                 style={{
-                  backgroundColor: "#42307D",
-                  opacity: 0.8,
+                  background: "linear-gradient(to bottom, rgba(66, 48, 125, 0.9), rgba(0, 0, 0, 0.5))",
                   zIndex: 1,
                 }}
               >

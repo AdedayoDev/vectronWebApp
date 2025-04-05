@@ -9,24 +9,37 @@ import { useRouter } from "next/navigation";
 export default function Settings() {
   const router = useRouter();
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
-  const [selectedAlert, setSelectedAlert] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState("");
-  const [selectedSynapse, setSelectedSynapse] = useState("");
-  const [save, setSave] = useState("");
+
+  // State for selected checkboxes
+  const [selectedAlerts, setSelectedAlerts] = useState([]);
+  const [selectedChannels, setSelectedChannels] = useState([]);
+  const [selectedSynapse, setSelectedSynapse] = useState([]);
 
   const toggleNotifications = () => {
     setIsNotificationsEnabled((prev) => !prev);
   };
 
+  // Function to handle checkbox selection (always multiple selection)
   const handleSelection = (section, option) => {
-    if (section === "alert") setSelectedAlert(option);
-    if (section === "channel") setSelectedChannel(option);
-    if (section === "synapse") setSelectedSynapse(option);
+    if (section === "alert") {
+      setSelectedAlerts((prev) =>
+        prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
+      );
+    } else if (section === "channel") {
+      setSelectedChannels((prev) =>
+        prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
+      );
+    } else if (section === "synapse") {
+      setSelectedSynapse((prev) =>
+        prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
+      );
+    }
   };
 
   function handleSave() {
     router.push("/settings");
   }
+
   return (
     <>
       <div className="mt-4">
@@ -65,64 +78,48 @@ export default function Settings() {
             {/* Alert Preferences Section */}
             <div className="alert mb-10">
               <h1 className="my-7 font-bold text-lg">Alert Preferences</h1>
-              {[
-                "Maintenance Alerts",
-                "Diagnostic Alerts",
-                "Location Tracking",
-                "Expense Update",
-              ].map((option) => (
-                <div
-                  key={option}
-                  className="alert-content flex items-center mb-2 justify-between"
-                >
-                  <h1>{option}</h1>
-                  <input
-                    type="checkbox"
-                    checked={selectedAlert === option}
-                    onChange={() => handleSelection("alert", option)}
-                  />
-                </div>
-              ))}
-            </div>
-            <hr />
-
-            {/* Notification Channels Section */}
-            <div className="channel mb-10">
-              <h1 className="my-7 font-bold text-lg">Notification Channels</h1>
-              {["Push Notifications", "Email Alerts", "Mentioned"].map(
+              {["Maintenance Alerts", "Diagnostic Alerts", "Location Tracking", "Expense Update"].map(
                 (option) => (
-                  <div
-                    key={option}
-                    className="channel-content flex items-center mb-2 justify-between"
-                  >
+                  <div key={option} className="flex items-center mb-2 justify-between">
                     <h1>{option}</h1>
                     <input
                       type="checkbox"
-                      checked={selectedChannel === option}
-                      onChange={() => handleSelection("channel", option)}
+                      checked={selectedAlerts.includes(option)}
+                      onChange={() => handleSelection("alert", option)}
                     />
                   </div>
                 )
               )}
             </div>
+
+            <hr />
+
+            {/* Notification Channels Section */}
+            <div className="channel mb-10">
+              <h1 className="my-7 font-bold text-lg">Notification Channels</h1>
+              {["Push Notifications", "Email Alerts", "Mentioned"].map((option) => (
+                <div key={option} className="flex items-center mb-2 justify-between">
+                  <h1>{option}</h1>
+                  <input
+                    type="checkbox"
+                    checked={selectedChannels.includes(option)}
+                    onChange={() => handleSelection("channel", option)}
+                  />
+                </div>
+              ))}
+            </div>
+
             <hr />
 
             {/* From Synapse Section */}
             <div className="synapse">
               <h1 className="my-7 font-bold text-lg">From Synapse</h1>
-              {[
-                "New notifications",
-                "Someone invite you to new chat",
-                "Mentioned",
-              ].map((option) => (
-                <div
-                  key={option}
-                  className="synapse-content flex items-center mb-2 justify-between"
-                >
+              {["New notifications", "Someone invited you to a new chat", "Mentioned"].map((option) => (
+                <div key={option} className="flex items-center mb-2 justify-between">
                   <h1>{option}</h1>
                   <input
                     type="checkbox"
-                    checked={selectedSynapse === option}
+                    checked={selectedSynapse.includes(option)}
                     onChange={() => handleSelection("synapse", option)}
                   />
                 </div>

@@ -20,8 +20,7 @@ const VechtronDashboard = () => {
         { id: 2, type: 'warning', message: 'Oil change due', component: 'Maintenance', time: '1 hour ago' },
         { id: 3, type: 'info', message: 'Tire pressure optimal', component: 'Tires', time: '2 hours ago' },
       ],
-      overallHealth: 85,
-      fuelEfficiency: 28,
+       fuelEfficiency: 28,
       activeAlerts: 3,
       nextService: 15,
       enginePerformance: 92,
@@ -72,7 +71,7 @@ const VechtronDashboard = () => {
             <p className="text-gray-600">Dashboard for your fleet</p>
           </div>
         </div>
-        <div className="relative w-64">
+        {/* <div className="relative w-64">
           <select 
             value={selectedVehicle} 
             onChange={(e) => setSelectedVehicle(e.target.value)}
@@ -84,7 +83,7 @@ const VechtronDashboard = () => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
       </div>
  
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

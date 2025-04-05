@@ -37,6 +37,8 @@ spec:
           envFrom:
           - secretRef:
               name: frontend-secrets
+          - configMapRef:
+              name: frontend-configmap
           readinessProbe:
             httpGet:
               path: /

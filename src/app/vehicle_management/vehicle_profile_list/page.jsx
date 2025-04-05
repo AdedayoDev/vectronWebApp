@@ -94,7 +94,7 @@ const router = useRouter()
         />
        <div>
         <p className="text-lg font-semibold">
-          {vehicle.nickname || 'Unknown'}
+          {vehicle.name || 'Unknown'}
         </p>
         <p className="text-base text-purple-600">
           {vehicle.make || 'Unknown'}

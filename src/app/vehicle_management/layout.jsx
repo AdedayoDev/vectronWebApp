@@ -1,7 +1,8 @@
 
 import { Inter } from 'next/font/google';
-import NavBar from "@components/navbar/chatNav";
-
+import NavBar from "./components/NavBar";
+import { AuthProvider } from "@components/guards/AuthProvider";
+import { ProtectedRoute } from "@components/guards/ProtectedRoute";
 export const metadata = {
   title: "Settings",
   description: "Your intelligent automotive companion",
@@ -33,9 +34,13 @@ export default function RootLayout({ children }) {
       <body
         style={{ fontFamily: "'Inter', sans-serif" }}
         className="overflow-x-hidden"
-      >
+      >    
+      <AuthProvider>
+      <ProtectedRoute>
       <NavBar />
         {children}
+        </ProtectedRoute>
+        </AuthProvider>
       </body>
     </html>
   );

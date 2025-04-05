@@ -57,12 +57,12 @@ export default function Chat() {
             <div className="text-xl md:text-2xl lg:text-4xl xl:text-5xl font-bold mb-3 mt-10">
               Unlock the power of AI
             </div>
-            <div className="text-xs md:text-sm lg:text-md xl:text-lg text-gray-400">
+            <div className="text-lg md:text-xl lg:text-xl  text-gray-400">
               Meet docvantage, our ai chat app revolutionizing conversations
             </div>
-            <div className="mt-10 pb-20">
+            <div className="mt-10 pb-20 space-y-10">
               {items.map((item, index) => (
-                <Conversation key={index} items={item} />
+                <Conversation key={index} items={item}  />
               ))}
             </div>
           </div>

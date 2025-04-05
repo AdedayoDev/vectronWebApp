@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
 import ChatBodyNew from "../_components/ChatBodyNew";
+import ChatBodyMobile from "../_components/ChatBodyMobile";
 import ChatBody from "../_components/ChatBody";
 import Loader from "../_components/Loader";
 import {
@@ -439,14 +440,21 @@ const handleNextVersion = (messageId) => {
           <div className="max-w-[1200px] mx-auto w-full h-[calc(100vh-100px)]">
             <div className="bg-white rounded-2xl shadow-xl h-full flex flex-col">
               <div className="flex-1 overflow-y-auto"  ref={messagesEndRef}>
-                <div className="p-6 pb-[200px]">
+                <div className="p-6 pb-[220px]">
                   {showWelcome && messages.length === 0 ? (
                     <>
                       <ChatHead />
-                      <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center">
+                      <div className="px-2 my-8 lg:my-12 font-semibold text-sm md:text-lg xl:text-3xl text-center hidden md:block ">
                         Good day! How may I assist you today?
                       </div>
+                      {/* Web Layout - Hidden on mobile */}
+                      <div className="hidden md:block">
                         <ChatBodyNew />
+                      </div>
+                      {/* Mobile Layout - Hidden on web */}
+                      <div className="block md:hidden">
+                        <ChatBodyMobile />
+                      </div>
                     </>
                   ) : (
                     messages.map((message) => (
@@ -503,12 +511,12 @@ const handleNextVersion = (messageId) => {
                                   </button>
                                 </>
                               )}
-                                <button className="rounded cursor-pointer p-1 border">
+                                {/* <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsUp size={13} color="gray" />
                                 </button>
                                 <button className="rounded cursor-pointer p-1 border">
                                   <ThumbsDown size={13} color="gray" />
-                                </button>
+                                </button> */}
                                 {/* <button className="rounded cursor-pointer p-1 border">
                                   <Share size={13} color="gray" />
                                 </button> */}

@@ -7,6 +7,7 @@ import Link from 'next/link';
 
 export default function PortalSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedPortal, setSelectedPortal] = useState(null);
 
   const portals = [
     {
@@ -18,29 +19,38 @@ export default function PortalSwitcher() {
     {
       name: "Vehicle Dashboard",
       icon: "/assets/icons/dashboard_16597209.png",
-      path: "/vehicle_management/portal",
-      description: "Monitor vehicle health and performance"
+      path:"/vehicle_management/portal/home",
+      description: "Vehicle Portal for health and performance monitoring"
     },
+    // {
+    //   name: "Diagnostics",
+    //   icon: "/assets/icons/car_repair.png",
+    //   path: "/vehicle_management/portal/home",
+    //   description: "Vehicle diagnostics and alerts"
+    // },
     {
-      name: "Diagnostics",
-      icon: "/assets/icons/car_repair.png",
-      path: "/vehicle_management/portal/home",
-      description: "Vehicle diagnostics and alerts"
-    },
-    {
-      name: "Route Navigation",
-      icon: "/assets/icons/map.svg",
-      path: "/route",
-      description: "Vehicle Route Navigation"
-    }
+        name: "Route Navigation",
+        icon: "/assets/icons/map.svg",
+        path: "/route",
+        description: "Vehicle Route Navigation"
+      }
   ];
+
+  const handlePortalClick = (portal) => {
+    setSelectedPortal(portal);
+    // Close modal after 500ms (0.5 seconds)
+    setTimeout(() => {
+      setIsOpen(false);
+      setSelectedPortal(null);
+    }, 500);
+  };
 
   return (
     <>
       {/* Floating Portal Switcher Button */}
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed top-2 left-4 p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 z-50"
+        className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 z-50"
       >
         <LayoutGrid className="w-5 h-5 text-gray-700" />
       </button>
@@ -63,7 +73,12 @@ export default function PortalSwitcher() {
                 <Link 
                   key={portal.name}
                   href={portal.path}
-                  className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => handlePortalClick(portal)}
+                  className={`p-4 border rounded-lg transition-colors ${
+                    selectedPortal?.name === portal.name 
+                      ? 'bg-purple-50 border-purple-200' 
+                      : 'hover:bg-gray-50'
+                  }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">

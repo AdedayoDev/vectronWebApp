@@ -1,7 +1,9 @@
 // utils/api.ts
 import { useAuthStore } from '@store/useStore'
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ai-staging.vechtron.com';
+// Set the base URL based on environment
+const BASE_URL = `https://${process.env.NEXT_PUBLIC_CHAT_API}`;
+// const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://ai-staging.vechtron.com';
 const getAuthToken = () => {
     const authData = localStorage.getItem('auth-storage');
     if (authData) {

@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Navbar({link='/', text, icon}) {
   return (
     <>
-      <div className="nav-content">
+      <div className="nav-content ">
        <Link href='/signin' className="nav-link">
         <Image
           src={icon}

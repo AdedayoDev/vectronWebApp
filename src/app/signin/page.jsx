@@ -34,9 +34,12 @@ export default function SignIn() {
       setTimeout(() => setError(""), 3000);
       return;
     }
+    const BASE_URL = `https://${process.env.NEXT_PUBLIC_BACKEND_API}/auth/api/v1/auth/account/login`;
+
+
 
     try {
-      const response = await fetch("https://api-staging.vechtron.com/api/v1/auth/account/login", {
+      const response = await fetch(BASE_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -53,7 +53,7 @@ export default function Vehicle_Management() {
             </div>
             <h1 className="text-xl font-semibold mb-7">Vehicle Management</h1>
             <div className="lg:w-[80%]">
-              <div className="flex justify-between my-3 items-center cursor-pointer">
+              {/* <div className="flex justify-between my-3 items-center cursor-pointer">
                 <div
                   className="flex items-center gap-2"
                   onClick={handleVehicleProfile}
@@ -68,8 +68,8 @@ export default function Vehicle_Management() {
                 </div>
 
                 <ChevronRight className="text-gray-400" />
-              </div>
-              <div className="w-full h-[2px] bg-gray-300 mb-3" />
+              </div> */}
+              {/* <div className="w-full h-[2px] bg-gray-300 mb-3" /> */}
               <Link href="#">
                 <div className="flex justify-between my-3 items-center">
                   <div className="flex items-center gap-2">
