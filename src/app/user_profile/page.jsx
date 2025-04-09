@@ -17,9 +17,6 @@ export default function Profile() {
     fullName: "",
     email: "",
     profilePic: null,
-    // is_vehicle_owner: true,
-    // phone: "",
-    // location: "",
   });
   const [errors, setErrors] = useState({});
   const [alert, setAlert] = useState("");
@@ -74,7 +71,6 @@ export default function Profile() {
         }
       } catch (error) {
         console.error("Error fetching user profile:", error.message);
-        console.log("Error details:", error);
       }
     };
 
@@ -134,17 +130,6 @@ export default function Profile() {
                 alt="Profile Preview"
                 className="mt-4 object-cover rounded-full"
               />
-
-              {/* <div>
-                <div className="flex relative text-gray-500 cursor-pointer items-center shadow-md w-[240px] mb-3 justify-center rounded-full p-3 gap-2 bg-white">
-                  <p className="text-gray-400">Upload a new image</p>
-                  <CloudUpload size={15} color="gray" />
-
-                </div>
-                <p className="text-sm text-gray-400">
-                  800x800 PNG, JPG recommended. Max file size: 2MB.
-                </p>
-              </div> */}
             </div>
 
 
@@ -212,19 +197,6 @@ export default function Profile() {
                 <p>{alert}</p>
               </div>
             )}
-
-
-            {/* Alert */}
-            {/* {alertMessage && (
-              <div
-                className={`fixed top-4 right-4 transition duration-300 ease-in z-50 px-4 py-2 rounded-md shadow-md text-white ${
-                  alertType === "success" ? "bg-green-500" : "bg-red-500"
-                }`}
-              >
-                {alertMessage}
-              </div>
-            )} */}
-
           </div>
         </div>
       </section>

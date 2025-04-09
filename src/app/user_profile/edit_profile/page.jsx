@@ -105,6 +105,29 @@ export default function Profile() {
     e.preventDefault();
 
     try {
+      // Prepare form data for the API request
+      const formDataToSend = new FormData();
+      // Object.keys(formData).forEach(key => {
+      //   if (formData[key] !== null) {
+      //     formDataToSend.append(key, formData[key]);
+      //   }
+      // });
+      // formDataToSend.append("first_name", formData.first_name);
+      // formDataToSend.append("last_name", formData.last_name);
+      // formDataToSend.append("email", formData.email);
+      // formDataToSend.append("username", formData.username);
+      // formDataToSend.append("is_vehicle_owner", formData.is_vehicle_owner);
+      // if (formData.profile_picture) {
+      //   formDataToSend.append("profile_picture", {
+      //     "first_name": formData.first_name,
+      //     "last_name": formData.last_name,
+      //     "email": formData.email,
+      //     "is_vehicle_owner": formData.is_vehicle_owner,
+      //     "profile_picture": formData.profile_picture
+      //   });
+      // }
+      // console.log(formData);
+
       // Make the API call
       const response = await api.post("/auth/api/v1/users/update-profile/", {
         first_name: formData.first_name,
